@@ -28,10 +28,11 @@ RUN wget https://go.dev/dl/go1.24.1.linux-$(dpkg --print-architecture).tar.gz \
 RUN apt install -y python3-pip \
   && apt install -y sshpass
 
-USER ubuntu
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="/home/ubuntu/.bashrc" SHELL="/usr/bin/bash" bash -
-RUN echo "export PATH=$PATH:/home/ubuntu/.local/bin:/usr/local/go/bin" >> /home/ubuntu/.profile
+RUN apt install sudo -y \
+  && echo "ubuntu ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-ENV PATH=$PATH:/usr/local/go/bin:/home/ubuntu/.local/bin
-ENV GO111MODULE=on
-ENV GOPROXY=https://goproxy.cn
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="/root/.bashrc" SHELL="/usr/bin/bash" bash -
+RUN echo "export PATH=$PATH:/usr/local/go/bin:/root/.local/bin" >> /root/.profile \
+  && echo "export GO111MODULE=on" >> /root/.profile \
+  && echo "export GOPROXY=https://goproxy.cn" >> /root/.profile
+
