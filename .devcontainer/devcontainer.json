@@ -42,7 +42,6 @@
   },
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.ssh,target=/ubuntu/.ssh,type=bind,consistency=cached",
-    "source=maven-local-repository,target=/ubuntu/.m2,type=volume,consistency=cached"
+    "source=${localEnv:HOME}/.ssh,target=/home/ubuntu/.ssh,type=bind,consistency=cached"
   ]
 }
