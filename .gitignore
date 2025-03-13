@@ -26,5 +26,6 @@ deploy.sh
 launch-node.sh
 .DS_Store
 *.swp
+.pnpm-store
 
 
