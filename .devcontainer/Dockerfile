@@ -32,7 +32,20 @@ RUN apt install sudo -y \
   && echo "ubuntu ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="/root/.bashrc" SHELL="/usr/bin/bash" bash -
+
 RUN echo "export PATH=$PATH:/usr/local/go/bin:/root/.local/bin" >> /root/.profile \
   && echo "export GO111MODULE=on" >> /root/.profile \
-  && echo "export GOPROXY=https://goproxy.cn" >> /root/.profile
+  && echo "export GOPROXY=https://goproxy.cn" >> /root/.profile \
+  && echo "source /root/.cmcc-venv/bin/activate" >> /root/.profile \
+  && echo "export LC_ALL=C.UTF-8" >> /root/.profile
+
+RUN apt install python3.12-venv -y
+
+ADD requirements.txt /root/requirements.txt
+
+SHELL ["/bin/bash", "-c"] 
+
+RUN python3 -m venv /root/.cmcc-venv \
+  && source /root/.cmcc-venv/bin/activate \
+  && pip install -U -r /root/requirements.txt
 
