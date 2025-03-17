@@ -47,10 +47,10 @@ meta:
 
   ```sh
   # 当前路径为 kuboard-spray
-  sudo pip install -r requirements.txt
+  pip install -r requirements.txt --break-system-packages
   ```
 
-- 替换对 `ansible` 定制的文件：
+- 替换对 `ansible` 定制的文件：（待完善）
 
   ```sh
   cp .docker/ansible-patch/config/base.yml /usr/local/lib/python3.8/dist-packages/ansible/config/base.yml
@@ -115,10 +115,10 @@ meta:
   # 假设 192.168.64.68 为您开发环境的 IP 地址
   ```
 
-- 在集成终端中（kuboard-spray/web 路径下）执行命令：
+- 在集成终端中（kuboard-spray/web/public 路径下）执行命令：
 
   ```sh
-  ln -s public/version-$(dpkg --print-architecture).json public/version.json
+  ln -s version-$(dpkg --print-architecture).json version.json
   # 仅需在首次运行时执行一次即可
   ```
 
