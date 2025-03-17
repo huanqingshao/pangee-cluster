@@ -1,28 +1,26 @@
-FROM ubuntu:24.04
+FROM ubuntu:20.04
 
 RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
-  && sed -i 's/ports\.ubuntu\.com/mirrors\.tuna\.tsinghua\.edu\.cn/g' /etc/apt/sources.list.d/ubuntu.sources\
+  && sed -i 's/ports\.ubuntu\.com/mirrors\.tuna\.tsinghua\.edu\.cn/g' /etc/apt/sources.list \
   && apt update \
   && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends tzdata \
   && apt upgrade -y \
   && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
   && apt install curl git vim wget -y 
 
-RUN install -m 0755 -d /etc/apt/keyrings \
-  && curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
-  && chmod a+r /etc/apt/keyrings/docker.asc  \
-  && echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null \
-  && apt update \
-  && apt install docker-ce-cli -y
+ADD apt-proxy.conf /etc/apt/apt.conf.d/proxy.conf
+
+RUN export https_proxy=http://192.168.3.109:7890 \
+  && wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
+  && dpkg -i docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
+  && rm docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
   && apt-get install -y nodejs \
   && useradd -D
 
-RUN wget https://go.dev/dl/go1.24.1.linux-$(dpkg --print-architecture).tar.gz \
+RUN export https_proxy=http://192.168.3.109:7890 && wget https://go.dev/dl/go1.24.1.linux-$(dpkg --print-architecture).tar.gz \
   && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.1.linux-$(dpkg --print-architecture).tar.gz
 
 RUN apt install -y python3-pip \
@@ -39,7 +37,7 @@ RUN echo "export PATH=$PATH:/usr/local/go/bin:/root/.local/bin" >> /root/.profil
   && echo "source /root/.cmcc-venv/bin/activate" >> /root/.profile \
   && echo "export LC_ALL=C.UTF-8" >> /root/.profile
 
-RUN apt install python3.12-venv -y
+RUN apt install python3-venv -y
 
 ADD requirements.txt /root/requirements.txt
 
