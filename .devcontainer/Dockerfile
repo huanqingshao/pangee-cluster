@@ -48,3 +48,5 @@ RUN python3 -m venv /root/.cmcc-venv \
   && source /root/.cmcc-venv/bin/activate \
   && pip install -U -r /root/requirements.txt
 
+RUN apt install -y rsync
+
