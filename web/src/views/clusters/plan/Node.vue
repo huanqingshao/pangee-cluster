@@ -26,7 +26,7 @@ zh:
     </div>
     <div class="delete_button" v-if="!hideDeleteButton && editMode !== 'view'">
       <el-button v-if="pendingAction === 'remove_node'" icon="el-icon-check" type="success" circle @click="cancelDelete"></el-button>
-      <el-popconfirm v-else icon="el-icon-info" icon-color="red" :title="$t('confirmDelete')" @confirm="deleteNode" placement="right-start">
+      <el-popconfirm v-else icon="el-icon-info" icon-color="red" :title="t('confirmDelete')" @confirm="deleteNode" placement="right-start">
         <template #reference>
           <el-button icon="el-icon-delete" type="danger" circle @submit.prevent.stop></el-button>
         </template>
@@ -143,11 +143,11 @@ export default {
     },
     deleteNode () {
       if (this.isClusterInstalled && !this.isClusterOnline) {
-        this.$message.error(this.$t('noRemoveOffline'))
+        this.$message.error(this.t('noRemoveOffline'))
         return
       }
       if (this.pendingAddNodes.length > 0 && this.onlineNodes[this.name] !== undefined) {
-        this.$message.error(this.$t('addNodeFirst'))
+        this.$message.error(this.t('addNodeFirst'))
         return
       }
       if (this.roles.etcd) {
@@ -159,7 +159,7 @@ export default {
           }
         }
         if (count === 1) {
-          this.$message.error(this.$t('cannot_remove_last_etcd'))
+          this.$message.error(this.t('cannot_remove_last_etcd'))
           return
         }
       }
@@ -172,7 +172,7 @@ export default {
           }
         }
         if (count === 1) {
-          this.$message.error(this.$t('cannot_remove_last_master'))
+          this.$message.error(this.t('cannot_remove_last_master'))
           return
         }
       }

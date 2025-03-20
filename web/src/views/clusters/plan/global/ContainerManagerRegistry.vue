@@ -33,7 +33,7 @@ zh:
           <!-- <FieldArray :holder="vars.containerd_insecure_registries" newItemTemplate="" :fieldName="key" label-width="0px" label=" "
             :itemProp="`${prop}.containerd_insecure_registries['${key}']`" :itemRules="insecureRegistriesItemRules" anti-freeze>
             <template v-slot:editItem="scope">
-              <el-input v-model.trim="item[scope.index]" :placeholder="$t('insecure_registries_placeholder')"></el-input>
+              <el-input v-model.trim="item[scope.index]" :placeholder="t('insecure_registries_placeholder')"></el-input>
             </template>
           </FieldArray> -->
         </div>

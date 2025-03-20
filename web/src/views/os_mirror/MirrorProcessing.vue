@@ -20,16 +20,16 @@ zh:
 </i18n>
 
 <template>
-  <ExecuteTask :history="os_mirror.history" :loading="loading" :title="$t('installMirror')" :startTask="applyPlan" @refresh="$emit('refresh')">  
+  <ExecuteTask :history="os_mirror.history" :loading="loading" :title="t('installMirror')" :startTask="applyPlan" @refresh="$emit('refresh')">  
     <el-form @submit.prevent.stop label-position="left" label-width="120px">
       <div style="height: 10px;"></div>
-      <el-form-item :label="$t('verbose')">
+      <el-form-item :label="t('verbose')">
         <el-switch v-model="form.verbose"></el-switch>
-        <div style="width: 240px; font-size: 12px;">{{$t('verbose_' + form.verbose)}}</div>
+        <div style="width: 240px; font-size: 12px;">{{t('verbose_' + form.verbose)}}</div>
       </el-form-item>
-      <el-form-item :label="$t('vvv')">
+      <el-form-item :label="t('vvv')">
         <el-switch v-model="form.vvv"></el-switch>
-        <div style="width: 240px; font-size: 12px;">{{$t('vvv_' + form.vvv)}}</div>
+        <div style="width: 240px; font-size: 12px;">{{t('vvv_' + form.vvv)}}</div>
       </el-form-item>
     </el-form>
   </ExecuteTask>

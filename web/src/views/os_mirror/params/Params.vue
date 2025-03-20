@@ -10,7 +10,7 @@ zh:
 
 <template>
   <div>
-    <el-alert :title="$t('params')" :closable="false" class="app_margin_bottom">{{ $t('params_desc') }}</el-alert>
+    <el-alert :title="t('params')" :closable="false" class="app_margin_bottom">{{ t('params_desc') }}</el-alert>
     <template v-for="(value, key) in os_mirror.status.params" :key="key">
       <FieldString :holder="os_mirror.status.params" :fieldName="key" label-width="240px" anti-freeze></FieldString>
     </template>

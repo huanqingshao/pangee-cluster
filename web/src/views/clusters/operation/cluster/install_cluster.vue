@@ -27,18 +27,18 @@ zh:
 
 <template>
   <el-form-item prop="action" :rules="rules">
-    <el-alert v-if="isClusterInstalled" type="warning" :title="$t('install_cluster')"
+    <el-alert v-if="isClusterInstalled" type="warning" :title="t('install_cluster')"
       class="app_margin_bottom" :closable="false">
-      {{$t('re_install_cluster')}}
+      {{t('re_install_cluster')}}
     </el-alert>
-    <el-form-item :label="$t('nodesToIncludeDesc')">
+    <el-form-item :label="t('nodesToIncludeDesc')">
       <template v-for="(item, key) in hosts" :key="'h' + key">
         <el-tag v-if="pingpong[key] && pingpong[key].ping === 'pong'" style="margin-bottom: 10px; margin-right: 10px;" effect="dark">
           <span class="app_text_mono" style="font-size: 14px;">{{key}}</span>
         </el-tag>
       </template>
     </el-form-item>
-    <el-form-item :label="$t('skip_downloads')" v-if="isClusterInstalled">
+    <el-form-item :label="t('skip_downloads')" v-if="isClusterInstalled">
       <el-switch v-model="formRef.install_cluster.skip_downloads"></el-switch>
     </el-form-item>
   </el-form-item>
@@ -70,7 +70,7 @@ export default {
             }
           }
           if (temp === '') {
-            return callback(_this.$t('requiresAtLeastOneOnlineNode'))
+            return callback(_this.t('requiresAtLeastOneOnlineNode'))
           }
 
           // 至少有一个工作节点
@@ -81,7 +81,7 @@ export default {
             }
           }
           if (countKubeNodeCount === 0) {
-            return callback(_this.$t('requiresKubeNodeCount'))
+            return callback(_this.t('requiresKubeNodeCount'))
           }
 
 
@@ -89,23 +89,23 @@ export default {
           let controlPlaneCount = 0
           for (let controlPlane in _this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
             if (_this.pingpong[controlPlane] === undefined || _this.pingpong[controlPlane].ping !== 'pong') {
-              return callback(_this.$t('requiresAllControlNodeOnline', { node: controlPlane }))
+              return callback(_this.t('requiresAllControlNodeOnline', { node: controlPlane }))
             }
             controlPlaneCount ++
           }
           if (controlPlaneCount === 0) {
-            return callback(_this.$t('requireAtLeastOneControlPlane'))
+            return callback(_this.t('requireAtLeastOneControlPlane'))
           }
           // 所有的 etcd 节点必须在线
           let etcdCount = 0
           for (let etcd in _this.cluster.inventory.all.children.target.children.etcd.hosts) {
             if (_this.pingpong[etcd] === undefined || _this.pingpong[etcd].ping !== 'pong') {
-              return callback(_this.$t('requiresAllEtcdNodeOnline, { node: etcd }'))
+              return callback(_this.t('requiresAllEtcdNodeOnline, { node: etcd }'))
             }
             etcdCount ++
           }
           if (etcdCount % 2 == 0) {
-            return callback(_this.$t('requiresOddEtcdCount'))
+            return callback(_this.t('requiresOddEtcdCount'))
           }
           return callback()
         },

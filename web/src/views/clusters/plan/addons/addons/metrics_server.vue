@@ -12,13 +12,13 @@ zh:
 </i18n>
 
 <template>
-  <AddonSection v-model:enabled="enabled" :label="$t('label')" :description="$t('obj.addon', {name: this.$t('description')})"
+  <AddonSection v-model:enabled="enabled" :label="t('label')" :description="$t('obj.addon', {name: this.t('description')})"
     :cluster="cluster" addonName="metrics_server" @refresh="$emit('refresh')">
     <template #more>
-      {{$t('addon_function')}}
+      {{t('addon_function')}}
     </template>
     <FieldString :holder="vars" :prop="prop" fieldName="metrics_server_metric_resolution" :rules="resolutionRules"></FieldString>
-    <FieldString :holder="addon.params" fieldName="metrics_server_version" :label="$t('metrics_server_version')" readOnly></FieldString>
+    <FieldString :holder="addon.params" fieldName="metrics_server_version" :label="t('metrics_server_version')" readOnly></FieldString>
   </AddonSection>
 </template>
 

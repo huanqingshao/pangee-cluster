@@ -61,35 +61,35 @@ zh:
   <ClusterTask :history="cluster.history" :populateRequest="populateRequest" @onShow="onShow" :action="form.action" playbook_check="upgrade_cluster"
     :cluster="cluster" :title="title" @refresh="$emit('refresh')">
     <el-form ref="form" :model="form" style="width: 850px;" label-width="120px">
-      <el-form-item :label="$t('operation')" prop="action" style="margin-top: 10px;">
+      <el-form-item :label="t('operation')" prop="action" style="margin-top: 10px;">
         <el-radio-group v-model="form.action" class="app_margin_bottom">
           <template v-if="nodeName === undefined">
             <el-radio-button label="download_binaries">
-              {{ $t('download_binaries') }}
+              {{ t('download_binaries') }}
             </el-radio-button>
             <el-radio-button label="upgrade_all_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
-              {{ $t('upgrade_all_nodes') }}
+              {{ t('upgrade_all_nodes') }}
             </el-radio-button>
             <el-radio-button label="upgrade_master_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
-              {{ $t('upgrade_master_nodes') }}
+              {{ t('upgrade_master_nodes') }}
             </el-radio-button>
-            <el-radio-button label="upgrade_multi_nodes" :disabled="requireSeparateDownloadAction || controlPlanePendingUpgrade">{{$t('upgrade_multi_nodes')}}</el-radio-button>
+            <el-radio-button label="upgrade_multi_nodes" :disabled="requireSeparateDownloadAction || controlPlanePendingUpgrade">{{t('upgrade_multi_nodes')}}</el-radio-button>
           </template>
           <template v-else>
             <el-radio-button label="drain_node" v-if="cluster.resourcePackage.data.supported_playbooks.drain_node"
               :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
-              {{$t('drain_node', {nodeName})}}
+              {{t('drain_node', {nodeName})}}
             </el-radio-button>
             <el-radio-button label="upgrade_single_node" :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
-              {{$t('upgrade_single_node', {nodeName})}}
+              {{t('upgrade_single_node', {nodeName})}}
             </el-radio-button>
             <el-radio-button label="uncordon_node" v-if="cluster.state.nodes[nodeName] && cluster.resourcePackage.data.supported_playbooks.uncordon_node"
               :disabled="!cluster.state.nodes[nodeName].spec.unschedulable">
-              {{$t('uncordon_node', {nodeName})}}
+              {{t('uncordon_node', {nodeName})}}
             </el-radio-button>
           </template>
         </el-radio-group>
-        <div class="form_description" :style="form.action === 'upgrade_all_nodes' ? 'color: var(--el-color-danger)':''">{{ $t(form.action + '_desc') }}</div>
+        <div class="form_description" :style="form.action === 'upgrade_all_nodes' ? 'color: var(--el-color-danger)':''">{{ t(form.action + '_desc') }}</div>
         <div v-if="form.action === 'upgrade_multi_nodes'" :rules="kube_nodes_to_upgrade_rules" style="margin-bottom: 18px;">
           <el-form-item prop="kube_nodes_to_upgrade" required>
             <el-checkbox-group v-model="form.kube_nodes_to_upgrade" @change="form.skip_downloads = !requireDownloadForNodes(form.kube_nodes_to_upgrade)">
@@ -102,18 +102,18 @@ zh:
         <div v-if="form.action === 'drain_node'">
           <pre class="drain_cmd app_text_mono">kubectl cordon {{ nodeName }}
 kubectl drain --force --ignore-daemonsets --grace-period {{ form.drain_node.drain_grace_period * 60}} --timeout {{ form.drain_node.drain_timeout * 60 }}s</pre>
-          <el-form-item label-width="150px" :label="$t('drain_grace_period')" required prop="drain_node.drain_grace_period">
+          <el-form-item label-width="150px" :label="t('drain_grace_period')" required prop="drain_node.drain_grace_period">
             <el-input-number v-model="form.drain_node.drain_grace_period" :min="1" :max="form.drain_node.drain_timeout - 1"></el-input-number> 分钟
             <span style="margin-left: 20px;" class="form_description">kubectl drain --grace-period</span>
           </el-form-item>
-          <el-form-item label-width="150px" :label="$t('drain_timeout')" required prop="drain_node.drain_timeout">
+          <el-form-item label-width="150px" :label="t('drain_timeout')" required prop="drain_node.drain_timeout">
             <el-input-number v-model="form.drain_node.drain_timeout" :min="form.drain_node.drain_grace_period + 1"></el-input-number> 分钟
             <span style="margin-left: 20px;" class="form_description">kubectl drain --timeout</span>
           </el-form-item>
-          <el-form-item label-width="150px" :label="$t('drain_retries')" required prop="drain_node.drain_retries">
+          <el-form-item label-width="150px" :label="t('drain_retries')" required prop="drain_node.drain_retries">
             <el-input-number v-model="form.drain_node.drain_retries" :min="1"></el-input-number> 次
           </el-form-item>
-          <el-form-item label-width="150px" :label="$t('drain_retry_delay_seconds')" required prop="drain_node.drain_retry_delay_seconds">
+          <el-form-item label-width="150px" :label="t('drain_retry_delay_seconds')" required prop="drain_node.drain_retry_delay_seconds">
             <el-input-number v-model="form.drain_node.drain_retry_delay_seconds" :min="5" :step="5"></el-input-number> 秒
           </el-form-item>
         </div>
@@ -121,7 +121,7 @@ kubectl drain --force --ignore-daemonsets --grace-period {{ form.drain_node.drai
           <pre class="pods_on_node">{{pods_on_node}}</pre>
         </el-scrollbar>
         <div v-if="form.action === 'upgrade_multi_nodes' || form.action === 'upgrade_single_node'">
-          <el-switch v-model="form.skip_downloads" :disabled="requireDownloadForNodes(form.kube_nodes_to_upgrade)" :active-text="$t('skip_downloads')"></el-switch>
+          <el-switch v-model="form.skip_downloads" :disabled="requireDownloadForNodes(form.kube_nodes_to_upgrade)" :active-text="t('skip_downloads')"></el-switch>
         </div>
       </el-form-item>
     </el-form>
@@ -155,7 +155,7 @@ export default {
         },
       },
       kube_nodes_to_upgrade_rules: [
-        { required: true, message: this.$t('upgrade_multi_nodes_desc') }
+        { required: true, message: this.t('upgrade_multi_nodes_desc') }
       ],
       pods_on_node: undefined,
     }
@@ -163,9 +163,9 @@ export default {
   computed: {
     title () {
       if (this.nodeName) {
-        return this.$t(this.form.action, { nodeName: this.nodeName })
+        return this.t(this.form.action, { nodeName: this.nodeName })
       }
-      return this.$t('upgrade_cluster') + ' : ' + this.$t(this.form.action)
+      return this.t('upgrade_cluster') + ' : ' + this.t(this.form.action)
     },
     requireSeparateDownloadAction () {
       for (let hostName in this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {

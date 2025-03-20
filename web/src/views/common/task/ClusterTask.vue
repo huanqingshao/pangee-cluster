@@ -1,7 +1,7 @@
 <i18n>
 en:
   verbose: Include task params
-  verbose_: 
+  verbose_: Normal level, it's recommended to use this option.
   verbose_v: May include sensitive data in the trace, e.g. path to files, user name, password.
   verbose_vvv: includes more information in log, only used in development.
   v_: Normal
@@ -13,6 +13,8 @@ en:
   operation: Operations
   offlineNodes: Offline nodes
   offlineNodesDesc: Exclude the following offline nodes.
+
+  newResourcePackageRequired: This resource package does not support the operation, please choose a new one.
 
 zh:
   verbose: 显示任务参数
@@ -29,6 +31,8 @@ zh:
   offlineNodes: 离线节点
   offlineNodesDesc: 排除以下不在线的节点：
 
+  newResourcePackageRequired: 当前资源包不支持此操作，请使用新的资源包
+
 </i18n>
 
 <template>
@@ -39,18 +43,18 @@ zh:
         <el-skeleton animated></el-skeleton>
       </div>
       <el-form v-else ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px" class="app_form_mini">
-        <el-form-item :label="$t('control_params')">
-          <el-form-item :label="$t('verbose')">
+        <el-form-item :label="t('control_params')">
+          <el-form-item :label="t('verbose')">
             <el-radio-group v-model="form.verbose">
-              <el-radio-button label="">{{$t('v_')}}</el-radio-button>
-              <el-radio-button label="v">{{$t('v_v')}}</el-radio-button>
-              <el-radio-button label="vvv">{{$t('v_vvv')}}</el-radio-button>
+              <el-radio-button label="">{{t('v_')}}</el-radio-button>
+              <el-radio-button label="v">{{t('v_v')}}</el-radio-button>
+              <el-radio-button label="vvv">{{t('v_vvv')}}</el-radio-button>
             </el-radio-group>
-            <div style="color: #aaa; font-size: 12px;">{{$t('verbose_' + form.verbose)}}</div>
+            <div style="color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</div>
           </el-form-item>
-          <el-form-item :label="$t('fork')" style="margin-top: 10px;">
+          <el-form-item :label="t('fork')" style="margin-top: 10px;">
             <el-input-number v-model="form.fork" :step="2" style="width: 166px;"></el-input-number>
-            <div style="color: #aaa; font-size: 12px;">{{$t('fork_more')}}</div>
+            <div style="color: #aaa; font-size: 12px;">{{t('fork_more')}}</div>
           </el-form-item>
         </el-form-item>
         
@@ -58,8 +62,8 @@ zh:
           <slot v-bind:form="form"></slot>
         </div>
 
-        <el-form-item :label="$t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
-          <div class="form_description">{{ $t('offlineNodesDesc') }}</div>
+        <el-form-item :label="t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
+          <div class="form_description">{{ t('offlineNodesDesc') }}</div>
           <template v-for="node in offlineNodes" :key="'exclude' + node">
             <el-tooltip class="box-item" effect="dark" :content="pingpong[node].message" placement="top-end">
               <el-tag type="danger" effect="dark" style="margin: 0 10px 10px 0;">
@@ -83,6 +87,7 @@ zh:
 
 <script>
 import ExecuteTask from './ExecuteTask.vue'
+import { useI18n } from 'vue-i18n';
 
 function trimMark(str) {
   if (str[str.length - 1] === ',') {
@@ -113,12 +118,19 @@ export default {
         nodes_to_exclude: [],
       },
       min_resource_package_version_rules: [
-        { required: true, message: this.$t('newResourcePackageRequired') }
+        { required: true, message: this.i18n('newResourcePackageRequired') }
       ],
       pingpong: {},
       pingpong_loading: true,
       pods_on_node: undefined,
     }
+  },
+  setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'local'
+    })
+    return { i18n: t }
   },
   computed: {
     offlineNodes () {

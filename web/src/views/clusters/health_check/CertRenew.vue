@@ -10,10 +10,10 @@ zh:
 </i18n>
 
 <template>
-  <ClusterTask v-if="!cluster.history.processing" :history="cluster.history" :title="$t('cert_renew')" :cluster="cluster"
+  <ClusterTask v-if="!cluster.history.processing" :history="cluster.history" :title="t('cert_renew')" :cluster="cluster"
     action="renew_cert" @refresh="$emit('refresh')" :populateRequest="populateRequest" :width="600">
-      <el-form-item :label="$t('desc_label')">
-        <span style="font-weight: bold;">{{ $t('cert_renew_desc') }}</span>
+      <el-form-item :label="t('desc_label')">
+        <span style="font-weight: bold;">{{ t('cert_renew_desc') }}</span>
       </el-form-item>
   </ClusterTask>
 </template>

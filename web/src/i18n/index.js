@@ -118,10 +118,10 @@ const messages = {
 
 const i18n = createI18n({
   fallbackLocale: 'zh',
-  globalInjection:true,
-  legacy: true,
-  silentFallbackWarn: true,
-  silentTranslationWarn: true,
+  // globalInjection:true,
+  // legacy: true,
+  // silentFallbackWarn: true,
+  // silentTranslationWarn: true,
   locale: language.split("-")[0] || "zh",
   messages,
 });

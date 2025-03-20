@@ -12,13 +12,13 @@ zh:
 <template>
   <el-popover
     placement="bottom"
-    :title="$t('changeColor')"
+    :title="t('changeColor')"
     width="300"
     trigger="click">
     <template #reference>
-      <el-button type="info">{{$t('changeColor')}}</el-button>
+      <el-button type="info">{{t('changeColor')}}</el-button>
     </template>
-    <span style="font-size: 13px; vertical-align: top; line-height: 28px; margin-right: 20px;">{{$t('reason')}}</span>
+    <span style="font-size: 13px; vertical-align: top; line-height: 28px; margin-right: 20px;">{{t('reason')}}</span>
     <el-color-picker
       v-model="color"
       show-alpha @change="change"
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     change () {
-      this.$confirm(this.$t('confirmToReload'), this.$t('message.prompt'), {
+      this.$confirm(this.t('confirmToReload'), this.$t('message.prompt'), {
         type: 'warning'
       }).then(() => {
         localStorage.setItem('terminalForegroundColor', this.color)

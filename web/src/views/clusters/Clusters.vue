@@ -16,7 +16,7 @@ zh:
 <template>
   <div>
     <div class="app_block_title">
-      {{$t('obj.cluster')}}
+      {{ $t('obj.cluster') }}
     </div>
     <div class="app_margin_bottom">
       <el-alert :closable="false" title="集群管理" class="app_white_alert">
@@ -33,21 +33,22 @@ zh:
         <div v-for="(item, index) in clusters" :key="'cluster' + index" class="cluster">
           <div class="deleteButton">
             <ClustersRename :clusterName="item" @success="refresh"></ClustersRename>
-            <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')" icon="el-icon-warning" icon-color="red"
-              placement="top-start" :title="$t('confirmToDelete')" @confirm="deleteCluster(item)">
+            <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')"
+              icon="el-icon-warning" icon-color="red" placement="top-start" :title="t('confirmToDelete')"
+              @confirm="deleteCluster(item)">
               <template #reference>
                 <el-button icon="el-icon-delete" circle type="danger"></el-button>
               </template>
             </el-popconfirm>
           </div>
-          <el-card shadow="never"
-            @click="$router.push(`/clusters/${item}`)">
+          <el-card shadow="never" @click="$router.push(`/clusters/${item}`)">
             <div class="noselect">
-              {{item}}
+              {{ item }}
             </div>
           </el-card>
         </div>
-        <el-button class="cluster" style="margin-bottom: 10px;" type="primary" size="large" icon="el-icon-plus" @click="$refs.create.show()">{{$t('addCluster')}}</el-button>
+        <el-button class="cluster" style="margin-bottom: 10px;" type="primary" size="large" icon="el-icon-plus"
+          @click="$refs.create.show()">{{ t('addCluster') }}</el-button>
       </div>
     </el-card>
     <CreateCluster ref="create"></CreateCluster>
@@ -63,15 +64,15 @@ export default {
   mixins: [mixin],
   props: {
   },
-  percentage () {
+  percentage() {
     return this.loading ? 10 : 100
   },
-  breadcrumb () {
+  breadcrumb() {
     return [
-      { label: this.$t('clusterList') }
+      { label: this.t('clusterList') }
     ]
   },
-  refresh () {
+  refresh() {
     this.refresh()
   },
   data() {
@@ -83,11 +84,11 @@ export default {
   computed: {
   },
   components: { CreateCluster, ClustersRename },
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    async refresh () {
+    async refresh() {
       this.loading = true
       await this.kuboardSprayApi.get('/clusters').then(resp => {
         this.clusters = resp.data.data
@@ -101,7 +102,7 @@ export default {
         this.refresh()
         this.$message.success(this.$t('msg.delete_succeeded'))
       }).catch(e => {
-        this.$message.error(this.$t('msg.delete_failed', {msg: e.response.data.message }))
+        this.$message.error(this.$t('msg.delete_failed', { msg: e.response.data.message }))
       })
     }
   }
@@ -116,6 +117,7 @@ export default {
   width: 200px;
   border-radius: 6px;
   cursor: pointer;
+
   .deleteButton {
     height: 0px;
     overflow: hidden;
@@ -125,9 +127,11 @@ export default {
     text-align: right;
   }
 }
+
 .cluster:hover {
   border-color: var(--el-color-primary);
 }
+
 .cluster:hover .deleteButton {
   overflow: visible;
 }

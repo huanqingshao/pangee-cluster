@@ -12,9 +12,9 @@ zh:
 <template>
   <div style="text-align: left;">
     <el-dialog :title="$t('msg.prompt')" v-model="dialogVisible" width="60%" :before-close="handleClose">
-      <p>{{ $t('error') }}</p>
+      <p>{{ t('error') }}</p>
       <p class="app_text_mono" style="font-size: 12px; margin-left: 20px; margin-bottom: 20px;">{{message}}</p>
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/websocket.html" :size="14" type="danger">{{$t('commonProblems')}}</KuboardSprayLink>
+      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/websocket.html" :size="14" type="danger">{{t('commonProblems')}}</KuboardSprayLink>
     </el-dialog>
   </div>
 </template>
@@ -33,7 +33,7 @@ export default {
       this.dialogVisible = true
     },
     handleClose() {
-      this.$confirm(this.$t('confirm'))
+      this.$confirm(this.t('confirm'))
         .then(() => {
           window.location.reload()
         })

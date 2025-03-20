@@ -14,29 +14,34 @@ zh:
 </i18n>
 
 <template>
-  <div class="header-warpper" :style="transparent ? 'background: transparent': ''">
+  <div class="header-warpper" :style="transparent ? 'background: transparent' : ''">
     <div :class="'header kuboard-header'">
       <el-progress class="progress" :percentage="percentage" status="success" :stroke-width="3"></el-progress>
       <div style="display: flex;" :class="transparent ? '' : 'header-background'">
-        <div :class="`slot ${pageLevel ? 'slot-cluster' : ''}`" :style="transparent ? 'background: transparent': ''">
-          <transition-group name="el-fade-in-linear" mode="out-in">
-            <HeaderBreadCrumb :label="$t('homePage')" to="/home" :kind="$t('homePage')" key="home" :hasNext="breadcrumb.length > 0"></HeaderBreadCrumb>
-            <HeaderBreadCrumb v-for="(item, index) in breadcrumb" :key="index + 'bc' + item.label"
-              :label="item.label" :to="item.to" :kind="item.kind" :hasNext="index < breadcrumb.length - 1"></HeaderBreadCrumb>
-            <KbButton v-if="refresh" style="margin-left: 20px;" icon="el-icon-refresh" :loading="percentage < 100" key="refresh"
-              @click="refresh.refresh.call(refresh.ref)"></KbButton>
+        <div :class="`slot ${pageLevel ? 'slot-cluster' : ''}`" :style="transparent ? 'background: transparent' : ''">
+          <transition-group name="el-fade-in-linear">
+            <HeaderBreadCrumb :label="t('homePage')" to="/home" :kind="t('homePage')" key="home"
+              :hasNext="breadcrumb.length > 0"></HeaderBreadCrumb>
+            <HeaderBreadCrumb v-for="(item, index) in breadcrumb" :key="index + 'bc' + item.label" :label="item.label"
+              :to="item.to" :kind="item.kind" :hasNext="index < breadcrumb.length - 1"></HeaderBreadCrumb>
+            <KbButton v-if="refresh" style="margin-left: 20px;" icon="el-icon-refresh" :loading="percentage < 100"
+              key="refresh" @click="refresh.refresh.call(refresh.ref)"></KbButton>
           </transition-group>
         </div>
         <div class="header-right">
           <div class="msg">
             <div class="version" :style="showGithubStar ? '' : 'line-height: 70px;'">
               <div class="dot"></div>
-              <div style="margin-right: 10px; width: 80px; display: inline-block; vertical-align: top; text-align: left;" class="nowrap">{{$t('version')}}</div>
+              <div
+                style="margin-right: 10px; width: 80px; display: inline-block; vertical-align: top; text-align: left;"
+                class="nowrap">{{ t('version') }}</div>
               <span class="font-weight">{{ version }}</span>
             </div>
             <div class="version" v-if="showGithubStar">
               <div class="dot"></div>
-              <iframe id="github-star-iframe" style="display:inline-block;vertical-align:middle;" :src="`https://addons.kuboard.cn/downloads/github-star-kuboard-spray.html?nocache=${Math.random()}`" frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe>
+              <iframe id="github-star-iframe" style="display:inline-block;vertical-align:middle;"
+                :src="`https://addons.kuboard.cn/downloads/github-star-kuboard-spray.html?nocache=${Math.random()}`"
+                frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe>
             </div>
           </div>
           <LoginInfo></LoginInfo>
@@ -62,7 +67,7 @@ export default {
     switchToNamespaceHome: { type: Boolean, required: false, default: false },
     transparent: { type: Boolean, required: false, default: false },
   },
-  data () {
+  data() {
     return {
       dialogVisible: false,
       current: 0,
@@ -77,7 +82,7 @@ export default {
       refresh: 'header/refresh',
     }),
     loading() {
-      return this. percentage < 100
+      return this.percentage < 100
     },
     version() {
       return window.KuboardSpray.version.version
@@ -90,7 +95,7 @@ export default {
   //     }
   //   }
   // },
-  mounted () {
+  mounted() {
     this.interval = setInterval(() => {
       this.current = this.current + 1
     }, 5000)
@@ -103,7 +108,7 @@ export default {
     })
     showGithubStar()
   },
-  beforeUnmount () {
+  beforeUnmount() {
     clearInterval(this.interval)
   },
   components: { HeaderBreadCrumb, KbButton, LoginInfo },
@@ -116,10 +121,12 @@ export default {
 .kuboard-header .el-progress__text {
   display: none;
 }
+
 .kuboard-header .el-progress {
   line-height: 2px;
   height: 2px;
 }
+
 .kuboard-header .el-progress .el-progress-bar {
   top: 0;
   position: fixed;
@@ -144,9 +151,11 @@ export default {
   transition: 0.2s;
   line-height: 35px;
 }
+
 .version:hover {
   color: var(--el-color-primary-light-5);
 }
+
 .version .dot {
   width: 6px;
   height: 6px;
@@ -156,16 +165,19 @@ export default {
   margin-right: 8px;
   margin-bottom: 2px;
 }
+
 .msg {
   display: inline-block;
   width: 300px;
   text-align: left;
 }
+
 .setting {
   height: 70px;
   vertical-align: top;
   display: inline-block;
 }
+
 .font-weight {
   font-weight: 600;
 }
@@ -173,18 +185,22 @@ export default {
 .dropdown-menu {
   cursor: pointer;
 }
+
 .dropdown-menu :hover {
   color: var(--el-color-primary);
 }
+
 .header {
   height: 72px;
   position: fixed;
   top: 0;
   z-index: 1000;
 }
+
 .header-background {
   background: transparent;
 }
+
 .header-warpper {
   height: 72px;
   background: transparent;
@@ -194,10 +210,12 @@ export default {
   height: 70px;
   overflow: hidden;
 }
+
 .progress {
   width: 100%;
   overflow: hidden;
 }
+
 .slot {
   height: 70px;
   overflow: hidden;
@@ -208,9 +226,11 @@ export default {
   z-index: 1;
   color: var(--el-color-white);
 }
+
 .slot-cluster {
   color: var(--el-color-white);
 }
+
 .header-right {
   padding-right: 10px;
   position: fixed;
@@ -222,10 +242,12 @@ export default {
   height: 70px;
   text-align: right;
 }
+
 .logo_label {
   font-size: 12px;
   color: mix(var(--el-color-white), var(--el-color-primary), 70%);
 }
+
 .logo {
   font-size: 16px;
   font-weight: 600;
@@ -240,14 +262,17 @@ export default {
   height: 50px;
   margin-top: 10px;
 }
+
 .logo:hover {
   color: var(--el-color-primary);
   background-color: white;
 }
+
 .logo:active {
   color: var(--el-color-primary);
   outline: none;
 }
+
 .yaml {
   font-size: 16px;
   font-weight: 600;
@@ -268,6 +293,7 @@ export default {
   height: 60px;
   margin-top: 5px;
 }
+
 .settings .button {
   height: 30px;
   line-height: 30px;
@@ -280,10 +306,12 @@ export default {
   margin-right: 10px;
   width: 75px;
 }
+
 .settings .button:hover {
   color: var(--el-color-primary);
   background-color: white;
 }
+
 .userInfo {
   font-size: 13px;
   width: 110px;
@@ -293,14 +321,17 @@ export default {
   font-weight: 800;
   color: white;
 }
+
 .userInfo:hover {
   color: var(--el-color-primary);
 }
+
 .item {
   line-height: 1;
   height: 32px;
   vertical-align: top;
 }
+
 .label {
   color: var(--el-text-color-secondary);
   width: 120px;
@@ -309,6 +340,7 @@ export default {
   font-size: 13px;
   padding: 7px 0;
 }
+
 .value {
   color: var(--el-text-color-primary);
   width: calc(100% - 150px);
@@ -319,13 +351,16 @@ export default {
   font-size: 13px;
   height: 28px;
   padding: 7px 0;
-  font-family: Monaco,Menlo,Consolas,Bitstream Vera Sans Mono,monospace;
+  font-family: Monaco, Menlo, Consolas, Bitstream Vera Sans Mono, monospace;
 }
-.value button{
+
+.value button {
   margin-top: -7px;
 }
+
 .alertWrapper {
-  text-align: left; padding: 0;
+  text-align: left;
+  padding: 0;
   position: absolute;
   top: 2px;
   z-index: 5000;

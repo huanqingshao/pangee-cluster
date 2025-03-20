@@ -19,7 +19,7 @@ zh:
 
 <template>
   <el-form class="app_form_mini" label-position="left" label-width="200px">
-    <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{$t('package_content')}} ]</div>
+    <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{t('package_content')}} ]</div>
     <el-collapse v-model="activeNames">
       <el-collapse-item name="1">
         <template #title>
@@ -36,7 +36,7 @@ zh:
           <span class="package_title">kubernetes</span>
         </template>
         <div class="package_info">
-          <el-form-item :label="$t('os')">
+          <el-form-item :label="t('os')">
             <div>
               <template v-for="(item, key) in resourcePackage.metadata.supported_os" :key="'os' + key">
                 <div>
@@ -78,7 +78,7 @@ zh:
       </el-collapse-item>
       <el-collapse-item name="4">
         <template #title>
-          <span class="package_title">{{$t('network_plugin')}}</span>
+          <span class="package_title">{{t('network_plugin')}}</span>
         </template>
         <div class="package_info">
           <template v-for="(item, index) in resourcePackage.data.network_plugin" :key="index + 'network_plugin'">
@@ -95,7 +95,7 @@ zh:
       </el-collapse-item>
       <el-collapse-item name="5">
         <template #title>
-          <span class="package_title">{{$t('dependency')}}</span>
+          <span class="package_title">{{t('dependency')}}</span>
         </template>
         <div class="package_info">
           <template v-for="(item, index) in resourcePackage.data.dependency" :key="index + 'dependency'">
@@ -109,7 +109,7 @@ zh:
       </el-collapse-item>
       <el-collapse-item name="6">
         <template #title>
-          <span class="package_title">{{$t('addon')}}</span>
+          <span class="package_title">{{t('addon')}}</span>
         </template>
         <div class="package_info">
           <template v-for="(item, index) in resourcePackage.data.addon" :key="index + 'addon'">
@@ -118,8 +118,8 @@ zh:
                 <div style="font-weight: bolder;">{{item.name}}</div>
               </template>
               <div class="app_text_mono">
-                <el-tag type="success" v-if="item.lifecycle && item.lifecycle.install_by_default">{{$t('install_by_default_true')}}</el-tag>
-                <el-tag type="info" v-else>{{$t('install_by_default_false')}}</el-tag>
+                <el-tag type="success" v-if="item.lifecycle && item.lifecycle.install_by_default">{{t('install_by_default_true')}}</el-tag>
+                <el-tag type="info" v-else>{{t('install_by_default_false')}}</el-tag>
               </div>
             </el-form-item>
             <div class="package_info">

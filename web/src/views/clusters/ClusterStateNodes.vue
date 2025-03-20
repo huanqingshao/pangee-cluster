@@ -12,14 +12,14 @@ zh:
 </i18n>
 
 <template>
-  <el-popover placement="bottom-start" :title="$t('title')" :width="600" trigger="click">
+  <el-popover placement="bottom-start" :title="t('title')" :width="600" trigger="click">
     <template #reference>
-      <el-button v-if="state.code === undefined" type="info" round :loading="true">{{$t('loading')}}</el-button>
+      <el-button v-if="state.code === undefined" type="info" round :loading="true">{{t('loading')}}</el-button>
       <template v-else-if="state.code === 200">
-        <el-button v-if="healthy" type="success" round icon="el-icon-success-filled">{{$t('nodeCount', { count, etcdCount: state.etcd_members_count })}}</el-button>
-        <el-button v-else type="danger" round icon="el-icon-success-filled">{{$t('nodeCount', { count, etcdCount: state.etcd_members_count })}}</el-button>
+        <el-button v-if="healthy" type="success" round icon="el-icon-success-filled">{{t('nodeCount', { count, etcdCount: state.etcd_members_count })}}</el-button>
+        <el-button v-else type="danger" round icon="el-icon-success-filled">{{t('nodeCount', { count, etcdCount: state.etcd_members_count })}}</el-button>
       </template>
-      <el-button v-else type="danger" round icon="el-icon-info-filled">{{$t('unreachable')}}</el-button>
+      <el-button v-else type="danger" round icon="el-icon-info-filled">{{t('unreachable')}}</el-button>
     </template>
     <div>
       <el-scrollbar max-height="45vh">
@@ -28,7 +28,7 @@ zh:
             <ClusterStateNodesItem :node="node" :name="name"></ClusterStateNodesItem>
           </div>
         </div>
-        <el-alert v-else type="error" :closable="false" :title="$t('unreachable')" effect="dark">
+        <el-alert v-else type="error" :closable="false" :title="t('unreachable')" effect="dark">
           <pre>{{state.msg}}</pre>
           <pre>{{state.etcd_msg}}</pre>
         </el-alert>

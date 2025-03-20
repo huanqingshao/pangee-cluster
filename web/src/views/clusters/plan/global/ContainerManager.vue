@@ -14,7 +14,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-if="cluster && cluster.resourcePackage" v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled anti-freeze>
+  <ConfigSection v-if="cluster && cluster.resourcePackage" v-model:enabled="enabled" :label="t('label')" :description="t('description')" disabled anti-freeze>
     <FieldSelect :holder="vars" fieldName="container_manager"
       :prop="prop" required :loadOptions="loadContainerEngines" :disabled="cluster.resourcePackage === undefined">
       <template #view_append>
@@ -37,7 +37,7 @@ zh:
       <FieldBool :holder="vars" :prop="prop" fieldName="docker_orphan_clean_up"></FieldBool>
       <FieldArray :holder="vars" :prop="prop" newItemTemplate="" fieldName="docker_insecure_registries" :itemRules="insecureRegistriesItemRules" anti-freeze>
         <template v-slot:editItem="scope">
-          <el-input v-model.trim="vars.docker_insecure_registries[scope.index]" :placeholder="$t('insecure_registries_placeholder')"></el-input>
+          <el-input v-model.trim="vars.docker_insecure_registries[scope.index]" :placeholder="t('insecure_registries_placeholder')"></el-input>
         </template>
       </FieldArray>
       <div style="margin: -15px 0 5px 120px;">
@@ -45,7 +45,7 @@ zh:
       </div>
       <FieldArray :holder="vars" :prop="prop" newItemTemplate="" fieldName="docker_registry_mirrors" :itemRules="insecureRegistriesItemRules" anti-freeze>
         <template v-slot:editItem="scope">
-          <el-input v-model.trim="vars.docker_registry_mirrors[scope.index]" :placeholder="$t('registry_mirrors_placeholder')"></el-input>
+          <el-input v-model.trim="vars.docker_registry_mirrors[scope.index]" :placeholder="t('registry_mirrors_placeholder')"></el-input>
         </template>
       </FieldArray>
     </template>

@@ -8,9 +8,9 @@ zh:
 <template>
   <div style="display: inline-block; text-align: left;">
     <div style="text-align: right;">
-      <el-button type="primary" icon="el-icon-download" @click="compute_dialogVisible = true">{{$t('createByOffline')}}</el-button>
+      <el-button type="primary" icon="el-icon-download" @click="compute_dialogVisible = true">{{t('createByOffline')}}</el-button>
     </div>
-    <el-dialog v-model="compute_dialogVisible" :title="$t('createByOffline')" width="80%" top="5vh" :close-on-click-modal="false">
+    <el-dialog v-model="compute_dialogVisible" :title="t('createByOffline')" width="80%" top="5vh" :close-on-click-modal="false">
       <div style="height: calc(90vh - 180px);">
         <el-alert :closable="false" type="warning" class="app_margin_bottom">
           <div style="line-height: 20px;">

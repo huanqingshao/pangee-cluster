@@ -8,7 +8,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled anti-freeze>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description')" disabled anti-freeze>
     <template #more>
       请确保节点的 IP 地址不包含在服务子网和容器组子网当中。
     </template>

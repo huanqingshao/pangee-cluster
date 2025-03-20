@@ -10,10 +10,10 @@ zh:
 </i18n>
 
 <template>
-  <ExecuteTask v-if="resource" :history="resource.history" :startTask="startTask" :label="$t('download')"
-    :title="$t('title', {name: resource.package.metadata.version})" :loading="loading" @refresh="$emit('refresh')">
+  <ExecuteTask v-if="resource" :history="resource.history" :startTask="startTask" :label="t('download')"
+    :title="t('title', {name: resource.package.metadata.version})" :loading="loading" @refresh="$emit('refresh')">
     <el-form @submit.prevent.stop :model="form" ref="form" label-position="left" label-width="120px">
-      <el-form-item :label="$t('selectSource')" prop="downloadFrom" :rules="sourceRules">
+      <el-form-item :label="t('selectSource')" prop="downloadFrom" :rules="sourceRules">
         <el-radio-group v-model="form.downloadFrom">
           <div style="line-height: 28px; padding-top: 5px;">
             <div v-for="(source, index) in resource.package.metadata.available_at" :key="'source' + index">
@@ -44,7 +44,7 @@ export default {
         downloadFrom: undefined,
       },
       sourceRules: [
-        { required: true, message: this.$t('selectSource'), trigger: 'change' }
+        { required: true, message: this.t('selectSource'), trigger: 'change' }
       ]
     }
   },

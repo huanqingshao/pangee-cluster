@@ -1,5 +1,4 @@
-<i18n>
-en:
+<i18n locale="en" lang="yaml">
   expand: Open
   collapse: Close
   clusters: Kubernetes Cluster
@@ -8,7 +7,8 @@ en:
   mirrors: OS Mirrors
   kuboard: Kuboard Integration
   profile: Change Password
-zh:
+</i18n>
+<i18n locale="zh" lang="yaml">
   expand: 展开
   collapse: 收起
   clusters: 集群管理
@@ -22,17 +22,16 @@ zh:
 <template>
   <div class="leftColumn">
     <div class="menuTitle noselect nowrap" :style="menuStyle" @click="$router.push('/home')">
-        Kuboard Spray
+      Kuboard Spray
     </div>
-    <el-menu :default-active="defaultActive" class="kuboard_namespaced_menu" unique-opened
-      :collapse="isCollapse" background-color="white"
-      ref="menu" router>
+    <el-menu :default-active="defaultActive" class="kuboard_namespaced_menu" unique-opened :collapse="isCollapse"
+      background-color="white" ref="menu" router>
       <el-menu-item index="1" :route="`/clusters`" class="toplevel">
         <el-icon>
           <el-icon-home-filled></el-icon-home-filled>
         </el-icon>
         <template #title>
-          <span>{{$t('clusters')}}</span>
+          <span>{{ t('clusters') }}</span>
         </template>
       </el-menu-item>
       <el-sub-menu index="2">
@@ -40,19 +39,19 @@ zh:
           <el-icon>
             <el-icon-setting></el-icon-setting>
           </el-icon>
-          <span>{{$t('settings')}}</span>
+          <span>{{ t('settings') }}</span>
         </template>
         <el-menu-item index="2-1" :route="`/settings/resources`">
-          {{$t('resources')}}
+          {{ t('resources') }}
         </el-menu-item>
         <el-menu-item index="2-2" :route="`/settings/mirrors`">
-          {{$t('mirrors')}}
+          {{ t('mirrors') }}
         </el-menu-item>
         <el-menu-item index="2-3" :route="`/settings/kuboard`">
-          {{$t('kuboard')}}
+          {{ t('kuboard') }}
         </el-menu-item>
         <el-menu-item index="2-4" :route="`/settings/profile`">
-          {{$t('profile')}}
+          {{ t('profile') }}
         </el-menu-item>
       </el-sub-menu>
 
@@ -62,7 +61,7 @@ zh:
         <el-icon-d-arrow-right v-if="isCollapse"></el-icon-d-arrow-right>
         <el-icon-d-arrow-left v-else></el-icon-d-arrow-left>
       </el-icon>
-      {{isCollapse ? $t('expand') : $t('collapse')}}
+      {{ isCollapse ? t('expand') : t('collapse') }}
     </div>
   </div>
 </template>
@@ -73,7 +72,7 @@ zh:
 export default {
   props: {
   },
-  data () {
+  data() {
     let isCollapse = false
     if (localStorage.getItem('menu-collapse') === 'true') {
       isCollapse = true
@@ -84,7 +83,7 @@ export default {
     }
   },
   computed: {
-    menuStyle () {
+    menuStyle() {
       if (this.isCollapse) {
         return 'width: 64px;'
       } else {
@@ -93,21 +92,21 @@ export default {
     }
   },
   watch: {
-    '$route.path' () {
+    '$route.path'() {
       this.$nextTick(() => {
         let active = this.refreshDefaultActive()
         this.defaultActive = active
       })
     },
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       let active = this.refreshDefaultActive()
       this.defaultActive = active
     })
   },
   methods: {
-    refreshDefaultActive () {
+    refreshDefaultActive() {
       let active = '0'
       if (this.$refs.menu === undefined) {
         return active
@@ -144,7 +143,7 @@ export default {
 @import "./menu.scss";
 
 .kuboard_global_menu {
-  
+
   text-align: left;
   background-color: rgb(244, 244, 245);
   padding: 10px 0 0 0;
@@ -153,9 +152,11 @@ export default {
   overflow-y: auto;
   border: none;
 }
+
 .kuboard_global_menu:not(.el-menu--collapse) {
   width: calc(8vw + 90px);
 }
+
 .kuboard_global_menu .el-menu-item-group__title {
   padding-left: 25px !important;
 }

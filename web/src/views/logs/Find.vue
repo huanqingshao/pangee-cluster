@@ -27,45 +27,45 @@ zh:
   <div style="margin-top: 1px;">
     <div v-if="visible" class="finder-form">
       <el-form style="display: inline-block;" label-width="80px" label-position="left" @submit.prevent>
-        <el-form-item :label="$t('string')">
+        <el-form-item :label="t('string')">
           <el-input ref="text" v-model="textToFind" clearable
             @keyup.enter="find(); $refs.text.focus()"
             style="width: calc(100vw - 1000px); max-width: 600px;"/>
         </el-form-item>
       </el-form>
       <div style="line-height: 28px; display: inline-block;">
-        <el-tooltip class="tip" effect="light" :content="$t('backward')" placement="bottom-start">
+        <el-tooltip class="tip" effect="light" :content="t('backward')" placement="bottom-start">
           <div class="icon-wrapper" @click="directionToFind = 0; find()">
             <img :class="directionToFind === 0 ? 'icon selected' : 'icon'" :src="iconLeft" />
           </div>
         </el-tooltip>
-        <el-tooltip class="tip" effect="light" :content="$t('forward')" placement="bottom-start">
+        <el-tooltip class="tip" effect="light" :content="t('forward')" placement="bottom-start">
           <div class="icon-wrapper" @click="directionToFind = 1; find()">
             <img :class="directionToFind === 1 ? 'icon selected' : 'icon'" :src="iconRight" />
           </div>
         </el-tooltip>
-        <el-tooltip class="tip" effect="light" :content="$t('pattern')" placement="bottom-start">
+        <el-tooltip class="tip" effect="light" :content="t('pattern')" placement="bottom-start">
           <div class="icon-wrapper" @click="isRegex = !isRegex">
             <img :class="isRegex ? 'icon selected' : 'icon'" :src="iconRegex" />
           </div>
         </el-tooltip>
-        <el-tooltip class="tip" effect="light" :content="$t('caseSensitive')" placement="bottom-start">
+        <el-tooltip class="tip" effect="light" :content="t('caseSensitive')" placement="bottom-start">
           <div class="icon-wrapper" @click="isCaseSensitive = !isCaseSensitive">
             <img :class="isCaseSensitive ? 'icon selected' : 'icon'" :src="iconCaseSensitive" />
           </div>
         </el-tooltip>
-        <el-tooltip class="tip" effect="light" :content="$t('wholeWords')" placement="bottom-start">
+        <el-tooltip class="tip" effect="light" :content="t('wholeWords')" placement="bottom-start">
           <div class="icon-wrapper" @click="isWholeWord = !isWholeWord">
             <img :class="isWholeWord ? 'icon selected' : 'icon'" :src="iconWholeWord" />
           </div>
         </el-tooltip>
-        <el-tooltip class="tip" effect="light" :content="$t('isHit')" placement="bottom-start" style="margin-left: 32px;">
+        <el-tooltip class="tip" effect="light" :content="t('isHit')" placement="bottom-start" style="margin-left: 32px;">
           <div class="icon-wrapper" style="cursor: auto;">
             <img :class="found ? 'icon selected-hit' : 'icon'" :src="iconHit" />
           </div>
         </el-tooltip>
         <div style="display: inline-block; margin-left: 50px;">
-          <el-button type="primary" icon="el-icon-search" @click="find" :disabled="!textToFind">{{$t('find')}}</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="find" :disabled="!textToFind">{{t('find')}}</el-button>
           <el-button type="info" icon="el-icon-close" @click="visible = false">{{$t('msg.cancel')}}</el-button>
         </div>
       </div>
@@ -148,7 +148,7 @@ export default {
         this.found = this.searchAddon.findPrevious(this.textToFind, {regex: this.isRegex, wholeWord: this.isWholeWord, caseSensitive: this.isCaseSensitive, incremental: false })
       }
       if (this.found === false) {
-        this.$message.warning(`${this.$t('notFound')}: ${this.textToFind}`)
+        this.$message.warning(`${this.t('notFound')}: ${this.textToFind}`)
       }
     },
   }

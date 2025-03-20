@@ -11,7 +11,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description', {nodeName: nodeName})" disabled anti-freeze>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description', {nodeName: nodeName})" disabled anti-freeze>
     <div v-if="node.k8s_node">
       <div style="text-align: right; margin-bottom: 10px;">
         <el-button @click="$refs.previewYaml.show([node.k8s_node], $t('msg.preview_yaml'))" type="primary" icon="el-icon-document">{{$t('msg.preview_yaml')}}</el-button>
@@ -19,7 +19,7 @@ zh:
       <PreviewYaml ref="previewYaml"></PreviewYaml>
     </div>
     <el-form label-width="160px" class="app_form_mini">
-      <el-form-item :label="$t('roles')" label-width="100px">
+      <el-form-item :label="t('roles')" label-width="100px">
         <div class="info" style="display: flex; flex-wrap: wrap;">
           <template v-if="node.k8s_node">
             <NodeRoleTag v-if="node.k8s_node.metadata.labels['node-role.kubernetes.io/control-plane'] !== undefined" role="kube_control_plane" style="margin-right: 10px; margin-bottom: 10px;" enabled read-only></NodeRoleTag>

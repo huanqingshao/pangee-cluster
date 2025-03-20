@@ -10,10 +10,10 @@ zh:
 </i18n>
 
 <template>
-  <AddonSection v-model:enabled="enabled" :label="$t('label')" :description="$t('obj.addon', {name: this.$t('description')})"
+  <AddonSection v-model:enabled="enabled" :label="t('label')" :description="$t('obj.addon', {name: this.t('description')})"
     :cluster="cluster" addonName="kuboard" @refresh="$emit('refresh')">
     <template #more>
-      {{$t('addon_function')}}
+      {{t('addon_function')}}
     </template>
     <FieldCommon :holder="holder" :prop="prop" fieldName="kuboard_version" :placeholder="'默认值 ' + addon.params_default.kuboard_version">
       <template #edit>

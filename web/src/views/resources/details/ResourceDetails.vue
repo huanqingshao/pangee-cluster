@@ -10,10 +10,10 @@ zh:
 <template>
   <div>
     <el-tabs v-if="releaseNoteHtml" v-model="activeName" type="card">
-      <el-tab-pane :label="$t('releaseNote')" name="releaseNote">
+      <el-tab-pane :label="t('releaseNote')" name="releaseNote">
         <div v-if="releaseNoteHtml" v-html="releaseNoteHtml" class="markdown"></div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('content')" name="content">
+      <el-tab-pane :label="t('content')" name="content">
         <div style="padding-top: 10px;">
           <ResourcePackage :expandAll="expandAll" :resourcePackage="resourcePackage"></ResourcePackage>
         </div>

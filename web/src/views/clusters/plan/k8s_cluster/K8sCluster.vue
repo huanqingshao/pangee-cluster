@@ -11,7 +11,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled anti-freeze>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description')" disabled anti-freeze>
     <template v-if="cluster.resourcePackage !== undefined">
       <el-form-item label="kube_version">
         <span class="app_text_mono">{{cluster.resourcePackage.data.kubernetes.kube_version}}</span>
@@ -46,7 +46,7 @@ zh:
     </template>
     <FieldNumber :holder="vars" :prop="prop" fieldName="kubelet_event_record_qps">
       <template #append>
-        <span v-if="vars.kubelet_event_record_qps === 0">{{$t('nolimit')}}</span>
+        <span v-if="vars.kubelet_event_record_qps === 0">{{t('nolimit')}}</span>
         <span v-else>个</span>
       </template>
       <template #edit_desc>
@@ -79,7 +79,7 @@ export default {
         {
           validator: (rule, value, callback) => {
             // if (!this.vars.kube_api_anonymous_auth && (value === 0 || value === undefined)) {
-            //   return callback(this.$t('kube_api_anonymous_auth_and_insecure_port'))
+            //   return callback(this.t('kube_api_anonymous_auth_and_insecure_port'))
             // }
             return callback()
           },

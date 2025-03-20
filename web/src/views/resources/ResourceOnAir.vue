@@ -17,7 +17,7 @@ zh:
       <template v-if="resourcePackage">
         <ResourceDownload  v-if="meetVersionRequirement" action="download" :resource="{package: resourcePackage, history:{task_type: 'resource', task_name: name, processing: false, success_tasks: []}}"></ResourceDownload>
         <template v-else>
-          <el-tag type="danger" effect="dark">{{ $t('minVersionRequired') }}</el-tag>
+          <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
           <el-tag type="danger" class="app_text_mono">{{resourcePackage.metadata.kuboard_spray_version.min}}</el-tag>
         </template>
       </template>
@@ -28,7 +28,7 @@ zh:
         <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
           <el-icon-cloudy></el-icon-cloudy>
         </el-icon>
-        {{$t('online')}}
+        {{t('online')}}
       </el-tag>
     </div>
     <el-card>
@@ -54,7 +54,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('resourceList'), to: '/settings/resources' },
+      { label: this.t('resourceList'), to: '/settings/resources' },
       { label: this.name },
     ]
   },

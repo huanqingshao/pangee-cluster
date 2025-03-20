@@ -11,11 +11,11 @@ zh:
 
 <template>
   <div class="app_margin_bottom">
-    <el-alert :title="$t('gapNode')" type="warning" :closable="false" class="app_margin_bottom">
+    <el-alert :title="t('gapNode')" type="warning" :closable="false" class="app_margin_bottom">
       <div style="width: 100%;">
-        <div>{{ $t('message') }}</div>
+        <div>{{ t('message') }}</div>
         <!-- <div style="text-align: right;">
-          <el-button type="primary" icon="el-icon-plus">{{ $t('addToKuboardSpray') }}</el-button>
+          <el-button type="primary" icon="el-icon-plus">{{ t('addToKuboardSpray') }}</el-button>
         </div> -->
       </div>
     </el-alert>

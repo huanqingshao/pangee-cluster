@@ -8,12 +8,12 @@ zh:
 
 <template>
   <div>
-    <SshParamsBastion v-if="cluster && cluster.inventory" :cluster="cluster" nodeName="bastion" :holder="inventory.all.hosts.bastion || {}" 
+     <SshParamsBastion v-if="cluster && cluster.inventory" :cluster="cluster" nodeName="bastion" :holder="inventory.all.hosts.bastion || {}" 
       prop="all.hosts.bastion"></SshParamsBastion>
-    <SshParamsCluster :cluster="cluster" :holder="cluster.inventory.all.children.target.vars" prop="all.children.target.vars" :description="$t('sshcommon')"></SshParamsCluster>
+    <SshParamsCluster :cluster="cluster" :holder="cluster.inventory.all.children.target.vars" prop="all.children.target.vars" :description="t('sshcommon')"></SshParamsCluster>
     <HttpProxy v-if="showHttpProxy" :cluster="cluster"></HttpProxy>
     <ContainerManager :cluster="cluster" @refresh="$emit('refresh')"></ContainerManager>
-    <OsMirror :cluster="cluster"></OsMirror>
+    <OsMirror :cluster="cluster"></OsMirror> 
   </div>
 </template>
 

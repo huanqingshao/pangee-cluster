@@ -18,22 +18,24 @@ zh:
 
 <template>
   <div>
-    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true" top="20vh"
-      :title="$t('addCluster')" width="45%">
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true" top="20vh" :title="t('addCluster')"
+      width="45%">
       <el-form :model="form" label-position="left" label-width="120px" v-if="dialogVisible" ref="form">
-        <FieldString :holder="form" fieldName="cluster_name" required :placeholder="$t('requiresName')" :rules="nameRules"></FieldString>
+        <FieldString :holder="form" fieldName="cluster_name" required :placeholder="t('requiresName')"
+          :rules="nameRules"></FieldString>
         <FieldSelect :holder="form" fieldName="kuboardspray_resource_package" :loadOptions="loadResourceList" required>
           <template #edit>
             <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus"
-              @confirm="openUrlInBlank('/#/settings/resources')"
-              :text="$t('createResource')" :message="$t('goToResourcePage')" width="420"></ConfirmButton>
+              @confirm="openUrlInBlank('/#/settings/resources')" :text="t('createResource')"
+              :message="t('goToResourcePage')" width="420"></ConfirmButton>
           </template>
         </FieldSelect>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" icon="el-icon-close" type="info" plain>{{$t('msg.cancel')}}</el-button>
-          <el-button @click="save" icon="el-icon-check" type="primary" :loading="saving">{{$t('msg.ok')}}</el-button>
+          <el-button @click="dialogVisible = false" icon="el-icon-close" type="info" plain>{{ $t('msg.cancel')
+            }}</el-button>
+          <el-button @click="save" icon="el-icon-check" type="primary" :loading="saving">{{ $t('msg.ok') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -41,17 +43,17 @@ zh:
 </template>
 
 <script>
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 export default {
-  setup () {
+  setup() {
     return {
-      dialogVisible: ref(false),
+      dialogVisible: ref(false)
     }
   },
   props: {
   },
-  provide () {
+  provide() {
     return {
       editMode: 'edit',
     }
@@ -78,7 +80,7 @@ export default {
               return callback('必须以字母开头，可以包含数字和字母')
             }
             this.kuboardSprayApi.get(`/clusters/${value}`).then(() => {
-              callback(this.$t('conflict', {name: value}))
+              callback(this.t('conflict', { name: value }))
             }).catch(e => {
               // console.log(e.response)
               if (e.response && e.response.data.code === 500) {
@@ -93,16 +95,16 @@ export default {
   },
   computed: {
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   watch: {
   },
   methods: {
-    show () {
+    show() {
       this.dialogVisible = true
     },
-    async loadResourceList () {
+    async loadResourceList() {
       let result = []
       await this.kuboardSprayApi.get('/resources').then(resp => {
         for (let res of resp.data.data) {
@@ -113,7 +115,7 @@ export default {
       })
       return result
     },
-    save () {
+    save() {
       this.$refs.form.validate(async flag => {
         if (flag) {
           this.saving = true
@@ -125,10 +127,10 @@ export default {
             if (resp.status === 500) {
               console.log(resp.data.data)
             }
-            this.$message.success(this.$t('msg.save_succeeded'))
+            this.$message.success(this.t('msg.save_succeeded'))
             this.$router.push(`/clusters/${this.form.cluster_name}?mode=edit`)
           }).catch(e => {
-            this.$message.error(this.$t('msg.save_failed', {msg: e.response.data.message}))
+            this.$message.error(this.t('msg.save_failed', { msg: e.response.data.message }))
           })
           this.saving = false
         }
@@ -138,6 +140,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

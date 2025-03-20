@@ -33,7 +33,7 @@ zh:
 
 <template>
   <div>
-    <el-dialog v-model="dialogVisible" :title="$t('title')" width="80%" top="5vh" :close-on-click-modal="false">
+    <el-dialog v-model="dialogVisible" :title="t('title')" width="80%" top="5vh" :close-on-click-modal="false">
       <Resources v-if="dialogVisible" hide-link>
         <template #columns>
           <el-table-column :label="$t('msg.operations')" min-width="130px">
@@ -42,39 +42,39 @@ zh:
                 <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
                   <el-icon-circle-check></el-icon-circle-check>
                 </el-icon>
-                {{ $t('currentVersion') }}
+                {{ t('currentVersion') }}
               </el-tag>
               <template v-else-if="scope.row.yaml">
                 <el-tag v-if="compareVersions(cluster.resourcePackage.data.kubernetes.kube_version, scope.row.yaml.data.kubernetes.kube_version) > 0"
                   type="info" effect="dark">
-                  {{$t('cannot_down_grade')}}
+                  {{t('cannot_down_grade')}}
                 </el-tag>
                 <template v-else>
                   <el-button icon="el-icon-view" type="primary" plain @click="$refs.comparePackage.show(scope.row)">{{ $t('msg.view') }}</el-button>
                   <template v-if="!matchComponents(scope.row)">
-                    <el-button disabled icon="el-icon-circle-close" type="info">{{ $t('not_supported_cm') }}</el-button>
+                    <el-button disabled icon="el-icon-circle-close" type="info">{{ t('not_supported_cm') }}</el-button>
                   </template>
                   <template v-else-if="canReplaceBy(scope.row)">
                     <el-button type="primary" icon="el-icon-download" v-if="!scope.row.isOffline && !scope.row.imported"
                       @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">
-                      {{ $t('downloadFirstCanReplace') }}
+                      {{ t('downloadFirstCanReplace') }}
                     </el-button>
-                    <confirm-button v-else type="warning" icon="el-icon-right" :text="$t('switchToTargetVersion')"
-                      :message="$t('switchToTargetVersionDesc')"
+                    <confirm-button v-else type="warning" icon="el-icon-right" :text="t('switchToTargetVersion')"
+                      :message="t('switchToTargetVersionDesc')"
                       @confirm="changeToVersion('replace', scope.row.version)">
                     </confirm-button>
                   </template>
                   <template v-else-if="canUpgradeTo(scope.row)">
                     <el-button type="primary" icon="el-icon-download" v-if="!scope.row.isOffline && !scope.row.imported"
                       @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">
-                      {{ $t('downloadFirstCanUpgrade') }}
+                      {{ t('downloadFirstCanUpgrade') }}
                     </el-button>
-                    <confirm-button v-else type="warning" icon="el-icon-right" :text="$t('upgradeToTargetVersion')"
-                      :message="$t('upgradeToTargetVersionDesc')"
+                    <confirm-button v-else type="warning" icon="el-icon-right" :text="t('upgradeToTargetVersion')"
+                      :message="t('upgradeToTargetVersionDesc')"
                       @confirm="changeToVersion('upgrade', scope.row.version)">
                     </confirm-button>
                   </template>
-                  <el-button v-else type="info" disabled icon="el-icon-circle-close">{{ $t('cannotUpgradeToTargetVersion') }}</el-button>
+                  <el-button v-else type="info" disabled icon="el-icon-circle-close">{{ t('cannotUpgradeToTargetVersion') }}</el-button>
                 </template>
               </template>
             </template>
@@ -161,7 +161,7 @@ export default {
       this.kuboardSprayApi.post(`/clusters/${this.cluster.name}/change_resource_package_version`, req).then(resp => {
         console.log(resp.data)
         this.dialogVisible = false
-        this.$message.success(this.$t('change_resource_package_version_success'))
+        this.$message.success(this.t('change_resource_package_version_success'))
         this.$emit('refresh')
       }).catch(e => {
         console.log(e)
@@ -169,7 +169,7 @@ export default {
         if (e.response && e.response.data && e.response.data.message) {
           msg = e.response.data.message
         }
-        this.$message.error(this.$t('change_resource_package_version_failed', {msg}))
+        this.$message.error(this.t('change_resource_package_version_failed', {msg}))
       })
     }
   }

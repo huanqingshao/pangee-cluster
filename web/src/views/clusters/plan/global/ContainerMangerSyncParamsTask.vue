@@ -15,9 +15,9 @@ zh:
   <ClusterTask v-if="!cluster.history.processing" :history="cluster.history" :title="title" action="sync_container_engine_params" :cluster="cluster"
     placement="top-end" @refresh="$emit('refresh')" :populateRequest="populateRequest" :width="600">
     <div style="width: 450px;">
-      <el-form-item :label="$t('desc_label')">
-        <li style="font-weight: bold;">{{ $t('sync_params_desc') }}</li>
-        <li style="font-weight: bold;">{{ $t('sync_params_desc_2') }}</li>
+      <el-form-item :label="t('desc_label')">
+        <li style="font-weight: bold;">{{ t('sync_params_desc') }}</li>
+        <li style="font-weight: bold;">{{ t('sync_params_desc_2') }}</li>
         <li><KuboardSprayLink size="12" href="https://kuboard-spray.cn/guide/options/insecure-registry.html"></KuboardSprayLink></li>
       </el-form-item>
     </div>
@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     title () {
-      return this.$t('sync_params')
+      return this.t('sync_params')
     },
   },
   components: { ClusterTask },

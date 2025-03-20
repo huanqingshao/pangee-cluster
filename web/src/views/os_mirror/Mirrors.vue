@@ -27,11 +27,11 @@ zh:
 
 <template>
   <div>
-    <div class="app_block_title">{{$t('titleRepo')}}</div>
-    <el-alert :title="$t('titleRepo')" :closable="false" class="app_white_alert">
+    <div class="app_block_title">{{t('titleRepo')}}</div>
+    <el-alert :title="t('titleRepo')" :closable="false" class="app_white_alert">
       <div class="description">
-        <li>{{$t('repoDescription1')}}</li>
-        <li>{{$t('repoDescription2')}}</li>
+        <li>{{t('repoDescription1')}}</li>
+        <li>{{t('repoDescription2')}}</li>
       </div>
     </el-alert>
 
@@ -40,7 +40,7 @@ zh:
         <el-skeleton v-if="loading" :rows="5" animated />
         <div v-else>
           <div style="text-align: right;" class="app_margin_bottom">
-            <el-button type="primary" icon="el-icon-plus" @click="$refs.create.show()">{{$t('addMirror')}}</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="$refs.create.show()">{{t('addMirror')}}</el-button>
           </div>
           <el-table v-if="mirrors" :data="mirrors" style="width: 100%;">
             <el-table-column prop="name" :label="$t('msg.name')">
@@ -53,30 +53,30 @@ zh:
                 </router-link>
               </template>
             </el-table-column>
-            <el-table-column prop="status.type" :label="$t('type')" width="150px">
+            <el-table-column prop="status.type" :label="t('type')" width="150px">
               <template #default="scope">
-                <el-tag v-if="scope.row.name.indexOf('docker_') === 0">{{$t('mirror_type_docker')}}</el-tag>
-                <el-tag type="warning" v-else>{{$t('mirror_type_os')}}</el-tag>
+                <el-tag v-if="scope.row.name.indexOf('docker_') === 0">{{t('mirror_type_docker')}}</el-tag>
+                <el-tag type="warning" v-else>{{t('mirror_type_os')}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="status.type" :label="$t('os')" width="150px">
+            <el-table-column prop="status.type" :label="t('os')" width="150px">
               <template #default="scope">
                 <span v-if="scope.row.name.indexOf('docker_') === 0">{{ scope.row.name.split('_')[1].split('-')[0] }}</span>
                 <span v-else>{{ scope.row.name.split('-')[0] }}</span>
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="status.kind" :label="$t('kind')" width="120px"></el-table-column> -->
+            <!-- <el-table-column prop="status.kind" :label="t('kind')" width="120px"></el-table-column> -->
             <el-table-column prop="status.url" label="url">
               <template #default="scope">
                 <KuboardSprayLink v-if="scope.row.status" :href="scope.row.status.url" :size="12">{{scope.row.status.url}}</KuboardSprayLink>
               </template>
             </el-table-column>
-            <el-table-column prop="status.status" :label="$t('status')" width="120px"></el-table-column>
+            <el-table-column prop="status.status" :label="t('status')" width="120px"></el-table-column>
             <el-table-column :label="$t('msg.operations')" width="200px">
               <template #default="scope">
                 <el-button icon="el-icon-view" type="primary" @click="$router.push(`/settings/mirrors/${scope.row.name}`)">{{ $t('msg.view') }}</el-button>
                 <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')" icon="el-icon-warning" icon-color="red"
-                  placement="bottom-end" :title="$t('confirmToDelete')" @confirm="deleteMirror(scope.row.name)">
+                  placement="bottom-end" :title="t('confirmToDelete')" @confirm="deleteMirror(scope.row.name)">
                   <template #reference>
                     <el-button icon="el-icon-delete" type="danger">{{ $t('msg.delete') }}</el-button>
                   </template>
@@ -124,7 +124,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('titleRepo') },
+      { label: this.t('titleRepo') },
     ]
   },
   computed: {

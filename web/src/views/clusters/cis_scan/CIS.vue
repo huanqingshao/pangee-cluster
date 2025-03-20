@@ -30,13 +30,13 @@ zh:
         Kube-bench
         <el-button type="primary" icon="el-icon-promotion" style="margin-left: 20px;"
           @click="execute_scan('ignore_cache')" :loading="loading">
-          {{ $t('execute_scan') }}
+          {{ t('execute_scan') }}
         </el-button>
         <div v-if="loadingPercentage < 100" style="display: inline-block; width: 200px; margin-left: 20px; vertical-align: middle;">
           <el-progress :percentage="loadingPercentage" :stroke-width="20" text-inside></el-progress>
         </div>
         <span v-else style="font-size: 13px; font-weight: normal; margin-left: 20px;">
-          {{ $t('last_run_time') }}
+          {{ t('last_run_time') }}
           <KuboardSprayTime :time="last_run_time"></KuboardSprayTime>
         </span>
         <KuboardSprayLink style="float: right;" href="https://kuboard-spray.cn/guide/cis-scan/kube-bench.html" target="blank">Kubebench CIS Scan</KuboardSprayLink>
@@ -58,35 +58,35 @@ zh:
         </el-table-column>
         <el-table-column width="120" fixed>
           <template #header>
-            {{$t('expected_and_remediation')}}
+            {{t('expected_and_remediation')}}
           </template>
           <template #default="scope">
             <el-tooltip v-if="scope.row.expected_result || scope.row.remediation" class="box-item" effect="dark"
               placement="top-end" trigger="click">
-              <el-button>{{$t('expected_and_remediation')}}</el-button>
+              <el-button>{{t('expected_and_remediation')}}</el-button>
               <template #content>
                 <div style="width: 650px;">
                   <template v-if="scope.row.test_info && false">
-                    <div class="test_title" >{{ $t('test_info') }}</div>
+                    <div class="test_title" >{{ t('test_info') }}</div>
                     <pre v-for="(info, index) in scope.row.test_info" :key="scope.row.id + 'info' + index">{{ info }}</pre>
                   </template>
                   <template v-if="scope.row.AuditConfig">
-                    <div class="test_title">{{$t('AuditConfig')}}</div>
+                    <div class="test_title">{{t('AuditConfig')}}</div>
                     <pre>{{scope.row.AuditConfig}}</pre>
                   </template>
                   <template v-if="scope.row.AuditEnv">
-                    <div class="test_title">{{$t('AuditEnv')}}</div>
+                    <div class="test_title">{{t('AuditEnv')}}</div>
                     <pre>{{scope.row.AuditEnv}}</pre>
                   </template>
                   <template v-if="scope.row.audit">
-                    <div class="test_title">{{$t('audit')}}</div>
+                    <div class="test_title">{{t('audit')}}</div>
                     <pre>{{scope.row.audit}}</pre>
                   </template>
                   <template v-if="scope.row.expected_result">
-                    <div class="test_title" >{{ $t('expected_result') }}</div>
+                    <div class="test_title" >{{ t('expected_result') }}</div>
                     <pre>{{ scope.row.expected_result }}</pre>
                   </template>
-                  <div class="test_title" >{{ $t('remediation') }}</div>
+                  <div class="test_title" >{{ t('remediation') }}</div>
                   <pre>{{ scope.row.remediation }}</pre>
                 </div>
               </template>
@@ -116,7 +116,7 @@ zh:
               </div>
               <template v-if="node[scope.row.id] && node[scope.row.id].test_number !== undefined">
                 <template v-if="node[scope.row.id].type === 'manual'">
-                  <el-tag type="info">{{$t('manual')}}</el-tag>
+                  <el-tag type="info">{{t('manual')}}</el-tag>
                 </template>
                 <template v-else>
                   <el-tag v-if="node[scope.row.id].status === 'PASS'" type="success">{{node[scope.row.id].status}}</el-tag>
@@ -129,14 +129,14 @@ zh:
                   <template #content>
                     <pre style="width: 650px;">{{node[scope.row.id].actual_value}}</pre>
                   </template>
-                  <el-tag class="reason" type="info">{{$t('actual_value')}}</el-tag>
+                  <el-tag class="reason" type="info">{{t('actual_value')}}</el-tag>
                 </el-tooltip>
                 <el-tooltip v-if="node[scope.row.id].reason" class="box-item" effect="dark"
                   placement="top-end" trigger="click">
                   <template #content>
                     <pre style="width: 650px;">{{node[scope.row.id].reason.replaceAll('\\n', '\n')}}</pre>
                   </template>
-                  <el-tag class="reason" type="info">{{$t('reason')}}</el-tag>
+                  <el-tag class="reason" type="info">{{t('reason')}}</el-tag>
                 </el-tooltip>
               </template>
             </template>

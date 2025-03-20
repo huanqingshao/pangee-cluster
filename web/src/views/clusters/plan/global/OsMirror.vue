@@ -20,14 +20,14 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled anti-freeze>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description')" disabled anti-freeze>
     <el-alert title="离线安装请注意" type="warning" :closable="true" class="app_margin_bottom">
       <div style="line-height: 20px;">
         <li>安装 Kubernetes 集群时，需要用到一些系统软件，例如： curl, rsync, ipvsadm, ipset, ethtool 等；</li>
         <li>大部分企业都有自己的系统软件源，为了减小尺寸，KuboardSpray 资源包中不包含这些软件；</li>
       </div>
     </el-alert>
-    <FieldCommon :holder="temp" fieldName="os" :label="$t('selectOs')" label-width="150px" anti-freeze>
+    <FieldCommon :holder="temp" fieldName="os" :label="t('selectOs')" label-width="150px" anti-freeze>
       <template #edit>
         <el-checkbox-group v-model="os">
           <el-checkbox v-for="(item, index) in supportedOs" :key="'os_e' + index" :label="normalizeOsName(index)">{{index}}</el-checkbox>

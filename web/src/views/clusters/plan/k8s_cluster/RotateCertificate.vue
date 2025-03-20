@@ -10,7 +10,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description')" disabled>
     <template #more>
       是否自动更新 kubelet / kube-apiserver 证书
     </template>
@@ -57,8 +57,8 @@ zh:
         </div>
       </template>
     </FieldBool> -->
-    <el-form-item labelWidth="180px" :label="$t('check')" v-if="isClusterOnline">
-      <el-button type="primary" text icon="el-icon-link" @click="$emit('switchTab', 'health_check')">{{ $t('check') }}</el-button>
+    <el-form-item labelWidth="180px" :label="t('check')" v-if="isClusterOnline">
+      <el-button type="primary" text icon="el-icon-link" @click="$emit('switchTab', 'health_check')">{{ t('check') }}</el-button>
     </el-form-item>
   </ConfigSection>
 </template>

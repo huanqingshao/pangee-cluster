@@ -17,7 +17,7 @@ zh:
     <slot></slot>
     <div style="text-align: right; margin-top: 20px;">
       <el-button @click="showConfirm = false" type="info" plain icon="el-icon-close">{{ $t('msg.cancel') }}</el-button>
-      <el-button @click="confirm" icon="el-icon-check" :type="type">{{ $t('continue', {text}) }}</el-button>
+      <el-button @click="confirm" icon="el-icon-check" :type="type">{{ t('continue', {text}) }}</el-button>
     </div>
   </el-popover>
 </template>

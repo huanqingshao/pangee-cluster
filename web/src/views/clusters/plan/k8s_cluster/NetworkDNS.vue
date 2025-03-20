@@ -9,7 +9,7 @@ en:
   applyDns: Apply DNS params to cluster.
 
   verbose: Include task params
-  verbose_: 
+  verbose_: Normal level, it's recommended to use this option.
   verbose_v: May include sensitive data in the trace, e.g. path to files, user name, password.
   verbose_vvv: includes more information in log, only used in development.
   v_: Normal
@@ -43,13 +43,13 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')" disabled anti-freeze helpLink="https://kuboard.cn/guide/options/dns.html">
+  <ConfigSection v-model:enabled="enabled" :label="('label')" :description="('description')" disabled anti-freeze helpLink="https://kuboard.cn/guide/options/dns.html">
     <template #more>
       集群 DNS 设置
     </template>
     <FieldArray :holder="vars" :prop="prop" newItemTemplate="" fieldName="upstream_dns_servers" :itemRules="upstreamDnsServerItemRules" anti-freeze>
       <template v-slot:editItem="scope">
-        <el-input v-model.trim="vars.upstream_dns_servers[scope.index]" :placeholder="$t('upstream_dns_servers_placeholder')"></el-input>
+        <el-input v-model.trim="vars.upstream_dns_servers[scope.index]" :placeholder="('upstream_dns_servers_placeholder')"></el-input>
       </template>
       <template #help>
         <div style="color: var(--el-text-color-secondary)">
@@ -70,28 +70,28 @@ zh:
     </FieldArray>
     <div v-if="isClusterOnline && editMode === 'view'" style="text-align: right; margin: -10px 0 10px;">
       <ExecuteTask :history="cluster.history" placement="left"
-          :title="$t('apply')" :startTask="applyDnsConfig" @refresh="$emit('refresh')" @visibleChange="onVisibleChange">
+          :title="('apply')" :startTask="applyDnsConfig" @refresh="$emit('refresh')" @visibleChange="onVisibleChange">
           <template #reference>
-            <el-button icon="el-icon-download" type="warning" plain>{{$t('apply')}}</el-button>
+            <el-button icon="el-icon-download" type="warning" plain>{{('apply')}}</el-button>
           </template>
           <div>
             <el-form ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px">
-              <div class="app_block_title">{{$t('label')}}</div>
-              <div style="margin-bottom: 20px; color: var(--el-text-color-secondary);">{{ $t('applyDns') }}</div>
-              <el-form-item :label="$t('verbose')">
+              <div class="app_block_title">{{('label')}}</div>
+              <div style="margin-bottom: 20px; color: var(--el-text-color-secondary);">{{ ('applyDns') }}</div>
+              <el-form-item :label="('verbose')">
                 <el-radio-group v-model="form.verbose">
-                  <el-radio-button label="">{{$t('v_')}}</el-radio-button>
-                  <el-radio-button label="v">{{$t('v_v')}}</el-radio-button>
-                  <el-radio-button label="vvv">{{$t('v_vvv')}}</el-radio-button>
+                  <el-radio-button label="">{{('v_')}}</el-radio-button>
+                  <el-radio-button label="v">{{('v_v')}}</el-radio-button>
+                  <el-radio-button label="vvv">{{('v_vvv')}}</el-radio-button>
                 </el-radio-group>
-                <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{$t('verbose_' + form.verbose)}}</div>
+                <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{('verbose_' + form.verbose)}}</div>
               </el-form-item>
-              <el-form-item :label="$t('fork')" style="margin-top: 10px;">
+              <el-form-item :label="('fork')" style="margin-top: 10px;">
                 <el-input-number v-model="form.fork" :step="2" style="width: 166px;"></el-input-number>
-                <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{$t('fork_more')}}</div>
+                <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{('fork_more')}}</div>
               </el-form-item>
-              <el-form-item :label="$t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
-                <div class="form_description">{{ $t('offlineNodesDesc') }}</div>
+              <el-form-item :label="('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
+                <div class="form_description">{{ ('offlineNodesDesc') }}</div>
                 <template v-for="node in offlineNodes" :key="'exclude' + node">
                   <el-tooltip class="box-item" effect="dark" :content="pingpong[node].message" placement="top-end">
                     <el-tag type="danger" effect="dark" style="margin: 0 10px 10px 0;">
@@ -111,16 +111,16 @@ zh:
       <template v-slot:editItem="scope">
         <FieldArray :holder="vars.coredns_external_zones[scope.index]" fieldName="zones" anti-freeze label-width="90px">
           <template v-slot:editItem="zone">
-            <el-input v-model.trim="vars.coredns_external_zones[scope.index].zones[zone.index]" :placeholder="$t('zone_placeholder')"></el-input>
+            <el-input v-model.trim="vars.coredns_external_zones[scope.index].zones[zone.index]" :placeholder="('zone_placeholder')"></el-input>
           </template>
         </FieldArray>
         <FieldArray :holder="vars.coredns_external_zones[scope.index]" fieldName="nameservers" anti-freeze label-width="90px" style="margin-top: 15px;">
           <template v-slot:editItem="nameserver">
-            <el-input v-model.trim="vars.coredns_external_zones[scope.index].nameservers[nameserver.index]" :placeholder="$t('zone_placeholder')"></el-input>
+            <el-input v-model.trim="vars.coredns_external_zones[scope.index].nameservers[nameserver.index]" :placeholder="('zone_placeholder')"></el-input>
           </template>
         </FieldArray>
-        <FieldNumber :holder="vars.coredns_external_zones[scope.index]" fieldName="cache" anti-freeze label-width="90px" style="margin-top: 15px;" :placeholder="$t('cache_placeholder')">
-          <template #append>{{$t('second')}}</template>
+        <FieldNumber :holder="vars.coredns_external_zones[scope.index]" fieldName="cache" anti-freeze label-width="90px" style="margin-top: 15px;" :placeholder="('cache_placeholder')">
+          <template #append>{{('second')}}</template>
         </FieldNumber>
       </template>
       <template #help>
@@ -129,11 +129,11 @@ zh:
         </div>
       </template>
     </FieldArray> -->
-    <ConfigSection v-model:enabled="nodeLocalDnsEnabled" :label="$t('nodelocaldnsLabel')" labelWidth="120px">
+    <ConfigSection v-model:enabled="nodeLocalDnsEnabled" :label="('nodelocaldnsLabel')" labelWidth="120px">
       <template #more>
         在每个节点上设置一个 DNS 服务，对 DNS 解析结果进行缓存，减少对 CoreDNS 的访问次数。
       </template>
-      <FieldString :holder="vars" fieldName="nodelocaldns_ip" :prop="prop" :rules="nodelocaldns_ip_rules" :helpString="$t('nodelocaldnsHelpStr')"></FieldString>
+      <FieldString :holder="vars" fieldName="nodelocaldns_ip" :prop="prop" :rules="nodelocaldns_ip_rules" :helpString="('nodelocaldnsHelpStr')"></FieldString>
     </ConfigSection>
   </ConfigSection>
 </template>

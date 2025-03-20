@@ -21,24 +21,24 @@ zh:
 <template>
   <div>
     <el-table :data="tableData" style="width: 100%" row-key="name" :expand-row-keys="expanded" height="calc(90vh - 245px)">
-      <el-table-column prop="name" :label="$t('componentName')" width="280">
+      <el-table-column prop="name" :label="t('componentName')" width="280">
         <template #header>
           <div class="compare_version_header">
-            <div style="text-align: center;">{{ $t('componentName') }}</div>
+            <div style="text-align: center;">{{ t('componentName') }}</div>
           </div>
         </template>
         <template #default="scope">
-          <div class="app_text_mono component_name nowrap">{{ $t(scope.row.name) }}</div>
+          <div class="app_text_mono component_name nowrap">{{ t(scope.row.name) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="version" :label="$t('versionInResource')" width="280">
+      <el-table-column prop="version" :label="t('versionInResource')" width="280">
         <template #header>
           <div class="compare_version_header">
             <div>
               <el-icon style="vertical-align: middle">
                 <el-icon-circle-check></el-icon-circle-check>
               </el-icon>
-              <span style="margin-left: 10px;">{{ $t('versionInResource') }}</span>
+              <span style="margin-left: 10px;">{{ t('versionInResource') }}</span>
             </div>
           </div>
           </template>
@@ -52,7 +52,7 @@ zh:
             <el-icon style="vertical-align: middle">
               <el-icon-cloudy></el-icon-cloudy>
             </el-icon>
-            <span style="margin-left: 10px;">{{$t('target_version')}}</span>
+            <span style="margin-left: 10px;">{{t('target_version')}}</span>
           </div>
         </template>
         <template #default="scope">

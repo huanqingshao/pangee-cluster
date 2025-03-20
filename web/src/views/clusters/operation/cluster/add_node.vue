@@ -22,7 +22,7 @@ zh:
 <template>
   <el-form-item prop="action" :rules="rules">
     <div class="form_description">
-      {{ $t('add_nodes_desc') }}
+      {{ t('add_nodes_desc') }}
     </div>
     <template v-for="(item, key) in pendingAddNodes" :key="'h' + key">
       <el-tag v-if="pingpong[item.name] && pingpong[item.name].ping === 'pong'" style="margin-top: 10px; margin-right: 10px;" :disabled="pingpong[item.name].ping !== 'pong'" :label="item.name">
@@ -59,7 +59,7 @@ export default {
             }
           }
           if (temp === '') {
-            return callback(_this.$t('requiresAtLeastOneOnlineNode'))
+            return callback(_this.t('requiresAtLeastOneOnlineNode'))
           }
 
           // 至少有一个工作节点
@@ -70,31 +70,31 @@ export default {
             }
           }
           if (countKubeNodeCount === 0) {
-            return callback(_this.$t('requiresKubeNodeCount'))
+            return callback(_this.t('requiresKubeNodeCount'))
           }
 
           // 所有的控制节点必须在线
           let controlPlaneCount = 0
           for (let controlPlane in _this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
             if (_this.pingpong[controlPlane] === undefined || _this.pingpong[controlPlane].ping !== 'pong') {
-              return callback(_this.$t('requiresAllControlNodeOnline', { node: controlPlane }))
+              return callback(_this.t('requiresAllControlNodeOnline', { node: controlPlane }))
             }
             controlPlaneCount ++
           }
           if (controlPlaneCount === 0) {
-            return callback(_this.$t('requireAtLeastOneControlPlane'))
+            return callback(_this.t('requireAtLeastOneControlPlane'))
           }
 
           // 所有的 etcd 节点必须在线
           let etcdCount = 0
           for (let etcd in _this.cluster.inventory.all.children.target.children.etcd.hosts) {
             if (_this.pingpong[etcd] === undefined || _this.pingpong[etcd].ping !== 'pong') {
-              return callback(_this.$t('requiresAllEtcdNodeOnline, { node: etcd }'))
+              return callback(_this.t('requiresAllEtcdNodeOnline, { node: etcd }'))
             }
             etcdCount ++
           }
           if (etcdCount % 2 == 0) {
-            return callback(_this.$t('requiresOddEtcdCount'))
+            return callback(_this.t('requiresOddEtcdCount'))
           }
           return callback()
         },

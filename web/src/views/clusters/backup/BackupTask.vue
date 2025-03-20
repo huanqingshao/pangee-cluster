@@ -12,9 +12,9 @@ zh:
 <template>
   <div>
     <ClusterTask v-if="!cluster.history.processing"
-      action="backup_etcd" :cluster="cluster" :title="$t('title')" :populateRequest="populateRequest" @refresh="$emit('refresh')" :width="600">
-      <el-form-item :label="$t('operation')">
-        <div style="font-weight: bolder; line-height: 28px;">{{ $t('backup_desc') }}</div>
+      action="backup_etcd" :cluster="cluster" :title="t('title')" :populateRequest="populateRequest" @refresh="$emit('refresh')" :width="600">
+      <el-form-item :label="t('operation')">
+        <div style="font-weight: bolder; line-height: 28px;">{{ t('backup_desc') }}</div>
         <el-tag class="app_text_mono">/data/cluster/{{cluster.name}}/backup</el-tag>
       </el-form-item>
     </ClusterTask>

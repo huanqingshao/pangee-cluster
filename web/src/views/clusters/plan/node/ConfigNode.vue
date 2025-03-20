@@ -38,7 +38,7 @@ zh:
       <div v-if="pingpong[nodeName]" class="app_text_mono">
         <div v-if="pingpong[nodeName].ping === 'pong'">
           {{ pingpong[nodeName].ping }}
-          <el-button style="float: right; margin-right: -8px;" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${nodeName}`)" icon="el-icon-monitor" type="primary">{{ $t('terminal')}}</el-button>
+          <el-button style="float: right; margin-right: -8px;" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${nodeName}`)" icon="el-icon-monitor" type="primary">{{ t('terminal')}}</el-button>
         </div>
         <span v-else>
           <div class="app_margin_bottom">
@@ -47,24 +47,24 @@ zh:
             <pre v-if="pingpong[nodeName].stderr"><el-tag style="margin-right: 5px;" type="danger" effect="dark">stderr</el-tag>{{pingpong[nodeName].stderr}}</pre>
           </div>
           <el-button type="primary" @click="$emit('ping')" :loading="pingpongLoading" icon="el-icon-lightning">PING</el-button>
-          <el-button v-if="pingpong[nodeName].unreachable === false" style="float: right; margin-right: -8px;" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${nodeName}`)" icon="el-icon-monitor" type="primary">{{ $t('terminal')}}</el-button>
+          <el-button v-if="pingpong[nodeName].unreachable === false" style="float: right; margin-right: -8px;" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${nodeName}`)" icon="el-icon-monitor" type="primary">{{ t('terminal')}}</el-button>
         </span>
       </div>
       <div v-else>
         <el-button type="primary" @click="$emit('ping')" :loading="pingpongLoading" icon="el-icon-lightning">PING</el-button>  
       </div>
     </el-alert>
-    <el-alert v-if="pendingDelete" :title="$t('pendingDelete')" type="error" :closable="false" effect="dark" class="app_margin_bottom" show-icon>
-      {{$t('pendingDeleteAction')}}
+    <el-alert v-if="pendingDelete" :title="t('pendingDelete')" type="error" :closable="false" effect="dark" class="app_margin_bottom" show-icon>
+      {{t('pendingDeleteAction')}}
       <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12" style="margin-left: 20px; color: white;"></KuboardSprayLink>
     </el-alert>
-    <el-alert v-if="pendingAdd" :title="$t('pendingAdd')" type="warning" :closable="false" effect="dark" class="app_margin_bottom" show-icon>
-      {{$t('pendingAddAction')}}
+    <el-alert v-if="pendingAdd" :title="t('pendingAdd')" type="warning" :closable="false" effect="dark" class="app_margin_bottom" show-icon>
+      {{t('pendingAddAction')}}
       <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12" style="margin-left: 20px; color: white;"></KuboardSprayLink>
     </el-alert>
     <StateNode v-if="onlineNodes[nodeName]" :cluster="cluster" :nodeName="nodeName"></StateNode>
     <SshParamsNode :cluster="cluster" v-if="inventory.all.hosts[nodeName]"
-      :holder="inventory.all.hosts[nodeName]" :prop="`all.hosts.${nodeName}`" :clusterName="cluster.name" :nodeName="nodeName" :description="$t('sshcommon', {nodeName: nodeName})">
+      :holder="inventory.all.hosts[nodeName]" :prop="`all.hosts.${nodeName}`" :clusterName="cluster.name" :nodeName="nodeName" :description="t('sshcommon', {nodeName: nodeName})">
       <NodeFact ref="nodeFact" class="app_margin_bottom" v-if="inventory.all.hosts[nodeName]"
         :form="$refs.form"
         node_owner_type="cluster"
@@ -83,8 +83,8 @@ zh:
         :ansible_ssh_common_args="inventory.all.children.target.vars.ansible_ssh_common_args"
       ></NodeFact>
     </SshParamsNode>
-    <ConfigSection v-model:enabled="enabledRoles" :label="$t('roles')" :description="$t('roleDescription', {nodeName: nodeName})" disabled anti-freeze>
-      <FieldCommon :label="$t('roles')" :anti-freeze="inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'">
+    <ConfigSection v-model:enabled="enabledRoles" :label="t('roles')" :description="t('roleDescription', {nodeName: nodeName})" disabled anti-freeze>
+      <FieldCommon :label="t('roles')" :anti-freeze="inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'">
         <template #edit>
           <div class="roles">
             <NodeRoleTag :enabled="isKubeControlPlane" role="kube_control_plane" @clickTag="isKubeControlPlane = !isKubeControlPlane"></NodeRoleTag>
@@ -101,7 +101,7 @@ zh:
         </template>
       </FieldCommon>
     </ConfigSection>
-    <ConfigSection v-if="enabledEtcd" v-model:enabled="enabledEtcd" label="ETCD" :description="$t('etcd', {nodeName: nodeName})" disabled anti-freeze>
+    <ConfigSection v-if="enabledEtcd" v-model:enabled="enabledEtcd" label="ETCD" :description="t('etcd', {nodeName: nodeName})" disabled anti-freeze>
       <FieldString :holder="inventory.all.children.target.children.etcd.hosts[nodeName]" fieldName="etcd_member_name" :rules="etcd_member_name_rules" 
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
         :prop="`all.children.target.children.etcd.hosts.${nodeName}`" required></FieldString>
@@ -130,11 +130,11 @@ export default {
         {
           validator: (rule, value, callback) => {
             if (!/^[a-z]([_a-z0-9]*[a-z0-9])?$/.test(value)) {
-              return callback(this.$t('invalidName'))
+              return callback(this.t('invalidName'))
             }
             for (let key in this.inventory.all.children.target.children.etcd.hosts) {
               if (key !== this.nodeName && this.inventory.all.children.target.children.etcd.hosts[key].etcd_member_name === value) {
-                return callback(this.$t('etcd_member_name_conflict', {nodeName: key}))
+                return callback(this.t('etcd_member_name_conflict', {nodeName: key}))
               }
             }
             return callback()
@@ -200,7 +200,7 @@ export default {
           this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.nodeName] = {}
         } else {
           if (!this.isEtcd && !this.isKubeNode) {
-            this.$message.error(this.$t('requiresAtLeastOneRole'))
+            this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.nodeName]
           }
@@ -222,7 +222,7 @@ export default {
           this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.nodeName] = {}
         } else {
           if (!this.isEtcd && !this.isKubeControlPlane) {
-            this.$message.error(this.$t('requiresAtLeastOneRole'))
+            this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.nodeName]
           }
@@ -239,7 +239,7 @@ export default {
           this.inventory.all.children.target.children.etcd.hosts[this.nodeName] = {}
         } else {
           if (!this.isKubeControlPlane && !this.isKubeNode) {
-            this.$message.error(this.$t('requiresAtLeastOneRole'))
+            this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.etcd.hosts[this.nodeName]
           }

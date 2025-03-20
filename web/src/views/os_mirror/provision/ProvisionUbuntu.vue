@@ -31,7 +31,7 @@ zh:
         <span class="app_text_mono">{{apt_mirror_ubuntu_mirror}}</span>
       </template>
     </FieldCommon>
-    <FieldCommon :label="$t('release')" required anti-freeze :holder="vars" fieldName="apt_mirror_repos" :prop="prop">
+    <FieldCommon :label="t('release')" required anti-freeze :holder="vars" fieldName="apt_mirror_repos" :prop="prop">
       <template #edit>
         <el-checkbox-group v-model="apt_mirror_repos">
           <el-checkbox v-for="(value, key) in releases" :key="key + 'release'" :label="key">
@@ -51,7 +51,7 @@ zh:
         </el-checkbox-group>
       </template>
     </FieldCommon>
-    <FieldCommon :label="$t('architecture')" required anti-freeze>
+    <FieldCommon :label="t('architecture')" required anti-freeze>
       <template #edit>
         <el-checkbox-group  v-model="apt_mirror_architecture">
           <el-checkbox v-for="(value, key) in architecture[os_mirror.status.type]" :key="key + 'release'" :label="key">
@@ -75,19 +75,19 @@ zh:
     <FieldRadio v-if="vars.apt_mirror_schedule"
       :disabled="!vars.apt_mirror_schedule_updates"
       :holder="vars.apt_mirror_schedule[0]"
-      fieldName="special_time" :label="$t('special_time')"
+      fieldName="special_time" :label="t('special_time')"
       :options="['daily', 'weekly', 'monthly']"></FieldRadio>
     <FieldBool :holder="vars" :prop="prop" fieldName="apt_mirror_populate_repos" anti-freeze></FieldBool>
     <FieldBool :holder="vars" :prop="prop" fieldName="apt_mirror_enable_limit_rate" anti-freeze></FieldBool>
     <FieldNumber :holder="vars" :prop="prop" fieldName="apt_mirror_limit_rate" anti-freeze
       v-if="vars.apt_mirror_enable_limit_rate">
-      <template #append>{{ $t('KB') }}</template>
-      <div class="placeholder">{{ $t('kb', { kb: vars.apt_mirror_limit_rate * 8 / 1000 }) }}</div>
+      <template #append>{{ t('KB') }}</template>
+      <div class="placeholder">{{ t('kb', { kb: vars.apt_mirror_limit_rate * 8 / 1000 }) }}</div>
     </FieldNumber>
     <FieldNumber :holder="vars" :prop="prop" fieldName="apt_mirror_nthreads" anti-freeze
       v-if="vars.apt_mirror_enable_limit_rate">
-      <template #append>{{ $t('threadCount') }}</template>
-      <div class="placeholder">{{ $t('totalkb', { kb: vars.apt_mirror_limit_rate * 8 * vars.apt_mirror_nthreads / 1000 }) }}</div>
+      <template #append>{{ t('threadCount') }}</template>
+      <div class="placeholder">{{ t('totalkb', { kb: vars.apt_mirror_limit_rate * 8 * vars.apt_mirror_nthreads / 1000 }) }}</div>
     </FieldNumber>
   </div>
 </template>
@@ -292,9 +292,9 @@ export default {
     },
     async loadSpecialTimeOptions () {
       return [
-        { label: this.$t('daily'), value: 'daily' },
-        { label: this.$t('weekly'), value: 'weekly' },
-        { label: this.$t('monthly'), value: 'monthly' },
+        { label: this.t('daily'), value: 'daily' },
+        { label: this.t('weekly'), value: 'weekly' },
+        { label: this.t('monthly'), value: 'monthly' },
       ]
     }
   }

@@ -1,10 +1,3 @@
-<i18n>
-en: 
-
-zh:
-
-</i18n>
-
 <template>
   <div :class="klass" v-if="klass.indexOf('error') > 0 || !hideSuccess">
     <div class="title" @click="expand = !expand">

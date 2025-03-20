@@ -10,9 +10,9 @@ zh:
 </i18n>
 
 <template>
-  <AddonSection v-model:enabled="enabled" :label="$t('label')" :description="$t('obj.addon', {name: this.$t('description')})"
+  <AddonSection v-model:enabled="enabled" :label="t('label')" :description="$t('obj.addon', {name: this.t('description')})"
     :cluster="cluster" addonName="nodelocaldns" @refresh="$emit('refresh')">
-    <template #more>{{$t('addon_function')}}</template>
+    <template #more>{{t('addon_function')}}</template>
     <FieldString :holder="vars" fieldName="nodelocaldns_ip" :prop="prop" :rules="nodelocaldns_ip_rules"></FieldString>
   </AddonSection>
 </template>

@@ -17,22 +17,22 @@ zh:
 <template>
   <ConfigSection v-model:enabled="enableSsh" label="SSH" :description="description" disabled anti-freeze>
     <FieldString disabled :holder="holder" fieldName="ansible_host" :prop="isNode ? `all.hosts.${nodeName}` : ''"
-      :placeholder="$t('ansible_host_placeholder')"></FieldString>
+      :placeholder="t('ansible_host_placeholder')"></FieldString>
     <FieldString :holder="holder" fieldName="ansible_port" anti-freeze></FieldString>
     <FieldCommon :holder="holder" fieldName="ansible_user" anti-freeze>
       <template #edit>
         <el-input v-model.trim="ansible_user"></el-input>
-        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ $t('rootuser') }}</el-tag>
+        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ t('rootuser') }}</el-tag>
       </template>
     </FieldCommon>
     <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze clearable>
       <template #edit>
-        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{$t('addSshKey')}}</el-button>
+        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{t('addSshKey')}}</el-button>
       </template>
     </FieldSelect>
     <FieldString :holder="holder" fieldName="ansible_password" anti-freeze show-password clearable></FieldString>
     <el-alert type="warning" :closable="false" v-if="cluster && cluster.inventory.all.hosts.bastion && holder.ansible_password" style="margin-left: 120px; width: calc(100% - 120px);">
-      {{ $t('password_and_bastion') }}
+      {{ t('password_and_bastion') }}
       <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12"></KuboardSprayLink>
     </el-alert>
     <!-- <FieldCommon :holder="holder" fieldName="ansible_become" anti-freeze>
@@ -46,7 +46,7 @@ zh:
     <template v-if="holder.ansible_become">
       <FieldString :holder="holder" fieldName="ansible_become_user" anti-freeze disabled></FieldString>
       <FieldString :holder="holder" fieldName="ansible_become_password" show-password anti-freeze clearable></FieldString>
-      <div v-if="editMode !== 'view'">{{ $t('become_password_desc', {ansible_user}) }}</div>
+      <div v-if="editMode !== 'view'">{{ t('become_password_desc', {ansible_user}) }}</div>
     </template> -->
     <FieldSelect :holder="holder" fieldName="ansible_python_interpreter" anti-freeze clearable :loadOptions="loadPythonInterpreter" allow-create filterable></FieldSelect>
     <slot></slot>

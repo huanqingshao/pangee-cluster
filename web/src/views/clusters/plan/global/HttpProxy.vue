@@ -12,10 +12,10 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="proxyEnabled" :label="$t('proxy')" :description="$t('proxyDescription')" anti-freeze>
+  <ConfigSection v-model:enabled="proxyEnabled" :label="t('proxy')" :description="t('proxyDescription')" anti-freeze>
     <el-alert class="app_margin_bottom" :closable="false">
-      <li>{{$t('proxyUsage1')}}</li>
-      <li>{{$t('proxyUsage2')}}</li>
+      <li>{{t('proxyUsage1')}}</li>
+      <li>{{t('proxyUsage2')}}</li>
     </el-alert>
     <FieldString :holder="vars" fieldName="http_proxy" prop="all.children.target.vars" anti-freeze></FieldString>
     <FieldString :holder="vars" fieldName="https_proxy" prop="all.children.target.vars" anti-freeze></FieldString>

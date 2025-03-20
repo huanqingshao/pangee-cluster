@@ -18,19 +18,19 @@ zh:
   <el-scrollbar height="calc(100vh - 220px)">
     <div>
       <el-form label-position="left" label-width="120px">
-        <el-form-item :label="$t('resourceVersion')">
+        <el-form-item :label="t('resourceVersion')">
           <div class="app_text_mono version_no">
             <span style="margin-right: 20px;">{{ resource.metadata.version }}</span>
             <template v-if="!cluster.history.processing">
               <UpgradeTask v-if="pendingUpgrade" :cluster="cluster" :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></UpgradeTask>
               <template v-else>
-                <el-button type="danger" icon="el-icon-upload" @click="$refs.choose.show()" style="margin-left: 20px;">{{$t('chooseNewResourcePackage')}}</el-button>
+                <el-button type="danger" icon="el-icon-upload" @click="$refs.choose.show()" style="margin-left: 20px;">{{t('chooseNewResourcePackage')}}</el-button>
                 <template v-if="cluster.inventory.all.hosts.localhost.kuboardspray_resource_package_previous">
-                  <el-popover placement="top-start" :title="$t('finished_upgrade_title')" :width="350" trigger="hover">
+                  <el-popover placement="top-start" :title="t('finished_upgrade_title')" :width="350" trigger="hover">
                     <template #reference>
-                      <el-button type="success" round icon="el-icon-circle-check">{{ $t('finished_upgrade_title') }}</el-button>
+                      <el-button type="success" round icon="el-icon-circle-check">{{ t('finished_upgrade_title') }}</el-button>
                     </template>
-                    <div>{{$t('finished_upgrade')}}</div>
+                    <div>{{t('finished_upgrade')}}</div>
                     <div class="app_text_mono" style="line-height: 36px; color: var(--el-color-primary);">{{cluster.inventory.all.hosts.localhost.kuboardspray_resource_package_previous}}</div>
                   </el-popover>
                 </template>
@@ -42,7 +42,7 @@ zh:
       </el-form>
     </div>
     <el-alert v-if="resource.data.supported_playbooks['cluster_version_'+cluster.inventory.all.children.target.vars.container_manager] === undefined" type="warning" :closable="false">
-      {{ $t('not_support_cluster_version') }}
+      {{ t('not_support_cluster_version') }}
     </el-alert>
     <el-alert v-else-if="errMsg" type="error" :closable="false">
       <pre>{{errMsg}}</pre>

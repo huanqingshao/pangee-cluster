@@ -22,12 +22,12 @@ zh:
 </i18n>
 
 <template>
-  <FieldCommon :holder="vars" :fieldName="fieldName" label-width="150px" :placeholder="type.indexOf('opensuse') >= 0 ? $t('install_docker_from_distro') : $t('asis')"
-    class="os_mirror_select_repo" :label="type + ' ' + $t('source')" :required="type.indexOf('opensuse') < 0" :prop="prop" anti-freeze>
+  <FieldCommon :holder="vars" :fieldName="fieldName" label-width="150px" :placeholder="type.indexOf('opensuse') >= 0 ? t('install_docker_from_distro') : t('asis')"
+    class="os_mirror_select_repo" :label="type + ' ' + t('source')" :required="type.indexOf('opensuse') < 0" :prop="prop" anti-freeze>
     <template #edit>
       <template v-if="type.indexOf('opensuse') >= 0">
-        <span v-if="type.indexOf('docker_') === 0">{{ $t('install_docker_from_distro') }}</span>
-        <span v-else>{{ $t('asis') }}</span>
+        <span v-if="type.indexOf('docker_') === 0">{{ t('install_docker_from_distro') }}</span>
+        <span v-else>{{ t('asis') }}</span>
       </template>
       <div style="display: flex;" v-else>
         <el-select v-model="vars[fieldName]" @visible-change="loadKuboardsprayRepoOptions" style="flex-grow: 1;">
@@ -52,7 +52,7 @@ zh:
           </template>
         </el-select>
         <ConfirmButton @confirm="openUrlInBlank('/#/settings/mirrors')" buttonStyle="margin-left: 10px;" placement="top-end"
-          icon="el-icon-plus" plain :text="$t('addSource')" :message="$t('goToMirrorPage')"></ConfirmButton>
+          icon="el-icon-plus" plain :text="t('addSource')" :message="t('goToMirrorPage')"></ConfirmButton>
       </div>
       <template v-for="(option, index) in options" :key="fieldName + 'ep' + index">
         <div v-if="option.value === vars[fieldName]">
@@ -67,7 +67,7 @@ zh:
     </template>
     <template #view>
       <span v-if="type.indexOf('opensuse') >= 0" style="color: var(--el-text-color-placeholder)">
-        {{$t('asis')}}
+        {{t('asis')}}
       </span>
       <template v-for="(option, index) in options" :key="fieldName + 'ep' + index">
         <div v-if="option.value === vars[fieldName]">
@@ -119,9 +119,9 @@ export default {
         let type = this.type
         this.kuboardSprayApi.get(`/mirrors`, { params: { type: type } }).then(async resp => {
           if (type.indexOf('docker_') !== 0) {
-            this.options.push({ label: this.$t('asis'), value: 'AS_IS'})
+            this.options.push({ label: this.t('asis'), value: 'AS_IS'})
           } else {
-            this.options.push({ label: this.$t('docker_asis'), value: 'AS_IS'})
+            this.options.push({ label: this.t('docker_asis'), value: 'AS_IS'})
           }
           for (let item of resp.data.data) {
             let name = item.slice(item.indexOf('-') + 1)

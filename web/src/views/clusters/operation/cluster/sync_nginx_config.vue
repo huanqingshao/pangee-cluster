@@ -12,7 +12,7 @@ zh:
 <template>
   <el-form-item prop="action" :rules="rules">
     <div class="form_description" style="margin-bottom: 10px;">
-      {{ $t('sync_nginx_config_desc') }}
+      {{ t('sync_nginx_config_desc') }}
     </div>
     <template v-for="(item, key) in cluster.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts" :key="'node' + key">
       <el-tag v-if="pingpong[key] && pingpong[key].ping === 'pong'
@@ -24,7 +24,7 @@ zh:
       </el-tag>
     </template>
     <div class="form_description" style="margin-bottom: 10px;">
-      {{ $t('exclude_pending_add_nodes') }}
+      {{ t('exclude_pending_add_nodes') }}
     </div>
     <template v-for="(item, key) in excludeNodes" :key="'node' + key">
       <el-tag style="margin-right: 10px; margin-bottom: 10px;" effect="dark" type="danger">

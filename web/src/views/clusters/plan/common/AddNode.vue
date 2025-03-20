@@ -26,17 +26,17 @@ zh:
 </i18n>
 
 <template>
-  <el-popover placement="right-start" :title="$t('addNode')" v-if="editMode !== 'view'"
+  <el-popover placement="right-start" :title="t('addNode')" v-if="editMode !== 'view'"
     v-model:visible="visible" :width="540" trigger="manual">
     <template #reference>
       <el-button icon="el-icon-plus" type="primary" @click="visible = true"
-        :disabled="editMode === 'view'">{{$t('addNode')}}</el-button>
+        :disabled="editMode === 'view'">{{t('addNode')}}</el-button>
     </template>
     <el-form label-position="left" label-width="80px" ref="addNodeForm" :model="addNodeForm" @submit.enter.prevent>
-      <el-form-item :label="$t('nodeName')" prop="name" :rules="nodeNameRules">
+      <el-form-item :label="t('nodeName')" prop="name" :rules="nodeNameRules">
         <el-input v-model.trim="addNodeForm.name"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
+      <el-form-item :label="t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
         <el-checkbox-group v-model="addNodeForm.roles">
           <el-checkbox label="kube_control_plane">{{$t('node.kube_control_plane')}}</el-checkbox>
           <el-checkbox label="etcd">{{$t('node.etcd')}}</el-checkbox>
@@ -44,9 +44,9 @@ zh:
         </el-checkbox-group>
       </el-form-item>
       <div class="app_margin_bottom">
-        <li class="desc">{{ $t('nodeRequirement1') }}</li>
-        <li class="desc">{{ $t('nodeRequirement2') }}</li>
-        <li class="desc">{{ $t('nodeRequirement3') }}</li>
+        <li class="desc">{{ t('nodeRequirement1') }}</li>
+        <li class="desc">{{ t('nodeRequirement2') }}</li>
+        <li class="desc">{{ t('nodeRequirement3') }}</li>
       </div>
     </el-form>
     <div style="text-align: right;">
@@ -76,13 +76,13 @@ export default {
           validator: (rule, value, callback) => {
             let keywords = ['bastion', 'target', 'kube_node', 'kube_control_plane', 'etcd', 'calico_rr', 'k8s_cluster', 'localhost', 'all']
             if (keywords.indexOf(value) > 0) {
-              return callback(this.$t('cannotUseKeyword', { keyword: value }))
+              return callback(this.t('cannotUseKeyword', { keyword: value }))
             }
             if (this.inventory.all.hosts[value] !== undefined) {
-              return callback(this.$t('conflict', {name: value}))
+              return callback(this.t('conflict', {name: value}))
             }
             if (!/^[a-z]([-a-z0-9]*[a-z0-9])?$/.test(value)) {
-              return callback(this.$t('invalidName'))
+              return callback(this.t('invalidName'))
             }
             callback()
           },
@@ -105,7 +105,7 @@ export default {
         if (v) {
           if (this.isClusterInstalled && this.isClusterOnline) {
             if (this.pendingRemoveNodes.length > 0) {
-              this.$message.error(this.$t('removeNodeFirst'))
+              this.$message.error(this.t('removeNodeFirst'))
               return
             }
           }

@@ -24,13 +24,13 @@ zh:
 <template>
   <div>
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true"
-      :title="$t('manageSshKey')" width="60%">
+      :title="t('manageSshKey')" width="60%">
       <div class="app_block_title_small">
-        {{$t('existingSshKeyFiles', {ownerType, ownerName})}}
+        {{t('existingSshKeyFiles', {ownerType, ownerName})}}
         <el-button circle type="primary" icon="el-icon-refresh" @click="load"></el-button>
       </div>
       <el-skeleton :rows="1" animated :loading="loading">
-        <el-alert v-if="keyFiles.length === 0" :title="$t('noKeyFiles')" :closable="false" type="warning"></el-alert>
+        <el-alert v-if="keyFiles.length === 0" :title="t('noKeyFiles')" :closable="false" type="warning"></el-alert>
         <template v-else>
           <el-tag v-for="(item, index) in keyFiles" :key="'file' + index"
             @close="deleteSshKey(item)"
@@ -42,20 +42,20 @@ zh:
 
       <div class="app_margin_top uploadSection">
         <div class="app_block_title_small">
-          {{$t('addSshKey')}}
+          {{t('addSshKey')}}
         </div>
         <el-upload ref="upload" :action="`${baseURL}/private-keys/${ownerType}/${ownerName}/${form.name}`"
           :headers="headers" :on-change="changeFileList" :multiple="false" :limit="2" :file-list="fileListToUpload"
           :auto-upload="false">
           <template #trigger>
             <div class="step">1</div>
-            <el-button size="small" type="primary" icon="el-icon-files">{{$t('selectFile')}}</el-button>
+            <el-button size="small" type="primary" icon="el-icon-files">{{t('selectFile')}}</el-button>
           </template>
           <div style="display: inline-block;">
             <el-form :model="form" class="app_form_mini" ref="form">
               <div class="step" style="margin-left: 20px">2</div>
               <el-form-item prop="name" :rules="rules" style="display: inline-block;">
-                <el-input style="width: 300px;" v-model.trim="form.name" :placeholder="$t('nameRequired')"></el-input>
+                <el-input style="width: 300px;" v-model.trim="form.name" :placeholder="t('nameRequired')"></el-input>
               </el-form-item>
             </el-form>
           </div>
@@ -63,7 +63,7 @@ zh:
           <el-button size="small" type="success" :loading="uploading" @click="submitUpload" icon="el-icon-upload">{{$t('msg.upload')}}</el-button>
           <template #tip>
             <div class="el-upload__tip">
-              {{$t('copyFile')}}
+              {{t('copyFile')}}
             </div>
           </template>
         </el-upload>
@@ -80,6 +80,7 @@ zh:
 <script>
 import {baseURL} from '../../utils/axios.js'
 import Cookie from 'js-cookie'
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -97,11 +98,11 @@ export default {
         name: undefined
       },
       rules: [
-        { required: true, message: this.$t('nameRequired'), trigger: 'blur' },
+        { required: true, message: this.i18n('nameRequired'), trigger: 'blur' },
         {
           validator: async (rule, value, callback) => {
             await this.kuboardSprayApi.get(`/private-keys/${this.ownerType}/${this.ownerName}/${value}`).then(() => {
-              callback(this.$t('duplicatedPrivateKeyFile'))
+              callback(this.i18n('duplicatedPrivateKeyFile'))
             }).catch(e => {
               if (e.response.status === 500) {
                 callback()
@@ -116,6 +117,13 @@ export default {
         Authorization: `Bearer ${Cookie.get('KuboardSprayToken')}`
       }
     }
+  },
+  setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'local'
+    })
+    return { i18n: t }
   },
   computed: {
   },
@@ -162,7 +170,7 @@ export default {
     },
     deleteSshKey (name) {
       this.$confirm(
-        this.$t('deleteSshKey', {name}),
+        this.t('deleteSshKey', {name}),
         'Warning',
         {
           confirmButtonText: this.$t('msg.ok'),

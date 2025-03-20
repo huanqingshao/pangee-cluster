@@ -23,14 +23,14 @@ zh:
       <div v-if="cluster">
         <template v-if="cluster.resourcePackage && cluster.resourcePackage.data.supported_playbooks.backup_etcd">
           <div style="display: flex;">
-            <ConfirmButton type="danger" :text="$t('msg.delete')" icon="el-icon-delete" @confirm="remove_backups" placement="right" :message="$t('delete_message')"
+            <ConfirmButton type="danger" :text="$t('msg.delete')" icon="el-icon-delete" @confirm="remove_backups" placement="right" :message="t('delete_message')"
               :disabled="selection.length === 0" style="margin-right: 10px;">
             </ConfirmButton>
-            <el-button type="primary" plain icon="el-icon-refresh" style="margin-right: 10px;" @click="list">{{ $t('refresh') }}</el-button>
+            <el-button type="primary" plain icon="el-icon-refresh" style="margin-right: 10px;" @click="list">{{ t('refresh') }}</el-button>
             <BackupTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')"></BackupTask>
             <RestoreTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')" 
               :disabled="selection.length !== 1" :backupFile="selection[0]"></RestoreTask>
-            <span style="font-size: 12px; color: var(--el-text-color-secondary); line-height: 28px;">{{ $t('select_one_backup_to_restore') }}</span>
+            <span style="font-size: 12px; color: var(--el-text-color-secondary); line-height: 28px;">{{ t('select_one_backup_to_restore') }}</span>
             <kuboard-spray-link href="https://kuboard-spray.cn/guide/maintain/backup.html" style="margin-left: 20px;" size="12px;"></kuboard-spray-link>
           </div>
           <div class="app_margin_bottom"></div>
@@ -41,10 +41,10 @@ zh:
           <div v-else>
             <el-table :data="backups" style="width: 100%" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column prop="node_name" :label="$t('node_name')" sortable />
-              <el-table-column prop="etcd_member_name" :label="$t('etcd_member_name')" sortable />
-              <el-table-column prop="backup_name" :label="$t('backup_name')" sortable />
-              <el-table-column prop="size" :label="$t('size')" sortable align="right" width="200">
+              <el-table-column prop="node_name" :label="t('node_name')" sortable />
+              <el-table-column prop="etcd_member_name" :label="t('etcd_member_name')" sortable />
+              <el-table-column prop="backup_name" :label="t('backup_name')" sortable />
+              <el-table-column prop="size" :label="t('size')" sortable align="right" width="200">
                 <template #default="scope">
                   <span style="margin-right: 10px;">
                     {{ scope.row.size ? String(scope.row.size).replace(/(\d)(?=(\d{3})+$)/g, "$1,") : ''}}

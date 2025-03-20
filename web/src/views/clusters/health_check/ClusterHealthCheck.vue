@@ -1,10 +1,3 @@
-<i18n>
-en:
-
-zh:
-
-</i18n>
-
 <template>
   <div>
     <el-scrollbar height="calc(100vh - 220px)">

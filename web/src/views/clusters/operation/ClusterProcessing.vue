@@ -1,7 +1,7 @@
 <i18n>
 en:
   verbose: Include task params
-  verbose_: 
+  verbose_: Normal level, it's recommended to use this option.
   verbose_v: May include sensitive data in the trace, e.g. path to files, user name, password.
   verbose_vvv: includes more information in log, only used in development.
   v_: Normal
@@ -61,36 +61,36 @@ zh:
     </div>
     <el-form v-else ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px" class="app_form_mini">
       <!-- <div style="height: 10px;"></div> -->
-      <el-form-item :label="$t('control_params')">
-        <el-form-item :label="$t('verbose')">
+      <el-form-item :label="t('control_params')">
+        <el-form-item :label="t('verbose')">
           <el-radio-group v-model="form.verbose">
-            <el-radio-button label="">{{$t('v_')}}</el-radio-button>
-            <el-radio-button label="v">{{$t('v_v')}}</el-radio-button>
-            <el-radio-button label="vvv">{{$t('v_vvv')}}</el-radio-button>
+            <el-radio-button label="">{{t('v_')}}</el-radio-button>
+            <el-radio-button label="v">{{t('v_v')}}</el-radio-button>
+            <el-radio-button label="vvv">{{t('v_vvv')}}</el-radio-button>
           </el-radio-group>
-          <span style="width: 350px; margin-left: 20px; color: #aaa; font-size: 12px;">{{$t('verbose_' + form.verbose)}}</span>
+          <span style="width: 350px; margin-left: 20px; color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</span>
         </el-form-item>
-        <el-form-item :label="$t('fork')" style="margin-top: 10px;">
+        <el-form-item :label="t('fork')" style="margin-top: 10px;">
           <el-input-number v-model="form.fork" :step="2" style="width: 166px;"></el-input-number>
-          <span style="width: 350px; margin-left: 20px; color: #aaa; font-size: 12px;">{{$t('fork_more')}}</span>
+          <span style="width: 350px; margin-left: 20px; color: #aaa; font-size: 12px;">{{t('fork_more')}}</span>
         </el-form-item>
       </el-form-item>
-      <el-form-item :label="$t('operation')" prop="action" style="margin-top: 10px;">
+      <el-form-item :label="t('operation')" prop="action" style="margin-top: 10px;">
         <el-radio-group v-model="action" class="app_margin_bottom">
           <el-radio-button :disabled="action !== 'install_cluster'" label="install_cluster">
-            {{ $t('install_cluster') }}
+            {{ t('install_cluster') }}
           </el-radio-button>
           <el-radio-button :disabled="pendingRemoveNodes.length == 0" label="remove_node">
-            {{ $t('aboutToRemoveNode') }}
+            {{ t('aboutToRemoveNode') }}
           </el-radio-button>
           <el-radio-button :disabled="pendingAddNodes.length == 0" label="add_node">
-            {{ $t('aboutToAddNode') }}
+            {{ t('aboutToAddNode') }}
           </el-radio-button>
           <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_nginx_config" label="sync_nginx_config">
-            {{ $t('sync_nginx_config') }}
+            {{ t('sync_nginx_config') }}
           </el-radio-button>
           <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_etcd_address" label="sync_etcd_address">
-            {{ $t('sync_etcd_address') }}
+            {{ t('sync_etcd_address') }}
           </el-radio-button>
         </el-radio-group>
 
@@ -104,8 +104,8 @@ zh:
           :offlineNodes="offlineNodes">
         </Component>
       </el-form-item>
-      <el-form-item :label="$t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
-        <div class="form_description">{{ $t('offlineNodesDesc') }}</div>
+      <el-form-item :label="t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
+        <div class="form_description">{{ t('offlineNodesDesc') }}</div>
         <template v-for="node in offlineNodes" :key="'exclude' + node">
           <el-tooltip class="box-item" effect="dark" :content="pingpong[node].message" placement="top-end">
             <el-tag type="danger" effect="dark" style="margin: 0 10px 10px 0;">
@@ -134,6 +134,7 @@ import install_cluster from './cluster/install_cluster.vue'
 import remove_node from './cluster/remove_node.vue'
 import sync_etcd_address from './cluster/sync_etcd_address.vue'
 import sync_nginx_config from './cluster/sync_nginx_config.vue'
+import { useI18n } from 'vue-i18n';
 
 function trimMark(str) {
   if (str[str.length - 1] === ',') {
@@ -158,11 +159,18 @@ export default {
         nodes_to_exclude: []
       },
       min_resource_package_version_rules: [
-        { required: true, message: this.$t('newResourcePackageRequired') }
+        { required: true, message: this.i18n('newResourcePackageRequired') }
       ],
       pingpong: {},
       pingpong_loading: true,
     }
+  },
+  setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'local'
+    })
+    return { i18n: t }
   },
   inject: ['isClusterInstalled', 'isClusterOnline', 'pendingRemoveNodes', 'pendingAddNodes'],
   computed: {
@@ -185,7 +193,7 @@ export default {
       set (v) { this.form.action = v }
     },
     title () {
-      return this.$t(this.action, { count: this.pendingAddNodes.length || this.pendingRemoveNodes.length })
+      return this.t(this.action, { count: this.pendingAddNodes.length || this.pendingRemoveNodes.length })
     },
     hosts () {
       if (this.cluster && this.cluster.inventory) {

@@ -58,28 +58,28 @@ zh:
 <template>
   <div>
     <div style="background-color: #3a3333; color: #fffeff; font-weight: 500; padding: 8px 20px 8px 20px; line-height: 22px; text-align: center;">
-      {{this.$t('logs')}} - <span class="app_text_mono">{{ownerType}}/{{ownerName}}/{{pid}}</span>
+      {{this.t('logs')}} - <span class="app_text_mono">{{ownerType}}/{{ownerName}}/{{pid}}</span>
       <span style="float:left;">
         <ChangeFontSize class="button" :terminal="xterm" :fitAddon="fitAddon"></ChangeFontSize>
         <ChangeColor class="button"></ChangeColor>
-        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{$t('find')}}</el-button>
+        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{t('find')}}</el-button>
         <Find ref="find" class="button" :terminal="xterm"></Find>
       </span>
       <span :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
         {{ stateStr }}
       </span>
-      <el-button v-if="isRunning" style="float: right; margin-right: 20px;" type="danger" @click="dialogVisible = true">{{ $t('forceKill') }}</el-button>
-      <el-tag v-else size="default" style="float: right; margin-right: 20px;" type="">{{ $t('finished') }}</el-tag>
+      <el-button v-if="isRunning" style="float: right; margin-right: 20px;" type="danger" @click="dialogVisible = true">{{ t('forceKill') }}</el-button>
+      <el-tag v-else size="default" style="float: right; margin-right: 20px;" type="">{{ t('finished') }}</el-tag>
     </div>
     <div id="terminal" :style="`width: 100%; height: calc(100vh - 39px); background-color: black;`"></div>
     <el-dialog :title="$t('msg.prompt')" v-model="dialogVisible" width="60%" top="calc(50vh - 180px)" :close-on-click-modal="false">
       <el-alert type="error" :closable="false" effect="dark" show-icon>
-        <div class="confirmText">{{$t('confirmToKill')}}</div>
+        <div class="confirmText">{{t('confirmToKill')}}</div>
       </el-alert>
       <template #footer>
         <div>
           <el-button type="default" icon="el-icon-close" @click="dialogVisible = false">{{ $t('msg.close') }}</el-button>
-          <el-button type="primary" icon="el-icon-check" @click="killProcess">{{ $t('confirm') }}</el-button>
+          <el-button type="primary" icon="el-icon-check" @click="killProcess">{{ t('confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -132,15 +132,15 @@ export default {
     },
     stateStr() {
       if (this.socketReadyState === 0) {
-        return this.$t('connecting')
+        return this.t('connecting')
       } else if (this.socketReadyState === 1) {
-        return this.$t('connected')
+        return this.t('connected')
       } else if (this.socketReadyState === 2) {
-        return this.$t('closing')
+        return this.t('closing')
       } else if (this.socketReadyState === 3) {
-        return this.$t('closed')
+        return this.t('closed')
       }
-      return this.$t('unknown')
+      return this.t('unknown')
     },
   },
   components: { K8sTerminalErrorHint, ChangeFontSize, Find, ChangeColor },
@@ -160,12 +160,12 @@ export default {
     //     this.xterm.clear()
     //     this.$message({
     //       type: 'success',
-    //       message: this.$t('succeedInClear')
+    //       message: this.t('succeedInClear')
     //     });
     //   }).catch(() => {
     //     this.$message({
     //       type: 'info',
-    //       message: this.$t('message.canceled')
+    //       message: this.t('message.canceled')
     //     });          
     //   });
     // },
@@ -177,11 +177,11 @@ export default {
     killProcess () {
       this.kuboardSprayApi.delete(`/execute/${this.ownerType}/${this.ownerName}/kill/${this.pid}`).then(resp=> {
         if (resp.data.code === 200) {
-          this.$message.success(this.$t('killed'))
+          this.$message.success(this.t('killed'))
           this.dialogVisible = false
         }
       }).catch(e => {
-        this.$message.error(this.$t('failedToKill' + e.response.data.msg))
+        this.$message.error(this.t('failedToKill' + e.response.data.msg))
       })
     },
     refresh() {
@@ -242,7 +242,7 @@ export default {
         this.socketReadyState = this.socket.readyState
       }, 2000)
 
-      document.title = `${this.$t('logs')} - ${this.ownerType} / ${this.ownerName} / ${this.pid}`
+      document.title = `${this.t('logs')} - ${this.ownerType} / ${this.ownerName} / ${this.pid}`
     }
   }
 }

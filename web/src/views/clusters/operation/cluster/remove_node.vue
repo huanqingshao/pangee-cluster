@@ -30,8 +30,8 @@ zh:
     <div style="margin-left: 0px; margin-top: 10px;" class="app_form_mini">
       <el-form-item prop="remove_node.reset_nodes" required>
         <el-radio-group v-model="reset_nodes">
-          <el-radio-button :label="true">{{ $t('resetNodes') }}</el-radio-button>
-          <el-radio-button :label="false">{{ $t('resetNodesNo') }}</el-radio-button>
+          <el-radio-button :label="true">{{ t('resetNodes') }}</el-radio-button>
+          <el-radio-button :label="false">{{ t('resetNodesNo') }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item prop="remove_node.nodes_to_remove" :rules="nodes_to_remove_rules">
@@ -45,28 +45,28 @@ zh:
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label-width="150px" :label="$t('allow_ungraceful_removal')" style="margin-top: 10px;">
+      <el-form-item label-width="150px" :label="t('allow_ungraceful_removal')" style="margin-top: 10px;">
         <el-switch v-model="formRef.remove_node.allow_ungraceful_removal"></el-switch>
         <div style="line-height: 20px; display: inline-block; vertical-align: top; margin-left: 10px;">
-          <div class="form_description">{{$t('allow_ungraceful_removal_desc')}}</div>
+          <div class="form_description">{{t('allow_ungraceful_removal_desc')}}</div>
           <div class="form_description app_text_mono" style="color: #666; font-weight: bold;">
             kubectl drain --force --ignore-daemonsets --grace-period {{ formRef.remove_node.drain_grace_period * 60}} 
               --timeout {{ formRef.remove_node.drain_timeout * 60 }}s
           </div>
         </div>
       </el-form-item>
-      <el-form-item label-width="150px" :label="$t('drain_grace_period')" required prop="remove_node.drain_grace_period">
+      <el-form-item label-width="150px" :label="t('drain_grace_period')" required prop="remove_node.drain_grace_period">
         <el-input-number v-model="formRef.remove_node.drain_grace_period" :min="1" :max="formRef.remove_node.drain_timeout - 1"></el-input-number> 分钟
         <span style="margin-left: 20px;" class="form_description">kubectl drain --grace-period</span>
       </el-form-item>
-      <el-form-item label-width="150px" :label="$t('drain_timeout')" required prop="remove_node.drain_timeout">
+      <el-form-item label-width="150px" :label="t('drain_timeout')" required prop="remove_node.drain_timeout">
         <el-input-number v-model="formRef.remove_node.drain_timeout" :min="formRef.remove_node.drain_grace_period + 1"></el-input-number> 分钟
         <span style="margin-left: 20px;" class="form_description">kubectl drain --timeout</span>
       </el-form-item>
-      <el-form-item label-width="150px" :label="$t('drain_retries')" required prop="remove_node.drain_retries">
+      <el-form-item label-width="150px" :label="t('drain_retries')" required prop="remove_node.drain_retries">
         <el-input-number v-model="formRef.remove_node.drain_retries" :min="1"></el-input-number> 次
       </el-form-item>
-      <el-form-item label-width="150px" :label="$t('drain_retry_delay_seconds')" required prop="remove_node.drain_retry_delay_seconds">
+      <el-form-item label-width="150px" :label="t('drain_retry_delay_seconds')" required prop="remove_node.drain_retry_delay_seconds">
         <el-input-number v-model="formRef.remove_node.drain_retry_delay_seconds" :min="5" :step="5"></el-input-number> 秒
       </el-form-item>
     </div>
@@ -89,13 +89,13 @@ export default {
     let _this = this
     return {
       nodes_to_remove_rules: [
-        { required: true, message: _this.$t('nodes_to_remove_required') }
+        { required: true, message: _this.t('nodes_to_remove_required') }
       ],
       rules: [{
         validator (rule, value, callback) {
           for (let node of _this.formRef.remove_node.nodes_to_remove) {
             if (_this.cluster.inventory.all.children.target.children.etcd.hosts[node] !== undefined && _this.formRef.remove_node.nodes_to_remove.length > 1) {
-              return callback(_this.$t('removeOneEtcdNodeOnce'))
+              return callback(_this.t('removeOneEtcdNodeOnce'))
             }
           }
           return callback()

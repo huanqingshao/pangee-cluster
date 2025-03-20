@@ -10,7 +10,7 @@ zh:
     <template #content>
       <div class="app_text_mono">{{formattedTime}}</div>
     </template>
-    <span class="text" :style="isFuture > 0 ? 'color: var(--el-color-primary); font-weight: bold' : ''">{{distance}}{{$t('ago')}}</span>
+    <span class="text" :style="isFuture > 0 ? 'color: var(--el-color-primary); font-weight: bold' : ''">{{distance}}{{t('ago')}}</span>
   </el-tooltip>
 </template>
 

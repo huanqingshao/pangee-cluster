@@ -10,11 +10,11 @@ zh:
 <template>
   <el-popover
     placement="bottom"
-    :title="$t('adustFontSize')"
+    :title="t('adustFontSize')"
     width="200"
     trigger="click">
     <template #reference>
-      <el-button type="info">{{$t('fontSize')}}</el-button>
+      <el-button type="info">{{t('fontSize')}}</el-button>
     </template>
     <el-input-number v-model="fontSize" style="width: 100%" @change="changeFontSize" :min="12" :max="20"></el-input-number>
   </el-popover>

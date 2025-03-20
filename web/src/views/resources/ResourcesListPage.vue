@@ -24,7 +24,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('title') }
+      { label: this.t('title') }
     ]
   },
   refresh () {

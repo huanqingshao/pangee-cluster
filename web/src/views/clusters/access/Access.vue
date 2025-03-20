@@ -29,11 +29,11 @@ zh:
 <template>
   <el-skeleton v-if="cluster.state === undefined || cluster.state.code === 0" style="height: calc(100vh - 220px);" animated></el-skeleton>
   <el-scrollbar height="calc(100vh - 220px)" v-else-if="cluster.state.code === 200">
-    <!-- <el-alert type="error" effect="dark" class="app_margin_bottom" :title="$t('requiredToSyncEtcd')" :closable="false" show-icon></el-alert> -->
-    <el-alert type="info" :title="$t('accessMethods')" :closable="false"></el-alert>
-    <div class="app_block_title">{{ $t('accessFromControlPlane') }}</div>
+    <!-- <el-alert type="error" effect="dark" class="app_margin_bottom" :title="t('requiredToSyncEtcd')" :closable="false" show-icon></el-alert> -->
+    <el-alert type="info" :title="t('accessMethods')" :closable="false"></el-alert>
+    <div class="app_block_title">{{ t('accessFromControlPlane') }}</div>
     <div class="access_details" v-if="cluster">
-      <el-alert :title="$t('controlPlanes')" :closable="false" type="success"></el-alert>
+      <el-alert :title="t('controlPlanes')" :closable="false" type="success"></el-alert>
       <div class="details">
         <template v-for="(item, key) in cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts" :key="key">
           <div v-if="cluster.state && cluster.state.nodes[key]" class="app_margin_top">
@@ -43,14 +43,14 @@ zh:
             <el-tag class="node_text" effect="light" size="default">
               <span class="app_text_mono">{{cluster.inventory.all.hosts[key].ansible_host}}</span>
             </el-tag>
-            <el-button @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${key}`)" style="margin-left: 10px;" icon="el-icon-monitor" type="primary">{{ $t('terminal')}}</el-button>
+            <el-button @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${key}`)" style="margin-left: 10px;" icon="el-icon-monitor" type="primary">{{ t('terminal')}}</el-button>
           </div>
         </template>
       </div>
     </div>
     <div class="app_block_title">kubeconfig</div>
     <div class="access_details">
-      <el-button type="primary" icon="el-icon-files" @click="fetchKubeconfig" :loading="kubeconfigLoading">{{ $t('getKubeconfig') }}</el-button>
+      <el-button type="primary" icon="el-icon-files" @click="fetchKubeconfig" :loading="kubeconfigLoading">{{ t('getKubeconfig') }}</el-button>
       <CopyToClipBoard v-if="kubeconfig" :value="kubeconfig"></CopyToClipBoard>
       <el-skeleton class="app_margin_top" v-if="kubeconfigLoading" animated></el-skeleton>
       <div v-if="kubeconfig && !kubeconfigLoading" class="app_margin_top app_codemirror_auto_height">
@@ -59,7 +59,7 @@ zh:
     </div>
     <div class="app_block_title">kuboard</div>
     <div class="access_details">
-      <el-alert :closable="false" type="success" effect="dark" :title="$t('proposeKuboard')"></el-alert>
+      <el-alert :closable="false" type="success" effect="dark" :title="t('proposeKuboard')"></el-alert>
       <template v-if="cluster.state.addons">
         <div class="details" v-if="cluster.state.addons.kuboard === undefined">
           <KuboardSprayLink class="app_margin_top" href="https://www.kuboard.cn/">https://www.kuboard.cn/</KuboardSprayLink>
@@ -80,14 +80,14 @@ zh:
     </div>
     <div class="app_block_title">etcd</div>
     <div class="access_details" v-if="cluster.state">
-      <el-alert :closable="false" type="success" effect="dark" :title="$t('etcdAccess')"></el-alert>
+      <el-alert :closable="false" type="success" effect="dark" :title="t('etcdAccess')"></el-alert>
       <div class="details">
         <template v-for="(item, key) in cluster.state.etcd_members" :key="'etcd' + key">
           <div style="margin-top: 10px;">
             <el-tag class="node_text" type="" size="default">{{ etcdIp(item) }}</el-tag>
             <el-tag class="node_text" type="" effect="light" size="default">{{item.clientURLs && item.clientURLs.length > 0 ? item.clientURLs[0] : ''}}</el-tag>
             <template v-for="(etcd, name) in cluster.inventory.all.children.target.children.etcd.hosts" :key="'eb' + name + key">
-              <el-button v-if="etcd.etcd_member_name === key" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${name}`)" icon="el-icon-monitor" type="primary">{{ $t('terminal')}}</el-button>
+              <el-button v-if="etcd.etcd_member_name === key" @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${name}`)" icon="el-icon-monitor" type="primary">{{ t('terminal')}}</el-button>
             </template>
           </div>
         </template>
@@ -101,7 +101,7 @@ zh:
     <span v-if="cluster.state.msg" class="app_text_mono" v-html="cluster.state.msg.replaceAll('\n', '<br>').replaceAll('    ', '<span style=margin-right:20px;></span>')"></span>
     <span v-else>{{cluster.state}}</span>
     <div style="margin-top: 20px;">
-      <el-button type="primary" round icon="el-icon-arrow-left" @click="$emit('switch', 'plan')">{{$t('switchToPlan')}}</el-button>
+      <el-button type="primary" round icon="el-icon-arrow-left" @click="$emit('switch', 'plan')">{{t('switchToPlan')}}</el-button>
     </div>
   </el-alert>
 </template>
@@ -154,7 +154,7 @@ export ETCDCTL_CERT=/etc/ssl/etcd/ssl/admin-$(hostname).pem
 export ETCDCTL_KEY=/etc/ssl/etcd/ssl/admin-$(hostname)-key.pem
 export ETCDCTL_CACERT=/etc/ssl/etcd/ssl/ca.pem
 etcdctl member list
-# ${this.$t('yourcommand')}
+# ${this.t('yourcommand')}
 `
       },
       set () {}

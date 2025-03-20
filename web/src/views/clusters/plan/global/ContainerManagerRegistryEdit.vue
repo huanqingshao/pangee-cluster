@@ -18,18 +18,18 @@ zh:
 <template>
   <el-popover :visible="visible" placement="top-end" :width="630" trigger="manual">
     <template #reference>
-      <el-button v-if="isAdd" type="primary" plain icon="el-icon-plus" @click="visible = true">{{$t('add_insecure_registry')}}</el-button>
+      <el-button v-if="isAdd" type="primary" plain icon="el-icon-plus" @click="visible = true">{{t('add_insecure_registry')}}</el-button>
       <el-button v-else type="primary" plain icon="el-icon-edit" @click="visible = true" style="margin-top: -7px;">{{$t('msg.edit')}}</el-button>
     </template>
-    <div v-if="isAdd" class="app_block_title">{{ $t('add_insecure_registry') }}</div>
-    <div v-else class="app_block_title">{{ $t('edit_insecure_registry') }}</div>
+    <div v-if="isAdd" class="app_block_title">{{ t('add_insecure_registry') }}</div>
+    <div v-else class="app_block_title">{{ t('edit_insecure_registry') }}</div>
     <div style="margin-top: 20px;">
       <el-form ref="form" :model="insecure_registry_form" @submit.prevent.stop>
         <div v-if="isAdd" class="app_margin_bottom description" style="line-height: 28px; margin-bottom: 20px;">
           <li>假设镜像仓库的访问地址为 <el-tag class="app_text_mono">192.168.30.56:5000</el-tag> </li>
           <li>假设引用镜像的格式为 <el-tag class="app_text_mono">my-registry.com/repo-name/image-name:tag</el-tag> </li>
         </div>
-        <el-form-item :label="$t('domain_name')" prop="domain_name" :rules="domainNameRules" label-width="120px">
+        <el-form-item :label="t('domain_name')" prop="domain_name" :rules="domainNameRules" label-width="120px">
           <div class="description">
             <el-input v-model.trim="insecure_registry_form.domain_name" placeholder="基于上述假设，此处应填写 my-registry.com"></el-input>
             <div v-if="isAdd">
@@ -37,7 +37,7 @@ zh:
             </div>
           </div>
         </el-form-item>
-        <el-form-item :label="$t('address')" prop="address" :rules="addressRules" label-width="120px">
+        <el-form-item :label="t('address')" prop="address" :rules="addressRules" label-width="120px">
           <div class="description">
             <el-input v-model.trim="insecure_registry_form.address" placeholder="基于上述假设，此处应填写 http(s)://192.168.30.56:5000"></el-input>
             <div v-if="isAdd">
@@ -74,7 +74,7 @@ export default {
         address: undefined,
       },
       domainNameRules: [
-        { required: true, message: this.$t('domain_name_required'), trigger: 'blur' }
+        { required: true, message: this.t('domain_name_required'), trigger: 'blur' }
       ],
       addressRules: [
         { required: true, type: 'string', message: '字段不能为空', trigger: 'blur' },

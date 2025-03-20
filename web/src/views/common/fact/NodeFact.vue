@@ -31,7 +31,7 @@ zh:
 <template>
   <div>
       <div style="text-align: right;">
-        <el-button type="primary" :loading="loadingFact" icon="el-icon-refresh-left" @click="loadFacts(false)">{{$t('validate')}}</el-button>
+        <el-button type="primary" :loading="loadingFact" icon="el-icon-refresh-left" @click="loadFacts(false)">{{t('validate')}}</el-button>
       </div>
       <el-skeleton v-if="loadingFact" animated></el-skeleton>
       <div v-if="fact" class="app_form_mini app_margin_top">
@@ -43,36 +43,36 @@ zh:
           </el-alert>
         </div>
         <el-form v-if="fact.ansible_facts" label-width="160px" label-position="left">
-          <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{$t('facts')}} ]</div>
+          <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{t('facts')}} ]</div>
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
               <template #title>
-                <span class="package_title">{{$t('baseInfo')}}</span>
+                <span class="package_title">{{t('baseInfo')}}</span>
               </template>
               <div class="package_info">
-                <NodeFactField :holder="fact.ansible_facts.ansible_python" fieldName="executable" :label="$t('python_executable')"></NodeFactField>
-                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_python_version" :label="$t('python_version')"></NodeFactField>
+                <NodeFactField :holder="fact.ansible_facts.ansible_python" fieldName="executable" :label="t('python_executable')"></NodeFactField>
+                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_python_version" :label="t('python_version')"></NodeFactField>
                 <el-divider style="margin: 10px 0;"></el-divider>
-                <NodeFactField v-if="fact.ansible_facts.ansible_lsb && fact.ansible_facts.ansible_lsb.description" :holder="fact.ansible_facts.ansible_lsb" fieldName="description" :label="$t('os')"></NodeFactField>
-                <el-form-item v-else :label="$t('os')">
+                <NodeFactField v-if="fact.ansible_facts.ansible_lsb && fact.ansible_facts.ansible_lsb.description" :holder="fact.ansible_facts.ansible_lsb" fieldName="description" :label="t('os')"></NodeFactField>
+                <el-form-item v-else :label="t('os')">
                   <span class="field_value app_text_mono">{{fact.ansible_facts.ansible_distribution}} {{fact.ansible_facts.ansible_distribution_version}}</span>
                 </el-form-item>
-                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_machine" :label="$t('ansible_machine')"></NodeFactField>
-                <el-form-item :label="$t('cpumem')">
+                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_machine" :label="t('ansible_machine')"></NodeFactField>
+                <el-form-item :label="t('cpumem')">
                   <span class="field_value app_text_mono">{{fact.ansible_facts.ansible_processor_vcpus}}core / {{Math.round(fact.ansible_facts.ansible_memtotal_mb * 10 / 1024)/10}}Gi</span>
                 </el-form-item>
               </div>
             </el-collapse-item>
             <el-collapse-item name="2">
               <template #title>
-                <span class="package_title">{{$t('network')}}</span>
+                <span class="package_title">{{t('network')}}</span>
               </template>
               <div class="package_info" v-for="(ipv4, index) in ipv4s" :key="'ip'+index">
                 <el-divider v-if="index !== 0" style="margin: 10px 0;"></el-divider>
                 <NodeFactField :holder="ipv4.ipv4" fieldName="type"></NodeFactField>
                 <NodeFactField :holder="ipv4.ipv4" fieldName="device"></NodeFactField>
                 <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="address">
-                  <el-tag type="success" effect="dark" v-if="ipv4.isPrefered">{{$t('choosen')}}</el-tag>
+                  <el-tag type="success" effect="dark" v-if="ipv4.isPrefered">{{t('choosen')}}</el-tag>
                 </NodeFactField>
                 <!-- <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="network"></NodeFactField> -->
                 <!-- <NodeFactField :holder="ipv4" fieldName="gateway"></NodeFactField> -->
@@ -84,7 +84,7 @@ zh:
             </el-collapse-item>
             <el-collapse-item name="3">
               <template #title>
-                <span class="package_title">{{$t('disk')}}</span>
+                <span class="package_title">{{t('disk')}}</span>
               </template>
               <div class="package_info">
                 <template v-for="(item, key) in fact.ansible_facts.ansible_devices" :key="'disk' + key">
@@ -194,7 +194,7 @@ export default {
         } else {
           this.fact = {
             changed: false,
-            msg: _this.$t('no_cached_facts')
+            msg: _this.t('no_cached_facts')
           }
         }
       })

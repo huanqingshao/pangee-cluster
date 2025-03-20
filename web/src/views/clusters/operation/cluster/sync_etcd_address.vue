@@ -18,7 +18,7 @@ zh:
 <template>
   <el-form-item prop="action" :rules="rules">
     <div class="form_description app_text_mono" style="margin-bottom: 10px;">
-      {{ $t('sync_etcd_address_desc') }}
+      {{ t('sync_etcd_address_desc') }}
     </div>
     <div>
       <template v-for="(item, key) in cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts" :key="'kcp' + key">
@@ -50,16 +50,16 @@ export default {
           let controlPlaneCount = 0
           for (let controlPlane in _this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
             if (_this.pingpong[controlPlane] === undefined || _this.pingpong[controlPlane].ping !== 'pong') {
-              return callback(_this.$t('requiresAllControlNodeOnline', { node: controlPlane }))
+              return callback(_this.t('requiresAllControlNodeOnline', { node: controlPlane }))
             }
             // 所有控制节点必须都已经完成添加/删除操作
             if (_this.cluster.inventory.all.hosts[controlPlane].kuboardspray_node_action !== undefined) {
-              return callback(_this.$t('finishAddRemoveActionFirst', { node: controlPlane, action: _this.cluster.inventory.all.hosts[controlPlane].kuboardspray_node_action }))
+              return callback(_this.t('finishAddRemoveActionFirst', { node: controlPlane, action: _this.cluster.inventory.all.hosts[controlPlane].kuboardspray_node_action }))
             }
             controlPlaneCount ++
           }
           if (controlPlaneCount === 0) {
-            return callback(_this.$t('requireAtLeastOneControlPlane'))
+            return callback(_this.t('requireAtLeastOneControlPlane'))
           }
           return callback()
         },

@@ -19,9 +19,9 @@ zh:
         <el-popover placement="bottom-start" width="320" trigger="manual"
           v-model:visible="visiblePopover">
           <p>
-            {{ $t('clear1') }}
+            {{ t('clear1') }}
             <i class="strong-text">{{label}}</i>
-            {{ $t('clear2') }}
+            {{ t('clear2') }}
           </p>
           <div style="text-align: right; margin: 0">
             <el-button size="default" type="info" plain @click="confirm(false)" icon="el-icon-close">取 消</el-button>

@@ -17,7 +17,7 @@ zh:
     v-clipboard:copy="value"
     v-clipboard:success="success"
     v-clipboard:error="failed"
-  >{{ $t('copy') }}</el-button>
+  >{{ t('copy') }}</el-button>
 </template>
 
 <script>
@@ -39,10 +39,10 @@ export default {
   },
   methods: {
     success () {
-      this.$message.success(this.$t('copySuccess'))
+      this.$message.success(this.t('copySuccess'))
     },
     failed () {
-      this.$message.error(this.$t('copyError'))
+      this.$message.error(this.t('copyError'))
     }
   }
 }

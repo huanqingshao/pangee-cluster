@@ -12,11 +12,11 @@ zh:
 <template>
   <div>
     <ClusterTask v-if="!cluster.history.processing"
-      action="restore_etcd" :cluster="cluster" :title="$t('title')" :populateRequest="populateRequest"
+      action="restore_etcd" :cluster="cluster" :title="t('title')" :populateRequest="populateRequest"
       :disabled="disabled" type="primary" @refresh="$emit('refresh')" :width="600">
-      <el-form-item :label="$t('operation')">
+      <el-form-item :label="t('operation')">
         <el-alert type="warning" show-icon :closable="false" style="font-weight: bolder; line-height: 28px; margin: 10px 0 20px 0;">
-          {{ $t('restore_desc') }}
+          {{ t('restore_desc') }}
           <kuboard-spray-link href="https://kuboard-spray.cn/guide/maintain/backup.html#影响" style="float: right;" size="12px;" type="warning"></kuboard-spray-link>
         </el-alert>
         已选定从 ETCD 成员 <el-tag class="app_text_mono">{{backupFile.etcd_member_name}}</el-tag> 备份的快照文件 <el-tag class="app_text_mono">{{backupFile.backup_name}}</el-tag>

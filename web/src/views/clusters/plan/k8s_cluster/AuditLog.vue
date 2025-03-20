@@ -8,7 +8,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="$t('description')">
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description')">
     <template #more>
       将 Kubernetes 审计信息存储到指定的路径。禁用后将触发 CIS Scan 错误
     </template>

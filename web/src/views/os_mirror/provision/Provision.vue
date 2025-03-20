@@ -8,7 +8,7 @@ zh:
 
 <template>
   <div>
-    <el-form-item :label="$t('target_host')">
+    <el-form-item :label="t('target_host')">
       <div class="ssh_content">
         <SshParams :holder="inventory.all.hosts.mirror_node" prop="inventory.all.hosts.mirror_node" :mirrorName="os_mirror.name"></SshParams>
         <NodeFact v-bind="inventory.all.hosts.mirror_node" class="provision_node_fact" ref="fact"

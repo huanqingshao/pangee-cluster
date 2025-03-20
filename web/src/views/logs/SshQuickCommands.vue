@@ -48,7 +48,7 @@ zh:
   <div>
     <el-popover v-if="roles.kube_control_plane" v-model:visible="control_plane_commands_visible" placement="top-start" width="50vw" trigger="click">
       <template #reference>
-        <el-button style="margin-left: 10px" type="primary">{{ $t('kube_control_plane_cmds') }}</el-button>
+        <el-button style="margin-left: 10px" type="primary">{{ t('kube_control_plane_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in control_plane_commands" :key="type">
         <div class="app_text_mono commands_title">{{type}}</div>
@@ -57,7 +57,7 @@ zh:
     </el-popover>
     <el-popover v-if="roles.etcd" v-model:visible="etcd_commands_visible" placement="top-start" width="50vw" trigger="click">
       <template #reference>
-        <el-button style="margin-left: 10px" type="warning">{{ $t('etcd_cmds') }}</el-button>
+        <el-button style="margin-left: 10px" type="warning">{{ t('etcd_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in etcd_commands" :key="type">
         <div class="app_text_mono commands_title">{{type}}</div>
@@ -66,7 +66,7 @@ zh:
     </el-popover>
     <el-popover v-if="roles.kube_node" v-model:visible="kube_node_commands_visible" placement="top-start" width="50vw" trigger="click">
       <template #reference>
-        <el-button style="margin-left: 10px" type="success">{{ $t('kube_node_cmds') }}</el-button>
+        <el-button style="margin-left: 10px" type="success">{{ t('kube_node_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in kube_node_commands" :key="type">
         <div class="app_text_mono commands_title">{{type}}</div>
@@ -96,20 +96,20 @@ export default {
     control_plane_commands() {
       let temp = {
         kubectl: [
-          { name: this.$t('view_config'), cmd: 'kubectl config view' },
-          { name: this.$t('cluster_version'), cmd: 'kubectl version' },
-          { name: this.$t('get_nodes'), cmd: 'kubectl get nodes -o wide' },
-          { name: this.$t('get_namespaces'), cmd: 'kubectl get namespaces -o wide' },
-          { name: this.$t('get_all_pods'), cmd: 'kubectl get pods --all-namespaces -o wide' },
-          { name: this.$t('get_kube_system_pods'), cmd: 'kubectl get pods -n kube-system -o wide' },
+          { name: this.t('view_config'), cmd: 'kubectl config view' },
+          { name: this.t('cluster_version'), cmd: 'kubectl version' },
+          { name: this.t('get_nodes'), cmd: 'kubectl get nodes -o wide' },
+          { name: this.t('get_namespaces'), cmd: 'kubectl get namespaces -o wide' },
+          { name: this.t('get_all_pods'), cmd: 'kubectl get pods --all-namespaces -o wide' },
+          { name: this.t('get_kube_system_pods'), cmd: 'kubectl get pods -n kube-system -o wide' },
         ],
         kubelet: [
-          { name: this.$t('kubelet_version'), cmd: 'kubelet version' },
-          { name: this.$t('kubelet_status'), cmd: 'systemctl status kubelet' },
+          { name: this.t('kubelet_version'), cmd: 'kubelet version' },
+          { name: this.t('kubelet_status'), cmd: 'systemctl status kubelet' },
         ],
         crictl: [
-          { name: this.$t('crictl_ps'), cmd: 'crictl ps'},
-          { name: this.$t('crictl_images'), cmd: 'crictl images'},
+          { name: this.t('crictl_ps'), cmd: 'crictl ps'},
+          { name: this.t('crictl_images'), cmd: 'crictl images'},
         ]
       }
       temp = Object.assign(temp, this.kube_node_commands)
@@ -128,27 +128,27 @@ export default {
       }
       return {
         etcdctl: [
-          { name: this.$t('etcd_member_list'), cmd: 'etcdctl member list' },
-          { name: this.$t('etcd_member_status'), cmd: statusCmd},
+          { name: this.t('etcd_member_list'), cmd: 'etcdctl member list' },
+          { name: this.t('etcd_member_status'), cmd: statusCmd},
         ],
       }
     },
     kube_node_commands() {
       let temp = {
         kubelet: [
-          { name: this.$t('kubelet_version'), cmd: 'kubelet version' },
-          { name: this.$t('kubelet_status'), cmd: 'systemctl status kubelet' },
-          { name: this.$t('kubelet_journal'), cmd: 'journalctl -u kubelet.service'}
+          { name: this.t('kubelet_version'), cmd: 'kubelet version' },
+          { name: this.t('kubelet_status'), cmd: 'systemctl status kubelet' },
+          { name: this.t('kubelet_journal'), cmd: 'journalctl -u kubelet.service'}
         ],
         crictl: [
-          { name: this.$t('crictl_ps'), cmd: 'crictl ps'},
-          { name: this.$t('crictl_images'), cmd: 'crictl images'},
+          { name: this.t('crictl_ps'), cmd: 'crictl ps'},
+          { name: this.t('crictl_images'), cmd: 'crictl images'},
         ]
       }
       if (this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_network_plugin === 'calico') {
         temp.calicoctl = [
-          { name: this.$t('calico_node_list'), cmd: 'calicoctl get nodes' },
-          { name: this.$t('calico_node_status'), cmd: 'calicoctl node status' },
+          { name: this.t('calico_node_list'), cmd: 'calicoctl get nodes' },
+          { name: this.t('calico_node_status'), cmd: 'calicoctl node status' },
         ]
       }
       return temp

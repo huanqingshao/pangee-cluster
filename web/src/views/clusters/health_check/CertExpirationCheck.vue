@@ -9,10 +9,10 @@ zh:
 
 <template>
   <div>
-    <div class="app_block_title">{{ $t('cert_expiration_check') }}</div>
+    <div class="app_block_title">{{ t('cert_expiration_check') }}</div>
     <div class="app_description">
-      {{ $t('cert_expiration_check_desc') }}
-      <el-button type="primary" style="margin-left: 20px;" icon="el-icon-promotion" @click="checkCertExpiration">{{$t('cert_expiration_check')}}</el-button>
+      {{ t('cert_expiration_check_desc') }}
+      <el-button type="primary" style="margin-left: 20px;" icon="el-icon-promotion" @click="checkCertExpiration">{{t('cert_expiration_check')}}</el-button>
       <CertRenew v-if="cluster.resourcePackage.data.supported_playbooks.renew_cert && !cluster.history.processing" :cluster="cluster" @refresh="$emit('refresh')"></CertRenew>
     </div>
     <el-skeleton v-if="loading" animated class="app_margin_top"></el-skeleton>

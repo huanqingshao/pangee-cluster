@@ -17,12 +17,12 @@ zh:
 
 
 <template>
-  <ConfigSection ref="configSection" v-model:enabled="bastionEnabled" :label="$t('obj.bastion')" :description="$t('description')" anti-freeze>
+  <ConfigSection ref="configSection" v-model:enabled="bastionEnabled" :label="$t('obj.bastion')" :description="t('description')" anti-freeze>
     <template #more>
-      {{ $t('bastionUsage') }}
+      {{ t('bastionUsage') }}
     </template>
     <FieldString :holder="holder" fieldName="ansible_host" :prop="`all.hosts.${nodeName}`" anti-freeze
-      :placeholder="$t('ansible_host_placeholder')" :rules="hostRules"></FieldString>
+      :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></FieldString>
     <FieldString :holder="holder" fieldName="ansible_port" :prop="`all.hosts.${nodeName}`"
       :placeholder="placeholder('ansible_port')" anti-freeze required></FieldString>
     <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
@@ -30,7 +30,7 @@ zh:
     <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze clearable
       :placeholder="placeholder('ansible_ssh_private_key_file')">
       <template #edit>
-        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{$t('addSshKey')}}</el-button>
+        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{t('addSshKey')}}</el-button>
       </template>
     </FieldSelect>
     <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable

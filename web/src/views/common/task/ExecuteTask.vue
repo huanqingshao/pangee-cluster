@@ -37,21 +37,21 @@ zh:
 
 <template>
   <div v-if="dialogVisible" style="display: inline-block; width: 0px; height: 0px;">
-    <el-dialog v-model="dialogVisible" :title="$t('processingTitle')" width="50%" :close-on-click-modal="false" :append-to-body="true" :show-close="false">
-      <el-alert :type="type === 'primary' ? 'info' : type" :closable="false" :title="$t('processingTitle')" show-icon effect="dark" style="margin-top: 20px;">
-        <span>{{$t('processingHints')}}</span>
+    <el-dialog v-model="dialogVisible" :title="t('processingTitle')" width="50%" :close-on-click-modal="false" :append-to-body="true" :show-close="false">
+      <el-alert :type="type === 'primary' ? 'info' : type" :closable="false" :title="t('processingTitle')" show-icon effect="dark" style="margin-top: 20px;">
+        <span>{{t('processingHints')}}</span>
       </el-alert>
       <template #footer>
-        <el-button @click="forceHide = true" icon="el-icon-files">{{$t('closeWindow')}}</el-button>
-        <el-button @click="$emit('refresh')" type="danger" icon="el-icon-finished">{{$t('taskFinished')}}</el-button>
-        <el-button type="primary" icon="el-icon-check" @click="viewTaskLogs(history.current_pid)">{{$t('viewLogs')}}</el-button>
+        <el-button @click="forceHide = true" icon="el-icon-files">{{t('closeWindow')}}</el-button>
+        <el-button @click="$emit('refresh')" type="danger" icon="el-icon-finished">{{t('taskFinished')}}</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="viewTaskLogs(history.current_pid)">{{t('viewLogs')}}</el-button>
       </template>
     </el-dialog>
   </div>
   <template v-else-if="!loading">
     <el-popover v-if="!(finished && hideOnSuccess) && !history.processing" v-model:visible="showConfirm" :placement="placement" width="800" trigger="manual" :disabled="disabled">
       <template #reference>
-        <el-button :type="type" icon="el-icon-lightning" @click="showConfirm = !showConfirm" @click.prevent.stop :disabled="disabled">{{ title || $t('apply')}}</el-button>
+        <el-button :type="type" icon="el-icon-lightning" @click="showConfirm = !showConfirm" @click.prevent.stop :disabled="disabled">{{ title || t('apply')}}</el-button>
       </template>
       <el-form @submit.prevent.stop label-position="left" label-width="120px">
         <template v-if="finished">
@@ -59,7 +59,7 @@ zh:
             <el-icon :size="15" style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
               <el-icon-cloudy></el-icon-cloudy>
             </el-icon>
-            <span class="confirmText">{{$t('reset')}} {{title ? `[ ${title} ]` : ''}}</span>
+            <span class="confirmText">{{t('reset')}} {{title ? `[ ${title} ]` : ''}}</span>
           </el-alert>
         </template>
         <template v-else>
@@ -67,7 +67,7 @@ zh:
             <el-icon :size="15" style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
               <el-icon-lightning></el-icon-lightning>
             </el-icon>
-            <span class="confirmText">{{$t('confirmToExecute')}} {{title ? `[ ${title} ]` : ''}}</span>
+            <span class="confirmText">{{t('confirmToExecute')}} {{title ? `[ ${title} ]` : ''}}</span>
           </el-alert>
         </template>
 
@@ -75,15 +75,15 @@ zh:
 
         <div style="text-align: right; margin-top: 20px;">
           <el-button v-if="history.success_tasks.length > 0" @click="viewTaskLogs(lastSucessPid)"
-            type="success" plain icon="el-icon-files" style="float: left;">{{ $t('viewLastSuccessLog') }}</el-button>
+            type="success" plain icon="el-icon-files" style="float: left;">{{ t('viewLastSuccessLog') }}</el-button>
           <el-button v-if="history.current_pid && history.current_pid !== lastSucessPid" @click="viewTaskLogs(history.current_pid)" 
-            type="danger" plain icon="el-icon-document" style="float: left;">{{$t('viewLastLog')}}</el-button>
+            type="danger" plain icon="el-icon-document" style="float: left;">{{t('viewLastLog')}}</el-button>
           <el-button type="default" icon="el-icon-close" @click="showConfirm = false">{{$t('msg.cancel')}}</el-button>
           <el-button type="primary" icon="el-icon-lightning" @click="applyPlan" :loading="executing">{{$t('msg.ok')}}</el-button>
         </div>
       </el-form>
     </el-popover>
-    <el-button v-if="history.processing" type="danger" round @click="forceHide = false">{{ $t('taskInCurrent') }}</el-button>
+    <el-button v-if="history.processing" type="danger" round @click="forceHide = false">{{ t('taskInCurrent') }}</el-button>
   </template>
 </template>
 

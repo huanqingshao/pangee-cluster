@@ -12,15 +12,15 @@ zh:
 </i18n>
 
 <template>
-  <el-popover trigger="manual" v-model:visible="show" placement="top-start" :title="$t('rename')" width="420px">
+  <el-popover trigger="manual" v-model:visible="show" placement="top-start" :title="t('rename')" width="420px">
     <template #reference>
       <el-button icon="el-icon-edit" circle @click="show = true"></el-button>
     </template>
     <el-form :model="form" ref="form">
       <div class="app_text_mono" style="text-align: left; line-height: 28px;">
-        <span>{{ $t('renameCluster', { name: clusterName}) }}</span>
+        <span>{{ t('renameCluster', { name: clusterName }) }}</span>
         <el-form-item prop="name" :rules="nameRules">
-          <el-input v-model.trim="form.name" :placeholder="$t('input_newName')"></el-input>
+          <el-input v-model.trim="form.name" :placeholder="t('input_newName')"></el-input>
         </el-form-item>
       </div>
       <div style="text-align: right;">
@@ -52,7 +52,7 @@ export default {
               return callback('必须以字母开头，可以包含数字和字母')
             }
             this.kuboardSprayApi.get(`/clusters/${value}`).then(() => {
-              callback(this.$t('conflict', {name: value}))
+              callback(this.t('conflict', { name: value }))
             }).catch(e => {
               // console.log(e.response)
               if (e.response && e.response.data.code === 500) {
@@ -70,8 +70,8 @@ export default {
   },
   computed: {
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   methods: {
     renameCluster() {
@@ -93,6 +93,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

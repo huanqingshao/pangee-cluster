@@ -79,7 +79,7 @@ export default {
               if (resp.data.data === 'ok') {
                 return callback()
               } else {
-                return callback(this.$t('password_error'))
+                return callback(this.t('password_error'))
               }
             }).catch(e => {
               return callback('failed to validate password: ' + e)

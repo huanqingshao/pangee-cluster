@@ -16,7 +16,7 @@ zh:
     <el-dialog v-model="dialogVisible" width="80%" top="5vh" :close-on-click-modal="false">
       <template #header>
         <div style="background-color: var(--el-color-primary-light-9); margin-right: 25px; padding: 10px;">
-          {{$t('compareTitle')}}
+          {{t('compareTitle')}}
           <el-tag>
             <span class="app_text_mono" style="font-size: 14px;">{{cluster.resourcePackage.metadata.version}}</span>
           </el-tag>
@@ -28,16 +28,16 @@ zh:
       </template>
       <div v-if="dialogVisible">
         <el-tabs v-if="releaseNoteHtml" v-model="activeName" type="card">
-          <el-tab-pane :label="$t('compare')" name="compare">
+          <el-tab-pane :label="t('compare')" name="compare">
             <ComparePackageTable :cluster="cluster" :target="target.yaml"></ComparePackageTable>
           </el-tab-pane>
-          <el-tab-pane :label="$t('releaseNote')" name="releaseNote">
+          <el-tab-pane :label="t('releaseNote')" name="releaseNote">
             <el-scrollbar height="calc(90vh - 245px)">
               <el-skeleton v-if="releaseNoteLoading"></el-skeleton>
               <div v-else-if="releaseNoteHtml" v-html="releaseNoteHtml" class="markdown"></div>
             </el-scrollbar>
           </el-tab-pane>
-          <el-tab-pane :label="$t('content')" name="content">
+          <el-tab-pane :label="t('content')" name="content">
             <el-scrollbar height="calc(90vh - 245px)">
               <div style="padding-top: 10px;">
                 <ResourcePackage :expandAll="true" :resourcePackage="target.yaml"></ResourcePackage>

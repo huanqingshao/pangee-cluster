@@ -41,16 +41,16 @@ zh:
 <template>
   <div>
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true" top="20vh"
-      :title="$t('addMirror')" width="45%">
+      :title="t('addMirror')" width="45%">
       <el-form :model="form" label-position="left" label-width="120px" v-if="dialogVisible" ref="form">
-        <el-form-item :label="$t('mirror_type')">
+        <el-form-item :label="t('mirror_type')">
           <el-radio-group v-model="mirror_type">
-            <el-radio-button label="os">{{ $t('mirror_type_os') }}</el-radio-button>
-            <el-radio-button label="docker">{{ $t('mirror_type_docker') }}</el-radio-button>
+            <el-radio-button label="os">{{ t('mirror_type_os') }}</el-radio-button>
+            <el-radio-button label="docker">{{ t('mirror_type_docker') }}</el-radio-button>
           </el-radio-group>
-          <span style="margin-left: 20px; vertical-align: bottom; color: var(--el-text-color-secondary);">{{$t('mirror_type_' + mirror_type + '_desc')}}</span>
+          <span style="margin-left: 20px; vertical-align: bottom; color: var(--el-text-color-secondary);">{{t('mirror_type_' + mirror_type + '_desc')}}</span>
         </el-form-item>
-        <el-form-item :label="$t('os_type')" prop="kuboardspray_os_mirror_type" :rules="[{ required: true, message: 'required', trigger: 'change' }]">
+        <el-form-item :label="t('os_type')" prop="kuboardspray_os_mirror_type" :rules="[{ required: true, message: 'required', trigger: 'change' }]">
           <el-radio-group v-model="os_type">
             <el-radio-button label="anolis">Anolis</el-radio-button>
             <el-radio-button label="centos">Centos</el-radio-button>
@@ -68,12 +68,12 @@ zh:
           <template #edit>
             <div class="create_kind">
               <div v-if="form.kuboardspray_os_mirror_kind === 'provision'">
-                <el-alert :closable="false" type="warning" effect="dark" :title="$t('msg.prompt')">{{$t('provision_msg')}}</el-alert>
+                <el-alert :closable="false" type="warning" effect="dark" :title="$t('msg.prompt')">{{t('provision_msg')}}</el-alert>
               </div>
               <div v-else>
                 <FieldSelect :holder="form" fieldName="kuboardspray_os_mirror_url" required :disabled="!form.kuboardspray_os_mirror_type"
-                  allow-create filterable :loadOptions="loadMirrorList" :placeholder="$t('canCreateItem')"></FieldSelect>
-                <el-alert :closable="false" type="warning" :title="$t('msg.prompt')">{{$t('existing_msg')}}</el-alert>
+                  allow-create filterable :loadOptions="loadMirrorList" :placeholder="t('canCreateItem')"></FieldSelect>
+                <el-alert :closable="false" type="warning" :title="$t('msg.prompt')">{{t('existing_msg')}}</el-alert>
               </div>
             </div>
           </template>
@@ -129,7 +129,7 @@ export default {
             }
             let v = this.form.kuboardspray_os_mirror_type + '-' + this.form.kuboardspray_os_mirror_name
             this.kuboardSprayApi.get(`/mirrors/${v}`).then(() => {
-              callback(this.$t('conflict', {name: v}))
+              callback(this.t('conflict', {name: v}))
             }).catch(e => {
               if (e.response && e.response.data.code === 500) {
                 callback()

@@ -1,6 +1,9 @@
 <i18n>
 en:
-  
+  ipip_mode: ipip_mode
+  vxlan_mode: vxlan_mode
+  backend: backend
+  calico_mode: calico_mode
 zh:
   ipip_mode: ipip_mode
   vxlan_mode: vxlan_mode
@@ -11,7 +14,7 @@ zh:
 
 <template>
   <div>
-    <FieldCommon :holder="vars" :prop="prop" fieldName="calico_mode" :placeholder="$t('calico_mode')" label-width="160px">
+    <FieldCommon :holder="vars" :prop="prop" fieldName="calico_mode" :placeholder="t('calico_mode')" label-width="160px">
       <template #view>{{ calico_mode }}</template>
       <template #edit>
         <el-radio-group v-model="calico_mode">
@@ -20,7 +23,7 @@ zh:
         </el-radio-group>
       </template>
     </FieldCommon>
-    <FieldCommon v-if="calico_mode === 'IPIP'" :holder="vars" :prop="prop" fieldName="calico_ipip_mode" :placeholder="$t('ipip_mode')" label-width="160px">
+    <FieldCommon v-if="calico_mode === 'IPIP'" :holder="vars" :prop="prop" fieldName="calico_ipip_mode" :placeholder="t('ipip_mode')" label-width="160px">
       <template #view>
         <span>{{ ipip_mode }}</span>
       </template>
@@ -31,7 +34,7 @@ zh:
         </el-radio-group>
       </template>
     </FieldCommon>
-    <FieldCommon v-if="calico_mode === 'VXLAN'" :holder="vars" :prop="prop" fieldName="calico_vxlan_mode" :placeholder="$t('vxlan_mode')" label-width="160px">
+    <FieldCommon v-if="calico_mode === 'VXLAN'" :holder="vars" :prop="prop" fieldName="calico_vxlan_mode" :placeholder="t('vxlan_mode')" label-width="160px">
       <template #view>
         <span>{{ vxlan_mode }}</span>
       </template>
@@ -42,7 +45,7 @@ zh:
         </el-radio-group>
       </template>
     </FieldCommon>
-    <FieldCommon :holder="vars" :prop="prop" fieldName="calico_network_backend" :placeholder="$t('backend')" label-width="160px">
+    <FieldCommon :holder="vars" :prop="prop" fieldName="calico_network_backend" :placeholder="t('backend')" label-width="160px">
       <template #view>
         <span>{{ calico_network_backend }}</span>
       </template>

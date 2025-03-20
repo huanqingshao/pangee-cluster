@@ -16,7 +16,7 @@ zh:
         <template #edit>
           <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus" 
             @confirm="openUrlInBlank('/#/settings/resources')"
-            :text="$t('createResource')" :message="$t('goToResourcePage')"></ConfirmButton>
+            :text="t('createResource')" :message="t('goToResourcePage')"></ConfirmButton>
         </template>
       </FieldSelect>
       <div v-if="resourcePackage">

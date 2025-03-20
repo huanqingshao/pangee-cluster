@@ -20,11 +20,11 @@ zh:
 <template>
   <div>
     <div style="background-color: #3a3333; color: #fffeff; font-weight: 500; padding: 8px 20px 8px 20px; line-height: 22px; text-align: center;">
-      {{this.$t('terminal')}} - <span class="app_text_mono">{{ownerType}}/{{ownerName}}/{{nodeName}}</span>
+      {{this.t('terminal')}} - <span class="app_text_mono">{{ownerType}}/{{ownerName}}/{{nodeName}}</span>
       <span style="float:left;">
         <ChangeFontSize class="button" :terminal="xterm" :fitAddon="fitAddon"></ChangeFontSize>
         <ChangeColor class="button"></ChangeColor>
-        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{$t('find')}}</el-button>
+        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{t('find')}}</el-button>
         <Find ref="find" class="button" :terminal="xterm"></Find>
       </span>
       <span :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
@@ -83,15 +83,15 @@ export default {
     },
     stateStr() {
       if (this.socketReadyState === 0) {
-        return this.$t('connecting')
+        return this.t('connecting')
       } else if (this.socketReadyState === 1) {
-        return this.$t('connected')
+        return this.t('connected')
       } else if (this.socketReadyState === 2) {
-        return this.$t('closing')
+        return this.t('closing')
       } else if (this.socketReadyState === 3) {
-        return this.$t('closed')
+        return this.t('closed')
       }
-      return this.$t('unknown')
+      return this.t('unknown')
     },
   },
   components: { K8sTerminalErrorHint, ChangeFontSize, Find, ChangeColor, SshQuickCommands },
@@ -225,7 +225,7 @@ export ETCDCTL_CACERT=/etc/ssl/etcd/ssl/ca.pem
         this.socketReadyState = this.socket.readyState
       }, 2000)
 
-      document.title = `${this.$t('terminal')} - ${this.ownerName} / ${this.nodeName}`
+      document.title = `${this.t('terminal')} - ${this.ownerName} / ${this.nodeName}`
     }
   }
 }

@@ -11,7 +11,7 @@ en:
   offlineNodesDesc: Exclude the following offline nodes.
 
   verbose: Include task params
-  verbose_: 
+  verbose_: Normal level, it's recommended to use this option.
   verbose_v: May include sensitive data in the trace, e.g. path to files, user name, password.
   verbose_vvv: includes more information in log, only used in development.
   v_: Normal
@@ -54,40 +54,40 @@ zh:
           <el-icon style="margin-right: 5px;">
             <el-icon-check></el-icon-check>
           </el-icon>
-          {{$t('is_installed_true')}}
+          {{t('is_installed_true')}}
         </el-tag>
         <el-tag v-else type="warning" style="margin-right: 10px;">
           <el-icon style="margin-right: 5px;">
             <el-icon-close></el-icon-close>
           </el-icon>
-          {{$t('is_installed_false')}}
+          {{t('is_installed_false')}}
         </el-tag>
         <ExecuteTask v-if="showExecute" :history="cluster.history" placement="left"
           :disabled="executeDisabled"
-          :title="$t(action, {label})" :startTask="applyPlan" @refresh="$emit('refresh')" @visibleChange="onVisibleChange">
+          :title="t(action, {label})" :startTask="applyPlan" @refresh="$emit('refresh')" @visibleChange="onVisibleChange">
           <template #reference>
-            <el-button v-if="addonState.is_installed" icon="el-icon-remove" type="danger" plain>{{$t('uninstall')}}</el-button>
-            <el-button v-else icon="el-icon-download" type="warning" plain>{{$t('install')}}</el-button>
+            <el-button v-if="addonState.is_installed" icon="el-icon-remove" type="danger" plain>{{t('uninstall')}}</el-button>
+            <el-button v-else icon="el-icon-download" type="warning" plain>{{t('install')}}</el-button>
           </template>
           <div v-if="pingpong_loading" style="display: block; min-width: 420px;">
             <el-skeleton animated></el-skeleton>
           </div>
           <el-form v-else ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px">
             <div class="app_block_title">{{label}}</div>
-            <el-form-item :label="$t('verbose')">
+            <el-form-item :label="t('verbose')">
               <el-radio-group v-model="form.verbose">
-                <el-radio-button label="">{{$t('v_')}}</el-radio-button>
-                <el-radio-button label="v">{{$t('v_v')}}</el-radio-button>
-                <el-radio-button label="vvv">{{$t('v_vvv')}}</el-radio-button>
+                <el-radio-button label="">{{t('v_')}}</el-radio-button>
+                <el-radio-button label="v">{{t('v_v')}}</el-radio-button>
+                <el-radio-button label="vvv">{{t('v_vvv')}}</el-radio-button>
               </el-radio-group>
-              <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{$t('verbose_' + form.verbose)}}</div>
+              <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</div>
             </el-form-item>
-            <el-form-item :label="$t('fork')" style="margin-top: 10px;">
+            <el-form-item :label="t('fork')" style="margin-top: 10px;">
               <el-input-number v-model="form.fork" :step="2" style="width: 166px;"></el-input-number>
-              <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{$t('fork_more')}}</div>
+              <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{t('fork_more')}}</div>
             </el-form-item>
-            <el-form-item :label="$t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
-            <div class="form_description">{{ $t('offlineNodesDesc') }}</div>
+            <el-form-item :label="t('offlineNodes')" class="app_margin_top" v-if="offlineNodes.length > 0">
+            <div class="form_description">{{ t('offlineNodesDesc') }}</div>
             <template v-for="node in offlineNodes" :key="'exclude' + node">
               <el-tooltip class="box-item" effect="dark" :content="pingpong[node].message" placement="top-end">
                 <el-tag type="danger" effect="dark" style="margin: 0 10px 10px 0;">
@@ -101,7 +101,7 @@ zh:
           </el-form-item>
           </el-form>
         </ExecuteTask>
-        <el-button v-else-if="isClusterOnline && editMode === 'view' && !addonState.is_installed" type="primary" plain icon="el-icon-download" @click="prepareForInstall">{{ $t('install_addon') }}</el-button>
+        <el-button v-else-if="isClusterOnline && editMode === 'view' && !addonState.is_installed" type="primary" plain icon="el-icon-download" @click="prepareForInstall">{{ t('install_addon') }}</el-button>
       </div>
     </template>
     <template #more>
@@ -240,7 +240,7 @@ export default {
       this.$router.replace('?mode=edit')
       setTimeout(() => {
         this.$refs.configSection.expand(true)
-        this.$message.warning(this.$t('saveAndInstall'))
+        this.$message.warning(this.t('saveAndInstall'))
       }, 500)
     },
     onVisibleChange (v) {

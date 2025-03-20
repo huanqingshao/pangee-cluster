@@ -37,8 +37,8 @@ zh:
           <Node class="bastion" name="bastion" :cluster="cluster" hideDeleteButton
             :active="currentPropertiesTab === 'bastion'" @click="showBastion">
             <div style="margin-top: 10px;">
-              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small" style="width: 100px; text-align: center;">{{$t('enabledBation')}}</el-tag>
-              <el-tag v-else type="info" effect="light" size="small" style="width: 100px; text-align: center;">{{$t('disabledBation')}}</el-tag>
+              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small" style="width: 100px; text-align: center;">{{t('enabledBation')}}</el-tag>
+              <el-tag v-else type="info" effect="light" size="small" style="width: 100px; text-align: center;">{{t('disabledBation')}}</el-tag>
             </div>
           </Node>
           <div class="horizontalConnection" :style="bastionEnabled ? '' : 'border-color: white;'"></div>
@@ -92,7 +92,7 @@ zh:
         <el-tabs type="card" v-model="currentPropertiesTab">
           <el-tab-pane name="localhost">
             <template #label>
-              {{ $t('resourcePackage') }}
+              {{ t('resourcePackage') }}
             </template>
             <el-scrollbar max-height="calc(100vh - 276px)" ref="configKuboardSprayScroll">
               <div class="tab_content">
@@ -102,7 +102,7 @@ zh:
           </el-tab-pane>
           <el-tab-pane name="global_config">
             <template #label>
-              {{ $t('global_config') }}
+              {{ t('global_config') }}
             </template>
             <el-scrollbar max-height="calc(100vh - 276px)">
               <div class="tab_content">
@@ -132,7 +132,7 @@ zh:
           </el-tab-pane>
           <el-tab-pane name="addons">
             <template #label>
-              {{ $t('addons') }}
+              {{ t('addons') }}
             </template>
             <el-scrollbar max-height="calc(100vh - 276px)">
               <div class="tab_content">
@@ -156,11 +156,11 @@ zh:
           </el-tab-pane>
           <el-tab-pane v-else name="node_nodes">
             <template #label>
-              <div style="width: 100px; text-align: center;">{{ $t('singleNode') }}</div>
+              <div style="width: 100px; text-align: center;">{{ t('singleNode') }}</div>
             </template>
             <el-scrollbar max-height="calc(100vh - 276px)">
               <div class="tab_content">
-                <el-alert type="warning" :closable="false" :title="$t('selectANode')">
+                <el-alert type="warning" :closable="false" :title="t('selectANode')">
                 </el-alert>
               </div>
             </el-scrollbar>

@@ -23,26 +23,26 @@ zh:
       <el-card class="card">
         <template #header>
           <el-icon :size="20" style="margin-right: 10px;"><el-icon-box /></el-icon>
-          {{$t('resources')}}
+          {{t('resources')}}
         </template>
         <div class="description">
           下载不同版本 Kubernetes 集群所对应的资源包，以实现离线安装 Kubernetes 集群。
         </div>
         <div class="buttons">
-          <el-button type="primary" icon="el-icon-position" @click="$router.push(`/settings/resources`)">{{$t('resources')}}</el-button>
+          <el-button type="primary" icon="el-icon-position" @click="$router.push(`/settings/resources`)">{{t('resources')}}</el-button>
         </div>
       </el-card>
       <el-card style="margin: 0 20px;" class="card">
         <template #header>
           <el-icon :size="20" style="margin-right: 10px;"><img src="./images/kubernetes.png" style="width: 20px; height: 20px;"></el-icon>
-          {{$t('clusters')}}
+          {{t('clusters')}}
         </template>
         <div class="description">
           通过向导的方式规划和安装您的 Kubernetes 集群，并对集群进行后续的维护管理。
         </div>
         <div class="buttons">
           <el-button type="primary" icon="el-icon-position" @click="$router.push(`/clusters`)">
-            {{$t('clusters')}}
+            {{t('clusters')}}
           </el-button>
         </div>
       </el-card>
@@ -51,13 +51,13 @@ zh:
           <el-icon :size="20" style="margin-right: 10px;">
             <img style="width: 20px; height: 20px;" :src="kuboardIcon">
           </el-icon>
-          {{$t('kuboard')}}
+          {{t('kuboard')}}
         </template>
         <div class="description">
           将 Kuboard Spray 集成到 Kuboard 界面中，更方便地管理您的 Kubernetes 集群。
         </div>
         <div class="buttons">
-          <el-button type="primary" icon="el-icon-position" @click="$router.push(`/settings/kuboard`)">{{$t('kuboard')}}</el-button>
+          <el-button type="primary" icon="el-icon-position" @click="$router.push(`/settings/kuboard`)">{{t('kuboard')}}</el-button>
         </div>
       </el-card>
     </div>

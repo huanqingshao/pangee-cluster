@@ -48,24 +48,24 @@ zh:
       <div v-else-if="os_mirror.status">
         <el-card class="app_margin_bottom" shadow="never">
           <div style="margin-bottom: -20px;">
-            <el-form-item :label="$t('url')" prop="status.url" :rules="urlRules">
+            <el-form-item :label="t('url')" prop="status.url" :rules="urlRules">
               <span v-if="mode === 'view'">
                 <KuboardSprayLink :href="os_mirror.status.url">{{os_mirror.status.url}}</KuboardSprayLink>
               </span>
-              <el-input v-else v-model.trim="mirror_url" :placeholder="$t('url_placeholder')"></el-input>
+              <el-input v-else v-model.trim="mirror_url" :placeholder="t('url_placeholder')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('msg.status')">
-              <el-tag v-if="os_mirror.status.status === 'created'" type="">{{$t('created')}}</el-tag>
-              <el-tag v-if="os_mirror.status.status === 'success'" type="success" effect="dark">{{$t('success')}}</el-tag>
-              <el-tag v-if="os_mirror.status.status === 'failed'" type="danger" effect="dark">{{$t('failed')}}</el-tag>
+              <el-tag v-if="os_mirror.status.status === 'created'" type="">{{t('created')}}</el-tag>
+              <el-tag v-if="os_mirror.status.status === 'success'" type="success" effect="dark">{{t('success')}}</el-tag>
+              <el-tag v-if="os_mirror.status.status === 'failed'" type="danger" effect="dark">{{t('failed')}}</el-tag>
             </el-form-item>
           </div>
         </el-card>
         <el-tabs type="border-card" v-model="currentTab">
-          <el-tab-pane :label="$t('basics')" name="basics">
+          <el-tab-pane :label="t('basics')" name="basics">
             <Params v-if="os_mirror" :os_mirror="os_mirror"></Params>
           </el-tab-pane>
-          <el-tab-pane v-if="os_mirror.status.kind === 'provision'" :label="$t('provision')" name="provision">
+          <el-tab-pane v-if="os_mirror.status.kind === 'provision'" :label="t('provision')" name="provision">
             <el-scrollbar height="calc(100vh - 345px)">
               <Provision v-if="os_mirror.inventory" :os_mirror="os_mirror"></Provision>
             </el-scrollbar>
@@ -131,7 +131,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('titleRepo'), to: '/settings/mirrors' },
+      { label: this.t('titleRepo'), to: '/settings/mirrors' },
       { label: this.name },
     ]
   },

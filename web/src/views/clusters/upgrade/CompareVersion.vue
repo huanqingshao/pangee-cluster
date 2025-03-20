@@ -25,20 +25,20 @@ zh:
 <template>
   <div v-loading="cluster.state == undefined" style="min-height: 50vh;">
     <el-table v-if="cluster.state" :data="tableData" style="width: 100%" row-key="name" :expand-row-keys="expanded" height="calc(100vh - 270px)">
-      <el-table-column prop="name" :label="$t('componentName')" width="180" fixed>
+      <el-table-column prop="name" :label="t('componentName')" width="180" fixed>
         <template #header>
           <div class="compare_version_header">
-            <div style="text-align: center;">{{ $t('componentName') }}</div>
+            <div style="text-align: center;">{{ t('componentName') }}</div>
           </div>
         </template>
         <template #default="scope">
-          <div class="app_text_mono component_name nowrap">{{ $t(scope.row.name) }}</div>
+          <div class="app_text_mono component_name nowrap">{{ t(scope.row.name) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="version" :label="$t('versionInResource')" width="120" fixed>
+      <el-table-column prop="version" :label="t('versionInResource')" width="120" fixed>
         <template #header>
           <div class="compare_version_header">
-            <div>{{ $t('versionInResource') }}</div>
+            <div>{{ t('versionInResource') }}</div>
           </div>
           </template>
         <template #default="scope">
@@ -48,11 +48,11 @@ zh:
       <template v-if="version">
         <el-table-column min-width="120px" fixed>
           <template #header>
-            <div class="compare_version_header">{{ $t('command_for_version') }}</div>
+            <div class="compare_version_header">{{ t('command_for_version') }}</div>
           </template>
           <template #default="scope">
             <el-tooltip trigger="click" v-if="firstNode && firstNode[scope.row.name] && firstNode[scope.row.name].cmd" placement="top" width="420">
-              <el-button icon="el-icon-finished">{{$t('command_for_version')}}</el-button>
+              <el-button icon="el-icon-finished">{{t('command_for_version')}}</el-button>
               <template #content>
                 <pre style="margin: 0 10px;">{{ firstNode[scope.row.name].cmd }}</pre>
               </template>
@@ -69,7 +69,7 @@ zh:
           <template #default="scope">
             <template v-if="scope.row.name === 'kubernetes'">
               <template v-if="cluster.state.nodes[nodeName]">
-                <el-tag v-if="cluster.state.nodes[nodeName].spec.unschedulable" type="danger" effect="dark">{{ $t('cordoned') }}</el-tag>
+                <el-tag v-if="cluster.state.nodes[nodeName].spec.unschedulable" type="danger" effect="dark">{{ t('cordoned') }}</el-tag>
               </template>
             </template>
             <template v-else-if="nodeVersion[scope.row.name]">
@@ -102,7 +102,7 @@ zh:
             <el-icon style="vertical-align: middle;" class="is-loading">
               <el-icon-loading></el-icon-loading>
             </el-icon>
-            <span style="margin-left: 10px;">{{$t('loading')}}</span>
+            <span style="margin-left: 10px;">{{t('loading')}}</span>
           </div>
         </template>
         <template #default>

@@ -11,7 +11,7 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="$t('label')" :description="(fieldName == 'eviction_hard' ? '工作节点的 ' : '控制节点的 ') + $t('description')"
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="(fieldName == 'eviction_hard' ? '工作节点的 ' : '控制节点的 ') + t('description')"
     helpLink="https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/"
     anti-freeze labelWidth="120px">
     <FieldString :holder="vars[fieldName]['eviction.hard']" :prop="prop" placeholder="默认值: 100Mi" fieldName="memory.available"></FieldString>

@@ -37,21 +37,21 @@ zh:
 
 <template>
   <div>
-    <div class="app_block_title">{{$t('title')}}</div>
-    <el-alert :title="$t('title')" type="info" :closable="false" class="app_white_alert">
+    <div class="app_block_title">{{t('title')}}</div>
+    <el-alert :title="t('title')" type="info" :closable="false" class="app_white_alert">
       <div class="description">
-        <li>{{$t('resourceDescription1')}}</li>
-        <li>{{$t('resourceDescription2')}}</li>
+        <li>{{t('resourceDescription1')}}</li>
+        <li>{{t('resourceDescription2')}}</li>
       </div>
     </el-alert>
     <div style="text-align: right;">
       <KuboardSprayLink v-if="cannot_reach_online_repository" href="https://kuboard-spray.cn/support" type="danger"
-        style="margin-right: 10px; color: var(--el-color-danger)">{{ $t('cannot_reach_online_repository') }}</KuboardSprayLink>
+        style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}</KuboardSprayLink>
       <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
     </div>
     <div class="contentList">
       <el-table v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%">
-        <el-table-column prop="version" :label="$t('version')" width="200px">
+        <el-table-column prop="version" :label="t('version')" width="200px">
           <template #default="scope">
             <template v-if="hideLink">
               {{scope.row.version}}
@@ -72,7 +72,7 @@ zh:
             </template>
           </template>
         </el-table-column>
-        <!-- <el-table-column :label="$t('kubespray_version')">
+        <!-- <el-table-column :label="t('kubespray_version')">
           <template #default="scope">
             <span v-if="packageYaml[scope.row.version]">
               {{ scope.row.yaml.data.kubespray_version }}
@@ -82,7 +82,7 @@ zh:
             </el-icon>
           </template>
         </el-table-column> -->
-        <el-table-column :label="$t('kube_version')" width="100px">
+        <el-table-column :label="t('kube_version')" width="100px">
           <template #default="scope">
             <span v-if="scope.row.yaml">
               {{ scope.row.yaml.data.kubernetes.kube_version }}
@@ -92,7 +92,7 @@ zh:
             </el-icon>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('container_engine')" width="180px">
+        <el-table-column :label="t('container_engine')" width="180px">
           <template #default="scope">
             <template v-if="scope.row.yaml">
               <div v-for="(engine, key) in scope.row.yaml.data.container_engine" :key="`c${scope.index}_${key}`">
@@ -104,7 +104,7 @@ zh:
             </el-icon>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('supported_os')">
+        <el-table-column :label="t('supported_os')">
           <template #default="scope">
             <template v-if="scope.row.yaml">
               <span v-for="(os, key) in scope.row.yaml.metadata.supported_os" :key="`os${scope.index}_${key}`" style="margin-right: 10px;">
@@ -119,7 +119,7 @@ zh:
             </el-icon>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('import_status')" width="200px">
+        <el-table-column :label="t('import_status')" width="200px">
           <template #default="scope">
             <template v-if="importedPackageMap">
               <template v-if="importedPackageMap[scope.row.version]">
@@ -128,17 +128,17 @@ zh:
                     <el-icon-download v-if="scope.row.isOffline"></el-icon-download>
                     <el-icon-cloudy v-else></el-icon-cloudy>
                   </el-icon>
-                  {{ $t('import_status_true') }}
+                  {{ t('import_status_true') }}
                 </el-tag>
               </template>
               <el-tag v-else-if="scope.row.meetKuboardSprayVersion" type="warning" effect="dark">
                 <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
                   <el-icon-circle-close></el-icon-circle-close>
                 </el-icon>
-                {{ $t('import_status_false') }}
+                {{ t('import_status_false') }}
               </el-tag>
               <template v-else-if="scope.row.yaml">
-                <el-tag type="danger" effect="dark">{{ $t('minVersionRequired') }}</el-tag>
+                <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
                 <el-tag type="danger" class="app_text_mono">{{scope.row.yaml.metadata.kuboard_spray_version.min}}</el-tag>
               </template>
             </template>
@@ -148,7 +148,7 @@ zh:
           </template>
         </el-table-column>
         <slot name="columns">
-          <el-table-column :label="$t('msg.operations')" width="200px">
+          <el-table-column :label="t('msg.operations')" width="200px">
             <template #default="scope">
               <template v-if="importedPackageMap">
                 <template v-if="importedPackageMap[scope.row.version]">
@@ -157,7 +157,7 @@ zh:
                 </template>
                 <template v-else>
                   <el-button type="primary" plain icon="el-icon-view" @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ $t('msg.view') }}</el-button>
-                  <el-button type="primary" v-if="scope.row.meetKuboardSprayVersion" icon="el-icon-download" @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ $t('import') }}</el-button>
+                  <el-button type="primary" v-if="scope.row.meetKuboardSprayVersion" icon="el-icon-download" @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ t('import') }}</el-button>
                 </template>
               </template>
             </template>

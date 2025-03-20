@@ -65,6 +65,10 @@ const field = {
 
     ansible_python_interpreter: 'Python 路径',
 
+    calico_mode: "calico_mode",
+    calico_vxlan_mode: "calico_vxlan_mode",
+    calico_network_backend: "calico_network_backend",
+
     container_manager: '容器引擎',
     containerd_cfg_dir: 'config_dir',
     containerd_cfg_dir_placeholder: '默认值为 /etc/containerd，不建议修改',

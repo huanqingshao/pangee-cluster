@@ -20,16 +20,16 @@ zh:
           <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
             <el-icon-cloudy></el-icon-cloudy>
           </el-icon>
-          {{$t('loaded')}}
+          {{t('loaded')}}
         </el-tag>
         <el-tag v-else type="danger" effect="dark" style="margin-right: 20px;">
           <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
             <el-icon-cloudy></el-icon-cloudy>
           </el-icon>
-          {{$t('not_load')}}
+          {{t('not_load')}}
         </el-tag>
         <ResourceDownload :resource="resource" action="reload" :loading="loading" @refresh="refresh"></ResourceDownload>
-        <el-popconfirm v-if="!resource.history.processing" :title="$t('confirmToDelete')" @confirm="removeResource">
+        <el-popconfirm v-if="!resource.history.processing" :title="t('confirmToDelete')" @confirm="removeResource">
           <template #reference>
             <el-button type="danger" icon="el-icon-delete">{{ $t('msg.delete') }}</el-button>
           </template>
@@ -55,7 +55,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('resourceList'), to: '/settings/resources' },
+      { label: this.t('resourceList'), to: '/settings/resources' },
       { label: this.name },
     ]
   },

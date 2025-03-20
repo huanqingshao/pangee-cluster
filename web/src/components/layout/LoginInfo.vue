@@ -24,7 +24,7 @@ zh:
     <el-popover v-model:visible="visible" placement="bottom-end" :width="540" trigger="mannual">
       <template #reference>
         <div @click="visible = !visible">
-          <span class="font-weight" style="margin-right: 5px;">{{displayName}}</span>
+          <span class="font-weight" style="margin-right: 5px;">{{ displayName }}</span>
           <el-icon>
             <el-icon-caret-bottom></el-icon-caret-bottom>
           </el-icon>
@@ -32,22 +32,24 @@ zh:
       </template>
       <div style="padding: 20px; max-height: calc(100vh - 160px); overflow: hidden; overflow-y: auto;">
         <div style="text-align: right; height: 10px;">
-          <el-button style="margin-top: -30px;" size="large" type="primary" text icon="el-icon-close" @click="visible = false"></el-button>
+          <el-button style="margin-top: -30px;" size="large" type="primary" text icon="el-icon-close"
+            @click="visible = false"></el-button>
         </div>
         <div class="item">
-          <div class="label">{{$t('username')}}</div>
+          <div class="label">{{ t('username') }}</div>
           <div class="value">
             admin
           </div>
         </div>
         <div class="item">
-          <div class="label">{{$t('changePassword')}}</div>
+          <div class="label">{{ t('changePassword') }}</div>
           <div class="value">
-            <el-button type="primary" text @click="visible = false; $router.push('/settings/profile')" icon="el-icon-link">{{$t('changePassword')}}</el-button>
+            <el-button type="primary" text @click="visible = false; $router.push('/settings/profile')"
+              icon="el-icon-link">{{ t('changePassword') }}</el-button>
           </div>
         </div>
         <div class="app_text_right" style="float: right; margin-top: 20px;">
-          <el-button type="danger" @click="logout" icon="el-icon-lock">{{$t('logout')}}</el-button>
+          <el-button type="danger" @click="logout" icon="el-icon-lock">{{ t('logout') }}</el-button>
         </div>
       </div>
     </el-popover>
@@ -56,7 +58,7 @@ zh:
 
 <script>
 import { mapGetters } from 'vuex'
-import {clearAllCookie} from '../../utils/axios.js'
+import { clearAllCookie } from '../../utils/axios.js'
 
 export default {
   props: {
@@ -70,15 +72,15 @@ export default {
     ...mapGetters({
       userInfo: 'user/userInfo',
     }),
-    displayName () {
+    displayName() {
       return 'admin'
     }
   },
   components: {},
-  mounted () {
+  mounted() {
   },
   methods: {
-    logout () {
+    logout() {
       clearAllCookie()
       this.$router.push('/login')
     },
@@ -99,9 +101,11 @@ export default {
   vertical-align: top;
   color: var(--el-color-primary);
 }
+
 .user:hover {
   color: var(--el-color-primary-light-3);
 }
+
 .user .img {
   font-size: 22px;
   font-weight: 500;
@@ -118,6 +122,7 @@ export default {
   margin-left: 10px;
   font-weight: 600;
 }
+
 .userInfo {
   font-size: 13px;
   width: 110px;
@@ -127,14 +132,17 @@ export default {
   font-weight: 800;
   color: white;
 }
+
 .userInfo:hover {
   color: var(--el-color-primary);
 }
+
 .item {
   line-height: 1;
   height: 32px;
   vertical-align: top;
 }
+
 .label {
   color: var(--el-text-color-secondary);
   width: 120px;
@@ -143,6 +151,7 @@ export default {
   font-size: 13px;
   padding: 7px 0;
 }
+
 .value {
   color: var(--el-text-color-primary);
   width: 200px;
@@ -153,14 +162,17 @@ export default {
   font-size: 13px;
   height: 28px;
   padding: 7px 0;
-  font-family: Monaco,Menlo,Consolas,Bitstream Vera Sans Mono,monospace;
+  font-family: Monaco, Menlo, Consolas, Bitstream Vera Sans Mono, monospace;
 }
-.value button{
+
+.value button {
   margin-top: -7px;
 }
+
 .font-weight {
   font-weight: 600;
 }
+
 .clusterName {
   color: var(--el-color-primary) !important;
 }

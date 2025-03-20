@@ -28,7 +28,7 @@ zh:
           <template v-for="(addr, index) in node.k8s_node.status.addresses" :key="name + index">
             <el-tag type="" style="float: right;" v-if="addr.type === 'InternalIP'">{{addr.address}}</el-tag>
           </template>
-          <el-tag v-if="node.k8s_node.spec.unschedulable" type="danger" effect="dark" style="margin-right: 10px; float: right;">{{ $t('unschedulable') }}</el-tag>
+          <el-tag v-if="node.k8s_node.spec.unschedulable" type="danger" effect="dark" style="margin-right: 10px; float: right;">{{ t('unschedulable') }}</el-tag>
         </template>
         <template v-else-if="node.etcd_member">
           <el-tag type="" style="float: right;">{{node.etcd_member.health.endpoint}}</el-tag>

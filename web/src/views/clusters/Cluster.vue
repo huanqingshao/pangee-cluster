@@ -10,17 +10,19 @@ en:
   csi_scan: CSI Scan
   upgrade: Upgrade Cluster
   faile_validate_form: Please validate the form
+  operation: Operation
 zh:
   clusterList: 集群列表
   cluster: 集群
   access: 访问集群
-  plan: 集群规划
+  plan: 规划集群
   nodes: 节点维护
   health_check: 状态检查
   backup: 备份/恢复
   csi_scan: CIS扫描
   upgrade: 升级集群
   faile_validate_form: 请完善表单
+  operation: 操作集群
 </i18n>
 
 <template>
@@ -49,7 +51,7 @@ zh:
             :loading="loading"></ClusterProcessing>
         </template>
       </span>
-      <template v-if="cluster && cluster.history.processing">
+      <template v-if="cluster && cluster.history.processing || currentTab === 'operation'">
         <ClusterProcessing v-if="mode === 'view'" :cluster="cluster" :name="name" @refresh="refresh" :loading="loading"></ClusterProcessing>
       </template>
       <template v-if="cluster && isClusterInstalled">
@@ -60,29 +62,32 @@ zh:
       <el-skeleton animated :rows="10" style="height: calc(100vh - 190px);"></el-skeleton>
     </el-card>
     <el-tabs type="border-card" v-else v-model="currentTab">
-      <el-tab-pane :label="$t('plan')" name="plan">
+      <el-tab-pane :label="t('plan')" name="plan">
         <Plan v-if="cluster" ref="plan" :cluster="cluster" :mode="mode" @refresh="refresh" @switchTab="currentTab = $event"></Plan>
       </el-tab-pane>
-      <el-tab-pane :label="$t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
+      <el-tab-pane :label="t('operation')" name="operation">
+        <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster"></Operation>
+      </el-tab-pane>
+      <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
         <Access v-if="currentTab == 'access'" ref="access" 
           :cluster="cluster" :loading="loading" @switch="currentTab = $event"></Access>
       </el-tab-pane>
       <el-tab-pane v-if="cluster && cluster.inventory"
-        :disabled="disableNonePlanTab || !isClusterOnline" :label="$t('health_check')" name="health_check">
+        :disabled="disableNonePlanTab || !isClusterOnline" :label="t('health_check')" name="health_check">
         <ClusterHealthCheck v-if="isClusterInstalled && isClusterOnline && currentTab == 'health_check'" :cluster="cluster" @refresh="refresh"></ClusterHealthCheck>
         <el-skeleton v-else style="height: calc(100vh - 220px);"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="$t('backup')" name="backup">
+      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('backup')" name="backup">
         <Backup v-if="isClusterInstalled && isClusterOnline && currentTab == 'backup'" :cluster="cluster" @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px);"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="$t('csi_scan')" name="cis_scan">
+      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('csi_scan')" name="cis_scan">
         <div v-if="cluster && cluster.resourcePackage && !cluster.resourcePackage.data.supported_playbooks.cis_scan" style="height: calc(100vh - 220px);">
           {{ $t('msg.feature_doesnot_support_selected_resource_package') }}
         </div>
         <CIS v-else-if="currentTab === 'cis_scan'" :cluster="cluster"></CIS>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="$t('upgrade')" name="upgrade">
+      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('upgrade')" name="upgrade">
         <template  v-if="currentTab == 'upgrade'">
           <el-skeleton v-if="loading"></el-skeleton>
           <Upgrade v-else :cluster="cluster" @refresh="refresh"></Upgrade>
@@ -105,6 +110,7 @@ import clone from 'clone'
 import Plan from './plan/Plan.vue'
 import Upgrade from './upgrade/Upgrade.vue'
 import ClusterHealthCheck from './health_check/ClusterHealthCheck.vue'
+import Operation from "./operation2/Operation.vue"
 
 export default {
   mixins: [mixin],
@@ -117,7 +123,7 @@ export default {
   },
   breadcrumb () {
     return [
-      { label: this.$t('clusterList'), to: '/clusters' },
+      { label: this.t('clusterList'), to: '/clusters' },
       { label: this.name }
     ]
   },
@@ -194,7 +200,7 @@ export default {
       }),
     }
   },
-  components: { Plan, ClusterProcessing, Access, ClusterStateNodes, ClusterHealthCheck, Upgrade, Backup, CIS },
+  components: { Plan, ClusterProcessing, Access, ClusterStateNodes, ClusterHealthCheck, Upgrade, Backup, CIS, Operation },
   watch: {
     'cluster.inventory.all.hosts.localhost.kuboardspray_resource_package': function() {
       this.loadResourcePackage()
@@ -360,7 +366,7 @@ export default {
             this.$message.error(this.$t('msg.save_failed', e.response.data.message))
           })
         } else {
-          this.$message.error(this.$t('faile_validate_form'))
+          this.$message.error(this.t('faile_validate_form'))
         }
       })
     },

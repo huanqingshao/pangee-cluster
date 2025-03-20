@@ -27,16 +27,16 @@ zh:
 
 <template>
   <div>
-    <div class="app_block_title">{{ $t('connectivity_check') }}</div>
+    <div class="app_block_title">{{ t('connectivity_check') }}</div>
     <div class="app_description">
-      {{ $t('connectivity_check_desc') }}
+      {{ t('connectivity_check_desc') }}
       <el-button @click="refresh" icon="el-icon-refresh" type="primary">{{ $t('msg.refresh') }}</el-button>
       <KuboardSprayLink href="https://kuboard-spray.cn/guide/addons/netchecker.html" style="margin-left: 20px;" :size="13"></KuboardSprayLink>
     </div>
     <div v-if="installed">
       <el-skeleton v-if="loading" animated class="app_margin_top"></el-skeleton>
       <div v-else-if="connectivityCheck">
-        <el-alert :type="status === 'pass' ? 'success' : 'error'" effect="dark" :closable="false" :title="$t(status)" show-icon>
+        <el-alert :type="status === 'pass' ? 'success' : 'error'" effect="dark" :closable="false" :title="t(status)" show-icon>
           <span class="app_text_mono">{{ errorMsg || connectivityCheck.stdout_obj.Message }}</span>
         </el-alert>
         <div v-if="status === 'fail'" style="display: flex;" class="app_description">
@@ -60,25 +60,25 @@ zh:
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-copy-document'"></component>
                 </el-icon>
-                {{ $t('podList') }}
+                {{ t('podList') }}
               </el-radio-button>
               <el-radio-button label="podDetails">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document-copy'"></component>
                 </el-icon>
-                {{ $t('podDetails') }}
+                {{ t('podDetails') }}
               </el-radio-button>
               <el-radio-button label="events">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-files'"></component>
                 </el-icon>
-                {{ $t('events') }}
+                {{ t('events') }}
               </el-radio-button>
               <el-radio-button label="logs">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document'"></component>
                 </el-icon>
-                {{ $t('logs') }}
+                {{ t('logs') }}
               </el-radio-button>
             </el-radio-group>
             <el-scrollbar :max-height="400" style="margin-top: 10px;">
@@ -100,9 +100,9 @@ zh:
         </el-alert>
       </div>
     </div>
-    <el-alert v-else type="warning" :closable="false" :title="$t('installNetchecker')">
-      {{ $t('netcheckerNotInstalled') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/addons/netchecker.html" style="margin-left: 20px;" :size="12">{{ $t('installNetchecker') }}</KuboardSprayLink>
+    <el-alert v-else type="warning" :closable="false" :title="t('installNetchecker')">
+      {{ t('netcheckerNotInstalled') }}
+      <KuboardSprayLink href="https://kuboard-spray.cn/guide/addons/netchecker.html" style="margin-left: 20px;" :size="12">{{ t('installNetchecker') }}</KuboardSprayLink>
     </el-alert>
   </div>
 </template>
@@ -117,7 +117,7 @@ export default {
       errorMsg: undefined,
       loading: false,
       connectivityCheck: undefined,
-      connectivityLogs: this.$t('selectAPod'),
+      connectivityLogs: this.t('selectAPod'),
       connectivityLogsLoading: false,
       connectivityCheckLog: {
         type: 'events',
@@ -168,7 +168,7 @@ export default {
             }
           })
         } else {
-          this.connectivityLogs = this.$t('selectAPod')
+          this.connectivityLogs = this.t('selectAPod')
         }
       },
       deep: true,

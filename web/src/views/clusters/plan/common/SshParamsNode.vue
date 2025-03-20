@@ -35,7 +35,7 @@ zh:
   <ConfigSection ref="configSection" v-model:enabled="enableSsh" label="SSH" :description="description" disabled anti-freeze>
     <FieldCommon :holder="holder" fieldName="ansible_host" :prop="`all.hosts.${nodeName}`" :anti-freeze="onlineNodes[nodeName] === undefined || holder.kuboardspray_node_action === 'add_node'" :rules="hostRules">
       <template #edit>
-        <el-input v-model.trim="ansible_host" :placeholder="$t('ansible_host_placeholder')"></el-input>
+        <el-input v-model.trim="ansible_host" :placeholder="t('ansible_host_placeholder')"></el-input>
       </template>
     </FieldCommon>
     <FieldString :holder="holder" fieldName="ansible_port" :prop="`all.hosts.${nodeName}`"
@@ -44,21 +44,21 @@ zh:
     <FieldCommon :holder="holder" fieldName="ansible_user" :placeholder="placeholder('ansible_user')" anti-freeze>
       <template #edit>
         <el-input v-model.trim="ansible_user" :placeholder="placeholder('ansible_user')"></el-input>
-        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ $t('rootuser') }}</el-tag>
+        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ t('rootuser') }}</el-tag>
       </template>
     </FieldCommon>
     <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze clearable
       :placeholder="placeholder('ansible_ssh_private_key_file')">
       <template #edit>
-        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{$t('addSshKey')}}</el-button>
+        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{t('addSshKey')}}</el-button>
       </template>
     </FieldSelect>
     <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
       :placeholder="placeholder('ansible_password')"></FieldString>
     <el-alert type="warning" :closable="false" v-if="cluster && cluster.inventory.all.hosts.bastion && (holder.ansible_password || cluster.inventory.all.children.target.vars.ansible_password)" style="margin-left: 120px; width: calc(100% - 120px);">
-      {{ $t('password_and_bastion') }}
+      {{ t('password_and_bastion') }}
       <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12"></KuboardSprayLink>
-      <li v-if="cluster && cluster.inventory.all.children.target.vars.ansible_password">{{ $t('password_in_global') }}</li>
+      <li v-if="cluster && cluster.inventory.all.children.target.vars.ansible_password">{{ t('password_in_global') }}</li>
     </el-alert>
     <!-- <FieldCommon :holder="holder" fieldName="ansible_become" anti-freeze>
       <template #view>
@@ -66,7 +66,7 @@ zh:
       </template>
       <template #edit>
         <el-switch v-model="ansible_become" disabled></el-switch>
-        <el-tag v-if="holder.ansible_become === undefined" style="margin-left: 10px;" type="info">{{ $t('inhirit') }}</el-tag>
+        <el-tag v-if="holder.ansible_become === undefined" style="margin-left: 10px;" type="info">{{ t('inhirit') }}</el-tag>
       </template>
     </FieldCommon>
     <template v-if="ansible_become">
@@ -74,15 +74,15 @@ zh:
       <FieldString :holder="holder" fieldName="ansible_become_password" show-password :placeholder="placeholder('ansible_become_password')" anti-freeze clearable></FieldString>
     </template> -->
     <FieldSelect :holder="holder" fieldName="ansible_python_interpreter" anti-freeze clearable :loadOptions="loadPythonInterpreter" :placeholder="placeholder('ansible_python_interpreter')" allow-create filterable></FieldSelect>
-    <FieldCommon :holder="holder" fieldName="ip" :prop="`all.hosts.${nodeName}`" :anti-freeze="onlineNodes[nodeName] === undefined" :label="$t('ip')"
-      :placeholder="$t('ip_placeholder', { default_value: holder.ansible_host})" :rules="ipRules">
+    <FieldCommon :holder="holder" fieldName="ip" :prop="`all.hosts.${nodeName}`" :anti-freeze="onlineNodes[nodeName] === undefined" :label="t('ip')"
+      :placeholder="t('ip_placeholder', { default_value: holder.ansible_host})" :rules="ipRules">
       <template #edit>
-        <el-select v-model="holderRef.ip" style="width: 100%;" :loading="optionIpsLoading" @visible-change="loadOptionIps" :loading-text="$t('longTimeLoading')">
+        <el-select v-model="holderRef.ip" style="width: 100%;" :loading="optionIpsLoading" @visible-change="loadOptionIps" :loading-text="t('longTimeLoading')">
           <el-option v-for="item in optionIps" :key="item" :value="item">
             <span class="app_text_mono">{{ item }}</span>
           </el-option>
         </el-select>
-        <div style="font-size: 12px; color: #666; line-height: 20px; margin-top: 2px;">{{ $t('ipDescription') }}</div>
+        <div style="font-size: 12px; color: #666; line-height: 20px; margin-top: 2px;">{{ t('ipDescription') }}</div>
       </template>
       <template #view>
         <span class="app_text_mono">{{ holderRef.ip || ansible_host }}</span>
@@ -114,11 +114,11 @@ export default {
           validator: (rule, value, callback) => {
             if (value === location.hostname) {
               console.log(location.hostname)
-              return callback(this.$t('cannotUseLocalhostAsTarget'))
+              return callback(this.t('cannotUseLocalhostAsTarget'))
             }
             for (let key in this.cluster.inventory.all.hosts) {
               if (key !== this.nodeName && this.cluster.inventory.all.hosts[key].ansible_host === value) {
-                return callback(this.$t('duplicateIP', {node: key}))
+                return callback(this.t('duplicateIP', {node: key}))
               }
             }
             return callback()
@@ -127,13 +127,13 @@ export default {
         },
       ],
       ipRules: [
-        { required: true, message: this.$t('ip') + this.$t('field.is_required_field'), trigger: 'change' },
+        { required: true, message: this.t('ip') + this.$t('field.is_required_field'), trigger: 'change' },
         { validator: this.$validators.ipv4, trigger: 'change' },
         {
           validator: (rule, value, callback) => {
             for (let key in this.cluster.inventory.all.hosts) {
               if (key !== this.nodeName && this.cluster.inventory.all.hosts[key].ip === value) {
-                return callback(this.$t('duplicateIP', {node: key}))
+                return callback(this.t('duplicateIP', {node: key}))
               }
             }
 
@@ -252,7 +252,7 @@ export default {
           return default_value.slice(43)
         }
       }
-      return default_value ? this.$t('default_value', {default_value: default_value}) : this.$t('field.' + fieldName + '_placeholder')
+      return default_value ? this.t('default_value', {default_value: default_value}) : this.$t('field.' + fieldName + '_placeholder')
     },
     async loadSshKeyList () {
       let result = []
