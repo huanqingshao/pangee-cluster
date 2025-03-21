@@ -57,50 +57,67 @@ zh:
 
 <template>
   <div>
-    <div style="background-color: #3a3333; color: #fffeff; font-weight: 500; padding: 8px 20px 8px 20px; line-height: 22px; text-align: center;">
-      {{this.t('logs')}} - <span class="app_text_mono">{{ownerType}}/{{ownerName}}/{{pid}}</span>
-      <span style="float:left;">
+    <div
+      style="
+        background-color: #3a3333;
+        color: #fffeff;
+        font-weight: 500;
+        padding: 8px 20px 8px 20px;
+        line-height: 22px;
+        text-align: center;
+      "
+    >
+      {{ this.t("logs") }} - <span class="app_text_mono">{{ ownerType }}/{{ ownerName }}/{{ pid }}</span>
+      <span style="float: left">
         <ChangeFontSize class="button" :terminal="xterm" :fitAddon="fitAddon"></ChangeFontSize>
         <ChangeColor class="button"></ChangeColor>
-        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{t('find')}}</el-button>
+        <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{ t("find") }}</el-button>
         <Find ref="find" class="button" :terminal="xterm"></Find>
       </span>
       <span :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
         {{ stateStr }}
       </span>
-      <el-button v-if="isRunning" style="float: right; margin-right: 20px;" type="danger" @click="dialogVisible = true">{{ t('forceKill') }}</el-button>
-      <el-tag v-else size="default" style="float: right; margin-right: 20px;" type="">{{ t('finished') }}</el-tag>
+      <el-button v-if="isRunning" style="float: right; margin-right: 20px" type="danger" @click="dialogVisible = true">{{
+        t("forceKill")
+      }}</el-button>
+      <el-tag v-else size="default" style="float: right; margin-right: 20px" type="">{{ t("finished") }}</el-tag>
     </div>
     <div id="terminal" :style="`width: 100%; height: calc(100vh - 39px); background-color: black;`"></div>
-    <el-dialog :title="$t('msg.prompt')" v-model="dialogVisible" width="60%" top="calc(50vh - 180px)" :close-on-click-modal="false">
+    <el-dialog
+      :title="$t('msg.prompt')"
+      v-model="dialogVisible"
+      width="60%"
+      top="calc(50vh - 180px)"
+      :close-on-click-modal="false"
+    >
       <el-alert type="error" :closable="false" effect="dark" show-icon>
-        <div class="confirmText">{{t('confirmToKill')}}</div>
+        <div class="confirmText">{{ t("confirmToKill") }}</div>
       </el-alert>
       <template #footer>
         <div>
-          <el-button type="default" icon="el-icon-close" @click="dialogVisible = false">{{ $t('msg.close') }}</el-button>
-          <el-button type="primary" icon="el-icon-check" @click="killProcess">{{ t('confirm') }}</el-button>
+          <el-button type="default" icon="el-icon-close" @click="dialogVisible = false">{{ $t("msg.close") }}</el-button>
+          <el-button type="primary" icon="el-icon-check" @click="killProcess">{{ t("confirm") }}</el-button>
         </div>
       </template>
     </el-dialog>
-    <K8sTerminalErrorHint ref="errorHint"/>
+    <K8sTerminalErrorHint ref="errorHint" />
   </div>
 </template>
 
 <script>
-import { Terminal } from 'xterm'
-import { FitAddon } from 'xterm-addon-fit'
-import 'xterm/css/xterm.css'
-import K8sTerminalErrorHint from './K8sTerminalErrorHint'
-import ChangeFontSize from './ChangeFontSize'
-import Find from './Find'
-import ChangeColor from './ChangeColor'
+import { Terminal } from "xterm";
+import { FitAddon } from "xterm-addon-fit";
+import "xterm/css/xterm.css";
+import K8sTerminalErrorHint from "./K8sTerminalErrorHint.vue";
+import ChangeFontSize from "./ChangeFontSize.vue";
+import Find from "./Find.vue";
+import ChangeColor from "./ChangeColor.vue";
 
 function trimSlash(str) {
-  if (str[str.length - 1] === '/') {
-    return str.slice(0, str.length - 1)
+  if (str[str.length - 1] === "/") {
+    return str.slice(0, str.length - 1);
   }
-  return str
+  return str;
 }
 
 export default {
@@ -115,42 +132,42 @@ export default {
   data() {
     return {
       socketReadyState: 0,
-      ttySize: {rows: 100},
+      ttySize: { rows: 100 },
       xterm: undefined,
       fitAddon: undefined,
-      fontSize: parseInt(localStorage.getItem('terminal-font-size')) || 14,
+      fontSize: parseInt(localStorage.getItem("terminal-font-size")) || 14,
       isRunning: true,
-      dialogVisible: false,
-    }
+      dialogVisible: false
+    };
   },
   computed: {
     wsUrl() {
-      let wsHost = location.host
-      let protocol = location.protocol === 'http:' ? 'ws:' : 'wss:'
-      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/tail/${this.pid}/${this.file}`
-      return str
+      let wsHost = location.host;
+      let protocol = location.protocol === "http:" ? "ws:" : "wss:";
+      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/tail/${this.pid}/${this.file}`;
+      return str;
     },
     stateStr() {
       if (this.socketReadyState === 0) {
-        return this.t('connecting')
+        return this.t("connecting");
       } else if (this.socketReadyState === 1) {
-        return this.t('connected')
+        return this.t("connected");
       } else if (this.socketReadyState === 2) {
-        return this.t('closing')
+        return this.t("closing");
       } else if (this.socketReadyState === 3) {
-        return this.t('closed')
+        return this.t("closed");
       }
-      return this.t('unknown')
-    },
+      return this.t("unknown");
+    }
   },
   components: { K8sTerminalErrorHint, ChangeFontSize, Find, ChangeColor },
   mounted() {
-    window.addEventListener('resize', this.handleResize)
-    this.refresh()
+    window.addEventListener("resize", this.handleResize);
+    this.refresh();
   },
   beforeUnmount() {
-    this.xterm.dispose()
-    window.removeEventListener('resize', this.handleResize)
+    this.xterm.dispose();
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     // clear() {
@@ -166,86 +183,89 @@ export default {
     //     this.$message({
     //       type: 'info',
     //       message: this.t('message.canceled')
-    //     });          
+    //     });
     //   });
     // },
     handleResize() {
       this.$nextTick(() => {
-        this.fitAddon.fit()
-      })
+        this.fitAddon.fit();
+      });
     },
-    killProcess () {
-      this.kuboardSprayApi.delete(`/execute/${this.ownerType}/${this.ownerName}/kill/${this.pid}`).then(resp=> {
-        if (resp.data.code === 200) {
-          this.$message.success(this.t('killed'))
-          this.dialogVisible = false
-        }
-      }).catch(e => {
-        this.$message.error(this.t('failedToKill' + e.response.data.msg))
-      })
+    killProcess() {
+      this.kuboardSprayApi
+        .delete(`/execute/${this.ownerType}/${this.ownerName}/kill/${this.pid}`)
+        .then(resp => {
+          if (resp.data.code === 200) {
+            this.$message.success(this.t("killed"));
+            this.dialogVisible = false;
+          }
+        })
+        .catch(e => {
+          this.$message.error(this.t("failedToKill" + e.response.data.msg));
+        });
     },
     refresh() {
-      let _this = this
+      let _this = this;
       this.xterm = new Terminal({
         fontFamily: 'Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace',
         fontSize: this.fontSize,
         scrollback: 100000,
-        theme: { selection: 'rgba(255,36,36,0.5)', foreground: localStorage.getItem('terminalForegroundColor') || '#ccc' }
-      })
+        theme: { selection: "rgba(255,36,36,0.5)", foreground: localStorage.getItem("terminalForegroundColor") || "#ccc" }
+      });
       this.fitAddon = new FitAddon();
       this.xterm.loadAddon(this.fitAddon);
-      this.socket = new WebSocket(this.wsUrl)
+      this.socket = new WebSocket(this.wsUrl);
 
-      this.xterm.open(document.getElementById('terminal'))
+      this.xterm.open(document.getElementById("terminal"));
       this.xterm.onResize(data => {
-        this.ttySize = data
-      })
+        this.ttySize = data;
+      });
       this.xterm.onKey(event => {
-        if (event.domEvent.code === 'Enter') {
-          _this.xterm.writeln('')
+        if (event.domEvent.code === "Enter") {
+          _this.xterm.writeln("");
         }
-      })
+      });
 
-      this.fitAddon.fit()
+      this.fitAddon.fit();
 
       this.socket.onmessage = function (event) {
-        _this.xterm.writeln(event.data)
-        if (event.data.indexOf('KUBOARD SPRAY *****************************************************************') >= 0) {
-          _this.isRunning = false
+        _this.xterm.writeln(event.data);
+        if (event.data.indexOf("KUBOARD SPRAY *****************************************************************") >= 0) {
+          _this.isRunning = false;
         }
-      }
+      };
       this.socket.onerror = function (event) {
-        console.log(event)
-        _this.$refs.errorHint.show(_this.wsUrl)
-      }
+        console.log(event);
+        _this.$refs.errorHint.show(_this.wsUrl);
+      };
       this.socket.onopen = function () {
-        _this.socketReadyState = _this.socket.readyState
-      }
+        _this.socketReadyState = _this.socket.readyState;
+      };
       this.socket.onclose = function () {
-        _this.socketReadyState = _this.socket.readyState
-      }
+        _this.socketReadyState = _this.socket.readyState;
+      };
       let interval = setInterval(() => {
         try {
           if (this.socketReadyState === 1) {
-            this.socket.send('0')
-            window.console.log('anti idle, send empty string')
+            this.socket.send("0");
+            window.console.log("anti idle, send empty string");
           } else {
-            clearInterval(interval)
-            console.log('WebSocket 已关闭，停止 anti idle')
+            clearInterval(interval);
+            console.log("WebSocket 已关闭，停止 anti idle");
           }
         } catch (e) {
-          clearInterval(interval)
-          window.console.error('anti idle, failed ' + e)
+          clearInterval(interval);
+          window.console.error("anti idle, failed " + e);
         }
-      }, 30000)
+      }, 30000);
       setInterval(() => {
-        this.socketReadyState = this.socket.readyState
-      }, 2000)
+        this.socketReadyState = this.socket.readyState;
+      }, 2000);
 
-      document.title = `${this.t('logs')} - ${this.ownerType} / ${this.ownerName} / ${this.pid}`
+      document.title = `${this.t("logs")} - ${this.ownerType} / ${this.ownerName} / ${this.pid}`;
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>
