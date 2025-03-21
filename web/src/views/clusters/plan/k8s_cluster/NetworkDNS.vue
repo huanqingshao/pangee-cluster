@@ -80,9 +80,9 @@ zh:
               <div style="margin-bottom: 20px; color: var(--el-text-color-secondary);">{{ ('applyDns') }}</div>
               <el-form-item :label="('verbose')">
                 <el-radio-group v-model="form.verbose">
-                  <el-radio-button label="">{{('v_')}}</el-radio-button>
-                  <el-radio-button label="v">{{('v_v')}}</el-radio-button>
-                  <el-radio-button label="vvv">{{('v_vvv')}}</el-radio-button>
+                  <el-radio-button label="" value="">{{('v_')}}</el-radio-button>
+                  <el-radio-button label="v" value="v">{{('v_v')}}</el-radio-button>
+                  <el-radio-button label="vvv" value="vvv">{{('v_vvv')}}</el-radio-button>
                 </el-radio-group>
                 <div style="width: 350px; margin-left: 0; color: #aaa; font-size: 12px;">{{('verbose_' + form.verbose)}}</div>
               </el-form-item>

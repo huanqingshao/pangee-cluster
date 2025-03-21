@@ -17,7 +17,7 @@ zh:
         <el-radio-group v-model="form.downloadFrom">
           <div style="line-height: 28px; padding-top: 5px;">
             <div v-for="(source, index) in resource.package.metadata.available_at" :key="'source' + index">
-              <el-radio :label="source">
+              <el-radio :label="source" :value="source">
                 <span class="app_text_mono">{{source}}</span>
               </el-radio>
             </div>

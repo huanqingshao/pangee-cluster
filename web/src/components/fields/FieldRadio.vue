@@ -3,7 +3,7 @@
     <template #edit>
       <el-radio-group v-model="value" :disabled="disabled">
         <template v-for="(option, index) in options" :key="index">
-          <el-radio-button :label="option">
+          <el-radio-button :label="option" :value="option">
             {{ optionDesc(option) }}
           </el-radio-button>
         </template>

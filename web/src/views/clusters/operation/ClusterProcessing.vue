@@ -64,9 +64,9 @@ zh:
       <el-form-item :label="t('control_params')">
         <el-form-item :label="t('verbose')">
           <el-radio-group v-model="form.verbose">
-            <el-radio-button label="">{{t('v_')}}</el-radio-button>
-            <el-radio-button label="v">{{t('v_v')}}</el-radio-button>
-            <el-radio-button label="vvv">{{t('v_vvv')}}</el-radio-button>
+            <el-radio-button label="" value="">{{t('v_')}}</el-radio-button>
+            <el-radio-button label="v" value="v">{{t('v_v')}}</el-radio-button>
+            <el-radio-button label="vvv" value="vvv">{{t('v_vvv')}}</el-radio-button>
           </el-radio-group>
           <span style="width: 350px; margin-left: 20px; color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</span>
         </el-form-item>
@@ -77,19 +77,19 @@ zh:
       </el-form-item>
       <el-form-item :label="t('operation')" prop="action" style="margin-top: 10px;">
         <el-radio-group v-model="action" class="app_margin_bottom">
-          <el-radio-button :disabled="action !== 'install_cluster'" label="install_cluster">
+          <el-radio-button :disabled="action !== 'install_cluster'" label="install_cluster" value="install_cluster">
             {{ t('install_cluster') }}
           </el-radio-button>
-          <el-radio-button :disabled="pendingRemoveNodes.length == 0" label="remove_node">
+          <el-radio-button :disabled="pendingRemoveNodes.length == 0" label="remove_node" value="remove_node">
             {{ t('aboutToRemoveNode') }}
           </el-radio-button>
-          <el-radio-button :disabled="pendingAddNodes.length == 0" label="add_node">
+          <el-radio-button :disabled="pendingAddNodes.length == 0" label="add_node" value="add_node">
             {{ t('aboutToAddNode') }}
           </el-radio-button>
-          <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_nginx_config" label="sync_nginx_config">
+          <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_nginx_config" label="sync_nginx_config" value="sync_nginx_config">
             {{ t('sync_nginx_config') }}
           </el-radio-button>
-          <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_etcd_address" label="sync_etcd_address">
+          <el-radio-button :disabled="!cluster.inventory.all.hosts.localhost.kuboardspray_sync_etcd_address" label="sync_etcd_address" value="sync_etcd_address">
             {{ t('sync_etcd_address') }}
           </el-radio-button>
         </el-radio-group>

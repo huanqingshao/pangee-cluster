@@ -64,26 +64,26 @@ zh:
       <el-form-item :label="t('operation')" prop="action" style="margin-top: 10px;">
         <el-radio-group v-model="form.action" class="app_margin_bottom">
           <template v-if="nodeName === undefined">
-            <el-radio-button label="download_binaries">
+            <el-radio-button label="download_binaries" value="download_binaries">
               {{ t('download_binaries') }}
             </el-radio-button>
-            <el-radio-button label="upgrade_all_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
+            <el-radio-button label="upgrade_all_nodes" value="upgrade_all_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
               {{ t('upgrade_all_nodes') }}
             </el-radio-button>
-            <el-radio-button label="upgrade_master_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
+            <el-radio-button label="upgrade_master_nodes" value="upgrade_master_nodes" :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
               {{ t('upgrade_master_nodes') }}
             </el-radio-button>
-            <el-radio-button label="upgrade_multi_nodes" :disabled="requireSeparateDownloadAction || controlPlanePendingUpgrade">{{t('upgrade_multi_nodes')}}</el-radio-button>
+            <el-radio-button label="upgrade_multi_nodes" value="upgrade_multi_nodes" :disabled="requireSeparateDownloadAction || controlPlanePendingUpgrade">{{t('upgrade_multi_nodes')}}</el-radio-button>
           </template>
           <template v-else>
-            <el-radio-button label="drain_node" v-if="cluster.resourcePackage.data.supported_playbooks.drain_node"
+            <el-radio-button label="drain_node" value="drain_node" v-if="cluster.resourcePackage.data.supported_playbooks.drain_node"
               :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
               {{t('drain_node', {nodeName})}}
             </el-radio-button>
-            <el-radio-button label="upgrade_single_node" :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
+            <el-radio-button label="upgrade_single_node" value="upgrade_single_node" :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
               {{t('upgrade_single_node', {nodeName})}}
             </el-radio-button>
-            <el-radio-button label="uncordon_node" v-if="cluster.state.nodes[nodeName] && cluster.resourcePackage.data.supported_playbooks.uncordon_node"
+            <el-radio-button label="uncordon_node" value="uncordon_node" v-if="cluster.state.nodes[nodeName] && cluster.resourcePackage.data.supported_playbooks.uncordon_node"
               :disabled="!cluster.state.nodes[nodeName].spec.unschedulable">
               {{t('uncordon_node', {nodeName})}}
             </el-radio-button>
@@ -94,7 +94,9 @@ zh:
           <el-form-item prop="kube_nodes_to_upgrade" required>
             <el-checkbox-group v-model="form.kube_nodes_to_upgrade" @change="form.skip_downloads = !requireDownloadForNodes(form.kube_nodes_to_upgrade)">
               <template v-for="(node, nodeName) in cluster.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts" :key="'nu' + nodeName">
-                <el-checkbox v-if="cluster.inventory.all.hosts[nodeName].kuboardspray_node_action === 'upgrade_node'" :label="nodeName">{{nodeName}}</el-checkbox>
+                <el-checkbox v-if="cluster.inventory.all.hosts[nodeName].kuboardspray_node_action === 'upgrade_node'" :label="nodeName" :value="nodeName">
+                  {{nodeName}}
+                </el-checkbox>
               </template>
             </el-checkbox-group>
           </el-form-item>

@@ -61,6 +61,8 @@ zh:
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n';
+
 export default {
   props: {
     cluster: { type: Object, required: true },
@@ -74,12 +76,19 @@ export default {
         address: undefined,
       },
       domainNameRules: [
-        { required: true, message: this.t('domain_name_required'), trigger: 'blur' }
+        { required: true, message: this.i18n('domain_name_required'), trigger: 'blur' }
       ],
       addressRules: [
         { required: true, type: 'string', message: '字段不能为空', trigger: 'blur' },
       ]
     }
+  },
+  setup () {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'local'
+    })
+    return { i18n: t };
   },
   computed: {
     isAdd () {

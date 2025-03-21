@@ -1,6 +1,6 @@
-@import "./transition.scss";
+@forward "./transition.scss";
 
-@import './theme-variables.scss';
+@forward './theme-variables.scss';
 
 
 .el-popover {

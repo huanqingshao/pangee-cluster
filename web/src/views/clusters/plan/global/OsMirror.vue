@@ -30,12 +30,16 @@ zh:
     <FieldCommon :holder="temp" fieldName="os" :label="t('selectOs')" label-width="150px" anti-freeze>
       <template #edit>
         <el-checkbox-group v-model="os">
-          <el-checkbox v-for="(item, index) in supportedOs" :key="'os_e' + index" :label="normalizeOsName(index)">{{index}}</el-checkbox>
+          <el-checkbox v-for="(item, index) in supportedOs" :key="'os_e' + index" :label="normalizeOsName(index)" :value="normalizeOsName(index)">
+            {{index}}
+          </el-checkbox>
         </el-checkbox-group>
       </template>
       <template #view>
         <el-checkbox-group v-model="os" disabled>
-          <el-checkbox v-for="(item, index) in supportedOs" :key="'os_v' + index" :label="normalizeOsName(index)">{{index}}</el-checkbox>
+          <el-checkbox v-for="(item, index) in supportedOs" :key="'os_v' + index" :label="normalizeOsName(index)" :value="normalizeOsName(index)">
+            {{index}}
+          </el-checkbox>
         </el-checkbox-group>
       </template>
     </FieldCommon>

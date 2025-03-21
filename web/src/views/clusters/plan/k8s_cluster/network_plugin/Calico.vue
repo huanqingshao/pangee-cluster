@@ -18,8 +18,8 @@ zh:
       <template #view>{{ calico_mode }}</template>
       <template #edit>
         <el-radio-group v-model="calico_mode">
-          <el-radio-button label="IPIP">IPIP</el-radio-button>
-          <el-radio-button label="VXLAN">VXLAN</el-radio-button>
+          <el-radio-button label="IPIP" value="IPIP">IPIP</el-radio-button>
+          <el-radio-button label="VXLAN" value="VXLAN">VXLAN</el-radio-button>
         </el-radio-group>
       </template>
     </FieldCommon>
@@ -29,8 +29,8 @@ zh:
       </template>
       <template #edit>
         <el-radio-group v-model="ipip_mode">
-          <el-radio label="Always">Always</el-radio>
-          <el-radio label="CrossSubnet">CrossSubnet</el-radio>
+          <el-radio label="Always" value="Always">Always</el-radio>
+          <el-radio label="CrossSubnet" value="CrossSubnet">CrossSubnet</el-radio>
         </el-radio-group>
       </template>
     </FieldCommon>
@@ -40,8 +40,8 @@ zh:
       </template>
       <template #edit>
         <el-radio-group v-model="vxlan_mode">
-          <el-radio label="Always">Always</el-radio>
-          <el-radio label="CrossSubnet">CrossSubnet</el-radio>
+          <el-radio label="Always" value="Always">Always</el-radio>
+          <el-radio label="CrossSubnet" value="CrossSubnet">CrossSubnet</el-radio>
         </el-radio-group>
       </template>
     </FieldCommon>
@@ -51,9 +51,9 @@ zh:
       </template>
       <template #edit>
         <el-radio-group v-model="calico_network_backend">
-          <el-radio label="bird">bird</el-radio>
-          <el-radio label="vxlan">vxlan</el-radio>
-          <el-radio label="none">none</el-radio>
+          <el-radio label="bird" value="bird">bird</el-radio>
+          <el-radio label="vxlan" value="vxlan">vxlan</el-radio>
+          <el-radio label="none" value="none">none</el-radio>
         </el-radio-group>
       </template>
     </FieldCommon>

@@ -45,22 +45,22 @@ zh:
       <el-form :model="form" label-position="left" label-width="120px" v-if="dialogVisible" ref="form">
         <el-form-item :label="t('mirror_type')">
           <el-radio-group v-model="mirror_type">
-            <el-radio-button label="os">{{ t('mirror_type_os') }}</el-radio-button>
-            <el-radio-button label="docker">{{ t('mirror_type_docker') }}</el-radio-button>
+            <el-radio-button label="os" value="os">{{ t('mirror_type_os') }}</el-radio-button>
+            <el-radio-button label="docker" value="docker">{{ t('mirror_type_docker') }}</el-radio-button>
           </el-radio-group>
           <span style="margin-left: 20px; vertical-align: bottom; color: var(--el-text-color-secondary);">{{t('mirror_type_' + mirror_type + '_desc')}}</span>
         </el-form-item>
         <el-form-item :label="t('os_type')" prop="kuboardspray_os_mirror_type" :rules="[{ required: true, message: 'required', trigger: 'change' }]">
           <el-radio-group v-model="os_type">
-            <el-radio-button label="anolis">Anolis</el-radio-button>
-            <el-radio-button label="centos">Centos</el-radio-button>
-            <el-radio-button label="openeuler">openEuler</el-radio-button>
-            <el-radio-button label="oraclelinux">OracleLinux</el-radio-button>
+            <el-radio-button label="anolis" value="anolis">Anolis</el-radio-button>
+            <el-radio-button label="centos" value="centos">Centos</el-radio-button>
+            <el-radio-button label="openeuler" value="openeuler">openEuler</el-radio-button>
+            <el-radio-button label="oraclelinux" value="oraclelinux">OracleLinux</el-radio-button>
             <!-- <el-radio-button label="kylin linux advanced server">中标麒麟V10</el-radio-button> -->
-            <el-radio-button label="redhat">Redhat</el-radio-button>
-            <el-radio-button label="rocky">Rocky</el-radio-button>
-            <el-radio-button label="ubuntu">Ubuntu</el-radio-button>
-            <el-radio-button label="opensuse leap" disabled>openSUSE</el-radio-button>
+            <el-radio-button label="redhat" value="redhat">Redhat</el-radio-button>
+            <el-radio-button label="rocky" value="rocky">Rocky</el-radio-button>
+            <el-radio-button label="ubuntu" value="ubuntu">Ubuntu</el-radio-button>
+            <el-radio-button label="opensuse leap" value="opensuse leap" disabled>openSUSE</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <FieldString :holder="form" fieldName="kuboardspray_os_mirror_name" required :rules="nameRules" :disabled="!form.kuboardspray_os_mirror_type"></FieldString>

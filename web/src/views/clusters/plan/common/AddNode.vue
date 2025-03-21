@@ -38,9 +38,9 @@ zh:
       </el-form-item>
       <el-form-item :label="t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
         <el-checkbox-group v-model="addNodeForm.roles">
-          <el-checkbox label="kube_control_plane">{{$t('node.kube_control_plane')}}</el-checkbox>
-          <el-checkbox label="etcd">{{$t('node.etcd')}}</el-checkbox>
-          <el-checkbox label="kube_node">{{$t('node.kube_node')}}</el-checkbox>
+          <el-checkbox label="kube_control_plane" value="kube_control_plane">{{$t('node.kube_control_plane')}}</el-checkbox>
+          <el-checkbox label="etcd" value="etcd">{{$t('node.etcd')}}</el-checkbox>
+          <el-checkbox label="kube_node" value="kube_node">{{$t('node.kube_node')}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div class="app_margin_bottom">

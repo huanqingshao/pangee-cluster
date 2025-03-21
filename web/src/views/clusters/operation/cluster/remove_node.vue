@@ -30,13 +30,13 @@ zh:
     <div style="margin-left: 0px; margin-top: 10px;" class="app_form_mini">
       <el-form-item prop="remove_node.reset_nodes" required>
         <el-radio-group v-model="reset_nodes">
-          <el-radio-button :label="true">{{ t('resetNodes') }}</el-radio-button>
-          <el-radio-button :label="false">{{ t('resetNodesNo') }}</el-radio-button>
+          <el-radio-button :label="true" :value="true">{{ t('resetNodes') }}</el-radio-button>
+          <el-radio-button :label="false" :value="false">{{ t('resetNodesNo') }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item prop="remove_node.nodes_to_remove" :rules="nodes_to_remove_rules">
         <el-checkbox-group v-model="formRef.remove_node.nodes_to_remove">
-          <el-checkbox v-for="(item, key) in pendingRemoveNodes" :key="'h' + key" style="margin-top: 10px; margin-right: 10px;" :label="item.name"
+          <el-checkbox v-for="(item, key) in pendingRemoveNodes" :key="'h' + key" style="margin-top: 10px; margin-right: 10px;" :label="item.name" :value="item.name"
             :disabled="(pingpong[item.name] === undefined || pingpong[item.name].ping !== 'pong') && formRef.remove_node.reset_nodes">
             <el-tooltip v-if="pingpong[item.name] && pingpong[item.name].ping !== 'pong'" :content="pingpong[item.name].message" placement="top-start">
               <span class="app_text_mono">{{item.name}}</span>

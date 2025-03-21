@@ -46,9 +46,9 @@ zh:
         <el-form-item :label="t('control_params')">
           <el-form-item :label="t('verbose')">
             <el-radio-group v-model="form.verbose">
-              <el-radio-button label="">{{t('v_')}}</el-radio-button>
-              <el-radio-button label="v">{{t('v_v')}}</el-radio-button>
-              <el-radio-button label="vvv">{{t('v_vvv')}}</el-radio-button>
+              <el-radio-button label="" value="">{{t('v_')}}</el-radio-button>
+              <el-radio-button label="v" value="v">{{t('v_v')}}</el-radio-button>
+              <el-radio-button label="vvv" value="vvv">{{t('v_vvv')}}</el-radio-button>
             </el-radio-group>
             <div style="color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</div>
           </el-form-item>

@@ -56,25 +56,25 @@ zh:
           </el-scrollbar>
           <div style="flex-grow: 1; margin-left: 10px;">
             <el-radio-group v-model="connectivityCheckLog.type" size="default">
-              <el-radio-button label="podList">
+              <el-radio-button label="podList" value="podList">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-copy-document'"></component>
                 </el-icon>
                 {{ t('podList') }}
               </el-radio-button>
-              <el-radio-button label="podDetails">
+              <el-radio-button label="podDetails" value="podDetails">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document-copy'"></component>
                 </el-icon>
                 {{ t('podDetails') }}
               </el-radio-button>
-              <el-radio-button label="events">
+              <el-radio-button label="events" value="events">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-files'"></component>
                 </el-icon>
                 {{ t('events') }}
               </el-radio-button>
-              <el-radio-button label="logs">
+              <el-radio-button label="logs" value="logs">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
                   <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document'"></component>
                 </el-icon>

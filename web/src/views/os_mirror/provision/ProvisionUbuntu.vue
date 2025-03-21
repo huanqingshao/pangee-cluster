@@ -34,7 +34,7 @@ zh:
     <FieldCommon :label="t('release')" required anti-freeze :holder="vars" fieldName="apt_mirror_repos" :prop="prop">
       <template #edit>
         <el-checkbox-group v-model="apt_mirror_repos">
-          <el-checkbox v-for="(value, key) in releases" :key="key + 'release'" :label="key">
+          <el-checkbox v-for="(value, key) in releases" :key="key + 'release'" :label="key" :value="key">
             <span class="app_text_mono">
               Ubuntu {{value}} - {{key}}
             </span>
@@ -43,7 +43,7 @@ zh:
       </template>
       <template #view>
         <el-checkbox-group v-model="apt_mirror_repos" disabled>
-          <el-checkbox v-for="(value, key) in releases" :key="key + 'release'" :label="key">
+          <el-checkbox v-for="(value, key) in releases" :key="key + 'release'" :label="key" :value="key">
             <span class="app_text_mono">
               Ubuntu {{value}} - {{key}}
             </span>
@@ -54,7 +54,7 @@ zh:
     <FieldCommon :label="t('architecture')" required anti-freeze>
       <template #edit>
         <el-checkbox-group  v-model="apt_mirror_architecture">
-          <el-checkbox v-for="(value, key) in architecture[os_mirror.status.type]" :key="key + 'release'" :label="key">
+          <el-checkbox v-for="(value, key) in architecture[os_mirror.status.type]" :key="key + 'release'" :label="key" :value="key">
             <span class="app_text_mono">
               {{key}}
             </span>
@@ -63,7 +63,7 @@ zh:
       </template>
       <template #view>
         <el-checkbox-group v-model="apt_mirror_architecture" disabled>
-          <el-checkbox v-for="(value, key) in architecture[os_mirror.status.type]" :key="key + 'release'" :label="key">
+          <el-checkbox v-for="(value, key) in architecture[os_mirror.status.type]" :key="key + 'release'" :label="key" :value="key">
             <span class="app_text_mono">
               {{key}}
             </span>
