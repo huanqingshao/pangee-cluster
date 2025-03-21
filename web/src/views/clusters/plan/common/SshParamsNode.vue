@@ -96,6 +96,7 @@ zh:
 <script>
 import SshAddPrivateKey from '../../../private_key/SshAddPrivateKey.vue'
 import { Netmask } from 'netmask'
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -114,11 +115,11 @@ export default {
           validator: (rule, value, callback) => {
             if (value === location.hostname) {
               console.log(location.hostname)
-              return callback(this.t('cannotUseLocalhostAsTarget'))
+              return callback(this.i18n('cannotUseLocalhostAsTarget'))
             }
             for (let key in this.cluster.inventory.all.hosts) {
               if (key !== this.nodeName && this.cluster.inventory.all.hosts[key].ansible_host === value) {
-                return callback(this.t('duplicateIP', {node: key}))
+                return callback(this.i18n('duplicateIP', {node: key}))
               }
             }
             return callback()
@@ -127,13 +128,13 @@ export default {
         },
       ],
       ipRules: [
-        { required: true, message: this.t('ip') + this.$t('field.is_required_field'), trigger: 'change' },
+        { required: true, message: this.i18n('ip') + this.$t('field.is_required_field'), trigger: 'change' },
         { validator: this.$validators.ipv4, trigger: 'change' },
         {
           validator: (rule, value, callback) => {
             for (let key in this.cluster.inventory.all.hosts) {
               if (key !== this.nodeName && this.cluster.inventory.all.hosts[key].ip === value) {
-                return callback(this.t('duplicateIP', {node: key}))
+                return callback(this.i18n('duplicateIP', {node: key}))
               }
             }
 
@@ -170,6 +171,13 @@ export default {
       optionIps: [],
       optionIpsLoading: false,
     }
+  },
+  setup () {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'local'
+    })
+    return { i18n: t };
   },
   inject: ['onlineNodes', 'isClusterInstalled'],
   computed: {
@@ -252,7 +260,7 @@ export default {
           return default_value.slice(43)
         }
       }
-      return default_value ? this.t('default_value', {default_value: default_value}) : this.$t('field.' + fieldName + '_placeholder')
+      return default_value ? this.i18n('default_value', {default_value: default_value}) : this.$t('field.' + fieldName + '_placeholder')
     },
     async loadSshKeyList () {
       let result = []
