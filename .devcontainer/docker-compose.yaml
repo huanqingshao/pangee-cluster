@@ -1,0 +1,10 @@
+services:
+  devcontainer:
+    build: .
+    command: sleep infinity
+    extra_hosts:
+      - "host.docker.internal:host-gateway" 
+    environment:
+      - HTTP_PROXY=http://host.docker.internal:7890
+      - HTTPS_PROXY=http://host.docker.internal:7890
+      - NO_PROXY=10.0.0.0/8,*.cmcc,localhost,127.0.0.1/32
