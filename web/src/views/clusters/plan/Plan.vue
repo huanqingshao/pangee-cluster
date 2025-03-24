@@ -10,11 +10,15 @@ zh:
 </i18n>
 
 <template>
-  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory"
-    style="height: 100%">
+  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory" style="height: 100%">
     <div style="display: flex; height: 100%">
-      <el-tabs v-model="currentTab" type="border-card" tab-position="left" class="app_scrollable_tabs"
-        style="width: 100%; margin-bottom: -5px">
+      <el-tabs
+        v-model="currentTab"
+        type="border-card"
+        tab-position="left"
+        class="app_scrollable_tabs"
+        style="width: 100%; margin-bottom: -5px"
+      >
         <el-tab-pane name="architecture">
           <template #label> {{ t("architecture") }} </template>
           <PlanArchitecture></PlanArchitecture>
@@ -63,7 +67,15 @@ export default {
       }),
       currentTab: computed(() => {
         return this.currentPropertiesTab;
-      })
+      }),
+      validateFormFunction: callback => {
+        this.$refs.form.validate(flag => {
+          console.log("validateForm: " + flag);
+          if (callback) {
+            callback(flag);
+          }
+        });
+      }
     };
   },
   computed: {

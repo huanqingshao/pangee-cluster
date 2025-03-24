@@ -7,6 +7,8 @@ en:
   disabledBation: Disabled
   selectANode: Please select a node from the diagram to the left.
   resourcePackage: Resource Package
+  defaultSshParams: Default SSH Params
+  sshcommon: SSH Shared Params (apply to all the k8s nodes)
 zh:
   singleNode: 单个节点
   global_config: 参数配置
@@ -15,6 +17,8 @@ zh:
   disabledBation: 不使用跳板机
   selectANode: 请从左侧图中选择一个节点
   resourcePackage: 资源包
+  defaultSshParams: 默认 SSH 参数
+  sshcommon: SSH 共享参数（适用范围：所有 k8s 节点）
 </i18n>
 
 <template>
@@ -23,8 +27,14 @@ zh:
       <div class="left">
         <div style="padding: 5px; font-weight: bolder; font-size: 14px">Kuboard Spray</div>
         <div>
-          <Node class="localhost" name="localhost" :cluster="cluster" hideDeleteButton
-            :active="currentPropertiesTab === 'localhost'">
+          <Node
+            class="localhost"
+            name="localhost"
+            :cluster="cluster"
+            hideDeleteButton
+            :active="computedCurrentPropertiesTab === 'localhost'"
+            @click="computedCurrentPropertiesTab = 'localhost'"
+          >
           </Node>
         </div>
         <div>
@@ -32,38 +42,43 @@ zh:
           <div v-else class="horizontalConnection"></div>
         </div>
         <div>
-          <Node class="bastion" name="bastion" :cluster="cluster" hideDeleteButton
-            :active="currentPropertiesTab === 'bastion'" @click="showBastion">
+          <Node
+            class="bastion"
+            name="bastion"
+            :cluster="cluster"
+            hideDeleteButton
+            :active="computedCurrentPropertiesTab === 'bastion'"
+            @click="computedCurrentPropertiesTab = 'bastion'"
+          >
             <div style="margin-top: 10px">
-              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small"
-                style="width: 100px; text-align: center">{{
-                  t("enabledBation")
-                }}</el-tag>
+              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small" style="width: 100px; text-align: center">{{
+                t("enabledBation")
+              }}</el-tag>
               <el-tag v-else type="info" effect="light" size="small" style="width: 100px; text-align: center">{{
                 t("disabledBation")
-                }}</el-tag>
+              }}</el-tag>
             </div>
           </Node>
           <div class="horizontalConnection" :style="bastionEnabled ? '' : 'border-color: white;'"></div>
         </div>
         <div style="line-height: 28px">
-          <KuboardSprayLink href="https://kuboard-spray.cn/guide/install-k8s.html" :size="12">安装 K8S 集群？
-          </KuboardSprayLink>
-          <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/ha-mode.html" :size="12">实现高可用？
-          </KuboardSprayLink>
-          <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12">添加删除节点？
-          </KuboardSprayLink>
-          <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/upgrade.html" :size="12">升级集群？
+          <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12">
+            添加/删除节点？
           </KuboardSprayLink>
         </div>
       </div>
       <div class="right">
-        <div
-          style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
+        <div style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
           <span style="margin-right: 20px">Kubernetes Cluster</span>
-          <AddNode :inventory="inventory" v-model:currentPropertiesTab="currentPropertiesTab"></AddNode>
-          <el-button v-if="mode == 'view'" type="primary" plain icon="el-icon-lightning" @click="ping"
-            :loading="pingpong_loading">
+          <AddNode :inventory="inventory" v-model:computedCurrentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
+          <el-button
+            v-if="mode == 'view'"
+            type="primary"
+            plain
+            icon="el-icon-lightning"
+            @click="ping"
+            :loading="pingpong_loading"
+          >
             <span class="app_text_mono">PING</span>
           </el-button>
         </div>
@@ -71,80 +86,152 @@ zh:
           <div class="masters">
             <Node
               v-for="(item, index) in inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts"
-              :key="'control_plane' + index" @deleted="currentPropertiesTab = 'node_nodes'"
-              @click="currentPropertiesTab = 'NODE_' + index" :pingpong="pingpong" :pingpong_loading="pingpong_loading"
-              :active="nodeRoles(index)[currentPropertiesTab] ||
-                currentPropertiesTab === 'global_config' ||
-                currentPropertiesTab === 'addons' ||
-                currentPropertiesTab === 'k8s_cluster' ||
-                'NODE_' + index === currentPropertiesTab
-                " :name="index" :cluster="cluster"></Node>
+              :key="'control_plane' + index"
+              @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+              @click="computedCurrentPropertiesTab = 'NODE_' + index"
+              :pingpong="pingpong"
+              :pingpong_loading="pingpong_loading"
+              :active="
+                nodeRoles(index)[computedCurrentPropertiesTab] ||
+                computedCurrentPropertiesTab === 'global_config' ||
+                computedCurrentPropertiesTab === 'addons' ||
+                computedCurrentPropertiesTab === 'k8s_cluster' ||
+                'NODE_' + index === computedCurrentPropertiesTab
+              "
+              :name="index"
+              :cluster="cluster"
+            ></Node>
             <template v-for="(item, index) in inventory.all.children.target.children.etcd.hosts" :key="'etcd' + index">
-              <Node v-if="isEtcdAndNotControlPlane(index)" :name="index" :cluster="cluster"
-                @deleted="currentPropertiesTab = 'node_nodes'" @click="currentPropertiesTab = 'NODE_' + index"
-                @delete_button="deleteNode(index)" :pingpong="pingpong" :pingpong_loading="pingpong_loading" :active="nodeRoles(index)[currentPropertiesTab] ||
-                  currentPropertiesTab === 'global_config' ||
-                  currentPropertiesTab === 'k8s_cluster' ||
-                  'NODE_' + index === currentPropertiesTab
-                  "></Node>
+              <Node
+                v-if="isEtcdAndNotControlPlane(index)"
+                :name="index"
+                :cluster="cluster"
+                @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+                @click="computedCurrentPropertiesTab = 'NODE_' + index"
+                @delete_button="deleteNode(index)"
+                :pingpong="pingpong"
+                :pingpong_loading="pingpong_loading"
+                :active="
+                  nodeRoles(index)[computedCurrentPropertiesTab] ||
+                  computedCurrentPropertiesTab === 'global_config' ||
+                  computedCurrentPropertiesTab === 'k8s_cluster' ||
+                  'NODE_' + index === computedCurrentPropertiesTab
+                "
+              ></Node>
             </template>
           </div>
           <div class="workers">
             <template
               v-for="(item, index) in inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts"
-              :key="'node' + index">
-              <Node v-if="isNode(index)" :name="index" :cluster="cluster" :pingpong="pingpong"
-                :pingpong_loading="pingpong_loading" @click="currentPropertiesTab = 'NODE_' + index"
-                @deleted="currentPropertiesTab = 'node_nodes'" :active="nodeRoles(index)[currentPropertiesTab] ||
-                  currentPropertiesTab === 'global_config' ||
-                  currentPropertiesTab === 'addons' ||
-                  currentPropertiesTab === 'k8s_cluster' ||
-                  'NODE_' + index === currentPropertiesTab
-                  "></Node>
+              :key="'node' + index"
+            >
+              <Node
+                v-if="isNode(index)"
+                :name="index"
+                :cluster="cluster"
+                :pingpong="pingpong"
+                :pingpong_loading="pingpong_loading"
+                @click="computedCurrentPropertiesTab = 'NODE_' + index"
+                @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+                :active="
+                  nodeRoles(index)[computedCurrentPropertiesTab] ||
+                  computedCurrentPropertiesTab === 'global_config' ||
+                  computedCurrentPropertiesTab === 'addons' ||
+                  computedCurrentPropertiesTab === 'k8s_cluster' ||
+                  'NODE_' + index === computedCurrentPropertiesTab
+                "
+              ></Node>
             </template>
           </div>
           <div class="workers">
             <template v-for="(item, index) in nodeGap.inventory.all.hosts" :key="'gap_node' + index">
-              <Node :name="index" :cluster="nodeGap" :pingpong="pingpong" :pingpong_loading="pingpong_loading"
-                @deleted="currentPropertiesTab = 'node_nodes'" @click="currentPropertiesTab = 'GAP_NODE_' + index"
-                :active="'GAP_NODE_' + index === currentPropertiesTab"></Node>
+              <Node
+                :name="index"
+                :cluster="nodeGap"
+                :pingpong="pingpong"
+                :pingpong_loading="pingpong_loading"
+                @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+                @click="computedCurrentPropertiesTab = 'GAP_NODE_' + index"
+                :active="'GAP_NODE_' + index === computedCurrentPropertiesTab"
+              ></Node>
             </template>
           </div>
         </el-scrollbar>
       </div>
     </div>
-    <div class="properties" style="height: 100%;">
-      <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory"
-        style="height: 100%;">
-        <el-tabs type="card" v-model="currentPropertiesTab" class="app_scrollable_tabs">
-          <el-tab-pane :name="currentPropertiesTab"
-            v-if="currentPropertiesTab.indexOf('NODE_') === 0 || currentPropertiesTab.indexOf('GAP_NODE_') === 0">
-            <template #label>
-              <div v-if="currentPropertiesTab.indexOf('NODE_') === 0" style="width: 100px; text-align: center">
-                {{ currentPropertiesTab.slice(5) }}
-              </div>
-              <div v-else style="width: 100px; text-align: center">{{ currentPropertiesTab.slice(9) }}</div>
-            </template>
-            <div class="tab_content">
-              <ConfigNode v-if="currentPropertiesTab.indexOf('NODE_') === 0" :cluster="cluster"
-                :nodeName="currentPropertiesTab.slice(5)" :pingpong="pingpong" :pingpongLoading="pingpong_loading"
-                @ping="ping"></ConfigNode>
-              <CopyGapNodeToInventory v-else :cluster="nodeGap" :nodeName="currentPropertiesTab.slice(9)"
-                :pingpong="pingpong" :pingpongLoading="pingpong_loading" @ping="ping"></CopyGapNodeToInventory>
+    <div class="properties" style="height: 100%">
+      <el-tabs
+        type="card"
+        v-model="computedCurrentPropertiesTab"
+        class="app_scrollable_tabs"
+        :before-leave="beforeLeaveCurrentTab"
+      >
+        <el-tab-pane name="localhost">
+          <template #label>
+            {{ t("defaultSshParams") }}
+          </template>
+          <div v-if="computedCurrentPropertiesTab === 'localhost'">
+            <SshParamsCluster
+              :cluster="cluster"
+              :holder="cluster.inventory.all.children.target.vars"
+              prop="all.children.target.vars"
+              :description="t('sshcommon')"
+            ></SshParamsCluster>
+            <HttpProxy v-if="showHttpProxy" :cluster="cluster"></HttpProxy>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane name="bastion">
+          <template #label>
+            {{ $t("obj.bastion") }}
+          </template>
+          <SshParamsBastion
+            v-if="cluster && cluster.inventory && computedCurrentPropertiesTab == 'bastion'"
+            :cluster="cluster"
+            nodeName="bastion"
+            :holder="inventory.all.hosts.bastion || {}"
+            prop="all.hosts.bastion"
+          ></SshParamsBastion>
+        </el-tab-pane>
+        <el-tab-pane
+          :name="computedCurrentPropertiesTab"
+          v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0 || computedCurrentPropertiesTab.indexOf('GAP_NODE_') === 0"
+        >
+          <template #label>
+            <div v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0" style="width: 100px; text-align: center">
+              {{ computedCurrentPropertiesTab.slice(5) }}
             </div>
-          </el-tab-pane>
-          <el-tab-pane v-else name="node_nodes">
-            <template #label>
-              <div style="width: 100px; text-align: center">{{ t("singleNode") }}</div>
-            </template>
-            <el-scrollbar max-height="calc(100vh - 306px)">
-              <div class="tab_content">
-                <el-alert type="warning" :closable="false" :title="t('selectANode')"> </el-alert>
-              </div>
-            </el-scrollbar>
-          </el-tab-pane>
-        </el-tabs>
-      </el-form>
+            <div v-else style="width: 100px; text-align: center">{{ computedCurrentPropertiesTab.slice(9) }}</div>
+          </template>
+          <div class="tab_content">
+            <ConfigNode
+              v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0"
+              :cluster="cluster"
+              :nodeName="computedCurrentPropertiesTab.slice(5)"
+              :pingpong="pingpong"
+              :pingpongLoading="pingpong_loading"
+              @ping="ping"
+            ></ConfigNode>
+            <CopyGapNodeToInventory
+              v-else
+              :cluster="nodeGap"
+              :nodeName="computedCurrentPropertiesTab.slice(9)"
+              :pingpong="pingpong"
+              :pingpongLoading="pingpong_loading"
+              @ping="ping"
+            ></CopyGapNodeToInventory>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane v-else name="node_nodes">
+          <template #label>
+            <div style="width: 100px; text-align: center">{{ t("singleNode") }}</div>
+          </template>
+          <el-scrollbar max-height="calc(100vh - 306px)">
+            <div class="tab_content">
+              <el-alert type="warning" :closable="false" :title="t('selectANode')"> </el-alert>
+            </div>
+          </el-scrollbar>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -160,6 +247,9 @@ import ConfigNode from "./node/ConfigNode.vue";
 import CopyGapNodeToInventory from "./node/CopyGapNodeToInventory.vue";
 import ConfigEtcd from "./etcd/ConfigEtcd.vue";
 import AddNode from "./common/AddNode.vue";
+import SshParamsBastion from "./node/SshParamsBastion.vue";
+import SshParamsCluster from "./common/SshParamsCluster.vue";
+import HttpProxy from "./node/HttpProxy.vue";
 
 export default {
   props: {
@@ -185,11 +275,26 @@ export default {
         return this.mode;
       }),
       currentTab: computed(() => {
-        return this.currentPropertiesTab;
+        return this.computedCurrentPropertiesTab;
       })
     };
   },
+  inject: ["validateFormFunction"],
   computed: {
+    computedCurrentPropertiesTab: {
+      get() {
+        return this.currentPropertiesTab;
+      },
+      set(v) {
+        this.validateFormFunction(flag => {
+          if (flag) {
+            this.currentPropertiesTab = v;
+          } else {
+            this.$message({ message: this.$t("msg.fix_the_form"), type: "error" });
+          }
+        });
+      }
+    },
     inventory: {
       get() {
         return this.cluster.inventory;
@@ -198,8 +303,14 @@ export default {
         console.log(v);
       }
     },
+    showHttpProxy() {
+      return (
+        location.hash.indexOf("showHttpProxy=true") > 0 ||
+        this.cluster.inventory.all.children.target.vars.http_proxy !== undefined
+      );
+    },
     bastionEnabled() {
-      return this.cluster.inventory.all.children.target.children.bastion !== undefined;
+      return this.cluster.inventory.all.hosts.bastion !== undefined;
     },
     nodeGap() {
       let temp = {
@@ -260,7 +371,10 @@ export default {
     ConfigNode,
     ConfigEtcd,
     AddNode,
-    CopyGapNodeToInventory
+    CopyGapNodeToInventory,
+    SshParamsBastion,
+    SshParamsCluster,
+    HttpProxy
   },
   mounted() {
     let temp = sessionStorage.getItem(this.cluster.name + "_plan_tab") || "global_config";
@@ -269,24 +383,36 @@ export default {
         temp = "node_nodes";
       }
     }
-    this.currentPropertiesTab = temp;
+    this.computedCurrentPropertiesTab = temp;
   },
   watch: {
-    currentPropertiesTab: function () {
-      sessionStorage.setItem(this.cluster.name + "_plan_tab", this.currentPropertiesTab);
+    computedCurrentPropertiesTab: function () {
+      sessionStorage.setItem(this.cluster.name + "_plan_tab", this.computedCurrentPropertiesTab);
     },
     "inventory.all.hosts": function () {
-      if (this.currentPropertiesTab.indexOf("NODE_") !== 0) {
+      if (this.computedCurrentPropertiesTab.indexOf("NODE_") !== 0) {
         return;
       }
-      if (this.inventory.all.hosts[this.currentPropertiesTab.slice(5)] === undefined) {
-        this.currentPropertiesTab = "node_nodes";
+      if (this.inventory.all.hosts[this.computedCurrentPropertiesTab.slice(5)] === undefined) {
+        this.computedCurrentPropertiesTab = "node_nodes";
       }
     }
   },
   methods: {
     validate(callback) {
       this.$refs.form.validate(callback);
+    },
+    beforeLeaveCurrentTab(activeName, oldActiveName) {
+      return new Promise((resolve, reject) => {
+        this.validateFormFunction(flag => {
+          if (flag) {
+            resolve();
+          } else {
+            reject();
+            this.$message({ message: this.$t("msg.fix_the_form"), type: "error" });
+          }
+        });
+      });
     },
     nodeRoles(name) {
       let roles = {};
@@ -319,12 +445,6 @@ export default {
     isEtcdAndNotControlPlane(name) {
       let roles = this.nodeRoles(name);
       return roles.etcd && !roles.kube_control_plane;
-    },
-    showBastion() {
-      this.currentPropertiesTab = "global_config";
-      setTimeout(() => {
-        this.$refs.configKuboardSprayScroll.setScrollTop(0);
-      }, 400);
     },
     ping() {
       this.pingpong = {};
