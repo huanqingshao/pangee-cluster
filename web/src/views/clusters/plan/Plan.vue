@@ -10,22 +10,26 @@ zh:
 </i18n>
 
 <template>
-  <div style="display: flex">
-    <el-tabs v-model="currentTab" type="border-card" tab-position="left">
-      <el-tab-pane name="architecture">
-        <template #label> {{ t("architecture") }} </template>
-        <PlanArchitecture></PlanArchitecture>
-      </el-tab-pane>
-      <el-tab-pane name="config">
-        <template #label> {{ t("global_config") }} </template>
-        <PlanConfig :cluster="cluster"></PlanConfig>
-      </el-tab-pane>
-      <el-tab-pane name="hosts">
-        <template #label> {{ t("hosts") }} </template>
-        <PlanHosts :cluster="cluster" :mode="mode"></PlanHosts>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory"
+    style="height: 100%">
+    <div style="display: flex; height: 100%">
+      <el-tabs v-model="currentTab" type="border-card" tab-position="left" class="app_scrollable_tabs"
+        style="width: 100%; margin-bottom: -5px">
+        <el-tab-pane name="architecture">
+          <template #label> {{ t("architecture") }} </template>
+          <PlanArchitecture></PlanArchitecture>
+        </el-tab-pane>
+        <el-tab-pane name="config">
+          <template #label> {{ t("global_config") }} </template>
+          <PlanConfig :cluster="cluster" class="app_scroll_content"></PlanConfig>
+        </el-tab-pane>
+        <el-tab-pane name="hosts" style="overflow: visible">
+          <template #label> {{ t("hosts") }} </template>
+          <PlanHosts :cluster="cluster" :mode="mode"></PlanHosts>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </el-form>
 </template>
 
 <script>
@@ -237,11 +241,13 @@ export default {
 .plan {
   flex-grow: 2;
   display: flex;
+
   .left {
     width: 140px;
     min-height: 300px;
     border-radius: 10px;
     margin-left: 5px;
+
     .horizontalConnection {
       flex-grow: 1;
       width: calc(100% - 30px);
@@ -253,12 +259,14 @@ export default {
       margin-bottom: 23px;
       margin-right: -40px;
     }
+
     .verticalConnection {
       margin-left: 60px;
       border-left: dashed 2px var(--el-color-primary);
       height: 40px;
     }
   }
+
   .right {
     flex-grow: 1;
     min-height: 300px;
@@ -266,6 +274,7 @@ export default {
     border-radius: 10px;
     margin-left: 30px;
     padding: 10px;
+
     .masters {
       display: flex;
       flex-wrap: wrap;
@@ -273,6 +282,7 @@ export default {
       margin-bottom: 10px;
       border-bottom: dotted 1.5px var(--el-color-primary-light-5);
     }
+
     .workers {
       display: flex;
       flex-wrap: wrap;
@@ -285,6 +295,7 @@ export default {
   max-width: 45%;
   min-width: 45%;
   margin-left: 20px;
+
   .tab_content {
     padding: 10px;
     min-height: calc(100vh - 296px);
