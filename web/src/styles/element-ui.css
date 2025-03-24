@@ -150,6 +150,14 @@ input {
   background-color: var(--el-text-color-primary);
   border-radius: 3px;
 }
+.app_scrollable_tabs.el-tabs {
+  height: 100%;
+  .el-tab-pane {
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
 
 /* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸 */
 ::-webkit-scrollbar {

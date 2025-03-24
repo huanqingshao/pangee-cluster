@@ -28,30 +28,20 @@ zh:
 </i18n>
 
 <template>
-  <div>
+  <div style="height: calc(100% - 54px)">
     <ControlBar :title="name">
       <span v-show="cluster && !cluster.history.processing" style="margin-right: 10px">
         <template v-if="currentTab === 'plan'">
           <template v-if="mode === 'view'">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              @click="$router.replace(`/clusters/${name}?mode=edit`)"
-              :loading="loading"
-            >
+            <el-button type="primary" icon="el-icon-edit" @click="$router.replace(`/clusters/${name}?mode=edit`)"
+              :loading="loading">
               {{ $t("msg.edit") }}
             </el-button>
           </template>
           <template v-if="mode === 'edit'">
-            <el-popconfirm
-              :confirm-button-text="$t('msg.ok')"
-              :cancel-button-text="$t('msg.cancel')"
-              placement="bottom-start"
-              icon="el-icon-warning"
-              icon-color="red"
-              :title="$t('msg.confirmToCancel')"
-              @confirm="cancelEdit"
-            >
+            <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')"
+              placement="bottom-start" icon="el-icon-warning" icon-color="red" :title="$t('msg.confirmToCancel')"
+              @confirm="cancelEdit">
               <template #reference>
                 <el-button type="default" icon="el-icon-close">{{ $t("msg.cancel") }}</el-button>
               </template>
@@ -62,23 +52,13 @@ zh:
           </template>
         </template>
         <template v-if="currentTab === 'access' || currentTab === 'plan'">
-          <ClusterProcessing
-            v-if="mode === 'view' && cluster && !cluster.history.processing"
-            :cluster="cluster"
-            :name="name"
-            @refresh="refresh"
-            :loading="loading"
-          ></ClusterProcessing>
+          <ClusterProcessing v-if="mode === 'view' && cluster && !cluster.history.processing" :cluster="cluster"
+            :name="name" @refresh="refresh" :loading="loading"></ClusterProcessing>
         </template>
       </span>
       <template v-if="(cluster && cluster.history.processing) || currentTab === 'operation'">
-        <ClusterProcessing
-          v-if="mode === 'view'"
-          :cluster="cluster"
-          :name="name"
-          @refresh="refresh"
-          :loading="loading"
-        ></ClusterProcessing>
+        <ClusterProcessing v-if="mode === 'view'" :cluster="cluster" :name="name" @refresh="refresh" :loading="loading">
+        </ClusterProcessing>
       </template>
       <template v-if="cluster && isClusterInstalled">
         <ClusterStateNodes :cluster="cluster"></ClusterStateNodes>
@@ -87,65 +67,41 @@ zh:
     <el-card shadow="never" v-if="loading">
       <el-skeleton animated :rows="10" style="height: calc(100vh - 190px)"></el-skeleton>
     </el-card>
-    <el-tabs type="border-card" v-else v-model="currentTab">
+    <el-tabs type="border-card" v-else v-model="currentTab" class="app_scrollable_tabs">
       <el-tab-pane name="resourcePackage">
         <template #label>
           {{ t("resourcePackage") }}
         </template>
-        <el-scrollbar max-height="calc(100vh - 220px)" ref="configKuboardSprayScroll">
-          <div class="tab_content">
-            <ConfigKuboardSpray :cluster="cluster"></ConfigKuboardSpray>
-          </div>
-        </el-scrollbar>
+        <div class="app_scroll_content">
+          <ConfigKuboardSpray :cluster="cluster"></ConfigKuboardSpray>
+        </div>
       </el-tab-pane>
-      <el-tab-pane :label="t('plan')" name="plan">
-        <Plan
-          v-if="cluster"
-          ref="plan"
-          :cluster="cluster"
-          :mode="mode"
-          @refresh="refresh"
-          @switchTab="currentTab = $event"
-        ></Plan>
+      <el-tab-pane :label="t('plan')" name="plan" style="overflow: visible;">
+        <Plan v-if="cluster" ref="plan" :cluster="cluster" :mode="mode" @refresh="refresh"
+          @switchTab="currentTab = $event">
+        </Plan>
       </el-tab-pane>
       <el-tab-pane :label="t('operation')" name="operation">
         <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster"></Operation>
       </el-tab-pane>
       <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
-        <Access
-          v-if="currentTab == 'access'"
-          ref="access"
-          :cluster="cluster"
-          :loading="loading"
-          @switch="currentTab = $event"
-        ></Access>
+        <Access v-if="currentTab == 'access'" ref="access" :cluster="cluster" :loading="loading"
+          @switch="currentTab = $event"></Access>
       </el-tab-pane>
-      <el-tab-pane
-        v-if="cluster && cluster.inventory"
-        :disabled="disableNonePlanTab || !isClusterOnline"
-        :label="t('health_check')"
-        name="health_check"
-      >
-        <ClusterHealthCheck
-          v-if="isClusterInstalled && isClusterOnline && currentTab == 'health_check'"
-          :cluster="cluster"
-          @refresh="refresh"
-        ></ClusterHealthCheck>
+      <el-tab-pane v-if="cluster && cluster.inventory" :disabled="disableNonePlanTab || !isClusterOnline"
+        :label="t('health_check')" name="health_check">
+        <ClusterHealthCheck v-if="isClusterInstalled && isClusterOnline && currentTab == 'health_check'"
+          :cluster="cluster" @refresh="refresh"></ClusterHealthCheck>
         <el-skeleton v-else style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
       <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('backup')" name="backup">
-        <Backup
-          v-if="isClusterInstalled && isClusterOnline && currentTab == 'backup'"
-          :cluster="cluster"
-          @refresh="refresh"
-        ></Backup>
+        <Backup v-if="isClusterInstalled && isClusterOnline && currentTab == 'backup'" :cluster="cluster"
+          @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
       <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('csi_scan')" name="cis_scan">
-        <div
-          v-if="cluster && cluster.resourcePackage && !cluster.resourcePackage.data.supported_playbooks.cis_scan"
-          style="height: calc(100vh - 220px)"
-        >
+        <div v-if="cluster && cluster.resourcePackage && !cluster.resourcePackage.data.supported_playbooks.cis_scan"
+          style="height: calc(100vh - 220px)">
           {{ $t("msg.feature_doesnot_support_selected_resource_package") }}
         </div>
         <CIS v-else-if="currentTab === 'cis_scan'" :cluster="cluster"></CIS>
@@ -464,4 +420,4 @@ export default {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="scss"></style>
