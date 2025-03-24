@@ -13,30 +13,46 @@ zh:
   default_value: '默认值：{default_value} （继承自全局设置标签页中的配置）'
   duplicateIP: "IP 地址不能与其他节点相同：{node}"
   description: 通过跳板机或者堡垒机访问目标节点
+  protocol: 跳板机协议
 </i18n>
 
 
 <template>
-  <ConfigSection ref="configSection" v-model:enabled="bastionEnabled" :label="$t('obj.bastion')" :description="t('description')" anti-freeze>
+  <ConfigSection ref="configSection" v-model:enabled="bastionEnabled" :label="$t('obj.bastion')"
+    :description="t('description')" anti-freeze>
     <template #more>
       {{ t('bastionUsage') }}
     </template>
+    <el-form-item :label="t('protocol')" required>
+      <el-radio-group v-model="computedBastionType" :disabled="editMode != 'edit'">
+        <el-radio value="ssh">SSH</el-radio>
+        <el-radio value="socks5">SOCKS5</el-radio>
+      </el-radio-group>
+    </el-form-item>
     <FieldString :holder="holder" fieldName="ansible_host" :prop="`all.hosts.${nodeName}`" anti-freeze
       :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></FieldString>
     <FieldString :holder="holder" fieldName="ansible_port" :prop="`all.hosts.${nodeName}`"
       :placeholder="placeholder('ansible_port')" anti-freeze required></FieldString>
-    <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
-      :placeholder="placeholder('ansible_user')" anti-freeze required></FieldString>
-    <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze clearable
-      :placeholder="placeholder('ansible_ssh_private_key_file')">
-      <template #edit>
-        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{t('addSshKey')}}</el-button>
-      </template>
-    </FieldSelect>
-    <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
-      :placeholder="placeholder('ansible_password')"></FieldString>
-    <slot></slot>
-    <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
+    <template v-if="computedBastionType == 'ssh'">
+      <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
+        :placeholder="placeholder('ansible_user')" anti-freeze required></FieldString>
+      <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze
+        clearable :placeholder="placeholder('ansible_ssh_private_key_file')">
+        <template #edit>
+          <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus"
+            @click="$refs.addPrivateKey.show()">{{ t('addSshKey') }}</el-button>
+        </template>
+      </FieldSelect>
+      <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
+        :placeholder="placeholder('ansible_password')"></FieldString>
+      <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
+    </template>
+    <template v-else-if="computedBastionType == 'socks5'">
+      <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
+        :placeholder="placeholder('ansible_user')" anti-freeze></FieldString>
+      <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
+        :placeholder="placeholder('ansible_password')"></FieldString>
+    </template>
   </ConfigSection>
 </template>
 
@@ -57,18 +73,30 @@ export default {
       ]
     }
   },
+  inject: ['editMode'],
   computed: {
+    computedBastionType: {
+      get() {
+        if (this.inventory.all.hosts.bastion && this.inventory.all.hosts.bastion.bastionType) {
+          return this.inventory.all.hosts.bastion.bastionType
+        }
+        return "ssh"
+      },
+      set(type) {
+        this.inventory.all.hosts.bastion.bastionType = type;
+      }
+    },
     inventory: {
-      get () { return this.cluster.inventory },
-      set () {}
+      get() { return this.cluster.inventory },
+      set() { }
     },
     bastionEnabled: {
-      get () {
+      get() {
         return this.inventory.all.hosts.bastion !== undefined
       },
-      set (v) {
+      set(v) {
         if (v) {
-          this.inventory.all.hosts.bastion = this.inventory.all.hosts.bastion || {ansible_host: '', ansible_user: ''}
+          this.inventory.all.hosts.bastion = this.inventory.all.hosts.bastion || { ansible_host: '', ansible_user: '' }
         } else {
           delete this.inventory.all.hosts.bastion
           delete this.inventory.all.children.target.vars.ansible_ssh_common_args
@@ -76,39 +104,52 @@ export default {
       }
     },
     holderRef: {
-      get () {return this.holder},
-      set () {}
+      get() { return this.holder },
+      set() { }
     },
     ansible_become: {
-      get () {
+      get() {
         if (this.holder.ansible_become !== undefined) {
           return this.holder.ansible_become
         }
-        return this.cluster.inventory.all.children.target.vars.ansible_become 
+        return this.cluster.inventory.all.children.target.vars.ansible_become
       },
-      set (v) {
+      set(v) {
         this.holderRef.ansible_become = v
       }
     }
   },
   components: { SshAddPrivateKey },
-  mounted () {
+  mounted() {
   },
   watch: {
     holder: {
       handler: function (bastion) {
         if (bastion && bastion.ansible_host) {
-          let sshPass = ''
-          if (bastion['ansible_password']) {
-            sshPass = `sshpass -p '${bastion['ansible_password']}' `
+          if (this.computedBastionType == 'ssh') {
+            let sshPass = ''
+            if (bastion['ansible_password']) {
+              sshPass = `sshpass -p '${bastion['ansible_password']}' `
+            }
+            let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ControlMaster=auto -o ControlPersist=30m -o ControlPath={{kuboardspray_cluster_dir}}/%%r@%%h:%%p -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
+            temp += bastion["ansible_port"] + " " + bastion["ansible_user"] + "@" + bastion["ansible_host"]
+            if (bastion["ansible_ssh_private_key_file"]) {
+              temp += " -i " + bastion["ansible_ssh_private_key_file"]
+            }
+            temp += '"'
+            this.inventory.all.children.target.vars.ansible_ssh_common_args = temp
+          } else if (this.computedBastionType == 'socks5') {
+            let temp = `-o ProxyCommand="nc -X 5 -x ${bastion.ansible_host}:${bastion.ansible_port} %h %p"`
+            if (bastion['ansible_user']) {
+              temp = `-o ProxyCommand="nc -X 5 -x ${bastion['ansible_user']}@${bastion.ansible_host}:${bastion.ansible_port} %h %p"`
+            }
+            if (bastion['ansible_password'] && bastion['ansible_user']) {
+              temp = `-o ProxyCommand="nc -X 5 -x ${bastion['ansible_user']}:${bastion['ansible_password']}@${bastion.ansible_host}:${bastion.ansible_port} %h %p"`
+            }
+            this.inventory.all.children.target.vars.ansible_ssh_common_args = temp
+          } else {
+            delete this.inventory.all.children.target.vars.ansible_ssh_common_args
           }
-          let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ControlMaster=auto -o ControlPersist=30m -o ControlPath={{kuboardspray_cluster_dir}}/%%r@%%h:%%p -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
-          temp += bastion["ansible_port"] + " " + bastion["ansible_user"] + "@" + bastion["ansible_host"]
-          if (bastion["ansible_ssh_private_key_file"]) {
-            temp += " -i " + bastion["ansible_ssh_private_key_file"]
-          }
-          temp += '"'
-          this.inventory.all.children.target.vars.ansible_ssh_common_args = temp
         } else {
           delete this.inventory.all.children.target.vars.ansible_ssh_common_args
         }
@@ -120,7 +161,7 @@ export default {
     placeholder(fieldName) {
       return this.$t('field.' + fieldName + '_placeholder')
     },
-    async loadSshKeyList () {
+    async loadSshKeyList() {
       let result = []
       await this.kuboardSprayApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
         for (let item of resp.data.data) {
@@ -133,6 +174,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

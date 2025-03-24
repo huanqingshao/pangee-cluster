@@ -21,11 +21,17 @@ type Run struct {
 }
 
 func (run *Run) ToString() string {
-	result := "[" + run.Cmd + ", "
+	result := "[" + run.Cmd + " "
 	for index, arg := range run.Args {
+		if index > 1 && run.Args[index-1] == "-a" {
+			result += "'"
+		}
 		result += arg
+		if index > 1 && run.Args[index-1] == "-a" {
+			result += "'"
+		}
 		if index < len(run.Args)-1 {
-			result += ", "
+			result += " "
 		}
 	}
 	result += "]"

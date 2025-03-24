@@ -10,22 +10,24 @@ zh:
 </i18n>
 
 <template>
-  <div style="display: flex">
-    <el-tabs v-model="currentTab" type="border-card" tab-position="left">
-      <el-tab-pane name="architecture">
-        <template #label> {{ t("architecture") }} </template>
-        <PlanArchitecture></PlanArchitecture>
-      </el-tab-pane>
-      <el-tab-pane name="config">
-        <template #label> {{ t("global_config") }} </template>
-        <PlanConfig :cluster="cluster"></PlanConfig>
-      </el-tab-pane>
-      <el-tab-pane name="hosts">
-        <template #label> {{ t("hosts") }} </template>
-        <PlanHosts :cluster="cluster" :mode="mode"></PlanHosts>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory">
+    <div style="display: flex">
+      <el-tabs v-model="currentTab" type="border-card" tab-position="left">
+        <el-tab-pane name="architecture">
+          <template #label> {{ t("architecture") }} </template>
+          <PlanArchitecture></PlanArchitecture>
+        </el-tab-pane>
+        <el-tab-pane name="config">
+          <template #label> {{ t("global_config") }} </template>
+          <PlanConfig :cluster="cluster"></PlanConfig>
+        </el-tab-pane>
+        <el-tab-pane name="hosts">
+          <template #label> {{ t("hosts") }} </template>
+          <PlanHosts :cluster="cluster" :mode="mode"></PlanHosts>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </el-form>
 </template>
 
 <script>
