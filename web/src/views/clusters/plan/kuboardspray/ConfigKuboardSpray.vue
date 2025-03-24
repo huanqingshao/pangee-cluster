@@ -9,14 +9,35 @@ zh:
 
 <template>
   <div>
-    <ConfigSection v-model:enabled="useResourcePackage" disabled anti-freeze
+    <ConfigSection
+      v-model:enabled="useResourcePackage"
+      disabled
+      anti-freeze
       :label="$t('obj.resource')"
-      :description="$t('obj.resource') + ' ' + (inventory.all.hosts.localhost.kuboardspray_resource_package ? inventory.all.hosts.localhost.kuboardspray_resource_package : '')">
-      <FieldSelect :holder="inventory.all.hosts.localhost" fieldName="kuboardspray_resource_package" :loadOptions="loadResourceList" prop="all.hosts.localhost" required :disabled="isClusterInstalled">
+      :description="
+        $t('obj.resource') +
+        ' ' +
+        (inventory.all.hosts.localhost.kuboardspray_resource_package
+          ? inventory.all.hosts.localhost.kuboardspray_resource_package
+          : '')
+      "
+    >
+      <FieldSelect
+        :holder="inventory.all.hosts.localhost"
+        fieldName="kuboardspray_resource_package"
+        :loadOptions="loadResourceList"
+        prop="all.hosts.localhost"
+        required
+        :disabled="isClusterInstalled"
+      >
         <template #edit>
-          <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus" 
+          <ConfirmButton
+            buttonStyle="margin-left: 10px;"
+            icon="el-icon-plus"
             @confirm="openUrlInBlank('/#/settings/resources')"
-            :text="t('createResource')" :message="t('goToResourcePage')"></ConfirmButton>
+            :text="t('createResource')"
+            :message="t('goToResourcePage')"
+          ></ConfirmButton>
         </template>
       </FieldSelect>
       <div v-if="resourcePackage">
@@ -27,57 +48,66 @@ zh:
 </template>
 
 <script>
-import ResourceDetails from '../../../resources/details/ResourceDetails.vue'
+import ResourceDetails from "../../../resources/details/ResourceDetails.vue";
 
 export default {
   props: {
-    cluster: { type: Object, required: true },
+    cluster: { type: Object, required: true }
   },
-  data () {
+  data() {
     return {
       localhostRules: [
         {
           validator: (rule, value, callback) => {
-            callback('ErrorMessage')
+            callback("ErrorMessage");
           },
-          trigger: 'blur'
+          trigger: "blur"
         }
       ],
-      useResourcePackage: true,
-    }
+      useResourcePackage: true
+    };
   },
-  inject: ['isClusterInstalled', 'isClusterOnline'],
+  provide() {
+    return {
+      editMode: () => {
+        return "view";
+      }
+    };
+  },
+  inject: ["isClusterInstalled", "isClusterOnline"],
   computed: {
     inventory: {
-      get () {
-        return this.cluster.inventory
+      get() {
+        return this.cluster.inventory;
       },
-      set () {}
+      set() {}
     },
     resourcePackage: {
-      get () { return this.cluster.resourcePackage},
-      set () {}
-    },
+      get() {
+        return this.cluster.resourcePackage;
+      },
+      set() {}
+    }
   },
   components: { ResourceDetails },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    async loadResourceList () {
-      let result = []
-      await this.kuboardSprayApi.get('/resources').then(resp => {
-        for (let res of resp.data.data) {
-          result.push({ label: res, value: res })
-        }
-      }).catch(e => {
-        console.log(e)
-      })
-      return result
+    async loadResourceList() {
+      let result = [];
+      await this.kuboardSprayApi
+        .get("/resources")
+        .then(resp => {
+          for (let res of resp.data.data) {
+            result.push({ label: res, value: res });
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+      return result;
     }
   }
-}
+};
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>
