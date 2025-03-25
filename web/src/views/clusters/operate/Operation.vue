@@ -1,27 +1,25 @@
 <i18n>
 en:
-    singleNode: Specific Node
-    global_config: Global Config
-    addons: Addons
-    enabledBation: Enabled
-    disabledBation: Disabled
-    selectANode: Please select a node from the diagram to the left.
-    resourcePackage: Resource Package
+  singleNode: Specific Node
+  global_config: Global Config
+  addons: Addons
+  enabledBation: Enabled
+  disabledBation: Disabled
+  selectANode: Please select a node from the diagram to the left.
+  resourcePackage: Resource Package
 zh:
-    singleNode: 单个节点
-    global_config: 全局设置
-    addons: 可选组件
-    enabledBation: 使用跳板机
-    disabledBation: 不使用跳板机
-    selectANode: 请从左侧图中选择一个节点
-    resourcePackage: 资源包
+  singleNode: 单个节点
+  global_config: 全局设置
+  addons: 可选组件
+  enabledBation: 使用跳板机
+  disabledBation: 不使用跳板机
+  selectANode: 请从左侧图中选择一个节点
+  resourcePackage: 资源包
 </i18n>
 
 <template>
-  <div
-    style="height: calc(100vh - 220px); display: flex; flex-direction: column"
-  >
-    <el-card style="margin-bottom: 10px">
+  <div style="height: calc(100% - 2px); display: flex; flex-direction: column">
+    <el-card shadow="never" style="margin-bottom: 10px">
       <el-button-group>
         <el-button>安装集群</el-button>
         <el-button>添加节点</el-button>
@@ -30,7 +28,7 @@ zh:
       <div>参数设置</div>
     </el-card>
     <div style="display: flex; gap: 10px; flex-grow: 1">
-      <el-card class="operation-card" style="width: 180px; flex-grow: 0">
+      <el-card shadow="never" class="operation-card" style="width: 180px; flex-grow: 0">
         <div style="display: flex; flex-direction: column; gap: 10px">
           <div :class="stepClass('step1')" @click="currentStep = 'step1'">
             Step1
@@ -49,26 +47,34 @@ zh:
           </div>
         </div>
       </el-card>
-      <el-card class="operation-card">
+      <el-card shadow="never" class="operation-card">
         Markdown 文档
         <p>{{ currentStep }}</p>
+        <el-button @click="showFileBrowser" type="primary" icon="el-icon-pointer">查看代码</el-button>
       </el-card>
-      <el-card class="operation-card">
+      <el-card shadow="never" class="operation-card">
         执行历史日志
         <p>{{ currentStep }}</p>
       </el-card>
     </div>
+    <FileBrowser :root="`data:///resource/${cluster.resourcePackage.metadata.version}`" ref="filebrowser"></FileBrowser>
   </div>
 </template>
 
 <script>
+import FileBrowser from "./filebrowser/FileBrowser.vue";
+
 export default {
+  props: {
+    cluster: { type: Object, required: true },
+  },
   data() {
     return {
       currentOperation: "install",
       currentStep: "step1",
     };
   },
+  components: { FileBrowser },
   methods: {
     stepClass(step) {
       if (this.currentStep == step) {
@@ -76,6 +82,9 @@ export default {
       }
       return "step";
     },
+    showFileBrowser() {
+      this.$refs.filebrowser.show();
+    }
   },
 };
 </script>

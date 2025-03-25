@@ -1,8 +1,9 @@
+> 这个文档记录了一些创建 multipass 实例时用到的命令。仅在开发过程中使用到。
 
 ```sh
-multipass launch --name spray-02 -c 2 -d 40G -m 4G --network name="Default Switch",mode=manual,mac="52:54:00:4b:ab:cf" focal
+multipass launch --name spray-01 -c 2 -d 40G -m 4G --network name="Default Switch",mode=manual,mac="52:54:00:4b:ab:cf" focal
 
-multipass shell spray-02
+multipass shell spray-01
 
 sudo -i
 
@@ -21,27 +22,17 @@ systemctl restart sshd
 
 
 # 配置静态地址
-cat << EOF > /etc/netplan/10-custom.yaml
-network:
-  version: 2
-  ethernets:
-    extra0:
-      dhcp4: no
-      match:
-        macaddress: "52:54:00:4b:ab:cd"
-      addresses: [172.23.154.251/20]
-EOF
+# cat << EOF > /etc/netplan/10-custom.yaml
+# network:
+#   version: 2
+#   ethernets:
+#     extra0:
+#       dhcp4: no
+#       match:
+#         macaddress: "52:54:00:4b:ab:cd"
+#       addresses: [172.23.154.251/20]
+# EOF
 
-netplan apply
+# netplan apply
 
-```
-
-
-```sh
-Host spray-02
-  User shaohq
-  HostName 172.23.154.251
-  Port 22
-  IdentityFile /root/.ssh/id_ed25519_cmcc
-  ProxyCommand nc -X 5 -x 192.168.137.1:7890 %h %p
 ```

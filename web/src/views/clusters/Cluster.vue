@@ -68,7 +68,7 @@ zh:
       <el-skeleton animated :rows="10" style="height: calc(100vh - 190px)"></el-skeleton>
     </el-card>
     <el-tabs type="border-card" v-else v-model="currentTab" class="app_scrollable_tabs">
-      <el-tab-pane name="resourcePackage">
+      <el-tab-pane name="resourcePackage" :disabled="disableNonePlanTab">
         <template #label>
           {{ t("resourcePackage") }}
         </template>
@@ -81,7 +81,7 @@ zh:
           @switchTab="currentTab = $event">
         </Plan>
       </el-tab-pane>
-      <el-tab-pane :label="t('operation')" name="operation">
+      <el-tab-pane :label="t('operation')" name="operation" :disabled="disableNonePlanTab">
         <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster"></Operation>
       </el-tab-pane>
       <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
@@ -129,7 +129,7 @@ import clone from "clone";
 import Plan from "./plan/Plan.vue";
 import Upgrade from "./upgrade/Upgrade.vue";
 import ClusterHealthCheck from "./health_check/ClusterHealthCheck.vue";
-import Operation from "./operation2/Operation.vue";
+import Operation from "./operate/Operation.vue";
 import ConfigKuboardSpray from "./plan/kuboardspray/ConfigKuboardSpray.vue";
 
 export default {

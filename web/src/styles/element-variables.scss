@@ -57,6 +57,10 @@
   border: 1px solid var(--el-color-white);
 }
 
+.el-radio__input.is-checked + .el-radio__label {
+  color: var(--el-color-primary) !important;
+}
+
 .swiper-pagination {
   margin-left: -52px;
 }

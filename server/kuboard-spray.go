@@ -14,6 +14,7 @@ import (
 	"github.com/eip-work/kuboard-spray/api/cluster/state"
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/api/fact"
+	"github.com/eip-work/kuboard-spray/api/filebrowser"
 	"github.com/eip-work/kuboard-spray/api/os_mirror"
 	"github.com/eip-work/kuboard-spray/api/private_key"
 	"github.com/eip-work/kuboard-spray/api/resource"
@@ -108,6 +109,8 @@ func setupRouter() *gin.Engine {
 	api.GET("/mirrors/:name", os_mirror.GetMirror)
 	api.PUT("/mirrors/:name", os_mirror.ModifyOsMirro)
 	api.DELETE("/mirrors/:name", os_mirror.DeleteMirror)
+
+	api.GET("/filebrowser", filebrowser.List)
 
 	vue.ServeVue(router, root)
 
