@@ -6,7 +6,7 @@ import (
 
 func PopulateKuboardSprayVars(inventory map[string]interface{}, ownerType, ownerName string) {
 	MapSet(inventory, "all.hosts.localhost.ansible_python_interpreter", "/usr/bin/python3")
-	if MapGet(inventory, "all.hosts.all.bastion.bastionType") == "socks5" {
+	if MapGet(inventory, "all.hosts.all.bastion.bastion_type") == "socks5" {
 		MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }}")
 	} else {
 		MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }} {{ '' if ansible_password is defined and 'bastion' in groups['all'] else kuboardspray_ssh_multiplexing }}")

@@ -77,13 +77,13 @@ export default {
   computed: {
     computedBastionType: {
       get() {
-        if (this.inventory.all.hosts.bastion && this.inventory.all.hosts.bastion.bastionType) {
-          return this.inventory.all.hosts.bastion.bastionType
+        if (this.inventory.all.hosts.bastion && this.inventory.all.hosts.bastion.bastion_type) {
+          return this.inventory.all.hosts.bastion.bastion_type
         }
         return "ssh"
       },
       set(type) {
-        this.inventory.all.hosts.bastion.bastionType = type;
+        this.inventory.all.hosts.bastion.bastion_type = type;
       }
     },
     inventory: {

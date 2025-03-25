@@ -34,6 +34,7 @@ type NodeInfo struct {
 	BecomeUser     string `json:"ansible_become_user"`
 	BecomePassword string `json:"ansible_become_password"`
 	Port           int    `json:"ansible_port"`
+	BastionType    string `json:"bastion_type"`
 }
 
 type SSHClient struct {
@@ -61,6 +62,7 @@ func NewSSHClient(shellRequest ShellRequest) (*SSHClient, error) {
 	bastionRef := common.MapGet(inventory, "all.hosts.bastion")
 	if bastionRef != nil {
 		client.Bastion = populateNodeInfo(inventory, "bastion")
+		client.Bastion.User = common.MapGetString(inventory, "all.hosts.bastion.ansible_user")
 	}
 
 	return &client, nil
@@ -83,6 +85,7 @@ func populateNodeInfo(inventory map[string]interface{}, node string) *NodeInfo {
 	result.Become = getNodeInfoBool(inventory, node, "ansible_become")
 	result.BecomeUser = getNodeInfo(inventory, node, "ansible_become_user")
 	result.BecomePassword = getNodeInfo(inventory, node, "ansible_become_password")
+	result.BastionType = getNodeInfo(inventory, node, "bastion_type")
 	return result
 }
 

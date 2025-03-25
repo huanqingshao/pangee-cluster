@@ -27,14 +27,8 @@ zh:
       <div class="left">
         <div style="padding: 5px; font-weight: bolder; font-size: 14px">Kuboard Spray</div>
         <div>
-          <Node
-            class="localhost"
-            name="localhost"
-            :cluster="cluster"
-            hideDeleteButton
-            :active="computedCurrentPropertiesTab === 'localhost'"
-            @click="computedCurrentPropertiesTab = 'localhost'"
-          >
+          <Node class="localhost" name="localhost" :cluster="cluster" hideDeleteButton
+            :active="computedCurrentPropertiesTab === 'localhost'" @click="computedCurrentPropertiesTab = 'localhost'">
           </Node>
         </div>
         <div>
@@ -42,18 +36,13 @@ zh:
           <div v-else class="horizontalConnection"></div>
         </div>
         <div>
-          <Node
-            class="bastion"
-            name="bastion"
-            :cluster="cluster"
-            hideDeleteButton
-            :active="computedCurrentPropertiesTab === 'bastion'"
-            @click="computedCurrentPropertiesTab = 'bastion'"
-          >
+          <Node class="bastion" name="bastion" :cluster="cluster" hideDeleteButton
+            :active="computedCurrentPropertiesTab === 'bastion'" @click="computedCurrentPropertiesTab = 'bastion'">
             <div style="margin-top: 10px">
-              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small" style="width: 100px; text-align: center">{{
-                t("enabledBation")
-              }}</el-tag>
+              <el-tag v-if="bastionEnabled" type="danger" effect="dark" size="small"
+                style="width: 100px; text-align: center">{{
+                  t("enabledBation")
+                }}</el-tag>
               <el-tag v-else type="info" effect="light" size="small" style="width: 100px; text-align: center">{{
                 t("disabledBation")
               }}</el-tag>
@@ -68,17 +57,12 @@ zh:
         </div>
       </div>
       <div class="right">
-        <div style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
+        <div
+          style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
           <span style="margin-right: 20px">Kubernetes Cluster</span>
           <AddNode :inventory="inventory" v-model:computedCurrentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
-          <el-button
-            v-if="mode == 'view'"
-            type="primary"
-            plain
-            icon="el-icon-lightning"
-            @click="ping"
-            :loading="pingpong_loading"
-          >
+          <el-button v-if="mode == 'view'" type="primary" plain icon="el-icon-lightning" @click="ping"
+            :loading="pingpong_loading">
             <span class="app_text_mono">PING</span>
           </el-button>
         </div>
@@ -86,97 +70,60 @@ zh:
           <div class="masters">
             <Node
               v-for="(item, index) in inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts"
-              :key="'control_plane' + index"
-              @deleted="computedCurrentPropertiesTab = 'node_nodes'"
-              @click="computedCurrentPropertiesTab = 'NODE_' + index"
-              :pingpong="pingpong"
-              :pingpong_loading="pingpong_loading"
-              :active="
-                nodeRoles(index)[computedCurrentPropertiesTab] ||
+              :key="'control_plane' + index" @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+              @click="computedCurrentPropertiesTab = 'NODE_' + index" :pingpong="pingpong"
+              :pingpong_loading="pingpong_loading" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
                 computedCurrentPropertiesTab === 'global_config' ||
                 computedCurrentPropertiesTab === 'addons' ||
                 computedCurrentPropertiesTab === 'k8s_cluster' ||
                 'NODE_' + index === computedCurrentPropertiesTab
-              "
-              :name="index"
-              :cluster="cluster"
-            ></Node>
+                " :name="index" :cluster="cluster"></Node>
             <template v-for="(item, index) in inventory.all.children.target.children.etcd.hosts" :key="'etcd' + index">
-              <Node
-                v-if="isEtcdAndNotControlPlane(index)"
-                :name="index"
-                :cluster="cluster"
+              <Node v-if="isEtcdAndNotControlPlane(index)" :name="index" :cluster="cluster"
                 @deleted="computedCurrentPropertiesTab = 'node_nodes'"
-                @click="computedCurrentPropertiesTab = 'NODE_' + index"
-                @delete_button="deleteNode(index)"
-                :pingpong="pingpong"
-                :pingpong_loading="pingpong_loading"
-                :active="
-                  nodeRoles(index)[computedCurrentPropertiesTab] ||
+                @click="computedCurrentPropertiesTab = 'NODE_' + index" @delete_button="deleteNode(index)"
+                :pingpong="pingpong" :pingpong_loading="pingpong_loading" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
                   computedCurrentPropertiesTab === 'global_config' ||
                   computedCurrentPropertiesTab === 'k8s_cluster' ||
                   'NODE_' + index === computedCurrentPropertiesTab
-                "
-              ></Node>
+                  "></Node>
             </template>
           </div>
           <div class="workers">
             <template
               v-for="(item, index) in inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts"
-              :key="'node' + index"
-            >
-              <Node
-                v-if="isNode(index)"
-                :name="index"
-                :cluster="cluster"
-                :pingpong="pingpong"
-                :pingpong_loading="pingpong_loading"
-                @click="computedCurrentPropertiesTab = 'NODE_' + index"
-                @deleted="computedCurrentPropertiesTab = 'node_nodes'"
-                :active="
-                  nodeRoles(index)[computedCurrentPropertiesTab] ||
+              :key="'node' + index">
+              <Node v-if="isNode(index)" :name="index" :cluster="cluster" :pingpong="pingpong"
+                :pingpong_loading="pingpong_loading" @click="computedCurrentPropertiesTab = 'NODE_' + index"
+                @deleted="computedCurrentPropertiesTab = 'node_nodes'" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
                   computedCurrentPropertiesTab === 'global_config' ||
                   computedCurrentPropertiesTab === 'addons' ||
                   computedCurrentPropertiesTab === 'k8s_cluster' ||
                   'NODE_' + index === computedCurrentPropertiesTab
-                "
-              ></Node>
+                  "></Node>
             </template>
           </div>
           <div class="workers">
             <template v-for="(item, index) in nodeGap.inventory.all.hosts" :key="'gap_node' + index">
-              <Node
-                :name="index"
-                :cluster="nodeGap"
-                :pingpong="pingpong"
-                :pingpong_loading="pingpong_loading"
+              <Node :name="index" :cluster="nodeGap" :pingpong="pingpong" :pingpong_loading="pingpong_loading"
                 @deleted="computedCurrentPropertiesTab = 'node_nodes'"
                 @click="computedCurrentPropertiesTab = 'GAP_NODE_' + index"
-                :active="'GAP_NODE_' + index === computedCurrentPropertiesTab"
-              ></Node>
+                :active="'GAP_NODE_' + index === computedCurrentPropertiesTab"></Node>
             </template>
           </div>
         </el-scrollbar>
       </div>
     </div>
     <div class="properties" style="height: 100%">
-      <el-tabs
-        type="card"
-        v-model="computedCurrentPropertiesTab"
-        class="app_scrollable_tabs"
-        :before-leave="beforeLeaveCurrentTab"
-      >
+      <el-tabs type="card" v-model="computedCurrentPropertiesTab" class="app_scrollable_tabs"
+        :before-leave="beforeLeaveCurrentTab">
         <el-tab-pane name="localhost">
           <template #label>
             {{ t("defaultSshParams") }}
           </template>
           <div v-if="computedCurrentPropertiesTab === 'localhost'">
-            <SshParamsCluster
-              :cluster="cluster"
-              :holder="cluster.inventory.all.children.target.vars"
-              prop="all.children.target.vars"
-              :description="t('sshcommon')"
-            ></SshParamsCluster>
+            <SshParamsCluster :cluster="cluster" :holder="cluster.inventory.all.children.target.vars"
+              prop="all.children.target.vars" :description="t('sshcommon')"></SshParamsCluster>
             <HttpProxy v-if="showHttpProxy" :cluster="cluster"></HttpProxy>
           </div>
         </el-tab-pane>
@@ -184,18 +131,12 @@ zh:
           <template #label>
             {{ $t("obj.bastion") }}
           </template>
-          <SshParamsBastion
-            v-if="cluster && cluster.inventory && computedCurrentPropertiesTab == 'bastion'"
-            :cluster="cluster"
-            nodeName="bastion"
-            :holder="inventory.all.hosts.bastion || {}"
-            prop="all.hosts.bastion"
-          ></SshParamsBastion>
+          <SshParamsBastion v-if="cluster && cluster.inventory && computedCurrentPropertiesTab == 'bastion'"
+            :cluster="cluster" nodeName="bastion" :holder="inventory.all.hosts.bastion || {}" prop="all.hosts.bastion">
+          </SshParamsBastion>
         </el-tab-pane>
-        <el-tab-pane
-          :name="computedCurrentPropertiesTab"
-          v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0 || computedCurrentPropertiesTab.indexOf('GAP_NODE_') === 0"
-        >
+        <el-tab-pane :name="computedCurrentPropertiesTab"
+          v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0 || computedCurrentPropertiesTab.indexOf('GAP_NODE_') === 0">
           <template #label>
             <div v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0" style="width: 100px; text-align: center">
               {{ computedCurrentPropertiesTab.slice(5) }}
@@ -203,22 +144,11 @@ zh:
             <div v-else style="width: 100px; text-align: center">{{ computedCurrentPropertiesTab.slice(9) }}</div>
           </template>
           <div class="tab_content">
-            <ConfigNode
-              v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0"
-              :cluster="cluster"
-              :nodeName="computedCurrentPropertiesTab.slice(5)"
-              :pingpong="pingpong"
-              :pingpongLoading="pingpong_loading"
-              @ping="ping"
-            ></ConfigNode>
-            <CopyGapNodeToInventory
-              v-else
-              :cluster="nodeGap"
-              :nodeName="computedCurrentPropertiesTab.slice(9)"
-              :pingpong="pingpong"
-              :pingpongLoading="pingpong_loading"
-              @ping="ping"
-            ></CopyGapNodeToInventory>
+            <ConfigNode v-if="computedCurrentPropertiesTab.indexOf('NODE_') === 0" :cluster="cluster"
+              :nodeName="computedCurrentPropertiesTab.slice(5)" :pingpong="pingpong" :pingpongLoading="pingpong_loading"
+              @ping="ping"></ConfigNode>
+            <CopyGapNodeToInventory v-else :cluster="nodeGap" :nodeName="computedCurrentPropertiesTab.slice(9)"
+              :pingpong="pingpong" :pingpongLoading="pingpong_loading" @ping="ping"></CopyGapNodeToInventory>
           </div>
         </el-tab-pane>
         <el-tab-pane v-else name="node_nodes">
@@ -263,29 +193,17 @@ export default {
       pingpong_loading: false
     };
   },
-  provide() {
-    return {
-      editMode: computed(() => {
-        if (this.mode === "view") {
-          return "view";
-        }
-        if (this.cluster && this.cluster.history.success_tasks.length > 0) {
-          return "frozen";
-        }
-        return this.mode;
-      }),
-      currentTab: computed(() => {
-        return this.computedCurrentPropertiesTab;
-      })
-    };
-  },
-  inject: ["validateFormFunction"],
+  inject: ["validateFormFunction", "editMode"],
   computed: {
     computedCurrentPropertiesTab: {
       get() {
         return this.currentPropertiesTab;
       },
       set(v) {
+        if (this.editMode == "view") {
+          this.currentPropertiesTab = v;
+          return;
+        }
         this.validateFormFunction(flag => {
           if (flag) {
             this.currentPropertiesTab = v;
@@ -403,6 +321,9 @@ export default {
       this.$refs.form.validate(callback);
     },
     beforeLeaveCurrentTab(activeName, oldActiveName) {
+      if (this.editMode == "view") {
+        return true;
+      }
       return new Promise((resolve, reject) => {
         this.validateFormFunction(flag => {
           if (flag) {

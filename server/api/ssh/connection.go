@@ -5,14 +5,16 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net"
+	"os"
+	"strconv"
 	"time"
 	"unicode/utf8"
 
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/net/proxy"
 )
 
 func dialSsh(node NodeInfo) (*ssh.ClientConfig, error) {
@@ -27,7 +29,7 @@ func dialSsh(node NodeInfo) (*ssh.ClientConfig, error) {
 		auth = append(auth, ssh.Password(node.Password))
 	}
 	if node.PrivateKeyPath != "" {
-		key, err := ioutil.ReadFile(node.PrivateKeyPath)
+		key, err := os.ReadFile(node.PrivateKeyPath)
 		if err == nil {
 			signer, err := ssh.ParsePrivateKey(key)
 			if err == nil {
@@ -63,41 +65,89 @@ func (sshClient *SSHClient) GenerateClient() error {
 	var err error
 
 	if sshClient.Bastion != nil {
-		var bastionClient *ssh.Client
-		bClientConfig, err := dialSsh(*sshClient.Bastion)
-		if err != nil {
-			return err
+
+		if sshClient.Bastion.BastionType == "socks5" {
+
+			var proxyAddress = ""
+			if sshClient.Bastion.User != "" {
+				proxyAddress += sshClient.Bastion.User
+				if sshClient.Bastion.Password != "" {
+					proxyAddress += ":" + sshClient.Bastion.Password
+				}
+				proxyAddress += "@"
+			}
+			proxyAddress += sshClient.Bastion.Host + ":" + strconv.Itoa(sshClient.Bastion.Port)
+			proxyDialer, err := proxy.SOCKS5("tcp", proxyAddress, nil, proxy.Direct)
+
+			if err != nil {
+				return err
+			}
+			logrus.Trace("proxy connected: ", proxyAddress)
+
+			addr := fmt.Sprintf("%s:%d", sshClient.Host, sshClient.Port)
+			logrus.Trace("ssh addr: ", addr)
+			conn, err := proxyDialer.Dial("tcp", addr)
+			if err != nil {
+				logrus.Trace("err: ", err)
+				return err
+			}
+			logrus.Trace("dialed address ", addr, " throw proxy.")
+
+			clientConfig, err := dialSsh(sshClient.NodeInfo)
+			if err != nil {
+				return err
+			}
+
+			logrus.Trace("dialed ssh ", addr)
+			ncc, chans, reqs, err := ssh.NewClientConn(conn, addr, clientConfig)
+			if err != nil {
+				return err
+			}
+
+			sClient := ssh.NewClient(ncc, chans, reqs)
+
+			logrus.Trace("connected throw bastion.")
+
+			sshClient.Client = sClient
+			return nil
+
+		} else { // BastionType == "ssh"
+			var bastionClient *ssh.Client
+			bClientConfig, err := dialSsh(*sshClient.Bastion)
+			if err != nil {
+				return err
+			}
+			addr := fmt.Sprintf("%s:%d", sshClient.Bastion.Host, sshClient.Bastion.Port)
+			if bastionClient, err = ssh.Dial("tcp", addr, bClientConfig); err != nil {
+				return err
+			}
+			logrus.Trace("dialed bastion ", addr)
+
+			addr = fmt.Sprintf("%s:%d", sshClient.Host, sshClient.Port)
+			conn, err := bastionClient.Dial("tcp", addr)
+
+			if err != nil {
+				return err
+			}
+
+			clientConfig, err := dialSsh(sshClient.NodeInfo)
+			if err != nil {
+				return err
+			}
+
+			logrus.Trace("dialed ssh ", addr)
+			ncc, chans, reqs, err := ssh.NewClientConn(conn, addr, clientConfig)
+			if err != nil {
+				return err
+			}
+
+			sClient := ssh.NewClient(ncc, chans, reqs)
+
+			logrus.Trace("connected throw bastion.")
+
+			sshClient.Client = sClient
+			return nil
 		}
-		addr := fmt.Sprintf("%s:%d", sshClient.Bastion.Host, sshClient.Bastion.Port)
-		if bastionClient, err = ssh.Dial("tcp", addr, bClientConfig); err != nil {
-			return err
-		}
-		logrus.Trace("dialed ", addr)
-
-		addr = fmt.Sprintf("%s:%d", sshClient.Host, sshClient.Port)
-		conn, err := bastionClient.Dial("tcp", addr)
-
-		if err != nil {
-			return err
-		}
-
-		clientConfig, err := dialSsh(sshClient.NodeInfo)
-		if err != nil {
-			return err
-		}
-
-		logrus.Trace("dialed ", addr)
-		ncc, chans, reqs, err := ssh.NewClientConn(conn, addr, clientConfig)
-		if err != nil {
-			return err
-		}
-
-		sClient := ssh.NewClient(ncc, chans, reqs)
-
-		logrus.Trace("connected throw bastion.")
-
-		sshClient.Client = sClient
-		return nil
 	}
 
 	clientConfig, err := dialSsh(sshClient.NodeInfo)
