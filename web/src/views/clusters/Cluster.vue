@@ -48,7 +48,7 @@ zh:
             </el-popconfirm>
             <el-button type="primary" icon="el-icon-check" :disabled="noSaveRequired" @click="save">{{
               $t("msg.save")
-            }}</el-button>
+              }}</el-button>
           </template>
         </template>
         <template v-if="currentTab === 'access' || currentTab === 'plan'">
@@ -68,7 +68,7 @@ zh:
       <el-skeleton animated :rows="10" style="height: calc(100vh - 190px)"></el-skeleton>
     </el-card>
     <el-tabs type="border-card" v-else v-model="currentTab" class="app_scrollable_tabs">
-      <el-tab-pane name="resourcePackage" :disabled="disableNonePlanTab">
+      <el-tab-pane name="resourcePackage">
         <template #label>
           {{ t("resourcePackage") }}
         </template>
@@ -81,7 +81,7 @@ zh:
           @switchTab="currentTab = $event">
         </Plan>
       </el-tab-pane>
-      <el-tab-pane :label="t('operation')" name="operation" :disabled="disableNonePlanTab">
+      <el-tab-pane :label="t('operation')" name="operation">
         <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster"></Operation>
       </el-tab-pane>
       <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">

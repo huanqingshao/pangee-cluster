@@ -1,22 +1,16 @@
 <i18n>
 en:
   singleNode: Specific Node
-  global_config: Configuration
-  addons: Addons
   enabledBation: Enabled
   disabledBation: Disabled
   selectANode: Please select a node from the diagram to the left.
-  resourcePackage: Resource Package
   defaultSshParams: Default SSH Params
   sshcommon: SSH Shared Params (apply to all the k8s nodes)
 zh:
   singleNode: 单个节点
-  global_config: 参数配置
-  addons: 可选组件
   enabledBation: 使用跳板机
   disabledBation: 不使用跳板机
   selectANode: 请从左侧图中选择一个节点
-  resourcePackage: 资源包
   defaultSshParams: 默认 SSH 参数
   sshcommon: SSH 共享参数（适用范围：所有 k8s 节点）
 </i18n>
@@ -73,9 +67,6 @@ zh:
               :key="'control_plane' + index" @deleted="computedCurrentPropertiesTab = 'node_nodes'"
               @click="computedCurrentPropertiesTab = 'NODE_' + index" :pingpong="pingpong"
               :pingpong_loading="pingpong_loading" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
-                computedCurrentPropertiesTab === 'global_config' ||
-                computedCurrentPropertiesTab === 'addons' ||
-                computedCurrentPropertiesTab === 'k8s_cluster' ||
                 'NODE_' + index === computedCurrentPropertiesTab
                 " :name="index" :cluster="cluster"></Node>
             <template v-for="(item, index) in inventory.all.children.target.children.etcd.hosts" :key="'etcd' + index">
@@ -83,8 +74,6 @@ zh:
                 @deleted="computedCurrentPropertiesTab = 'node_nodes'"
                 @click="computedCurrentPropertiesTab = 'NODE_' + index" @delete_button="deleteNode(index)"
                 :pingpong="pingpong" :pingpong_loading="pingpong_loading" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
-                  computedCurrentPropertiesTab === 'global_config' ||
-                  computedCurrentPropertiesTab === 'k8s_cluster' ||
                   'NODE_' + index === computedCurrentPropertiesTab
                   "></Node>
             </template>
@@ -96,9 +85,6 @@ zh:
               <Node v-if="isNode(index)" :name="index" :cluster="cluster" :pingpong="pingpong"
                 :pingpong_loading="pingpong_loading" @click="computedCurrentPropertiesTab = 'NODE_' + index"
                 @deleted="computedCurrentPropertiesTab = 'node_nodes'" :active="nodeRoles(index)[computedCurrentPropertiesTab] ||
-                  computedCurrentPropertiesTab === 'global_config' ||
-                  computedCurrentPropertiesTab === 'addons' ||
-                  computedCurrentPropertiesTab === 'k8s_cluster' ||
                   'NODE_' + index === computedCurrentPropertiesTab
                   "></Node>
             </template>
@@ -169,13 +155,8 @@ zh:
 <script>
 import { computed } from "vue";
 import Node from "./Node.vue";
-import ConfigKuboardSpray from "./kuboardspray/ConfigKuboardSpray.vue";
-import ConfigK8sCluster from "./k8s_cluster/ConfigK8sCluster.vue";
-import ConfigGlobal from "./global/ConfigGlobal.vue";
-import ConfigAddons from "./addons/ConfigAddons.vue";
 import ConfigNode from "./node/ConfigNode.vue";
 import CopyGapNodeToInventory from "./node/CopyGapNodeToInventory.vue";
-import ConfigEtcd from "./etcd/ConfigEtcd.vue";
 import AddNode from "./common/AddNode.vue";
 import SshParamsBastion from "./node/SshParamsBastion.vue";
 import SshParamsCluster from "./common/SshParamsCluster.vue";
@@ -188,7 +169,7 @@ export default {
   },
   data() {
     return {
-      currentPropertiesTab: "global_config",
+      currentPropertiesTab: "localhost",
       pingpong: {},
       pingpong_loading: false
     };
@@ -282,12 +263,7 @@ export default {
   },
   components: {
     Node,
-    ConfigKuboardSpray,
-    ConfigK8sCluster,
-    ConfigGlobal,
-    ConfigAddons,
     ConfigNode,
-    ConfigEtcd,
     AddNode,
     CopyGapNodeToInventory,
     SshParamsBastion,
@@ -295,7 +271,7 @@ export default {
     HttpProxy
   },
   mounted() {
-    let temp = sessionStorage.getItem(this.cluster.name + "_plan_tab") || "global_config";
+    let temp = sessionStorage.getItem(this.cluster.name + "_plan_tab") || "localhost";
     if (temp.indexOf("NODE_") === 0) {
       if (this.inventory.all.hosts[temp.slice(5)] === undefined) {
         temp = "node_nodes";
