@@ -19,38 +19,35 @@ zh:
 
 <template>
   <div style="height: calc(100% - 2px); display: flex; flex-direction: column">
-    <el-card shadow="never" style="margin-bottom: 10px">
-      <el-button-group>
-        <el-button>安装集群</el-button>
-        <el-button>添加节点</el-button>
-        <el-button>删除节点</el-button>
-      </el-button-group>
-      <div>参数设置</div>
-    </el-card>
-    <div style="display: flex; gap: 10px; flex-grow: 1">
-      <el-card shadow="never" class="operation-card" style="width: 180px; flex-grow: 0">
+    <div style="margin-bottom: 10px">
+      <el-radio-group v-model="currentOperation" size="default">
+        <template v-for="(operation, index) in cluster.resourcePackage.operations" :key="'op_' + index">
+          <el-radio-button :label="operation.title[locale]" :value="index"></el-radio-button>
+        </template>
+      </el-radio-group>
+      <div class="operation-params">
+        参数设置
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; flex: 1; overflow-y: hidden;">
+      <el-card shadow="never" class="operation-card" style="width: 240px; flex-grow: 0;">
         <div style="display: flex; flex-direction: column; gap: 10px">
-          <div :class="stepClass('step1')" @click="currentStep = 'step1'">
-            Step1
-          </div>
-          <div :class="stepClass('step2')" @click="currentStep = 'step2'">
-            Step2
-          </div>
-          <div :class="stepClass('step3')" @click="currentStep = 'step3'">
-            Step3
-          </div>
-          <div :class="stepClass('step4')" @click="currentStep = 'step4'">
-            Step4
-          </div>
-          <div :class="stepClass('step5')" @click="currentStep = 'step5'">
-            Step5
-          </div>
+          <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
+            :key="'step_' + index">
+            <OperationStep :is-current="currentStep == index" :step="step" status="completed"
+              @click="currentStep = index"></OperationStep>
+          </template>
         </div>
       </el-card>
-      <el-card shadow="never" class="operation-card">
-        Markdown 文档
-        <p>{{ currentStep }}</p>
-        <el-button @click="showFileBrowser" type="primary" icon="el-icon-pointer">查看代码</el-button>
+      <el-card shadow="never" class="operation-card" style="max-width: 50%; min-width: 50%;"
+        :body-style="{ height: 'calc(100% - 40px)' }">
+        <div style="height: 0px; text-align: right;">
+          <el-button @click="showFileBrowser" type="primary" icon="el-icon-pointer">查看代码</el-button>
+        </div>
+        <div style="height: 100%; overflow: hidden; overflow-y: auto;">
+          <OperationStepMarkdown :cluster="cluster" :operation-index="currentOperation" :step-index="currentStep">
+          </OperationStepMarkdown>
+        </div>
       </el-card>
       <el-card shadow="never" class="operation-card">
         执行历史日志
@@ -63,6 +60,8 @@ zh:
 
 <script>
 import FileBrowser from "./filebrowser/FileBrowser.vue";
+import OperationStep from "./OperationStep.vue";
+import OperationStepMarkdown from "./OperationStepMarkdown.vue"
 
 export default {
   props: {
@@ -70,11 +69,11 @@ export default {
   },
   data() {
     return {
-      currentOperation: "install",
-      currentStep: "step1",
+      currentOperation: 0,
+      currentStep: 0,
     };
   },
-  components: { FileBrowser },
+  components: { FileBrowser, OperationStep, OperationStepMarkdown },
   methods: {
     stepClass(step) {
       if (this.currentStep == step) {
@@ -90,25 +89,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.operation-params {
+  padding: 10px;
+  border: 1px solid var(--el-color-info-light-9);
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  background-color: var(--el-color-primary-light-9);
+}
+
 .operation-card {
   flex-grow: 1;
-  height: 100%;
-
-  .step {
-    padding: 10px;
-    border: 1px solid var(--el-color-info-light-9);
-    border-radius: 3px;
-    background-color: var(--el-color-primary-light-9);
-    cursor: pointer;
-  }
-
-  .step:hover {
-    background-color: var(--el-color-primary-light-6);
-  }
-
-  .step.active {
-    background-color: var(--el-color-primary);
-    color: var(--el-color-white);
-  }
+  height: calc(100% - 2px);
+  overflow: hidden;
 }
 </style>

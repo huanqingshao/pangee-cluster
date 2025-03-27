@@ -3,12 +3,12 @@ import { markRaw }from "vue";
 
 export default {
   data () {
-    const { t } = useI18n({
+    const { t, locale } = useI18n({
       inheritLocale: true,
       useScope: 'local'
     })
     let temp = markRaw(t);
-    return { t: temp }
+    return { t: temp, locale }
   }
 
 }

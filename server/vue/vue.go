@@ -14,6 +14,9 @@ func ServeVue(router *gin.Engine, root *gin.RouterGroup) {
 
 	static := router.Group("/")
 
+	resourceDir := constants.GET_DATA_RESOURCE_DIR()
+	static.StaticFS("/resource-package", http.Dir(resourceDir))
+
 	router.LoadHTMLGlob(kuboardSprayWebDir + "/**.html")
 	static.StaticFS("/fonts", http.Dir(kuboardSprayWebDir+"/fonts"))
 	static.StaticFS("/js", http.Dir(kuboardSprayWebDir+"/js"))
@@ -25,4 +28,5 @@ func ServeVue(router *gin.Engine, root *gin.RouterGroup) {
 	static.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
+
 }

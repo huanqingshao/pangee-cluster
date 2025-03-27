@@ -111,6 +111,7 @@ func setupRouter() *gin.Engine {
 	api.DELETE("/mirrors/:name", os_mirror.DeleteMirror)
 
 	api.GET("/filebrowser", filebrowser.List)
+	api.GET("/filebrowser/get", filebrowser.Get)
 
 	vue.ServeVue(router, root)
 
