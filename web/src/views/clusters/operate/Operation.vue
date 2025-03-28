@@ -30,21 +30,35 @@ zh:
       </div>
     </div>
     <div style="display: flex; gap: 10px; flex: 1; overflow-y: hidden;">
-      <el-card shadow="never" class="operation-card" style="width: 240px; flex-grow: 0;">
-        <div style="display: flex; flex-direction: column; gap: 10px">
+      <el-card shadow="never" class="operation-card" style="width: 240px; flex-grow: 0;"
+        :body-style="{ height: 'calc(100% - 40px)', overflow: 'hidden', overflowY: 'auto' }">
+        <div class="noselect">
+          <el-steps direction="vertical" :active="currentStep">
+            <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
+              :key="'step_' + index">
+              <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index"
+                :status="currentStep >= index || true ? 'success' : ''"
+                :class="currentStep == index ? 'is-selected-step' : ''" />
+            </template>
+          </el-steps>
+        </div>
+        <!-- <div style="display: flex; flex-direction: column; gap: 10px">
           <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
             :key="'step_' + index">
             <OperationStep :is-current="currentStep == index" :step="step" status="completed"
               @click="currentStep = index"></OperationStep>
           </template>
-        </div>
+        </div> -->
       </el-card>
       <el-card shadow="never" class="operation-card" style="max-width: 50%; min-width: 50%;"
         :body-style="{ height: 'calc(100% - 40px)' }">
-        <div style="height: 0px; text-align: right;">
-          <el-button @click="showFileBrowser" type="primary" icon="el-icon-pointer">查看代码</el-button>
+        <div class="markdown-title">
+          <div style="flex-grow: 1; font-weight: bolder;">{{
+            cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale] }}</div>
+          <el-button style="float: right" @click="showFileBrowser" type="primary"
+            icon="el-icon-pointer">查看代码</el-button>
         </div>
-        <div style="height: 100%; overflow: hidden; overflow-y: auto;">
+        <div style="height: calc(100% - 42px); overflow: hidden; overflow-y: auto;">
           <OperationStepMarkdown :cluster="cluster" :operation-index="currentOperation" :step-index="currentStep">
           </OperationStepMarkdown>
         </div>
@@ -101,5 +115,48 @@ export default {
   flex-grow: 1;
   height: calc(100% - 2px);
   overflow: hidden;
+}
+
+.markdown-title {
+  height: 36px;
+  margin-bottom: 10px;
+  background-color: var(--el-color-primary-light-9);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+</style>
+
+<style lang="scss">
+.operation-card .el-step__main {
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  .el-step__title {
+    font-size: 13px;
+    font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
+    font-weight: normal;
+  }
+
+  .el-step__description {
+    border-bottom: 2px solid var(--el-color-primary-light-7);
+    font-size: 14px;
+    font-weight: bolder;
+  }
+
+}
+
+.operation-card .is-selected-step {
+  .el-step__icon {
+    border: 2px solid var(--el-color-primary);
+
+    svg {
+      color: var(--el-color-primary);
+    }
+  }
+
+  .el-step__description {
+    border-bottom: 3px solid var(--el-color-primary);
+  }
 }
 </style>

@@ -5,6 +5,7 @@ import (
 
 	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 // ServeVue ServeVue
@@ -15,6 +16,7 @@ func ServeVue(router *gin.Engine, root *gin.RouterGroup) {
 	static := router.Group("/")
 
 	resourceDir := constants.GET_DATA_RESOURCE_DIR()
+	logrus.Info("resourceDir: ", resourceDir)
 	static.StaticFS("/resource-package", http.Dir(resourceDir))
 
 	router.LoadHTMLGlob(kuboardSprayWebDir + "/**.html")
