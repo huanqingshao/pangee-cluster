@@ -108,17 +108,56 @@ export default {
 
 <style lang="scss">
 .operation-step-markdown {
+  counter-reset: h1counter h2counter h3counter h4counter h5counter;
+}
+
+.operation-step-markdown {
   font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
   font-size: 14px;
 
+
   h1 {
     font-size: 18px;
+    counter-reset: h2counter 1;
+  }
+
+  h1::before {
+    counter-increment: h1counter;
+    content: counter(h1counter) ". ";
   }
 
   h2 {
     font-size: 16px;
-    background-color: var(--el-color-primary-light-9);
-    padding: 10px 20px;
+    counter-reset: h3counter;
+  }
+
+  h2::before {
+    counter-increment: h2counter;
+    content: counter(h1counter)"." counter(h2counter) " ";
+  }
+
+  h3 {
+    font-size: 15px;
+    counter-reset: h4counter;
+  }
+
+  h3::before {
+    counter-increment: h3counter;
+    content: counter(h1counter)"." counter(h2counter)"." counter(h3counter) " ";
+  }
+
+  h4 {
+    counter-reset: h5counter;
+  }
+
+  h4::before {
+    counter-increment: h4counter;
+    content: counter(h1counter)"." counter(h2counter)"." counter(h3counter) "." counter(h4counter) " ";
+  }
+
+  h5::before {
+    counter-increment: h5counter;
+    content: counter(h1counter)"." counter(h2counter)"." counter(h3counter) "." counter(h4counter) "." counter(h5counter) " ";
   }
 
   p img {
