@@ -68,7 +68,7 @@ zh:
         <p>{{ currentStep }}</p>
       </el-card>
     </div>
-    <FileBrowser :root="`data:///resource/${cluster.resourcePackage.metadata.version}`" ref="filebrowser"></FileBrowser>
+    <FileBrowser :package-name="`${cluster.resourcePackage.metadata.version}`" ref="filebrowser"></FileBrowser>
   </div>
 </template>
 
