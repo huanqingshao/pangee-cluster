@@ -9,6 +9,7 @@
 
 <script>
 import markdown from 'markdown-it'
+import axios from 'axios'
 
 export default {
   props: {
@@ -63,11 +64,12 @@ export default {
   methods: {
     refresh() {
       if (this.path) {
-        this.kuboardSprayApi
-          .get(`/filebrowser/get?filePath=data:///resource/${this.path}/README.md`).then(resp => {
-            let content = resp.data.data.content;
+        axios
+          .get(`/resource-package/${this.path}/README.md`).then(resp => {
+            let content = resp.data;
             content = content.replaceAll("](./", "](/resource-package/" + this.path + "/");
             this.markdownContent = content;
+            console.log(this.markdownContent);
           }).catch(e => {
             if (e.status == 404) {
               this.markdownContent = e.response.data.message
