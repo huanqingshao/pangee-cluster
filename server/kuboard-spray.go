@@ -11,6 +11,7 @@ import (
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_access"
 	"github.com/eip-work/kuboard-spray/api/cluster/health_check"
 	"github.com/eip-work/kuboard-spray/api/cluster/operation"
+	"github.com/eip-work/kuboard-spray/api/cluster/operation_v2"
 	"github.com/eip-work/kuboard-spray/api/cluster/state"
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/api/fact"
@@ -66,8 +67,9 @@ func setupRouter() *gin.Engine {
 	api.POST("/clusters/:cluster/sync_container_engine_params", operation.SyncContainerEngineParams)
 	api.POST("/clusters/:cluster/backup_etcd", operation.BackupEtcd)
 	api.POST("/clusters/:cluster/restore_etcd", operation.RestoreBackup)
-
 	api.POST("/clusters/:cluster/cis_scan", cis_scan.CisScan)
+
+	api.POST("/clusters/:cluster/operation/:operation/step/:step", operation_v2.ExecuteStep)
 
 	api.GET("/clusters/:cluster/access/kubeconfig", cluster_access.GetKubeConfig)
 

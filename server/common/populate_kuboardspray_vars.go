@@ -9,7 +9,8 @@ func PopulateKuboardSprayVars(inventory map[string]interface{}, ownerType, owner
 	if MapGet(inventory, "all.hosts.all.bastion.bastion_type") == "socks5" {
 		MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }}")
 	} else {
-		MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }} {{ '' if ansible_password is defined and 'bastion' in groups['all'] else kuboardspray_ssh_multiplexing }}")
+		// MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }} {{ '' if ansible_password is defined and 'bastion' in groups['all'] else kuboardspray_ssh_multiplexing }}")
+		MapSet(inventory, "all.vars.ansible_ssh_args", "{{ kuboardspray_ssh_args }}")
 	}
 	MapSet(inventory, "all.vars.ansible_ssh_pipelining", true)
 	MapSet(inventory, "all.vars.kuboardspray_cluster_dir", constants.GET_DATA_DIR()+"/"+ownerType+"/"+ownerName)

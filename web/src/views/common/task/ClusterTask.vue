@@ -36,28 +36,29 @@ zh:
 </i18n>
 
 <template>
-  <ExecuteTask :history="cluster.history" :loading="loading" :title="title" :startTask="execute" @refresh="$emit('refresh')"
-    :disabled="disabled" :type="type" @visibleChange="onVisibleChange">
+  <ExecuteTask :history="cluster.history" :loading="loading" :title="title" :startTask="execute"
+    @refresh="$emit('refresh')" :disabled="disabled" :type="type" @visibleChange="onVisibleChange">
     <div :style="`width: ${width}px;`">
       <div v-if="pingpong_loading" style="display: block;">
         <el-skeleton animated></el-skeleton>
       </div>
-      <el-form v-else ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px" class="app_form_mini">
+      <el-form v-else ref="form" :model="form" @submit.prevent.stop label-position="left" label-width="120px"
+        class="app_form_mini">
         <el-form-item :label="t('control_params')">
           <el-form-item :label="t('verbose')">
             <el-radio-group v-model="form.verbose">
-              <el-radio-button label="" value="">{{t('v_')}}</el-radio-button>
-              <el-radio-button label="v" value="v">{{t('v_v')}}</el-radio-button>
-              <el-radio-button label="vvv" value="vvv">{{t('v_vvv')}}</el-radio-button>
+              <el-radio-button label="" value="">{{ t('v_') }}</el-radio-button>
+              <el-radio-button label="v" value="v">{{ t('v_v') }}</el-radio-button>
+              <el-radio-button label="vvv" value="vvv">{{ t('v_vvv') }}</el-radio-button>
             </el-radio-group>
-            <div style="color: #aaa; font-size: 12px;">{{t('verbose_' + form.verbose)}}</div>
+            <div style="color: #aaa; font-size: 12px;">{{ t('verbose_' + form.verbose) }}</div>
           </el-form-item>
           <el-form-item :label="t('fork')" style="margin-top: 10px;">
             <el-input-number v-model="form.fork" :step="2" style="width: 166px;"></el-input-number>
-            <div style="color: #aaa; font-size: 12px;">{{t('fork_more')}}</div>
+            <div style="color: #aaa; font-size: 12px;">{{ t('fork_more') }}</div>
           </el-form-item>
         </el-form-item>
-        
+
         <div style="font-size: 12px;">
           <slot v-bind:form="form"></slot>
         </div>
@@ -76,9 +77,9 @@ zh:
           </template>
         </el-form-item>
 
-        <el-form-item v-if="action && cluster && cluster.resourcePackage && cluster.resourcePackage.data.supported_playbooks[playbook_check || action] === undefined" prop="min_resource_package_version" 
-          style="margin-top: -10px;"
-          :rules="min_resource_package_version_rules">
+        <el-form-item
+          v-if="action && cluster && cluster.resourcePackage && cluster.resourcePackage.data.supported_playbooks[playbook_check || action] === undefined"
+          prop="min_resource_package_version" style="margin-top: -10px;" :rules="min_resource_package_version_rules">
         </el-form-item>
       </el-form>
     </div>
@@ -100,6 +101,8 @@ export default {
   props: {
     cluster: { type: Object, required: true },
     action: { type: String, required: false, default: undefined },
+    operation: { type: String, required: false, default: undefined },
+    step: { type: String, required: false, default: undefined },
     playbook_check: { type: String, required: false, default: undefined },
     title: { type: String, required: true },
     populateRequest: { type: Function, required: true },
@@ -133,7 +136,7 @@ export default {
     return { i18n: t }
   },
   computed: {
-    offlineNodes () {
+    offlineNodes() {
       let result = []
       for (let key in this.cluster.inventory.all.hosts) {
         if (this.pingpong[key] && this.pingpong[key].ping !== 'pong') {
@@ -144,7 +147,7 @@ export default {
     },
   },
   components: { ExecuteTask },
-  mounted () {
+  mounted() {
   },
   emits: ['onShow', 'refresh'],
   methods: {
@@ -153,14 +156,14 @@ export default {
         let count = 0
         for (let key in this.cluster.inventory.all.hosts) {
           if (key !== 'localhost')
-          count ++
+            count++
         }
         this.form.fork = count
         this.testPingPong('target')
         this.$emit('onShow')
       }
     },
-    testPingPong (nodes) {
+    testPingPong(nodes) {
       this.pingpong = {}
       this.pingpong_loading = true
       let req = { nodes: nodes }
@@ -175,7 +178,7 @@ export default {
         }
       })
     },
-    async execute () {
+    async execute() {
       if (this.pingpong_loading) {
         this.$message.error('Wait ..')
         return
@@ -202,7 +205,12 @@ export default {
 
             _this.populateRequest.apply(_this.$parent, _this.form).then(r => {
               req = Object.assign(req, r)
-              _this.kuboardSprayApi.post(`/clusters/${_this.cluster.name}/${_this.action}`, req).then(resp => {
+              let path = `/clusters/${_this.cluster.name}/${_this.action}`;
+              if (_this.operation) {
+                path = `/clusters/${_this.cluster.name}/operation/${_this.operation}/step/${_this.step}`
+              }
+              console.log(path)
+              _this.kuboardSprayApi.post(path, req).then(resp => {
                 let pid = resp.data.data.pid
                 resolve(pid)
               }).catch(e => {
@@ -227,6 +235,7 @@ export default {
   color: #aaa;
   max-width: 700px;
 }
+
 .pods_on_node {
   background-color: var(--el-text-color-primary);
   color: var(--el-color-white);
@@ -234,6 +243,7 @@ export default {
   margin: 0;
   min-height: 200px;
 }
+
 .drain_cmd {
   background-color: var(--el-text-color-primary);
   color: var(--el-color-white);

@@ -64,7 +64,10 @@ zh:
         </div>
       </el-card>
       <el-card shadow="never" class="operation-card">
+        <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+        </OperationStepExecute>
         执行历史日志
+
         <p>{{ currentStep }}</p>
       </el-card>
     </div>
@@ -74,8 +77,8 @@ zh:
 
 <script>
 import FileBrowser from "./filebrowser/FileBrowser.vue";
-import OperationStep from "./OperationStep.vue";
 import OperationStepMarkdown from "./OperationStepMarkdown.vue"
+import OperationStepExecute from "./OperationStepExecute.vue";
 
 export default {
   props: {
@@ -87,7 +90,7 @@ export default {
       currentStep: 0,
     };
   },
-  components: { FileBrowser, OperationStep, OperationStepMarkdown },
+  components: { FileBrowser, OperationStepExecute, OperationStepMarkdown },
   methods: {
     stepClass(step) {
       if (this.currentStep == step) {
