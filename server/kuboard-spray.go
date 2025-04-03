@@ -88,7 +88,9 @@ func setupRouter() *gin.Engine {
 	api.GET("/clusters/:cluster/health_check/details", health_check.CheckConnectivityDetails)
 
 	api.GET("/execute/:owner_type/:owner_name/tail/:pid/:file", command.TailFile)
+	api.GET("/execute/:owner_type/:owner_name/tail-v2/:operation/:step/:time/:file", command.TailFile) // operation/step/time
 	api.DELETE("/execute/:owner_type/:owner_name/kill/:pid", command.ExecuteKill)
+	api.DELETE("/execute/:owner_type/:owner_name/kill-v2/:operation/:step/:time", command.ExecuteKill)
 
 	api.POST("/facts/:node_owner_type/:node_owner/:node", fact.GetNodeFacts)
 	api.GET("/ssh/:node_owner_type/:node_owner/:node", ssh.ShellWs)

@@ -15,30 +15,38 @@ import (
 type ExecuteKillRequest struct {
 	OwnerType string `uri:"owner_type" binding:"required"`
 	OwnerName string `uri:"owner_name" binding:"required"`
-	Pid       string `uri:"pid" binding:"required"`
+	Pid       string `uri:"pid"`
+	Operation string `uri:"operation"`
+	Step      string `uri:"step"`
+	Time      string `uri:"time"`
 }
 
 func ExecuteKill(c *gin.Context) {
 	var req ExecuteKillRequest
 	c.ShouldBindUri(&req)
 
-	process := runningProcesses[req.Pid]
+	pid := req.Pid
+	if pid == "" {
+		pid = req.Operation + "/" + req.Step + "/" + req.Time
+	}
+
+	process := runningProcesses[pid]
 	if process == nil {
-		common.HandleError(c, http.StatusNotFound, "process doesnot exist or is already killed. "+req.Pid, nil)
+		common.HandleError(c, http.StatusNotFound, "process doesnot exist or is already killed. "+pid, nil)
 		return
 	}
 
-	defer delete(runningProcesses, req.Pid)
+	defer delete(runningProcesses, pid)
 
 	if err := process.Kill(); err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "failed to kill process "+req.Pid, err)
+		common.HandleError(c, http.StatusInternalServerError, "failed to kill process "+pid, err)
 		return
 	}
 
 	go func() {
 		time.Sleep(time.Duration(1) * time.Second)
 
-		logFilePath := constants.GET_DATA_DIR() + "/" + req.OwnerType + "/" + req.OwnerName + "/history/" + req.Pid + "/execute.log"
+		logFilePath := constants.GET_DATA_DIR() + "/" + req.OwnerType + "/" + req.OwnerName + "/history/" + pid + "/execute.log"
 		logrus.Trace("logFilePath: ", logFilePath)
 		logFile, err := os.OpenFile(logFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {

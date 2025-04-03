@@ -17,5 +17,5 @@ func CreateDirIfNotExists(path string) error {
 	if PathExists(path) {
 		return nil
 	}
-	return os.Mkdir(path, os.ModePerm)
+	return os.MkdirAll(path, os.ModePerm)
 }

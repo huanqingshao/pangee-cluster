@@ -28,6 +28,7 @@ type Execute struct {
 	PostExec  func(ExecuteExitStatus) (string, error)
 	Dir       string
 	Env       []string
+	Pid       string
 	R_Error   error
 	R_Pid     string
 }
@@ -89,6 +90,9 @@ func (execute *Execute) exec() {
 	}()
 
 	pid := time.Now().Format("2006-01-02_15-04-05.999") + "_" + execute.Type
+	if execute.Pid != "" {
+		pid = execute.Pid
+	}
 	historyPath := constants.GET_DATA_DIR() + "/" + execute.OwnerType + "/" + execute.OwnerName + "/history"
 	if err := common.CreateDirIfNotExists(historyPath); err != nil {
 		execute.R_Error = errors.New("cannot create historyDir : " + historyPath + " : " + err.Error())

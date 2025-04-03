@@ -57,16 +57,14 @@ zh:
 
 <template>
   <div>
-    <div
-      style="
+    <div style="
         background-color: #3a3333;
         color: #fffeff;
         font-weight: 500;
         padding: 8px 20px 8px 20px;
         line-height: 22px;
         text-align: center;
-      "
-    >
+      ">
       {{ this.t("logs") }} - <span class="app_text_mono">{{ ownerType }}/{{ ownerName }}/{{ pid }}</span>
       <span style="float: left">
         <ChangeFontSize class="button" :terminal="xterm" :fitAddon="fitAddon"></ChangeFontSize>
@@ -74,28 +72,26 @@ zh:
         <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{ t("find") }}</el-button>
         <Find ref="find" class="button" :terminal="xterm"></Find>
       </span>
-      <span :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
+      <span
+        :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
         {{ stateStr }}
       </span>
-      <el-button v-if="isRunning" style="float: right; margin-right: 20px" type="danger" @click="dialogVisible = true">{{
-        t("forceKill")
-      }}</el-button>
+      <el-button v-if="isRunning" style="float: right; margin-right: 20px" type="danger"
+        @click="dialogVisible = true">{{
+          t("forceKill")
+        }}</el-button>
       <el-tag v-else size="default" style="float: right; margin-right: 20px" type="">{{ t("finished") }}</el-tag>
     </div>
     <div id="terminal" :style="`width: 100%; height: calc(100vh - 39px); background-color: black;`"></div>
-    <el-dialog
-      :title="$t('msg.prompt')"
-      v-model="dialogVisible"
-      width="60%"
-      top="calc(50vh - 180px)"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('msg.prompt')" v-model="dialogVisible" width="60%" top="calc(50vh - 180px)"
+      :close-on-click-modal="false">
       <el-alert type="error" :closable="false" effect="dark" show-icon>
         <div class="confirmText">{{ t("confirmToKill") }}</div>
       </el-alert>
       <template #footer>
         <div>
-          <el-button type="default" icon="el-icon-close" @click="dialogVisible = false">{{ $t("msg.close") }}</el-button>
+          <el-button type="default" icon="el-icon-close" @click="dialogVisible = false">{{ $t("msg.close")
+          }}</el-button>
           <el-button type="primary" icon="el-icon-check" @click="killProcess">{{ t("confirm") }}</el-button>
         </div>
       </template>
@@ -144,7 +140,7 @@ export default {
     wsUrl() {
       let wsHost = location.host;
       let protocol = location.protocol === "http:" ? "ws:" : "wss:";
-      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/tail/${this.pid}/${this.file}`;
+      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") ? "tail-v2" : "tail"}/${this.pid}/${this.file}`;
       return str;
     },
     stateStr() {
@@ -193,7 +189,7 @@ export default {
     },
     killProcess() {
       this.kuboardSprayApi
-        .delete(`/execute/${this.ownerType}/${this.ownerName}/kill/${this.pid}`)
+        .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") ? "kill-v2" : "kill"}/${this.pid}`)
         .then(resp => {
           if (resp.data.code === 200) {
             this.$message.success(this.t("killed"));
@@ -276,6 +272,7 @@ export default {
   vertical-align: top;
   background-color: gray;
 }
+
 .confirmText {
   font-size: 15px;
   font-weight: bolder;

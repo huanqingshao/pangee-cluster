@@ -99,8 +99,11 @@ func (ft *FileTailer) writer(ws *websocket.Conn, filePath string) {
 type TailFileRequest struct {
 	OwnerType string `uri:"owner_type" binding:"required"`
 	OwnerName string `uri:"owner_name" binding:"required"`
-	Pid       string `uri:"pid" binding:"required"`
+	Pid       string `uri:"pid"`
 	File      string `uri:"file" binding:"required"`
+	Operation string `uri:"operation"`
+	Step      string `uri:"step"`
+	Time      string `uri:"time"`
 }
 
 func TailFile(c *gin.Context) {
@@ -123,6 +126,10 @@ func TailFile(c *gin.Context) {
 			return
 		}
 		pid = string(b)
+	}
+
+	if pid == "" {
+		pid = reqParams.Operation + "/" + reqParams.Step + "/" + reqParams.Time
 	}
 
 	var upgrader = websocket.Upgrader{

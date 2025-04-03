@@ -2,6 +2,7 @@ package operation_v2
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
 	"github.com/eip-work/kuboard-spray/api/command"
@@ -36,6 +37,8 @@ func ExecuteStep(c *gin.Context) {
 
 	playbook := "operations/" + req.Operation + "/" + req.Step + "/playbook.yaml"
 
+	pid := req.Operation + "/" + req.Step + "/" + time.Now().Format("2006-01-02_15-04-05.999")
+
 	cmd := command.Execute{
 		OwnerType: "cluster",
 		OwnerName: req.Cluster,
@@ -49,6 +52,7 @@ func ExecuteStep(c *gin.Context) {
 		Type:     req.Operation,
 		PreExec:  func(execute_dir string) error { return common.SaveYamlFile(execute_dir+"/inventory.yaml", inventory) },
 		PostExec: postExec,
+		Pid:      pid,
 	}
 
 	if err := cmd.Exec(); err != nil {

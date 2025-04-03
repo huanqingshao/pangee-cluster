@@ -47,6 +47,11 @@ const constantRouterMap = [
     props: route => ({ ownerType: route.params.ownerType, ownerName: route.params.ownerName, pid: route.params.pid, file: route.params.file })
   },
   {
+    path: '/tail/:ownerType/:ownerName/history/:operation/:step/:time/:file',
+    component: () => import('../views/logs/TailFile.vue'),
+    props: route => ({ ownerType: route.params.ownerType, ownerName: route.params.ownerName, pid: route.params.operation + "/" + route.params.step + "/" + route.params.time, file: route.params.file })
+  },
+  {
     path: '/ssh/:ownerType/:ownerName/:nodeName',
     component: () => import('../views/logs/Ssh.vue'),
     props: route => ({ ownerType: route.params.ownerType, ownerName: route.params.ownerName, nodeName: route.params.nodeName })
