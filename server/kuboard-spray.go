@@ -70,6 +70,7 @@ func setupRouter() *gin.Engine {
 	api.POST("/clusters/:cluster/cis_scan", cis_scan.CisScan)
 
 	api.POST("/clusters/:cluster/operation/:operation/step/:step", operation_v2.ExecuteStep)
+	api.GET("/clusters/:cluster/history/:operation/step/:step", operation_v2.ListOperationStepHistory)
 
 	api.GET("/clusters/:cluster/access/kubeconfig", cluster_access.GetKubeConfig)
 

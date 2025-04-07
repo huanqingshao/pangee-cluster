@@ -14,8 +14,8 @@
               circle type="primary" plain></el-button>
           </div>
           <div class="tree">
-            <el-tree ref="tree" style="max-width: 600px" node-key="key" :props="treeProps" :load="loadNode"
-              :current-node-key="currentNode?.data.key" highlight-current @node-click="clickNode" lazy>
+            <el-tree ref="tree" style="max-width: 600px" node-key="path" :props="treeProps" :load="loadNode"
+              :current-node-key="currentNode?.data.path" highlight-current @node-click="clickNode" lazy>
               <template #default="{ node, data }">
                 <span class="app_text_mono">{{ data.name }}</span>
               </template>
@@ -46,20 +46,18 @@
 import axios from 'axios'
 
 function nodeToPath(node) {
-  let filePath = "";
-  if (node.level > 0) {
-    filePath = "/" + node.data.name;
-    while (node.parent && node.parent.data.name) {
-      node = node.parent;
-      filePath = "/" + node.data.name + filePath;
-    }
+  let filePath = (node.data.path || "");
+  if (node.level > 0 && node.parent.path) {
+    console.log(node.parent)
+    filePath = node.parent.path + "/" + node.data.name
+    console.log(filePath)
   }
   return filePath;
 }
 
 export default {
   props: {
-    packageName: { type: String, required: true }
+    packageName: { type: String, required: true },
   },
   data() {
     return {
@@ -74,7 +72,8 @@ export default {
         isLeaf: (item) => {
           return !item.isDir;
         }
-      }
+      },
+      files: []
     }
   },
   computed: {
@@ -94,18 +93,30 @@ export default {
   },
   methods: {
     show(files) {
+      this.files = files;
       this.visible = true;
     },
     loadNode(node, resolve, reject) {
-      this.kuboardSprayApi
-        .get(`/filebrowser?rootPath=data:///resource/${this.packageName + nodeToPath(node)}`).then(resp => {
-          let items = resp.data.data;
-          let path = nodeToPath(node);
-          for (let item of items) {
-            item.key = path + "/" + item.name;
-          }
-          resolve(items);
-        })
+      console.log("loadNode: ", node, nodeToPath(node));
+      if (this.files && this.files.length > 0 && node.level == 0) {
+        let items = [];
+        for (let i in this.files) {
+          let splited = this.files[i].path.split("/");
+          this.files[i].name = splited[splited.length - 1];
+          items.push(this.files[i]);
+        }
+        resolve(items);
+      } else {
+        this.kuboardSprayApi
+          .get(`/filebrowser?rootPath=data:///resource/${this.packageName + "/content" + nodeToPath(node)}`).then(resp => {
+            let items = resp.data.data;
+            let path = nodeToPath(node);
+            for (let item of items) {
+              item.path = path + "/" + item.name;
+            }
+            resolve(items);
+          })
+      }
     },
     clickNode(file, node) {
       this.currentNode = node;
@@ -114,7 +125,7 @@ export default {
         this.content = "";
         return;
       }
-      let path = `/resource-package/${this.packageName}${nodeToPath(node)}`;
+      let path = `/resource-package/${this.packageName}/content/${nodeToPath(node)}`;
       axios.head(path).then(resp => {
         if (resp.headers['content-type']?.indexOf("text") >= 0) {
           this.contentType = "text";

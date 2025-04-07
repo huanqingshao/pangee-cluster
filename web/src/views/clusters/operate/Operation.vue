@@ -30,46 +30,42 @@ zh:
       </div>
     </div>
     <div style="display: flex; gap: 10px; flex: 1; overflow-y: hidden;">
-      <el-card shadow="never" class="operation-card" style="width: 240px; flex-grow: 0;"
-        :body-style="{ height: 'calc(100% - 40px)', overflow: 'hidden', overflowY: 'auto' }">
-        <div class="noselect">
-          <el-steps direction="vertical" :active="currentStep">
-            <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
-              :key="'step_' + index">
-              <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index"
-                :status="currentStep >= index || true ? 'success' : ''"
-                :class="currentStep == index ? 'is-selected-step' : ''" />
-            </template>
-          </el-steps>
+      <div class="operation-card" style="min-width: 240px; flex-grow: 0;">
+        <div class="noselect operation-steps">
+          <div>
+            <el-steps direction="vertical" :active="currentStep">
+              <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
+                :key="'step_' + index">
+                <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index"
+                  :status="currentStep >= index || true ? 'success' : ''"
+                  :class="currentStep == index ? 'is-selected-step' : ''" />
+              </template>
+            </el-steps>
+          </div>
         </div>
-        <!-- <div style="display: flex; flex-direction: column; gap: 10px">
-          <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
-            :key="'step_' + index">
-            <OperationStep :is-current="currentStep == index" :step="step" status="completed"
-              @click="currentStep = index"></OperationStep>
-          </template>
-        </div> -->
-      </el-card>
-      <el-card shadow="never" class="operation-card" style="max-width: 50%; min-width: 50%;"
-        :body-style="{ height: 'calc(100% - 40px)' }">
+      </div>
+      <div class="operation-card" style="max-width: 50%; min-width: 50%;" :body-style="{ height: 'calc(100% - 40px)' }">
         <div class="markdown-title">
           <div style="flex-grow: 1; font-weight: bolder;">{{
             cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale] }}</div>
           <el-button style="float: right" @click="showFileBrowser" type="primary"
             icon="el-icon-pointer">查看代码</el-button>
         </div>
-        <div style="height: calc(100% - 42px); overflow: hidden; overflow-y: auto;">
+        <div class="markdown-content">
           <OperationStepMarkdown :cluster="cluster" :operation-index="currentOperation" :step-index="currentStep">
           </OperationStepMarkdown>
         </div>
-      </el-card>
-      <el-card shadow="never" class="operation-card">
-        <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
-        </OperationStepExecute>
-        执行历史日志
-
-        <p>{{ currentStep }}</p>
-      </el-card>
+      </div>
+      <div class="operation-card">
+        <div class="markdown-title">
+          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+          </OperationStepExecute>
+        </div>
+        <div class="operation-history">
+          <OperationStepHistory :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+          </OperationStepHistory>
+        </div>
+      </div>
     </div>
     <FileBrowser :package-name="`${cluster.resourcePackage.metadata.version}`" ref="filebrowser"></FileBrowser>
   </div>
@@ -79,6 +75,7 @@ zh:
 import FileBrowser from "./filebrowser/FileBrowser.vue";
 import OperationStepMarkdown from "./OperationStepMarkdown.vue"
 import OperationStepExecute from "./OperationStepExecute.vue";
+import OperationStepHistory from "./OperationStepHistory.vue";
 
 export default {
   props: {
@@ -90,7 +87,7 @@ export default {
       currentStep: 0,
     };
   },
-  components: { FileBrowser, OperationStepExecute, OperationStepMarkdown },
+  components: { FileBrowser, OperationStepExecute, OperationStepMarkdown, OperationStepHistory },
   methods: {
     stepClass(step) {
       if (this.currentStep == step) {
@@ -99,7 +96,12 @@ export default {
       return "step";
     },
     showFileBrowser() {
-      this.$refs.filebrowser.show();
+      let path = "/operations/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
+      path += "/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
+      this.$refs.filebrowser.show([{
+        isDir: true,
+        path: path
+      }]);
     }
   },
 };
@@ -116,17 +118,38 @@ export default {
 
 .operation-card {
   flex-grow: 1;
-  height: calc(100% - 2px);
+  height: calc(100% - 42px);
   overflow: hidden;
-}
+  padding: 20px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 8px;
 
-.markdown-title {
-  height: 36px;
-  margin-bottom: 10px;
-  background-color: var(--el-color-primary-light-9);
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
+  .operation-steps {
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  .markdown-title {
+    height: 36px;
+    margin-bottom: 10px;
+    background-color: var(--el-color-primary-light-9);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .markdown-content {
+    height: calc(100% - 46px);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  .operation-history {
+    height: calc(100% - 46px);
+    overflow: hidden;
+    overflow-y: auto;
+  }
 }
 </style>
 

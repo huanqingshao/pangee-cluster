@@ -42,8 +42,8 @@ zh:
       <template #footer>
         <el-button @click="forceHide = true" icon="el-icon-files">{{ t('closeWindow') }}</el-button>
         <el-button @click="$emit('refresh')" type="danger" icon="el-icon-finished">{{ t('taskFinished') }}</el-button>
-        <el-button type="primary" icon="el-icon-check"
-          @click="viewTaskLogs(history.current_pid)">{{ t('viewLogs') }}</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="viewTaskLogs(history.current_pid)">{{ t('viewLogs')
+          }}</el-button>
       </template>
     </el-dialog>
   </div>
@@ -76,19 +76,19 @@ zh:
         <slot></slot>
 
         <div style="text-align: right; margin-top: 20px;">
-          <el-button v-if="history.success_tasks.length > 0" @click="viewTaskLogs(lastSucessPid)" type="success" plain
+          <!-- <el-button v-if="history.success_tasks.length > 0" @click="viewTaskLogs(lastSucessPid)" type="success" plain
             icon="el-icon-files" style="float: left;">{{ t('viewLastSuccessLog') }}</el-button>
           <el-button v-if="history.current_pid && history.current_pid !== lastSucessPid"
             @click="viewTaskLogs(history.current_pid)" type="danger" plain icon="el-icon-document"
-            style="float: left;">{{ t('viewLastLog') }}</el-button>
+            style="float: left;">{{ t('viewLastLog') }}</el-button> -->
           <el-button type="default" icon="el-icon-close" @click="showConfirm = false">{{ $t('msg.cancel') }}</el-button>
-          <el-button type="primary" icon="el-icon-lightning" @click="applyPlan"
-            :loading="executing">{{ $t('msg.ok') }}</el-button>
+          <el-button type="primary" icon="el-icon-lightning" @click="applyPlan" :loading="executing">{{ $t('msg.ok')
+            }}</el-button>
         </div>
       </el-form>
     </el-popover>
     <el-button v-if="history.processing" type="danger" round @click="forceHide = false">{{ t('taskInCurrent')
-      }}</el-button>
+    }}</el-button>
   </template>
 </template>
 

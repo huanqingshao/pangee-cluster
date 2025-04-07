@@ -69,10 +69,10 @@ export default {
             let content = resp.data;
             content = content.replaceAll("](./", "](/resource-package/" + this.path + "/");
             this.markdownContent = content;
-            console.log(this.markdownContent);
           }).catch(e => {
             if (e.status == 404) {
-              this.markdownContent = e.response.data.message
+              this.markdownContent = "* Failed to get `/resource-package/" + this.path + "/README.md` \n* " + e.message;
+              console.log(this.markdownContent)
             }
           })
       } else {
@@ -168,13 +168,22 @@ export default {
   }
 
   p code {
-    background-color: var(--el-color-black);
     color: #c7254e !important;
     padding: .25rem .5rem;
     margin: 0;
     font-size: .9em;
     background-color: rgba(27, 31, 35, .05);
     border-radius: 3px;
+    font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
+  }
+
+  li code {
+    color: #c7254e !important;
+    padding: 1px .5rem;
+    margin: 0;
+    font-size: .9em;
+    border-radius: 3px;
+    background-color: rgba(27, 31, 35, .05);
     font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
   }
 
