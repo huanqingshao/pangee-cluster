@@ -2,7 +2,7 @@
 
 <template>
   <el-dialog v-model="visible" top="5vh" width="90%">
-    <div style="height: calc(90vh - 92px)">
+    <div v-if="visible" style="height: calc(90vh - 92px)">
       <div>
       </div>
       <div class="filebrowser">
@@ -29,7 +29,8 @@
               <span v-if="idx < items.length - 1">></span>
             </template>
           </div>
-          <Codemirror v-if="contentType == 'text'" v-model:value="content" :options="cmOptions"></Codemirror>
+          <Codemirror v-if="contentType == 'text'" v-model:value="content" :options="cmOptions">
+          </Codemirror>
           <div v-else class="editor">
             <!-- <pre v-if="contentType == 'text'"><code>{{ content }}</code></pre> -->
             <pre v-if="contentType == 'image'"><img :src="content" onclick=showMarkdownImageModal(this) /></pre>
@@ -53,9 +54,7 @@ import "codemirror/mode/yaml/yaml.js"
 function nodeToPath(node) {
   let filePath = (node.data.path || "");
   if (node.level > 0 && node.parent.path) {
-    console.log(node.parent)
     filePath = node.parent.path + "/" + node.data.name
-    console.log(filePath)
   }
   return filePath;
 }
@@ -114,7 +113,6 @@ export default {
       this.visible = true;
     },
     loadNode(node, resolve, reject) {
-      console.log("loadNode: ", node, nodeToPath(node));
       if (this.files && this.files.length > 0 && node.level == 0) {
         let items = [];
         for (let i in this.files) {
@@ -142,7 +140,6 @@ export default {
               label: "/roles/" + k
             })
           }
-          console.log(resp.data, playbook, roleSet, items);
           resolve(items);
         }).catch(e => {
           console.log(e);
@@ -157,6 +154,8 @@ export default {
               item.path = path + "/" + item.name;
             }
             resolve(items);
+          }).catch(e => {
+            reject(e);
           })
       }
     },
@@ -224,7 +223,6 @@ export default {
       border: 1px solid var(--el-border-color);
       border-radius: 8px;
       height: 32px;
-      width: 100%;
       display: flex;
       gap: 5px;
       align-items: center;
@@ -239,7 +237,6 @@ export default {
       border: 1px solid var(--el-border-color);
       border-radius: 8px;
       height: calc(100% - 42px);
-      width: 100%;
       overflow-x: auto;
       overflow-y: auto;
 
