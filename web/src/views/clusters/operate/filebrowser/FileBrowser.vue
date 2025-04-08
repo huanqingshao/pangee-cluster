@@ -1,12 +1,12 @@
 <i18n></i18n>
 
 <template>
-  <el-dialog v-model="visible" top="5vh" width="80%">
+  <el-dialog v-model="visible" top="5vh" width="90%">
     <div style="height: calc(90vh - 92px)">
       <div>
       </div>
       <div class="filebrowser">
-        <div class="left" :style="maxifyTreeWidth ? 'width: 50%' : 'width: 20%'">
+        <div class="left" :style="maxifyTreeWidth ? 'width: 50%' : 'min-width: 420px; max-width: 420px'">
           <div class="collapse">
             <el-button style="margin-top: 5px;" v-if="maxifyTreeWidth" icon="el-icon-d-arrow-left"
               @click="maxifyTreeWidth = false" circle type="primary" plain></el-button>
@@ -14,10 +14,10 @@
               circle type="primary" plain></el-button>
           </div>
           <div class="tree">
-            <el-tree ref="tree" style="max-width: 600px" node-key="path" :props="treeProps" :load="loadNode"
+            <el-tree ref="tree" style="max-width: 100%" node-key="path" :props="treeProps" :load="loadNode"
               :current-node-key="currentNode?.data.path" highlight-current @node-click="clickNode" lazy>
               <template #default="{ node, data }">
-                <span class="app_text_mono">{{ data.name }}</span>
+                <span class="app_text_mono">{{ data.label || data.name }}</span>
               </template>
             </el-tree>
           </div>
@@ -29,9 +29,10 @@
               <span v-if="idx < items.length - 1">></span>
             </template>
           </div>
-          <div class="editor">
-            <pre v-if="contentType == 'text'"><code>{{ content }}</code></pre>
-            <pre v-else-if="contentType == 'image'"><img :src="content" onclick=showMarkdownImageModal(this) /></pre>
+          <Codemirror v-if="contentType == 'text'" v-model:value="content" :options="cmOptions"></Codemirror>
+          <div v-else class="editor">
+            <!-- <pre v-if="contentType == 'text'"><code>{{ content }}</code></pre> -->
+            <pre v-if="contentType == 'image'"><img :src="content" onclick=showMarkdownImageModal(this) /></pre>
             <pre v-else-if="contentType == ''">请先选择一个文件</pre>
             <pre v-else>不能正常显示内容类型为 {{ contentType }} 的文件</pre>
           </div>
@@ -43,7 +44,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
+import yaml from "js-yaml";
+import Codemirror from "codemirror-editor-vue3"
+import "codemirror/theme/darcula.css"
+import "codemirror/mode/yaml/yaml.js"
 
 function nodeToPath(node) {
   let filePath = (node.data.path || "");
@@ -73,7 +78,18 @@ export default {
           return !item.isDir;
         }
       },
-      files: []
+      files: [],
+      cmOptions: {
+        mode: "yaml", // Language mode
+        theme: "darcula", // Theme
+        lineNumbers: true, // Show line number
+        lineWrapping: true,
+        smartIndent: true, // Smart indent
+        indentUnit: 2, // The smart indent unit is 2 spaces in length
+        foldGutter: true, // Code folding
+        readOnly: true,
+        styleActiveLine: true, // Display the style of the selected row
+      },
     }
   },
   computed: {
@@ -91,6 +107,7 @@ export default {
       return temp;
     }
   },
+  components: { Codemirror },
   methods: {
     show(files) {
       this.files = files;
@@ -103,9 +120,34 @@ export default {
         for (let i in this.files) {
           let splited = this.files[i].path.split("/");
           this.files[i].name = splited[splited.length - 1];
+          this.files[i].label = this.files[i].path;
           items.push(this.files[i]);
         }
-        resolve(items);
+        let roleSet = {};
+        axios.get(`/resource-package/${this.packageName}/content${nodeToPath({ data: items[0] })}/playbook.yaml`).then(resp => {
+          let playbook = yaml.load(resp.data);
+          for (let i in playbook) {
+            let task = playbook[i];
+            for (let j in task.roles) {
+              let role = task.roles[j];
+              roleSet[role] = true;
+            }
+          }
+
+          for (let k in roleSet) {
+            items.push({
+              isDir: true,
+              name: k,
+              path: "/roles/" + k,
+              label: "/roles/" + k
+            })
+          }
+          console.log(resp.data, playbook, roleSet, items);
+          resolve(items);
+        }).catch(e => {
+          console.log(e);
+          resolve(items);
+        })
       } else {
         this.kuboardSprayApi
           .get(`/filebrowser?rootPath=data:///resource/${this.packageName + "/content" + nodeToPath(node)}`).then(resp => {
@@ -125,7 +167,7 @@ export default {
         this.content = "";
         return;
       }
-      let path = `/resource-package/${this.packageName}/content/${nodeToPath(node)}`;
+      let path = `/resource-package/${this.packageName}/content${nodeToPath(node)}`;
       axios.head(path).then(resp => {
         if (resp.headers['content-type']?.indexOf("text") >= 0) {
           this.contentType = "text";
