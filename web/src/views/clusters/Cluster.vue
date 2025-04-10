@@ -46,22 +46,17 @@ zh:
                 <el-button type="default" icon="el-icon-close">{{ $t("msg.cancel") }}</el-button>
               </template>
             </el-popconfirm>
-            <el-button type="primary" icon="el-icon-check" :disabled="noSaveRequired" @click="save">{{
-              $t("msg.save")
-              }}</el-button>
+            <el-button type="primary" icon="el-icon-check" :disabled="noSaveRequired" @click="save">
+              {{ $t("msg.save") }}
+            </el-button>
           </template>
         </template>
-        <template v-if="currentTab === 'access' || currentTab === 'plan'">
-          <ClusterProcessing v-if="mode === 'view' && cluster && !cluster.history.processing" :cluster="cluster"
-            :name="name" @refresh="refresh" :loading="loading"></ClusterProcessing>
-        </template>
       </span>
-      <template v-if="(cluster && cluster.history.processing) || currentTab === 'operation'">
-        <ClusterProcessing v-if="mode === 'view'" :cluster="cluster" :name="name" @refresh="refresh" :loading="loading">
-        </ClusterProcessing>
-      </template>
       <template v-if="cluster && isClusterInstalled">
-        <ClusterStateNodes :cluster="cluster"></ClusterStateNodes>
+        <span style="color: var(--el-text-color-placeholder)">
+          FIXME 检查集群状态
+        </span>
+        <!-- <ClusterStateNodes :cluster="cluster"></ClusterStateNodes> -->
       </template>
     </ControlBar>
     <el-card shadow="never" v-if="loading">

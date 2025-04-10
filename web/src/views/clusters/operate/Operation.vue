@@ -60,6 +60,8 @@ zh:
         <div class="markdown-title">
           <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
           </OperationStepExecute>
+          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation"
+            :currentStep="currentStep"></OperationStepStatus>
         </div>
         <div class="operation-history">
           <OperationStepHistory :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
@@ -76,6 +78,7 @@ import FileBrowser from "./filebrowser/FileBrowser.vue";
 import OperationStepMarkdown from "./OperationStepMarkdown.vue"
 import OperationStepExecute from "./OperationStepExecute.vue";
 import OperationStepHistory from "./OperationStepHistory.vue";
+import OperationStepStatus from "./OperationStepStatus.vue";
 
 export default {
   props: {
@@ -87,7 +90,13 @@ export default {
       currentStep: 0,
     };
   },
-  components: { FileBrowser, OperationStepExecute, OperationStepMarkdown, OperationStepHistory },
+  components: {
+    FileBrowser,
+    OperationStepExecute,
+    OperationStepMarkdown,
+    OperationStepHistory,
+    OperationStepStatus
+  },
   methods: {
     stepClass(step) {
       if (this.currentStep == step) {
@@ -136,6 +145,7 @@ export default {
     background-color: var(--el-color-primary-light-9);
     display: flex;
     align-items: center;
+    justify-content: stretch;
     padding: 0 10px;
   }
 
