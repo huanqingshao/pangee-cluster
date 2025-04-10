@@ -1,4 +1,11 @@
-<i18n></i18n>
+<i18n>
+en:
+  selectANode: Please select a file from the tree on the left side.
+  cannotShowFile: "Cannot show content of type: {type}"
+zh:
+  selectANode: 请先选择一个文件
+  cannotShowFile: "不能正常显示内容类型为 {type} 的文件"
+</i18n>
 
 <template>
   <el-dialog v-model="visible" top="5vh" width="90%">
@@ -25,17 +32,20 @@
         <div class="right" :style="maxifyTreeWidth ? 'width: 50%' : 'width: 80%'">
           <div class="c-bar app_text_mono">
             <template v-for="(item, idx) in items">
-              <el-tag class="path_item noselect" @click="clickNode(item.data, item)">{{ item.data.name }}</el-tag>
+              <el-tag class="path_item noselect" @click="clickNode(item.data, item)">
+                {{ item.data.label || item.data.name }}
+              </el-tag>
               <span v-if="idx < items.length - 1">></span>
             </template>
+            <span v-if="items.length == 0"> {{ t("selectANode") }} </span>
           </div>
           <Codemirror v-if="contentType == 'text'" v-model:value="content" :options="cmOptions">
           </Codemirror>
           <div v-else class="editor">
             <!-- <pre v-if="contentType == 'text'"><code>{{ content }}</code></pre> -->
             <pre v-if="contentType == 'image'"><img :src="content" onclick=showMarkdownImageModal(this) /></pre>
-            <pre v-else-if="contentType == ''">请先选择一个文件</pre>
-            <pre v-else>不能正常显示内容类型为 {{ contentType }} 的文件</pre>
+            <pre v-else-if="contentType == ''" style="padding: 20px"> {{ t("selectANode") }} </pre>
+            <pre v-else style="padding: 20px"> {{ t("cannotShowFile", { type: contentType }) }} </pre>
           </div>
 
         </div>
@@ -133,7 +143,7 @@ export default {
           }
 
           for (let k in roleSet) {
-            items.push({
+            items.splice(1, 0, {
               isDir: true,
               name: k,
               path: "/roles/" + k,

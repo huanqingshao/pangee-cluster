@@ -2,8 +2,6 @@ import { createApp } from "vue";
 import router from "./router/index.js";
 import { initKuboardMfe } from "./micro-front-end.js";
 
-console.log("hello");
-
 import ElementPlus from "element-plus";
 import "./styles/element-variables.scss";
 import "./styles/element-ui.css";
@@ -50,5 +48,6 @@ axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
   // app.config.unwrapInjectedRef = true;
   initKuboardMfe(app);
   app.mount("#app");
+
   checkNewVersion.init();
 });
