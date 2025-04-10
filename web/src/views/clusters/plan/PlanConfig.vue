@@ -11,12 +11,8 @@ hi: kuboard
     <ConfigGlobal :cluster="cluster" @refresh="$emit('refresh')"></ConfigGlobal>
     <ConfigK8sCluster :cluster="cluster" @switchTab="$emit('switchTab', $event)"></ConfigK8sCluster>
     <ConfigEtcd :cluster="cluster"></ConfigEtcd>
-    <ConfigAddons
-      :cluster="cluster"
-      :currentTab="currentPropertiesTab"
-      :pingpong="pingpong"
-      @refresh="$emit('refresh')"
-    ></ConfigAddons>
+    <ConfigAddons :cluster="cluster" :currentTab="currentPropertiesTab" :pingpong="pingpong"
+      @refresh="$emit('refresh')"></ConfigAddons>
   </div>
 </template>
 

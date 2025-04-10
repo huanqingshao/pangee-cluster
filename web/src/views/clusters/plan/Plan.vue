@@ -2,23 +2,21 @@
 en:
   architecture: Architecture
   global_config: Configuration
+  remote_global_config: All.yaml
   hosts: Hosts
 zh:
   architecture: 部署架构
   global_config: 参数配置
+  remote_global_config: All.yaml
   hosts: 节点列表
 </i18n>
 
 <template>
-  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory" style="height: 100%">
+  <el-form ref="form" label-width="120px" label-position="left" @submit.enter.prevent :model="inventory"
+    style="height: 100%">
     <div style="display: flex; height: 100%">
-      <el-tabs
-        v-model="currentTab"
-        type="border-card"
-        tab-position="left"
-        class="app_scrollable_tabs"
-        style="width: 100%; margin-bottom: -5px"
-      >
+      <el-tabs v-model="currentTab" type="border-card" tab-position="left" class="app_scrollable_tabs"
+        style="width: 100%; margin-bottom: -5px">
         <el-tab-pane name="architecture">
           <template #label> {{ t("architecture") }} </template>
           <PlanArchitecture></PlanArchitecture>
@@ -26,6 +24,10 @@ zh:
         <el-tab-pane name="config">
           <template #label> {{ t("global_config") }} </template>
           <PlanConfig :cluster="cluster" class="app_scroll_content"></PlanConfig>
+        </el-tab-pane>
+        <el-tab-pane name="config_remote">
+          <template #label> {{ t("remote_global_config") }} </template>
+          <PlanConfigDynamic :cluster="cluster" class="app_scroll_content"></PlanConfigDynamic>
         </el-tab-pane>
         <el-tab-pane name="hosts" style="overflow: visible">
           <template #label> {{ t("hosts") }} </template>
@@ -38,7 +40,8 @@ zh:
 
 <script>
 import { computed } from "vue";
-import PlanConfig from "./PlanConfig.vue";
+import PlanConfig from "./PlanConfig.vue"
+import PlanConfigDynamic from "./PlanConfigDynamic.vue";
 import PlanHosts from "./PlanHosts.vue";
 import PlanArchitecture from "./PlanArchitecture.vue";
 
@@ -143,6 +146,7 @@ export default {
   components: {
     PlanArchitecture,
     PlanConfig,
+    PlanConfigDynamic,
     PlanHosts
   },
   mounted() {

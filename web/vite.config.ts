@@ -45,6 +45,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // Load proxy configuration from .env.development
       proxy: createProxy(viteEnv.VITE_PROXY)
     },
+    optimizeDeps: { include: ['vue'] },
     plugins: createVitePlugins(viteEnv),
     esbuild: {
       pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log"] : []
