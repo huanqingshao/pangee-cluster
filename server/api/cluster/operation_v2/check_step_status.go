@@ -38,6 +38,14 @@ func CheckStepStatus(c *gin.Context) {
 
 	playbook := "operations/" + request.Operation + "/" + request.Step + "/status.yaml"
 
+	if !common.PathExists(cluster.ResourcePackageDir + "/" + playbook) {
+		c.JSON(http.StatusNotFound, common.KuboardSprayResponse{
+			Code:    http.StatusNotFound,
+			Message: playbook + " is not found.",
+		})
+		return
+	}
+
 	cmd := command.Run{
 		Cmd: "ansible-playbook",
 		Args: []string{
