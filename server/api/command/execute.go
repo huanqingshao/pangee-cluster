@@ -199,6 +199,21 @@ func (execute *Execute) exec() {
 			}
 		}
 
+		// 检查集群任务执行结果
+		if execute.OwnerType == "cluster" {
+			splited := strings.Split(pid, "/")
+			cssr := CheckStepStatusRequest{
+				Cluster:   execute.OwnerName,
+				Operation: splited[0],
+				Step:      splited[1],
+			}
+			cssrResponse, err := CheckStepStatusExec(cssr)
+			if err == nil {
+				common.SaveYamlFile(execute_dir_path+"/result.yaml", cssrResponse)
+			}
+		}
+
+		// 保存任务执行状态 status.yaml
 		endTime := time.Now()
 		st, _ := time.Parse(time.RFC3339Nano, startTime)
 		statusTemp := map[string]any{
@@ -221,6 +236,7 @@ func (execute *Execute) exec() {
 			ExecuteDir: execute_dir_path,
 		}
 
+		// 执行 PostExec
 		message, err := execute.PostExec(exitStatus)
 		if err != nil {
 			logFile.WriteString("Error in PostExec: " + err.Error() + "\n")

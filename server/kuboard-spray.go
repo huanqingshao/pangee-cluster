@@ -72,6 +72,7 @@ func setupRouter() *gin.Engine {
 	api.POST("/clusters/:cluster/operation/:operation/step/:step", operation_v2.ExecuteStep)
 	api.GET("/clusters/:cluster/operation/:operation/step/:step", operation_v2.CheckStepStatus)
 	api.GET("/clusters/:cluster/history/:operation/step/:step", operation_v2.ListOperationStepHistory)
+	api.GET("/clusters/:cluster/history/:operation/step/:step/:time", operation_v2.GetHistoryStepResult)
 
 	api.GET("/clusters/:cluster/access/kubeconfig", cluster_access.GetKubeConfig)
 

@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/sirupsen/logrus"
 )
 
@@ -19,11 +19,11 @@ func contains(arr []string, str string) bool {
 
 func getNodesInK8s(clusterName string) ([]string, error) {
 
-	shellReq := ansible_rpc.AnsibleCommandsRequest{
+	shellReq := command.AnsibleCommandsRequest{
 		Name:    "shell",
 		Command: `{{'kubectl get nodes -o jsonpath="{.items[*].metadata.name}"'}}`,
 	}
-	shellResult, err := ansible_rpc.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "kube_control_plane[0]", []ansible_rpc.AnsibleCommandsRequest{shellReq})
+	shellResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "kube_control_plane[0]", []command.AnsibleCommandsRequest{shellReq})
 
 	if err != nil {
 		return nil, err
@@ -49,11 +49,11 @@ func arraySubtract(array1, array2 []string) []string {
 func getMembersInEtcd(clusterName string) ([]string, error) {
 	result := []string{}
 
-	shellReq := ansible_rpc.AnsibleCommandsRequest{
+	shellReq := command.AnsibleCommandsRequest{
 		Name:    "nodes",
 		Command: `etcdctl member list --write-out=json`,
 	}
-	shellResult, err := ansible_rpc.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "etcd[0]", []ansible_rpc.AnsibleCommandsRequest{shellReq})
+	shellResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "etcd[0]", []command.AnsibleCommandsRequest{shellReq})
 
 	if err != nil {
 		return nil, err

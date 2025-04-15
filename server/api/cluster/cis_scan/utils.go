@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/eip-work/kuboard-spray/constants"
 	"gopkg.in/yaml.v3"
@@ -20,14 +20,14 @@ func GetCisCacheFilePath(cluster string, target string) string {
 	return result
 }
 
-func GetCisCache(cluster string, target string) (*ansible_rpc.AnsibleResult, *time.Time, bool) {
+func GetCisCache(cluster string, target string) (*command.AnsibleResult, *time.Time, bool) {
 	filePath := GetCisCacheFilePath(cluster, target)
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, nil, false
 	}
 
-	result := &ansible_rpc.AnsibleResult{}
+	result := &command.AnsibleResult{}
 	if err := yaml.Unmarshal(content, result); err != nil {
 		return nil, nil, false
 	}
@@ -45,7 +45,7 @@ func GetCisCache(cluster string, target string) (*ansible_rpc.AnsibleResult, *ti
 	return result, &modTime, true
 }
 
-func SaveCisCache(cluster string, target string, content *ansible_rpc.AnsibleResult) error {
+func SaveCisCache(cluster string, target string, content *command.AnsibleResult) error {
 	dir := constants.GET_DATA_CLUSTER_DIR() + "/" + cluster + "/cis_scan"
 	common.CreateDirIfNotExists(dir)
 

@@ -61,6 +61,20 @@ func ExecuteKill(c *gin.Context) {
 			logFile.WriteString("\n\n")
 		}
 
+		// 检查集群任务执行结果
+		if req.OwnerType == "cluster" && req.Pid == "" {
+			cssr := CheckStepStatusRequest{
+				Cluster:   req.OwnerName,
+				Operation: req.Operation,
+				Step:      req.Step,
+			}
+			cssrResponse, err := CheckStepStatusExec(cssr)
+			if err == nil {
+				common.SaveYamlFile(constants.GET_DATA_DIR()+"/"+req.OwnerType+"/"+req.OwnerName+"/history/"+pid+"/result.yaml", cssrResponse)
+			}
+		}
+
+		// 保存任务执行状态 status.yaml
 		statusFilePath := constants.GET_DATA_DIR() + "/" + req.OwnerType + "/" + req.OwnerName + "/history/" + pid + "/status.yaml"
 		statusTemp, err := common.ParseYamlFile(statusFilePath)
 		if err == nil {

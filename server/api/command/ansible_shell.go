@@ -1,11 +1,10 @@
-package ansible_rpc
+package command
 
 import (
 	"encoding/json"
 	"os"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
@@ -63,7 +62,7 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 	logrus.Trace(string(playbookStr))
 	playbookFile.Write(playbookStr)
 
-	cmd := command.Run{
+	cmd := Run{
 		Cmd: "ansible-playbook",
 		Args: []string{
 			tempPlayBookFilePath,

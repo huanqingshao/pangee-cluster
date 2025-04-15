@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -45,7 +45,7 @@ func CheckAddonStatus(c *gin.Context) {
 	k8sVars := common.MapGet(inventory, "all.children.target.children.k8s_cluster.vars").(map[string]interface{})
 	addons := common.MapGet(resourcePackage, "data.addon").([]interface{})
 	startTime := time.Now()
-	commands := []ansible_rpc.AnsibleCommandsRequest{}
+	commands := []command.AnsibleCommandsRequest{}
 	for _, v := range addons {
 		addon := v.(map[string]interface{})
 		addonName := addon["name"].(string)
@@ -73,13 +73,13 @@ func CheckAddonStatus(c *gin.Context) {
 		}
 		checker := lifecycle["check"].(map[string]interface{})
 		shell := checker["shell"].(string) + " || true"
-		commands = append(commands, ansible_rpc.AnsibleCommandsRequest{
+		commands = append(commands, command.AnsibleCommandsRequest{
 			Command: shell,
 			Name:    addonName,
 		})
 	}
 
-	out, err := ansible_rpc.ExecuteShellCommands("cluster", request.ClusterName, "kube_control_plane", commands)
+	out, err := command.ExecuteShellCommands("cluster", request.ClusterName, "kube_control_plane", commands)
 
 	// logrus.Trace(out)
 

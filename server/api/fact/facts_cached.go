@@ -5,11 +5,11 @@ import (
 	"errors"
 	"io/ioutil"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/constants"
 )
 
-func nodefact_cached(req GetNodeFactRequest) (*ansible_rpc.AnsibleResultNode, error) {
+func nodefact_cached(req GetNodeFactRequest) (*command.AnsibleResultNode, error) {
 
 	factDir := constants.GET_DATA_DIR() + "/" + req.NodeOwnerType + "/" + req.NodeOwner + "/fact"
 	factPath := factDir + "/" + req.Node + "_" + req.Ip + "_" + req.Port
@@ -19,7 +19,7 @@ func nodefact_cached(req GetNodeFactRequest) (*ansible_rpc.AnsibleResultNode, er
 		return nil, err
 	}
 
-	fact := &ansible_rpc.AnsibleResultNode{}
+	fact := &command.AnsibleResultNode{}
 	if err := json.Unmarshal(fact_bytes, fact); err != nil {
 		return nil, errors.New("Failed to Unmarshal result " + err.Error())
 	}

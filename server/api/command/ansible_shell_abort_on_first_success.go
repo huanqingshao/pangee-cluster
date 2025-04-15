@@ -1,4 +1,4 @@
-package ansible_rpc
+package command
 
 import (
 	"encoding/json"

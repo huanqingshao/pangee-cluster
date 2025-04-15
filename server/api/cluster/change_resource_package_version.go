@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -51,15 +51,15 @@ func ChangeResourcePackageVersion(c *gin.Context) {
 	if netmanager == "calico" && (common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_ipip_mode") == nil ||
 		common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_vxlan_mode") == nil ||
 		common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_network_backend") == nil) {
-		shellReq1 := ansible_rpc.AnsibleCommandsRequest{
+		shellReq1 := command.AnsibleCommandsRequest{
 			Name:    "calico",
 			Command: `calicoctl.sh get ipPool default-pool -o json`,
 		}
-		shellReq2 := ansible_rpc.AnsibleCommandsRequest{
+		shellReq2 := command.AnsibleCommandsRequest{
 			Name:    "calico",
 			Command: `kubectl get cm -n kube-system calico-config -o json`,
 		}
-		shellResult, err := ansible_rpc.ExecuteShellCommandsAbortOnFirstSuccess("cluster", req.Cluster, "kube_control_plane[0]", []ansible_rpc.AnsibleCommandsRequest{shellReq1, shellReq2})
+		shellResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", req.Cluster, "kube_control_plane[0]", []command.AnsibleCommandsRequest{shellReq1, shellReq2})
 		if err != nil {
 			common.HandleError(c, http.StatusInternalServerError, "failed to get calico status", err)
 			return

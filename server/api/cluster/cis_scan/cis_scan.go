@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
 )
@@ -54,13 +54,13 @@ func CisScan(c *gin.Context) {
 		cmd += " --targets=master,controlplane,node,policies,etcd"
 	}
 
-	commands := []ansible_rpc.AnsibleCommandsRequest{
+	commands := []command.AnsibleCommandsRequest{
 		{
 			Name:    "scan",
 			Command: cmd,
 		},
 	}
-	result, err := ansible_rpc.ExecuteShellCommandsWithStrategy("cluster", req.ClusterName, req.Target, commands, "linear")
+	result, err := command.ExecuteShellCommandsWithStrategy("cluster", req.ClusterName, req.Target, commands, "linear")
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "Failed to execute cis scan", err)
 		return

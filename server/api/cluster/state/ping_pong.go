@@ -3,8 +3,8 @@ package state
 import (
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
 )
@@ -50,7 +50,7 @@ func PingPong(clusterName string, nodes string) (*PingPongResult, error) {
 	inventoryYamlPath := cluster_common.ClusterInventoryYamlPath(clusterName)
 
 	args := []string{nodes, "-m", "ping"}
-	results, err := ansible_rpc.ExecuteAdhocCommandWithInventory(inventoryYamlPath, args)
+	results, err := command.ExecuteAdhocCommandWithInventory(inventoryYamlPath, args)
 	if err != nil {
 		return nil, err
 	}

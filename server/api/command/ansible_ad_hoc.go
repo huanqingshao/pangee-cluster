@@ -1,4 +1,4 @@
-package ansible_rpc
+package command
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/sirupsen/logrus"
@@ -72,7 +71,7 @@ func ExecuteAdhocCommandWithIp(req AdhocCommandRequestWithIP, args []string) ([]
 	arguments := []string{"temp", "-i", inventoryPath, "--timeout", "3", "--forks", "200"}
 	arguments = append(arguments, args...)
 
-	run := command.Run{
+	run := Run{
 		Cmd:  "ansible",
 		Args: arguments,
 		Env:  []string{"ANSIBLE_CONFIG=./ansible.cfg", "ANSIBLE_CACHE_PLUGIN=memory", "ANSIBLE_CACHE_PLUGIN_CONNECTION=" + constants.GET_DATA_DIR() + "/" + req.NodeOwnerType + "/" + req.NodeOwner + "/fact"},
@@ -107,7 +106,7 @@ func ExecuteAdhocCommandWithInventory(inventoryPath string, args []string) ([]An
 	arguments := []string{"-i", inventoryPath, "--timeout", "3", "--forks", "200", "-e", "kuboardspray_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'"}
 	arguments = append(arguments, args...)
 
-	run := command.Run{
+	run := Run{
 		Cmd:  "ansible",
 		Args: arguments,
 		Env:  []string{"ANSIBLE_CONFIG=./ansible.cfg", "ANSIBLE_CACHE_PLUGIN_CONNECTION=" + inventoryPath[0:(len(inventoryPath)-14)] + "/fact"},

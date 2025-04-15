@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
@@ -14,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type ClusterVersion map[string](map[string]ansible_rpc.AnsibleResultNode)
+type ClusterVersion map[string](map[string]command.AnsibleResultNode)
 
 func CheckClusterVersion(c *gin.Context) {
 
@@ -59,7 +58,7 @@ func CheckClusterVersion(c *gin.Context) {
 
 	// logrus.Trace("stdout: ", string(stdout), "\nstderr: ", string(stderr))
 
-	result := &ansible_rpc.AnsibleResult{}
+	result := &command.AnsibleResult{}
 	if err := json.Unmarshal(stdout, result); err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to Unmarshal result: ["+string(stdout)+"]", err)
 		logrus.Trace("stdout: ", string(stdout), "\nstderr: ", string(stderr))
@@ -72,7 +71,7 @@ func CheckClusterVersion(c *gin.Context) {
 	for _, task := range result.Plays[0].Tasks {
 		for nodeName, node := range task.Hosts {
 			if clusterVersion[nodeName] == nil {
-				clusterVersion[nodeName] = make(map[string]ansible_rpc.AnsibleResultNode)
+				clusterVersion[nodeName] = make(map[string]command.AnsibleResultNode)
 			}
 			clusterVersion[nodeName][task.Task.Name] = node
 		}

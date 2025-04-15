@@ -57,13 +57,17 @@ zh:
             <el-button type="primary" link icon="el-icon-pointer" @click="viewTaskLogs(scope.row)">
               {{ t("viewLog") }}
             </el-button>
-            <el-button type="primary" link icon="el-icon-notification" disabled style="margin: 0">
+            <el-button type="primary" link icon="el-icon-notification" style="margin: 0"
+              @click="viewTaskResult(scope.row)">
               {{ t("statusInHistory") }}
             </el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
+    <div>
+      <OperationStepStatusDialog ref="statusDialog"></OperationStepStatusDialog>
+    </div>
   </div>
   <div v-else>
     <div style="line-height: 28px">
@@ -75,6 +79,7 @@ zh:
 
 <script>
 import dayjs from 'dayjs';
+import OperationStepStatusDialog from './OperationStepStatusDialog.vue';
 
 export default {
   props: {
@@ -102,7 +107,7 @@ export default {
       return path;
     }
   },
-  components: {},
+  components: { OperationStepStatusDialog },
   mounted() {
     this.refresh()
   },
@@ -137,6 +142,21 @@ export default {
       path = `${path}${this.cluster.resourcePackage.operations[this.currentOperation]?.steps[this.currentStep]?.name}/`
       path = `${path}${item.time}/execute.log`
       this.openUrlInBlank(path)
+    },
+    viewTaskResult(item) {
+      let path = "/clusters/" + this.cluster.name + "/history/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
+      path += "/step/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
+      path += "/" + item.time;
+      console.log(path)
+      this.kuboardSprayApi.get(path).then(resp => {
+        let status = resp.data;
+        this.$refs.statusDialog.show(status);
+      }).catch(e => {
+        if (e.status == 500) {
+          this.$message.error(e.response.data.message);
+        }
+        console.log(e);
+      })
     }
   }
 }

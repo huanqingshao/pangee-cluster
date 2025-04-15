@@ -5,14 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
+	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
 	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
 )
 
 type GetNodeFactRequest struct {
-	ansible_rpc.AdhocCommandRequestWithIP
+	command.AdhocCommandRequestWithIP
 	Node         string `uri:"node"`
 	FromCache    bool   `json:"from_cache"`
 	GatherSubset string `json:"gather_subset"`
@@ -25,7 +25,7 @@ func GetNodeFacts(c *gin.Context) {
 	c.ShouldBindJSON(&req)
 	c.ShouldBindUri(&req)
 
-	var result *ansible_rpc.AnsibleResultNode
+	var result *command.AnsibleResultNode
 	var err error
 
 	if req.FromCache {
@@ -46,7 +46,7 @@ func GetNodeFacts(c *gin.Context) {
 
 }
 
-func nodefacts(req GetNodeFactRequest) (*ansible_rpc.AnsibleResultNode, error) {
+func nodefacts(req GetNodeFactRequest) (*command.AnsibleResultNode, error) {
 
 	typeDir := constants.GET_DATA_DIR() + "/" + req.NodeOwnerType
 	common.CreateDirIfNotExists(typeDir)
@@ -64,7 +64,7 @@ func nodefacts(req GetNodeFactRequest) (*ansible_rpc.AnsibleResultNode, error) {
 	if req.Filter != "" {
 		args = append(args, "-a", "filter="+req.Filter)
 	}
-	fact, err := ansible_rpc.ExecuteAdhocCommandWithIp(req.AdhocCommandRequestWithIP, args)
+	fact, err := command.ExecuteAdhocCommandWithIp(req.AdhocCommandRequestWithIP, args)
 	if err != nil {
 		return nil, err
 	}

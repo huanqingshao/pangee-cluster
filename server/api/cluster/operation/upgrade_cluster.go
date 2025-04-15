@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/api/ansible_rpc"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
@@ -122,13 +121,13 @@ func doUpgrade(req UpgradeClusterRequest, c *gin.Context) {
 func getKubeletVersion(clusterName string) (map[string]string, error) {
 	cmd := "kubectl get nodes -o go-template --template=\"{{ '{{' }}range.items{{'}}'}}{{ '{{' }}.metadata.name{{'}}'}} {{ '{{' }}.status.nodeInfo.kubeletVersion{{'}}'}},{{ '{{' }}end{{'}}'}}\""
 
-	req := []ansible_rpc.AnsibleCommandsRequest{}
-	req = append(req, ansible_rpc.AnsibleCommandsRequest{
+	req := []command.AnsibleCommandsRequest{}
+	req = append(req, command.AnsibleCommandsRequest{
 		Name:    "getKubeletVersion",
 		Command: cmd,
 	})
 
-	ansibleResult, err := ansible_rpc.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "kube_control_plane[0]", req)
+	ansibleResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", clusterName, "kube_control_plane[0]", req)
 	if err != nil {
 		return nil, err
 	}
