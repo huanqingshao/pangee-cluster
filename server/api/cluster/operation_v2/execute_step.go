@@ -32,7 +32,10 @@ func ExecuteStep(c *gin.Context) {
 	}
 
 	postExec := func(status command.ExecuteExitStatus) (string, error) {
-		return "\n执行成功", nil
+		if status.Success {
+			return "\n执行成功: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil
+		}
+		return "\n执行失败: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil
 	}
 
 	playbook := "operations/" + req.Operation + "/" + req.Step + "/playbook.yaml"
@@ -48,9 +51,11 @@ func ExecuteStep(c *gin.Context) {
 			result = appendCommonParams(result, req, false)
 			return result
 		},
-		Dir:      cluster_common.ResourcePackageDirForInventory(inventory),
-		Type:     req.Operation,
-		PreExec:  func(execute_dir string) error { return common.SaveYamlFile(execute_dir+"/inventory.yaml", inventory) },
+		Dir:  cluster_common.ResourcePackageDirForInventory(inventory),
+		Type: req.Operation,
+		PreExec: func(execute_dir string) error {
+			return common.SaveYamlFile(execute_dir+"/inventory.yaml", inventory)
+		},
 		PostExec: postExec,
 		Pid:      pid,
 	}

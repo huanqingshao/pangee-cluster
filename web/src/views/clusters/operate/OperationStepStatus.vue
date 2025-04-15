@@ -30,7 +30,7 @@
             </el-table-column>
             <el-table-column label="查询命令" width="120">
               <template #default="scope">
-                <el-popover placement="top" trigger="hover" width="800" effect="dark">
+                <el-popover placement="top" trigger="hover" width="75vw" effect="dark">
                   <template #reference>
                     <el-button link class="app_text_mono" icon="el-icon-pointer">查看</el-button>
                   </template>
@@ -50,7 +50,7 @@
                       <ElIconCheck />
                     </el-icon>
                   </el-tag>
-                  <el-popover v-else width="800" effect="dark">
+                  <el-popover v-else width="75vw" effect="dark">
                     <template #reference>
                       <el-tag type="danger" effect="dark" round size="small">
                         <el-icon>

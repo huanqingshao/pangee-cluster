@@ -60,6 +60,19 @@ func ExecuteKill(c *gin.Context) {
 			logFile.WriteString("\033[31m\033[01m\033[05m ###############" + "######################" + "###############\033[0m \n")
 			logFile.WriteString("\n\n")
 		}
+
+		statusFilePath := constants.GET_DATA_DIR() + "/" + req.OwnerType + "/" + req.OwnerName + "/history/" + pid + "/status.yaml"
+		statusTemp, err := common.ParseYamlFile(statusFilePath)
+		if err == nil {
+			endTime := time.Now()
+			startTime, err := time.Parse(time.RFC3339Nano, statusTemp["startTime"].(string))
+			if err == nil {
+				statusTemp["status"] = "killed"
+				statusTemp["endTime"] = endTime.Format(time.RFC3339Nano)
+				statusTemp["duration"] = endTime.Sub(startTime).Milliseconds()
+			}
+			common.SaveYamlFile(statusFilePath, statusTemp)
+		}
 	}()
 
 	c.JSON(http.StatusOK, gin.H{

@@ -2,6 +2,7 @@ package operation_v2
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -22,28 +23,25 @@ type CheckStepStatusRequest struct {
 	Step      string `uri:"step" binding:"required"`
 }
 
-func CheckStepStatus(c *gin.Context) {
-	var request CheckStepStatusRequest
-	c.ShouldBindUri(&request)
-	c.ShouldBindJSON(&request)
+func CheckStepStatusExec(request CheckStepStatusRequest) (CheckStepStatusResponse, error) {
 
 	startTime := time.Now()
 
 	cluster, err := cluster_common.ClusterMetadataByName(request.Cluster)
 
 	if err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "failed to get cluster metadata", err)
-		return
+		// common.HandleError(c, http.StatusInternalServerError, "failed to get cluster metadata", err)
+		return nil, errors.New("failed to get cluster metadata")
 	}
 
 	playbook := "operations/" + request.Operation + "/" + request.Step + "/status.yaml"
 
 	if !common.PathExists(cluster.ResourcePackageDir + "/" + playbook) {
-		c.JSON(http.StatusNotFound, common.KuboardSprayResponse{
-			Code:    http.StatusNotFound,
-			Message: playbook + " is not found.",
-		})
-		return
+		// c.JSON(http.StatusNotFound, common.KuboardSprayResponse{
+		// 	Code:    http.StatusNotFound,
+		// 	Message: playbook + " is not found.",
+		// })
+		return nil, errors.New(playbook + " is not found.")
 	}
 
 	cmd := command.Run{
@@ -64,16 +62,16 @@ func CheckStepStatus(c *gin.Context) {
 	duration := time.Now().UnixNano() - startTime.UnixNano()
 	logrus.Trace("duration: ", duration/1000000)
 	if err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "failed to run", err)
-		return
+		// common.HandleError(c, http.StatusInternalServerError, "failed to run", err)
+		return nil, errors.New(err.Error())
 	}
 
 	result := &ansible_rpc.AnsibleResult{}
 	if err := json.Unmarshal(stdout, result); err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "failed to Unmarshal result: ["+string(stdout)+"]", err)
+		// common.HandleError(c, http.StatusInternalServerError, "failed to Unmarshal result: ["+string(stdout)+"]", err)
 		logrus.Trace("stdout: ", string(stdout), "\nstderr: ", string(stderr))
 		logrus.Trace("duration: ", duration/1000000)
-		return
+		return nil, errors.New("failed to Unmarshal result: [" + string(stdout) + "]")
 	}
 
 	stepStatus := CheckStepStatusResponse{}
@@ -85,6 +83,19 @@ func CheckStepStatus(c *gin.Context) {
 			}
 			stepStatus[nodeName][task.Task.Name] = node
 		}
+	}
+	return stepStatus, nil
+}
+
+func CheckStepStatus(c *gin.Context) {
+	var request CheckStepStatusRequest
+	c.ShouldBindUri(&request)
+	c.ShouldBindJSON(&request)
+
+	stepStatus, err := CheckStepStatusExec(request)
+
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, err.Error(), err)
 	}
 
 	c.JSON(http.StatusOK, common.KuboardSprayResponse{

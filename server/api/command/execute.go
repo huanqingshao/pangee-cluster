@@ -89,7 +89,8 @@ func (execute *Execute) exec() {
 		}
 	}()
 
-	pid := time.Now().Format("2006-01-02_15-04-05.999") + "_" + execute.Type
+	startTime := time.Now().Format(time.RFC3339Nano)
+	pid := startTime + "_" + execute.Type
 	if execute.Pid != "" {
 		pid = execute.Pid
 	}
@@ -106,6 +107,12 @@ func (execute *Execute) exec() {
 		execute.mutex.Unlock()
 		return
 	}
+
+	status := map[string]string{
+		"startTime": startTime,
+		"status":    "processing",
+	}
+	common.SaveYamlFile(execute_dir_path+"/status.yaml", status)
 
 	if execute.PreExec != nil {
 		if err := execute.PreExec(execute_dir_path); err != nil {
@@ -191,6 +198,21 @@ func (execute *Execute) exec() {
 				success = false
 			}
 		}
+
+		endTime := time.Now()
+		st, _ := time.Parse(time.RFC3339Nano, startTime)
+		statusTemp := map[string]any{
+			"startTime": startTime,
+			"endTime":   endTime.Format(time.RFC3339Nano),
+			"duration":  endTime.Sub(st).Milliseconds(),
+			"status":    "success",
+		}
+		if success {
+			statusTemp["status"] = "success"
+		} else {
+			statusTemp["status"] = "failed"
+		}
+		common.SaveYamlFile(execute_dir_path+"/status.yaml", statusTemp)
 
 		exitStatus := ExecuteExitStatus{
 			Success:    success,

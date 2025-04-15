@@ -17,8 +17,9 @@ type ListExecuteHistoryRequest struct {
 }
 
 type HistoryItem struct {
-	Time   string `json:"time" binding:"required"`
-	Status string `json:"status" binding:"required"`
+	Time     string `json:"time" binding:"required"`
+	Status   string `json:"status" binding:"required"`
+	Duration int    `json:"duration"`
 }
 
 func ListOperationStepHistory(c *gin.Context) {
@@ -38,10 +39,17 @@ func ListOperationStepHistory(c *gin.Context) {
 		}
 		for _, entry := range entries {
 			if entry.IsDir() {
-				result = append(result, HistoryItem{
-					Time:   entry.Name(),
-					Status: "unknown",
-				})
+				item := HistoryItem{
+					Time: entry.Name(),
+				}
+				status, err := common.ParseYamlFile(historyDir + "/" + entry.Name() + "/status.yaml")
+				if err == nil {
+					item.Status = status["status"].(string)
+					if status["duration"] != nil {
+						item.Duration = status["duration"].(int)
+					}
+				}
+				result = append(result, item)
 			}
 		}
 	}
