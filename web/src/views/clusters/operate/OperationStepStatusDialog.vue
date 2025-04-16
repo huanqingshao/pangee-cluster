@@ -91,7 +91,7 @@ zh:
                 </template>
                 <div class="shell_response">
                   <div class="app_text_mono">
-                    {{ scope.row[column.key].stdout }}
+                    {{ scope.row[column.key].stdout || scope.row[column.key].msg }}
                   </div>
                 </div>
               </el-popover>
