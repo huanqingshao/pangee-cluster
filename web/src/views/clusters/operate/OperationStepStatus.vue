@@ -15,6 +15,8 @@
       <el-button @click="$refs.dialog.show(status)" :disabled="loading || status == undefined" link
         icon="el-icon-pointer">查看状态明细</el-button>
     </span>
+    <el-button icon="el-icon-refresh" style="margin-left: 5px" @click="() => { checkStatus(); $emit('refresh') }"
+      :loading="loading"></el-button>
     <div style="text-align: left;">
       <OperationStepStatusDialog ref="dialog"></OperationStepStatusDialog>
     </div>
@@ -44,8 +46,8 @@ export default {
       }
       let total = 0;
       let success = 0;
-      for (let i in this.status.data) {
-        let node = this.status.data[i];
+      for (let i in this.status.data.result) {
+        let node = this.status.data.result[i];
         for (let j in node) {
           let action = node[j];
           total++;

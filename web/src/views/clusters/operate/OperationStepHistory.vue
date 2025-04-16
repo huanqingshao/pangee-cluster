@@ -1,6 +1,5 @@
 <i18n>
 en:
-  noHistory: No History
   startTime: Start Time
   duration: Duration
   status: Status
@@ -13,7 +12,6 @@ en:
   success: Success
   failed: Failed
 zh:
-  noHistory: 暂无历史操作
   startTime: 开始时间
   duration: 耗时
   status: 状态
@@ -28,8 +26,9 @@ zh:
 </i18n>
 
 <template>
-  <div v-if="history.length > 0" class="operation_step_history">
-    <el-table :data="history" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
+  <div class="operation_step_history">
+    <el-table v-loading="loading" :data="history" :header-cell-style="{ 'text-align': 'center' }"
+      :cell-style="{ 'text-align': 'center' }">
       <el-table-column :label="t('startTime')" min-width="150px">
         <template #default="scope">
           {{ formatTime(scope.row.time) }}
@@ -69,11 +68,6 @@ zh:
       <OperationStepStatusDialog ref="statusDialog"></OperationStepStatusDialog>
     </div>
   </div>
-  <div v-else>
-    <div style="line-height: 28px">
-      <el-link type="danger" disabled>{{ t("noHistory") }}</el-link>
-    </div>
-  </div>
 </template>
 
 
@@ -89,7 +83,8 @@ export default {
   },
   data() {
     return {
-      history: []
+      history: [],
+      loading: false
     }
   },
   computed: {
@@ -130,10 +125,14 @@ export default {
      */
     async refresh() {
       if (this.apiPath) {
-        this.kuboardSprayApi
-          .get(this.apiPath).then(resp => {
-            this.history = resp.data.data.history
-          })
+        this.loading = true;
+        this.kuboardSprayApi.get(this.apiPath).then(resp => {
+          this.history = resp.data.data.history
+          this.loading = false;
+        }).catch(e => {
+          console.log(e);
+          this.loading = false;
+        })
       }
     },
     viewTaskLogs(item) {

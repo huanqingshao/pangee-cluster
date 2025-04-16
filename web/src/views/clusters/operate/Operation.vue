@@ -61,10 +61,11 @@ zh:
           <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
           </OperationStepExecute>
           <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation"
-            :currentStep="currentStep"></OperationStepStatus>
+            :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
         </div>
         <div class="operation-history">
-          <OperationStepHistory :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation"
+            :currentStep="currentStep">
           </OperationStepHistory>
         </div>
       </div>

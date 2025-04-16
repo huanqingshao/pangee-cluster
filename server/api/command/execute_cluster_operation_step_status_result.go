@@ -13,7 +13,11 @@ import (
 
 // 只适用于 Cluster 的 Operation/Step
 
-type CheckStepStatusResponse map[string](map[string]AnsibleResultNode)
+type CheckStepStatusResponse struct {
+	StartTime string                                    `json:"start_time" binding:"required"`
+	Duration  int64                                     `json:"duration" binding:"required"`
+	Result    map[string](map[string]AnsibleResultNode) `json:"result" binding:"required"`
+}
 
 type CheckStepStatusRequest struct {
 	Cluster   string `uri:"cluster" binding:"required"`
@@ -21,7 +25,7 @@ type CheckStepStatusRequest struct {
 	Step      string `uri:"step" binding:"required"`
 }
 
-func CheckStepStatusExec(request CheckStepStatusRequest) (CheckStepStatusResponse, error) {
+func CheckStepStatusExec(request CheckStepStatusRequest) (*CheckStepStatusResponse, error) {
 
 	startTime := time.Now()
 
@@ -72,15 +76,20 @@ func CheckStepStatusExec(request CheckStepStatusRequest) (CheckStepStatusRespons
 		return nil, errors.New("failed to Unmarshal result: [" + string(stdout) + "]")
 	}
 
+	// FIXME 记录执行时间
 	stepStatus := CheckStepStatusResponse{}
+
+	stepStatus.StartTime = startTime.Format(time.RFC3339)
+	stepStatus.Duration = duration / 1000000
+	stepStatus.Result = make(map[string](map[string]AnsibleResultNode))
 
 	for _, task := range result.Plays[0].Tasks {
 		for nodeName, node := range task.Hosts {
-			if stepStatus[nodeName] == nil {
-				stepStatus[nodeName] = make(map[string]AnsibleResultNode)
+			if stepStatus.Result[nodeName] == nil {
+				stepStatus.Result[nodeName] = make(map[string]AnsibleResultNode)
 			}
-			stepStatus[nodeName][task.Task.Name] = node
+			stepStatus.Result[nodeName][task.Task.Name] = node
 		}
 	}
-	return stepStatus, nil
+	return &stepStatus, nil
 }
