@@ -2,12 +2,12 @@
 en:
   architecture: Architecture
   global_config: Configuration
-  remote_global_config: All.yaml
+  remote_global_config: Configuration
   hosts: Hosts
 zh:
   architecture: 部署架构
   global_config: 参数配置
-  remote_global_config: All.yaml
+  remote_global_config: 参数配置
   hosts: 节点列表
 </i18n>
 
@@ -21,10 +21,10 @@ zh:
           <template #label> {{ t("architecture") }} </template>
           <PlanArchitecture></PlanArchitecture>
         </el-tab-pane>
-        <el-tab-pane name="config">
+        <!-- <el-tab-pane name="config">
           <template #label> {{ t("global_config") }} </template>
           <PlanConfig :cluster="cluster" class="app_scroll_content"></PlanConfig>
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane name="config_remote">
           <template #label> {{ t("remote_global_config") }} </template>
           <PlanConfigDynamic :cluster="cluster" class="app_scroll_content"></PlanConfigDynamic>
@@ -52,7 +52,6 @@ export default {
   },
   data() {
     return {
-      currentTab: "architecture",
       pingpong: {},
       pingpong_loading: false
     };
@@ -82,6 +81,27 @@ export default {
     };
   },
   computed: {
+    currentTab: {
+      get() {
+        if (this.$store.state.cluster[this.cluster.name] == undefined) {
+          return "architecture";
+        }
+        if (this.$store.state.cluster[this.cluster.name].plan == undefined) {
+          return "architecture";
+        }
+        return this.$store.state.cluster[this.cluster.name].plan.currentTab || "architecture"
+      },
+      set(v) {
+        this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
+          {
+            cluster: this.cluster.name,
+            tab: "plan",
+            key: "currentTab",
+            value: v
+          }
+        );
+      }
+    },
     inventory: {
       get() {
         return this.cluster.inventory;

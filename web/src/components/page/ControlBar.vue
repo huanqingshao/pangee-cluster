@@ -4,7 +4,7 @@
       <div class="titleWrapper">
         <span class="title">
           <slot name="title">
-            {{title}}
+            {{ title }}
           </slot>
         </span>
       </div>
@@ -27,8 +27,8 @@ export default {
   },
   computed: {
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   methods: {
 
@@ -57,6 +57,8 @@ export default {
   line-height: 32px;
   text-align: left;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .titleWrapper {
@@ -66,7 +68,7 @@ export default {
 }
 
 .title {
-  margin-left: 20px; 
+  margin-left: 20px;
   font-weight: 500;
 }
 
@@ -84,7 +86,7 @@ export default {
 }
 
 .buttons {
-  vertical-align: top;
-  display: inline-block;
+  align-items: center;
+  display: flex;
 }
 </style>

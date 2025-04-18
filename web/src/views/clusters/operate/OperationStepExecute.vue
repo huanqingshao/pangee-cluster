@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ClusterTask v-if="!cluster.history.processing" action="backup_etcd" :cluster="cluster"
+    <ClusterTask action="backup_etcd" :cluster="cluster"
       :operation="cluster.resourcePackage.operations[currentOperation].name"
       :step="cluster.resourcePackage.operations[currentOperation].steps[currentStep].name"
       :title="cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale]"

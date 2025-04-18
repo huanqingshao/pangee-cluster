@@ -48,8 +48,8 @@ zh:
     </el-dialog>
   </div>
   <template v-else-if="!loading">
-    <el-popover v-if="!(finished && hideOnSuccess) && !history.processing" v-model:visible="showConfirm"
-      :placement="placement" width="800" trigger="manual" :disabled="disabled">
+    <el-popover v-if="startTask != undefined && !(finished && hideOnSuccess) && !history.processing"
+      v-model:visible="showConfirm" :placement="placement" width="800" trigger="manual" :disabled="disabled">
       <template #reference>
         <el-button :type="type" icon="el-icon-lightning" @click="showConfirm = !showConfirm" @click.prevent.stop
           :disabled="disabled">{{ title || t('apply') }}</el-button>
@@ -82,13 +82,15 @@ zh:
             @click="viewTaskLogs(history.current_pid)" type="danger" plain icon="el-icon-document"
             style="float: left;">{{ t('viewLastLog') }}</el-button> -->
           <el-button type="default" icon="el-icon-close" @click="showConfirm = false">{{ $t('msg.cancel') }}</el-button>
-          <el-button type="primary" icon="el-icon-lightning" @click="applyPlan" :loading="executing">{{ $t('msg.ok')
-            }}</el-button>
+          <el-button type="primary" icon="el-icon-lightning" @click="applyPlan" :loading="executing">
+            {{ $t('msg.ok') }}
+          </el-button>
         </div>
       </el-form>
     </el-popover>
-    <el-button v-if="history.processing" type="danger" round @click="forceHide = false">{{ t('taskInCurrent')
-    }}</el-button>
+    <el-button v-if="history.processing" type="danger" round @click="forceHide = false">
+      {{ t('taskInCurrent') }}
+    </el-button>
   </template>
 </template>
 
@@ -97,17 +99,18 @@ export default {
   props: {
     history: { type: Object, required: true },
     loading: { type: Boolean, required: false },
-    startTask: { type: Function, required: true },
+    startTask: { type: Function, required: false },
     label: { type: String, required: false, default: undefined },
     title: { type: String, required: false, default: undefined },
     hideOnSuccess: { type: Boolean, required: false, default: false },
     placement: { type: String, required: false, default: 'bottom-start' },
     disabled: { type: Boolean, required: false, default: false },
     type: { type: String, required: false, default: 'warning' },
+    promptOnProcessing: { type: Boolean, required: false, default: false }
   },
   data() {
     return {
-      forceHide: false,
+      forceHide: !this.promptOnProcessing,
       showConfirmData: false,
       executing: false,
     }

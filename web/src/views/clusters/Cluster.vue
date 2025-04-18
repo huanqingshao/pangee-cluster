@@ -52,8 +52,11 @@ zh:
           </template>
         </template>
       </span>
+      <template v-if="cluster">
+        <ExecuteTask :history="cluster.history" @refresh="refresh" :prompt-on-processing="true"></ExecuteTask>
+      </template>
       <template v-if="cluster && isClusterInstalled">
-        <span style="color: var(--el-text-color-placeholder)">
+        <span style="color: var(--el-text-color-placeholder); margin-left: 10px;">
           FIXME 检查集群状态
         </span>
         <!-- <ClusterStateNodes :cluster="cluster"></ClusterStateNodes> -->
@@ -77,31 +80,32 @@ zh:
         </Plan>
       </el-tab-pane>
       <el-tab-pane :label="t('operation')" name="operation">
-        <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster"></Operation>
+        <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster" @refresh="refresh"></Operation>
       </el-tab-pane>
       <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
         <Access v-if="currentTab == 'access'" ref="access" :cluster="cluster" :loading="loading"
           @switch="currentTab = $event"></Access>
       </el-tab-pane>
-      <el-tab-pane v-if="cluster && cluster.inventory" :disabled="disableNonePlanTab || !isClusterOnline"
+      <el-tab-pane v-if="false && cluster && cluster.inventory" :disabled="disableNonePlanTab || !isClusterOnline"
         :label="t('health_check')" name="health_check">
         <ClusterHealthCheck v-if="isClusterInstalled && isClusterOnline && currentTab == 'health_check'"
           :cluster="cluster" @refresh="refresh"></ClusterHealthCheck>
         <el-skeleton v-else style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('backup')" name="backup">
+      <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('backup')" name="backup">
         <Backup v-if="isClusterInstalled && isClusterOnline && currentTab == 'backup'" :cluster="cluster"
           @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('csi_scan')" name="cis_scan">
+      <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('csi_scan')"
+        name="cis_scan">
         <div v-if="cluster && cluster.resourcePackage && !cluster.resourcePackage.data.supported_playbooks.cis_scan"
           style="height: calc(100vh - 220px)">
           {{ $t("msg.feature_doesnot_support_selected_resource_package") }}
         </div>
         <CIS v-else-if="currentTab === 'cis_scan'" :cluster="cluster"></CIS>
       </el-tab-pane>
-      <el-tab-pane :disabled="disableNonePlanTab || !isClusterOnline" :label="t('upgrade')" name="upgrade">
+      <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('upgrade')" name="upgrade">
         <template v-if="currentTab == 'upgrade'">
           <el-skeleton v-if="loading"></el-skeleton>
           <Upgrade v-else :cluster="cluster" @refresh="refresh"></Upgrade>
@@ -126,6 +130,7 @@ import Upgrade from "./upgrade/Upgrade.vue";
 import ClusterHealthCheck from "./health_check/ClusterHealthCheck.vue";
 import Operation from "./operate/Operation.vue";
 import ConfigKuboardSpray from "./plan/kuboardspray/ConfigKuboardSpray.vue";
+import ExecuteTask from "../common/task/ExecuteTask.vue";
 
 export default {
   mixins: [mixin],
@@ -147,10 +152,20 @@ export default {
       percentage: 0,
       cluster: undefined,
       originalInventoryYaml: "",
-      currentTab: "plan"
     };
   },
   computed: {
+    currentTab: {
+      get() {
+        if (this.$store.state.cluster[this.name] == undefined) {
+          return "plan";
+        }
+        return this.$store.state.cluster[this.name].currentTab || "plan"
+      },
+      set(v) {
+        this.$store.commit("cluster/CHANGE_TAB", { cluster: this.name, currentTab: v });
+      }
+    },
     loading() {
       return this.percentage < 100;
     },
@@ -222,7 +237,8 @@ export default {
     Backup,
     CIS,
     Operation,
-    ConfigKuboardSpray
+    ConfigKuboardSpray,
+    ExecuteTask
   },
   watch: {
     "cluster.inventory.all.hosts.localhost.kuboardspray_resource_package": function () {

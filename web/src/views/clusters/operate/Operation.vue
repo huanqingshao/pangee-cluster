@@ -58,7 +58,8 @@ zh:
       </div>
       <div class="operation-card">
         <div class="markdown-title">
-          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep"
+            @refresh="$emit('refresh')">
           </OperationStepExecute>
           <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation"
             :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
@@ -87,9 +88,51 @@ export default {
   },
   data() {
     return {
-      currentOperation: 0,
-      currentStep: 0,
     };
+  },
+  computed: {
+    currentOperation: {
+      get() {
+        if (this.$store.state.cluster[this.cluster.name] == undefined) {
+          return 0;
+        }
+        if (this.$store.state.cluster[this.cluster.name].operation == undefined) {
+          return 0;
+        }
+        return this.$store.state.cluster[this.cluster.name].operation.currentOperation || 0
+      },
+      set(v) {
+        this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
+          {
+            cluster: this.cluster.name,
+            tab: "operation",
+            key: "currentOperation",
+            value: v
+          }
+        );
+      }
+    },
+    currentStep: {
+      get() {
+        if (this.$store.state.cluster[this.cluster.name] == undefined) {
+          return 0;
+        }
+        if (this.$store.state.cluster[this.cluster.name].operation == undefined) {
+          return 0;
+        }
+        return this.$store.state.cluster[this.cluster.name].operation.currentStep || 0
+      },
+      set(v) {
+        this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
+          {
+            cluster: this.cluster.name,
+            tab: "operation",
+            key: "currentStep",
+            value: v
+          }
+        );
+      }
+    }
   },
   components: {
     FileBrowser,
