@@ -1,62 +1,67 @@
 <template>
-  <div>
-    <component :is="RemoteConfigComponent" :cluster="cluster"></component>
+  <div v-if="cluster && cluster.resourcePackage && cluster.inventory">
+    <RemoteConfigComponent :resource-package="cluster.resourcePackage" v-model="inventory">
+    </RemoteConfigComponent>
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { loadModule } from 'vue3-sfc-loader';
 import * as Vue from 'vue';
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, computed, provide, onMounted, reactive, ref, nextTick } from "vue";
 import axios from "axios";
-import i18n from "@/i18n/index.js";
 import yaml from "js-yaml";
+import { useI18n } from 'vue-i18n';
 
 import compareVersions from 'compare-versions'
 
-export default {
-  props: {
-    cluster: { type: Object, required: true }
+const props = defineProps<{
+  cluster: any;
+}>();
+
+const inventory = computed({
+  get() {
+    return props.cluster.inventory;
   },
-  data() {
-    return {
+  set(val) {
+    props.cluster.inventory = val;
+  }
+})
 
-    }
+const i18n = useI18n({
+  inheritLocale: true,
+  useScope: 'local'
+})
+
+provide("t", i18n.t);
+provide("locale", i18n.locale);
+provide("compareVersions", compareVersions);
+
+let options = {
+  moduleCache: { vue: Vue },
+  async getFile(url: string) {
+    const res = await axios.get(url);
+    return res.data;
   },
-  setup(props) {
+  addStyle(textContent: any) {
+    const style = Object.assign(document.createElement('style'), { textContent });
+    const ref = document.head.getElementsByTagName('style')[0] || null;
+    document.head.insertBefore(style, ref);
+  },
+  customBlockHandler(block: any, filename: string, options: any) {
 
-    window.compareVersions = compareVersions;
+    if (block.type !== 'i18n')
+      return
 
-    let options = {
-      moduleCache: { vue: Vue },
-      async getFile(url) {
-        const res = await axios.get(url);
-        return res.data;
-      },
-      addStyle(textContent) {
-        const style = Object.assign(document.createElement('style'), { textContent });
-        const ref = document.head.getElementsByTagName('style')[0] || null;
-        document.head.insertBefore(style, ref);
-      },
-      customBlockHandler(block, filename, options) {
-
-        if (block.type !== 'i18n')
-          return
-
-        const messages = yaml.load(block.content);
-        for (let locale in messages)
-          i18n.global.mergeLocaleMessage(locale, messages[locale]);
-      }
-    }
-    let url = `/resource-package/${props.cluster.resourcePackage.metadata.version}/content/vue/index.vue`;
-    let RemoteConfigComponent = defineAsyncComponent(() =>
-      loadModule(url, options)
-    );
-    console.log("加载远程组件 " + url);
-    return { RemoteConfigComponent };
+    const messages = yaml.load(block.content);
+    for (let locale in messages)
+      i18n.mergeLocaleMessage(locale, messages[locale]);
   }
 }
-
-
+let url = `/resource-package/${props.cluster.resourcePackage.metadata.version}/content/vue/index.vue`;
+const RemoteConfigComponent = defineAsyncComponent(() => {
+  return loadModule(url, options as any) as any
+}
+);
 
 </script>

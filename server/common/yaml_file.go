@@ -1,15 +1,16 @@
 package common
 
 import (
+	"bytes"
 	"errors"
-	"io/ioutil"
+	"os"
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
 func ParseYamlFile(filePath string) (map[string]interface{}, error) {
-	content, err := ioutil.ReadFile(filePath)
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -21,10 +22,16 @@ func ParseYamlFile(filePath string) (map[string]interface{}, error) {
 }
 
 func SaveYamlFile(filePath string, content interface{}) error {
-	str, err := yaml.Marshal(content)
+
+	var buffer bytes.Buffer
+	encoder := yaml.NewEncoder(&buffer)
+	encoder.SetIndent(2)
+
+	err := encoder.Encode(&content)
+
 	if err != nil {
 		return errors.New("failed to marshal content : " + err.Error())
 	}
 	logrus.Trace("write yaml file: ", filePath)
-	return ioutil.WriteFile(filePath, str, 0666)
+	return os.WriteFile(filePath, buffer.Bytes(), 0666)
 }
