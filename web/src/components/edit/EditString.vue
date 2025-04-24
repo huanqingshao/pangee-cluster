@@ -1,6 +1,5 @@
 <template>
-  <EditCommon v-model="modelValue" :prop="prop" :rules="rules" :required="required" :label="label"
-    :placeholder="placeholder" :helpString="helpString" :helpLink="helpLink">
+  <EditCommon v-model="modelValue">
     <template #edit="scope">
       <el-input v-if="showPassword" v-model="modelValue" show-password :disabled="disabled" :clearable="clearable"
         :placeholder="scope.placeholder"></el-input>
@@ -22,22 +21,10 @@ import { ref } from "vue";
 import EditCommon from "./EditCommon.vue"
 
 const props = withDefaults(defineProps<{
-  prop?: string;
-  required?: boolean;
-  rules?: any[];
-  label?: string;
-  placeholder?: string;
-  antiFreeze?: boolean;
-  readOnly?: boolean;
-  labelWidth?: string;
-  helpString?: string;
-  helpLink?: string;
   showPassword?: boolean;
   disabled?: boolean;
   clearable?: boolean;
 }>(), {
-  required: false,
-  readOnly: false,
   showPassword: false,
   disabled: false,
   clearable: false

@@ -14,6 +14,9 @@ importers:
       '@soerenmartius/vue3-clipboard':
         specifier: ^0.1.2
         version: 0.1.2
+      '@types/clone':
+        specifier: ^2.1.4
+        version: 2.1.4
       axios:
         specifier: ^1.2.2
         version: 1.8.3
@@ -1379,6 +1382,9 @@ packages:
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
+
+  '@types/clone@2.1.4':
+    resolution: {integrity: sha512-NKRWaEGaVGVLnGLB2GazvDaZnyweW9FJLLFL5LhywGJB3aqGMT9R/EUoJoSRP4nzofYnZysuDmrEJtJdAqUOtQ==}
 
   '@types/conventional-commits-parser@5.0.1':
     resolution: {integrity: sha512-7uz5EHdzz2TqoMfV7ee61Egf5y6NkcO4FB/1iCCQnbeiI1F3xzv3vK5dBCXUCLQgGYS+mUeigK1iKQzvED+QnQ==}
@@ -6443,6 +6449,8 @@ snapshots:
   '@sxzz/popperjs-es@2.11.7': {}
 
   '@trysound/sax@0.2.0': {}
+
+  '@types/clone@2.1.4': {}
 
   '@types/conventional-commits-parser@5.0.1':
     dependencies:

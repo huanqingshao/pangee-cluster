@@ -15,12 +15,14 @@ import KuboardSprayTime from './KuboardSprayTime.vue'
 import EditCommon from "./edit/EditCommon.vue"
 import EditString from "./edit/EditString.vue"
 import EditBool from "./edit/EditBool.vue"
+import EditNumber from './edit/EditNumber.vue'
 
 export default {
   install(app) {
     app.component("EditCommon", EditCommon)
     app.component("EditString", EditString)
     app.component("EditBool", EditBool)
+    app.component("EditNumber", EditNumber)
     app.component('FieldCommon', FieldCommon)
     app.component('FieldArray', FieldArray)
     app.component('FieldString', FieldString)

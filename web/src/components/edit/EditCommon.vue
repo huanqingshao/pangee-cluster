@@ -54,6 +54,7 @@ const props = withDefaults(defineProps<{
   helpString?: string;
   helpLink?: string;
 }>(), {
+  labelWidth: "150px",
   required: false,
   readOnly: false,
   antiFreeze: false
