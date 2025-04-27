@@ -16,7 +16,7 @@ zh:
       <slot name="edit" :placeholder="compute_placeholder"></slot>
     </template>
     <div v-else class="app_text_mono">
-      <slot name="view">
+      <slot name="view" :placeholder="compute_placeholder">
         <span v-if="modelValue !== undefined && modelValue !== ''">
           {{ compute_display_value }}
         </span>
