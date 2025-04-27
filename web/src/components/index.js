@@ -16,6 +16,8 @@ import EditCommon from "./edit/EditCommon.vue"
 import EditString from "./edit/EditString.vue"
 import EditBool from "./edit/EditBool.vue"
 import EditNumber from './edit/EditNumber.vue'
+import EditArray from "./edit/EditArray.vue"
+import EditRadio from "./edit/EditRadio.vue"
 
 export default {
   install(app) {
@@ -23,6 +25,8 @@ export default {
     app.component("EditString", EditString)
     app.component("EditBool", EditBool)
     app.component("EditNumber", EditNumber)
+    app.component("EditArray", EditArray)
+    app.component("EditRadio", EditRadio)
     app.component('FieldCommon', FieldCommon)
     app.component('FieldArray', FieldArray)
     app.component('FieldString', FieldString)

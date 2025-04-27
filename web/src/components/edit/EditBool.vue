@@ -1,6 +1,5 @@
 <template>
-  <EditCommon v-model="modelValue" :prop="prop" :rules="rules" :required="required" :label="label"
-    :placeholder="placeholder">
+  <EditCommon v-model="modelValue">
     <template #edit>
       <el-switch v-model="modelValue" :disabled="disabled"></el-switch>
       <div class="desc">
@@ -19,18 +18,9 @@
 <script lang="ts" setup>
 import EditCommon from "./EditCommon.vue"
 
-const props = withDefaults(defineProps<{
-  prop?: string;
-  required?: boolean;
-  rules?: any[];
-  label?: string;
-  placeholder?: string;
-  antiFreeze?: boolean;
-  readOnly?: boolean;
+withDefaults(defineProps<{
   disabled?: boolean;
 }>(), {
-  required: false,
-  readOnly: false,
   disabled: false,
 })
 

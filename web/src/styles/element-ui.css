@@ -39,7 +39,10 @@
   margin-bottom: 18px !important;
 }
 .app_form_mini .el-form-item__label {
-  padding: 0px !important;
+  padding: 0 !important;
+}
+.app_form_item_hide_label .el-form-item__label {
+  display: none;
 }
 .app_form_12px .el-form-item__label {
   font-size: 12px !important;

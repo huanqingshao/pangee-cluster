@@ -1,12 +1,12 @@
 <template>
   <EditCommon v-model="modelValue">
     <template #edit>
-      <div style="flex-wrap: wrap; margin: -5px; width: 100%;" class="app_form_mini">
+      <div style="flex-wrap: wrap; margin: -5px; width: 100%;" class="app_form_mini app_form_item_hide_label">
         <template v-for="(item, index) in modelValue" :key="index + 'item'">
           <el-form-item :rules="itemRules" :prop="`${prop}.${index}`"
             :class="isBlockItem ? 'block_item_in_array' : 'item_in_array'">
             <template v-if="isBlockItem">
-              <div style="display: flex;">
+              <div style="display: flex; gap: 0">
                 <div style="width: calc(100% - 20px);">
                   <slot name="editItem" :index="index" :item="item"></slot>
                 </div>
@@ -17,9 +17,9 @@
               </div>
             </template>
             <template v-else>
-              <div style="display: flex;">
-                <slot name="editItem" :index="index" :item="item"></slot>
-                <el-button style="margin-left: 10px;" icon="el-icon-delete" type="primary" text
+              <div style="display: flex; gap: 0">
+                <slot name="editItem" :index="index" :item="item" style="flex-grow: 1"></slot>
+                <el-button style="margin-left: 5px;" icon="el-icon-delete" type="primary" text
                   @click="modelValue!.splice(index, 1)"></el-button>
               </div>
             </template>
