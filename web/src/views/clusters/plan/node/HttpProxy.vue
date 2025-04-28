@@ -14,12 +14,15 @@ zh:
 <template>
   <ConfigSection v-model:enabled="proxyEnabled" :label="t('proxy')" :description="t('proxyDescription')" anti-freeze>
     <el-alert class="app_margin_bottom" :closable="false">
-      <li>{{t('proxyUsage1')}}</li>
-      <li>{{t('proxyUsage2')}}</li>
+      <li>{{ t('proxyUsage1') }}</li>
+      <li>{{ t('proxyUsage2') }}</li>
     </el-alert>
-    <FieldString :holder="vars" fieldName="http_proxy" prop="all.children.target.vars" anti-freeze></FieldString>
-    <FieldString :holder="vars" fieldName="https_proxy" prop="all.children.target.vars" anti-freeze></FieldString>
-    <FieldString :holder="vars" fieldName="additional_no_proxy" prop="all.children.target.vars" anti-freeze></FieldString>
+    <EditString v-model="vars.http_proxy" label="http_proxy" prop="all.children.target.vars" anti-freeze>
+    </EditString>
+    <EditString v-model="vars.https_proxy" label="https_proxy" prop="all.children.target.vars" anti-freeze>
+    </EditString>
+    <EditString v-model="vars.additional_no_proxy" label="no_proxy" prop="all.children.target.vars" anti-freeze>
+    </EditString>
   </ConfigSection>
 </template>
 
@@ -35,23 +38,23 @@ export default {
   },
   computed: {
     inventory: {
-      get () { return this.cluster.inventory },
-      set () {},
+      get() { return this.cluster.inventory },
+      set() { },
     },
     vars: {
-      get () {
+      get() {
         return this.cluster.inventory.all.children.target.vars
       },
-      set () {}
+      set() { }
     },
     proxyEnabled: {
-      get () {
+      get() {
         if (this.vars) {
           return this.vars.http_proxy !== undefined
         }
         return false
       },
-      set (v) {
+      set(v) {
         if (v) {
           this.vars = this.vars || {}
           this.vars.http_proxy = ''
@@ -63,14 +66,12 @@ export default {
       }
     },
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   methods: {
   }
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

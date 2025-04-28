@@ -2,44 +2,31 @@
 en:
   createResource: "Add Resource Package"
   goToResourcePage: It's about to open Resource Package Download page in new window, do you confirm?
+  kuboardspray_resource_package: 'Resource Package'
 zh:
   createResource: '添加资源包'
   goToResourcePage: '此操作将在新窗口打开资源包导入页面，完成设置后，您可以切换窗口会到当前页面，是否继续？'
+  kuboardspray_resource_package: '资源包'
+  kuboardspray_resource_package_placeholder: '请选择资源包'
 </i18n>
 
 <template>
   <div>
-    <ConfigSection
-      v-model:enabled="useResourcePackage"
-      disabled
-      anti-freeze
-      :label="$t('obj.resource')"
-      :description="
-        $t('obj.resource') +
-        ' ' +
-        (inventory.all.hosts.localhost.kuboardspray_resource_package
-          ? inventory.all.hosts.localhost.kuboardspray_resource_package
-          : '')
-      "
-    >
-      <FieldSelect
-        :holder="inventory.all.hosts.localhost"
-        fieldName="kuboardspray_resource_package"
-        :loadOptions="loadResourceList"
-        prop="all.hosts.localhost"
-        required
-        :disabled="isClusterInstalled"
-      >
+    <ConfigSection v-model:enabled="useResourcePackage" disabled anti-freeze :label="$t('obj.resource')" :description="$t('obj.resource') +
+      ' ' +
+      (inventory.all.hosts.localhost.kuboardspray_resource_package
+        ? inventory.all.hosts.localhost.kuboardspray_resource_package
+        : '')
+      ">
+      <EditSelect v-model="inventory.all.hosts.localhost.kuboardspray_resource_package"
+        :label="t('kuboardspray_resource_package')" :placeholder="t('kuboardspray_resource_package_placeholder')"
+        :loadOptions="loadResourceList" prop="all.hosts.localhost" required :disabled="isClusterInstalled">
         <template #edit>
-          <ConfirmButton
-            buttonStyle="margin-left: 10px;"
-            icon="el-icon-plus"
-            @confirm="openUrlInBlank('/#/settings/resources')"
-            :text="t('createResource')"
-            :message="t('goToResourcePage')"
-          ></ConfirmButton>
+          <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus"
+            @confirm="openUrlInBlank('/#/settings/resources')" :text="t('createResource')"
+            :message="t('goToResourcePage')"></ConfirmButton>
         </template>
-      </FieldSelect>
+      </EditSelect>
       <div v-if="resourcePackage">
         <ResourceDetails :resourcePackage="resourcePackage"></ResourceDetails>
       </div>
@@ -80,17 +67,17 @@ export default {
       get() {
         return this.cluster.inventory;
       },
-      set() {}
+      set() { }
     },
     resourcePackage: {
       get() {
         return this.cluster.resourcePackage;
       },
-      set() {}
+      set() { }
     }
   },
   components: { ResourceDetails },
-  mounted() {},
+  mounted() { },
   methods: {
     async loadResourceList() {
       let result = [];

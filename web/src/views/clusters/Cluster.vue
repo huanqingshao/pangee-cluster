@@ -97,14 +97,6 @@ zh:
           @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('csi_scan')"
-        name="cis_scan">
-        <div v-if="cluster && cluster.resourcePackage && !cluster.resourcePackage.data.supported_playbooks.cis_scan"
-          style="height: calc(100vh - 220px)">
-          {{ $t("msg.feature_doesnot_support_selected_resource_package") }}
-        </div>
-        <CIS v-else-if="currentTab === 'cis_scan'" :cluster="cluster"></CIS>
-      </el-tab-pane>
       <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('upgrade')" name="upgrade">
         <template v-if="currentTab == 'upgrade'">
           <el-skeleton v-if="loading"></el-skeleton>
@@ -118,10 +110,8 @@ zh:
 <script>
 import mixin from "../../mixins/mixin.js";
 import yaml from "js-yaml";
-import ClusterProcessing from "./operation/ClusterProcessing.vue";
 import Access from "./access/Access.vue";
 import Backup from "./backup/Backup.vue";
-import CIS from "./cis_scan/CIS.vue";
 import { computed } from "vue";
 import ClusterStateNodes from "./ClusterStateNodes.vue";
 import clone from "clone";
@@ -229,13 +219,11 @@ export default {
   },
   components: {
     Plan,
-    ClusterProcessing,
     Access,
     ClusterStateNodes,
     ClusterHealthCheck,
     Upgrade,
     Backup,
-    CIS,
     Operation,
     ConfigKuboardSpray,
     ExecuteTask

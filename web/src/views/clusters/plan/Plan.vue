@@ -21,10 +21,6 @@ zh:
           <template #label> {{ t("architecture") }} </template>
           <PlanArchitecture></PlanArchitecture>
         </el-tab-pane>
-        <!-- <el-tab-pane name="config">
-          <template #label> {{ t("global_config") }} </template>
-          <PlanConfig :cluster="cluster" class="app_scroll_content"></PlanConfig>
-        </el-tab-pane> -->
         <el-tab-pane name="config_remote">
           <template #label> {{ t("remote_global_config") }} </template>
           <PlanConfigDynamic :cluster="cluster" class="app_scroll_content"></PlanConfigDynamic>
@@ -40,7 +36,6 @@ zh:
 
 <script>
 import { computed } from "vue";
-import PlanConfig from "./PlanConfig.vue"
 import PlanConfigDynamic from "./PlanConfigDynamic.vue";
 import PlanHosts from "./PlanHosts.vue";
 import PlanArchitecture from "./PlanArchitecture.vue";
@@ -165,7 +160,6 @@ export default {
   },
   components: {
     PlanArchitecture,
-    PlanConfig,
     PlanConfigDynamic,
     PlanHosts
   },

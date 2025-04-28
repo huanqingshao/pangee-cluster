@@ -14,6 +14,25 @@ zh:
   duplicateIP: "IP 地址不能与其他节点相同：{node}"
   description: 通过跳板机或者堡垒机访问目标节点
   protocol: 跳板机协议
+
+  ansible_host: '主机'
+  ansible_port: 'SSH 端口'
+  ansible_port_placeholder: 'KuboardSpray 连接该主机时所使用的 SHH 端口'
+  
+  ansible_user: '用户名'
+  ansible_user_placeholder: 'KuboardSpray 连接该主机时所使用的用户名'
+  ansible_password: '密码'
+  ansible_password_placeholder: 'KuboardSpray 连接该主机时所使用的密码'
+  ansible_ssh_private_key_file: '私钥文件'
+  ansible_ssh_private_key_file_placeholder: 'KuboardSpray 连接该主机时所使用的私钥文件'
+  ansible_become: '切换身份'
+  ansible_become_placeholder: 'KuboardSpray 登录到该主机后，是否使用 su 命令切换身份'
+  ansible_become_user: '切换到用户'
+  ansible_become_user_placeholder: 'KuboardSpray 登录该主机后，使用 su 命令切换到用户名'
+  ansible_become_password: '切换密码'
+  ansible_become_password_placeholder: '切换密码'
+
+  ansible_python_interpreter: 'Python 路径'
 </i18n>
 
 
@@ -29,29 +48,29 @@ zh:
         <el-radio value="socks5">SOCKS5</el-radio>
       </el-radio-group>
     </el-form-item>
-    <FieldString :holder="holder" fieldName="ansible_host" :prop="`all.hosts.${nodeName}`" anti-freeze
-      :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></FieldString>
-    <FieldString :holder="holder" fieldName="ansible_port" :prop="`all.hosts.${nodeName}`"
-      :placeholder="placeholder('ansible_port')" anti-freeze required></FieldString>
+    <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}`" anti-freeze
+      :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
+    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}`"
+      :placeholder="placeholder('ansible_port')" anti-freeze required></EditString>
     <template v-if="computedBastionType == 'ssh'">
-      <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
-        :placeholder="placeholder('ansible_user')" anti-freeze required></FieldString>
-      <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze
-        clearable :placeholder="placeholder('ansible_ssh_private_key_file')">
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+        :placeholder="placeholder('ansible_user')" anti-freeze required></EditString>
+      <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
+        :loadOptions="loadSshKeyList" anti-freeze clearable :placeholder="placeholder('ansible_ssh_private_key_file')">
         <template #edit>
           <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus"
             @click="$refs.addPrivateKey.show()">{{ t('addSshKey') }}</el-button>
         </template>
-      </FieldSelect>
-      <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
-        :placeholder="placeholder('ansible_password')"></FieldString>
+      </EditSelect>
+      <EditString v-model="holder.ansible_password" :label="t('ansible_password')" show-password anti-freeze clearable
+        :placeholder="placeholder('ansible_password')"></EditString>
       <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
     </template>
     <template v-else-if="computedBastionType == 'socks5'">
-      <FieldString :holder="holder" fieldName="ansible_user" :prop="`all.hosts.${nodeName}`"
-        :placeholder="placeholder('ansible_user')" anti-freeze></FieldString>
-      <FieldString :holder="holder" fieldName="ansible_password" show-password anti-freeze clearable
-        :placeholder="placeholder('ansible_password')"></FieldString>
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+        :placeholder="placeholder('ansible_user')" anti-freeze></EditString>
+      <EditString v-model="holder.ansible_password" :label="t('ansible_password')" show-password anti-freeze clearable
+        :placeholder="placeholder('ansible_password')"></EditString>
     </template>
   </ConfigSection>
 </template>

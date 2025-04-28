@@ -44,12 +44,6 @@
         <el-menu-item index="2-1" :route="`/settings/resources`">
           {{ t('resources') }}
         </el-menu-item>
-        <el-menu-item index="2-2" :route="`/settings/mirrors`">
-          {{ t('mirrors') }}
-        </el-menu-item>
-        <el-menu-item index="2-3" :route="`/settings/kuboard`">
-          {{ t('kuboard') }}
-        </el-menu-item>
         <el-menu-item index="2-4" :route="`/settings/profile`">
           {{ t('profile') }}
         </el-menu-item>

@@ -6,6 +6,7 @@ en:
   requiresName: Please input name.
   conflict: conflict with existing one {name}.
   goToResourcePage: This is going to open Resource package management page in a new window, do you confirm?
+  resourcePackage: Resource Package
 zh:
   addCluster: 添加集群安装计划
   createResource: '添加资源包'
@@ -13,6 +14,7 @@ zh:
   requiresName: 请填写名称
   conflict: 与已有的重复 {name}
   goToResourcePage: 此操作将要在新窗口打开资源包加载页面，完成设置后，您可以切换窗口回到当前页面，是否继续？
+  resourcePackage: 资源包
 </i18n>
 
 
@@ -21,20 +23,21 @@ zh:
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true" top="20vh" :title="t('addCluster')"
       width="45%">
       <el-form :model="form" label-position="left" label-width="120px" v-if="dialogVisible" ref="form">
-        <FieldString :holder="form" fieldName="cluster_name" required :placeholder="t('requiresName')"
-          :rules="nameRules"></FieldString>
-        <FieldSelect :holder="form" fieldName="kuboardspray_resource_package" :loadOptions="loadResourceList" required>
+        <EditString v-model="form.cluster_name" prop="cluster_name" :label="t('name')" required
+          :placeholder="t('requiresName')" :rules="nameRules"></EditString>
+        <EditSelect v-model="form.kuboardspray_resource_package" :label="t('resourcePackage')"
+          :loadOptions="loadResourceList" required>
           <template #edit>
             <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus"
               @confirm="openUrlInBlank('/#/settings/resources')" :text="t('createResource')"
               :message="t('goToResourcePage')" width="420"></ConfirmButton>
           </template>
-        </FieldSelect>
+        </EditSelect>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false" icon="el-icon-close" type="info" plain>{{ $t('msg.cancel')
-            }}</el-button>
+          }}</el-button>
           <el-button @click="save" icon="el-icon-check" type="primary" :loading="saving">{{ $t('msg.ok') }}</el-button>
         </span>
       </template>
@@ -43,6 +46,7 @@ zh:
 </template>
 
 <script>
+import ResourcePackage from '@/views/resources/details/ResourcePackage.vue'
 import { ref } from 'vue'
 
 export default {

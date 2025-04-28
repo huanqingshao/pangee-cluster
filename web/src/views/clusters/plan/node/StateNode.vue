@@ -11,10 +11,12 @@ zh:
 </i18n>
 
 <template>
-  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description', {nodeName: nodeName})" disabled anti-freeze>
+  <ConfigSection v-model:enabled="enabled" :label="t('label')" :description="t('description', { nodeName: nodeName })"
+    disabled anti-freeze>
     <div v-if="node.k8s_node">
       <div style="text-align: right; margin-bottom: 10px;">
-        <el-button @click="$refs.previewYaml.show([node.k8s_node], $t('msg.preview_yaml'))" type="primary" icon="el-icon-document">{{$t('msg.preview_yaml')}}</el-button>
+        <el-button @click="$refs.previewYaml.show([node.k8s_node], $t('msg.preview_yaml'))" type="primary"
+          icon="el-icon-document">{{ $t('msg.preview_yaml') }}</el-button>
       </div>
       <PreviewYaml ref="previewYaml"></PreviewYaml>
     </div>
@@ -22,11 +24,15 @@ zh:
       <el-form-item :label="t('roles')" label-width="100px">
         <div class="info" style="display: flex; flex-wrap: wrap;">
           <template v-if="node.k8s_node">
-            <NodeRoleTag v-if="node.k8s_node.metadata.labels['node-role.kubernetes.io/control-plane'] !== undefined" role="kube_control_plane" style="margin-right: 10px; margin-bottom: 10px;" enabled read-only></NodeRoleTag>
-            <NodeRoleTag v-if="isKubeNode" role="kube_node" enabled read-only style="margin-bottom: 10px;"></NodeRoleTag>
+            <NodeRoleTag v-if="node.k8s_node.metadata.labels['node-role.kubernetes.io/control-plane'] !== undefined"
+              role="kube_control_plane" style="margin-right: 10px; margin-bottom: 10px;" enabled read-only>
+            </NodeRoleTag>
+            <NodeRoleTag v-if="isKubeNode" role="kube_node" enabled read-only style="margin-bottom: 10px;">
+            </NodeRoleTag>
           </template>
           <template v-if="node.etcd_member">
-            <NodeRoleTag role="etcd" enabled read-only style="margin-bottom: 10px;">{{node.etcd_member.name}}</NodeRoleTag>
+            <NodeRoleTag role="etcd" enabled read-only style="margin-bottom: 10px;">{{ node.etcd_member.name }}
+            </NodeRoleTag>
           </template>
         </div>
       </el-form-item>
@@ -34,24 +40,28 @@ zh:
 
         <el-form-item label="base info" label-width="100px">
           <div class="info">
-            <FieldString :holder="node.k8s_node.spec" fieldName="podCIDR"></FieldString>
-            <FieldString v-for="(addr, index) in node.k8s_node.status.addresses" :key="'a' + index" :holder="addr" :label="addr.type" fieldName="address"></FieldString>
-            <FieldString :holder="node.k8s_node.status.nodeInfo" fieldName="containerRuntimeVersion"></FieldString>
-            <FieldString :holder="node.k8s_node.status.nodeInfo" fieldName="kubeletVersion"></FieldString>
-            <FieldString :holder="node.k8s_node.status.nodeInfo" fieldName="osImage"></FieldString>
+            <EditString v-model="node.k8s_node.spec.podCIDR" label="podCIDR"></EditString>
+            <EditString v-for="(addr, index) in node.k8s_node.status.addresses" :key="'a' + index"
+              v-model="addr.address" :label="addr.type" label="address"></EditString>
+            <EditString v-model="node.k8s_node.status.nodeInfo.containerRuntimeVersion" label="containerRuntimeVersion">
+            </EditString>
+            <EditString v-model="node.k8s_node.status.nodeInfo.kubeletVersion" label="kubeletVersion"></EditString>
+            <EditString v-model="node.k8s_node.status.nodeInfo.osImage" label="osImage"></EditString>
           </div>
         </el-form-item>
         <el-form-item label="allocatable" label-width="100px">
           <div class="info">
-            <FieldString :holder="node.k8s_node.status.allocatable" fieldName="cpu"></FieldString>
-            <FieldString :holder="node.k8s_node.status.allocatable" fieldName="memory"></FieldString>
-            <FieldString :holder="node.k8s_node.status.allocatable" fieldName="ephemeral-storage"></FieldString>
-            <FieldString :holder="node.k8s_node.status.allocatable" fieldName="pods"></FieldString>
+            <EditString v-model="node.k8s_node.status.allocatable.cpu" label="cpu"></EditString>
+            <EditString v-model="node.k8s_node.status.allocatable.memory" label="memory"></EditString>
+            <EditString v-model="node.k8s_node.status.allocatable['ephemeral-storage']" label="ephemeral-storage">
+            </EditString>
+            <EditString v-model="node.k8s_node.status.allocatable.pods" label="pods"></EditString>
           </div>
         </el-form-item>
         <el-form-item label="conditions" label-width="100px">
           <div class="info">
-            <StateNodeCondition v-for="(condition, index) in node.k8s_node.status.conditions" :key="'condition' + index" :condition="condition"></StateNodeCondition>
+            <StateNodeCondition v-for="(condition, index) in node.k8s_node.status.conditions" :key="'condition' + index"
+              :condition="condition"></StateNodeCondition>
           </div>
         </el-form-item>
       </template>
@@ -76,14 +86,14 @@ export default {
   inject: ['onlineNodes'],
   computed: {
     enabled: {
-      get () {return true},
-      set () {}
+      get() { return true },
+      set() { }
     },
     node: {
-      get () {return this.onlineNodes[this.nodeName] || {}},
-      set () {}
+      get() { return this.onlineNodes[this.nodeName] || {} },
+      set() { }
     },
-    isKubeNode () {
+    isKubeNode() {
       let node = this.onlineNodes[this.nodeName]
       if (node !== undefined && node.k8s_node !== undefined) {
         node = node.k8s_node
@@ -99,7 +109,7 @@ export default {
     }
   },
   components: { StateNodeCondition, NodeRoleTag },
-  mounted () {
+  mounted() {
   },
   methods: {
 
@@ -114,4 +124,3 @@ export default {
   padding: 5px 20px;
 }
 </style>
-

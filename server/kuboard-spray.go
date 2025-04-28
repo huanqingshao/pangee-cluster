@@ -7,16 +7,13 @@ import (
 
 	"github.com/eip-work/kuboard-spray/api/cluster"
 	"github.com/eip-work/kuboard-spray/api/cluster/backup"
-	"github.com/eip-work/kuboard-spray/api/cluster/cis_scan"
 	"github.com/eip-work/kuboard-spray/api/cluster/cluster_access"
 	"github.com/eip-work/kuboard-spray/api/cluster/health_check"
-	"github.com/eip-work/kuboard-spray/api/cluster/operation"
 	"github.com/eip-work/kuboard-spray/api/cluster/operation_v2"
 	"github.com/eip-work/kuboard-spray/api/cluster/state"
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/api/fact"
 	"github.com/eip-work/kuboard-spray/api/filebrowser"
-	"github.com/eip-work/kuboard-spray/api/os_mirror"
 	"github.com/eip-work/kuboard-spray/api/private_key"
 	"github.com/eip-work/kuboard-spray/api/resource"
 	"github.com/eip-work/kuboard-spray/api/ssh"
@@ -48,26 +45,7 @@ func setupRouter() *gin.Engine {
 	api.DELETE("/clusters/:cluster", cluster.DeleteCluster)
 	api.PATCH("/clusters/:cluster", cluster.RenameCluster)
 
-	api.POST("/clusters/:cluster/install_cluster", operation.InstallCluster)
-	api.POST("/clusters/:cluster/remove_node", operation.RemoveNode)
-	api.POST("/clusters/:cluster/add_node", operation.AddNode)
-	api.POST("/clusters/:cluster/sync_nginx_config", operation.SyncNginxConfigActions)
-	api.POST("/clusters/:cluster/sync_etcd_address", operation.SyncEtcdConfigActions)
-	api.POST("/clusters/:cluster/install_addon", operation.InstallAddon)
-	api.POST("/clusters/:cluster/remove_addon", operation.RemoveAddon)
 	api.POST("/clusters/:cluster/change_resource_package_version", cluster.ChangeResourcePackageVersion)
-	api.POST("/clusters/:cluster/upgrade_all_nodes", operation.UpgradeCluster)
-	api.POST("/clusters/:cluster/upgrade_master_nodes", operation.UpgradeCluster)
-	api.POST("/clusters/:cluster/upgrade_single_node", operation.UpgradeCluster)
-	api.POST("/clusters/:cluster/upgrade_multi_nodes", operation.UpgradeCluster)
-	api.POST("/clusters/:cluster/download_binaries", operation.DownloadBinaries)
-	api.POST("/clusters/:cluster/drain_node", operation.DrainNode)
-	api.POST("/clusters/:cluster/uncordon_node", operation.UncordonNode)
-	api.POST("/clusters/:cluster/renew_cert", operation.RenewCert)
-	api.POST("/clusters/:cluster/sync_container_engine_params", operation.SyncContainerEngineParams)
-	api.POST("/clusters/:cluster/backup_etcd", operation.BackupEtcd)
-	api.POST("/clusters/:cluster/restore_etcd", operation.RestoreBackup)
-	api.POST("/clusters/:cluster/cis_scan", cis_scan.CisScan)
 
 	api.POST("/clusters/:cluster/operation/:operation/step/:step", operation_v2.ExecuteStep)
 	api.GET("/clusters/:cluster/operation/:operation/step/:step", operation_v2.CheckStepStatus)
@@ -109,13 +87,6 @@ func setupRouter() *gin.Engine {
 	api.POST("/resources/:name/download", resource.CreateAndDownloadResource)
 	api.POST("/resources/:name/reload", resource.ReloadResource)
 	api.DELETE("/resources/:name", resource.DeleteResource)
-
-	api.GET("/mirrors", os_mirror.ListOsMirrors)
-	api.POST("/mirrors", os_mirror.CreateOsMirror)
-	api.POST("/mirrors/:name/install", os_mirror.InstallOsMirror)
-	api.GET("/mirrors/:name", os_mirror.GetMirror)
-	api.PUT("/mirrors/:name", os_mirror.ModifyOsMirro)
-	api.DELETE("/mirrors/:name", os_mirror.DeleteMirror)
 
 	api.GET("/filebrowser", filebrowser.List)
 

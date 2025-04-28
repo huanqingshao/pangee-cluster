@@ -11,44 +11,58 @@ zh:
   password_and_bastion: 您将使用跳板机访问节点，如果在此处使用密码访问，创建 ssh 连接的时间较长，建议清除密码并提供 “私钥文件”。
   speedup: 加速执行
   rootuser: 必须使用 root 用户
+  
+  ansible_host: '主机'
+  ansible_port: 'SSH 端口'
+  ansible_port_placeholder: 'KuboardSpray 连接该主机时所使用的 SHH 端口'
+  
+  ansible_user: '用户名'
+  ansible_user_placeholder: 'KuboardSpray 连接该主机时所使用的用户名'
+  ansible_password: '密码'
+  ansible_password_placeholder: 'KuboardSpray 连接该主机时所使用的密码'
+  ansible_ssh_private_key_file: '私钥文件'
+  ansible_ssh_private_key_file_placeholder: 'KuboardSpray 连接该主机时所使用的私钥文件'
+  ansible_become: '切换身份'
+  ansible_become_placeholder: 'KuboardSpray 登录到该主机后，是否使用 su 命令切换身份'
+  ansible_become_user: '切换到用户'
+  ansible_become_user_placeholder: 'KuboardSpray 登录该主机后，使用 su 命令切换到用户名'
+  ansible_become_password: '切换密码'
+  ansible_become_password_placeholder: '切换密码'
+
+  ansible_python_interpreter: 'Python 路径'
 </i18n>
 
 
 <template>
   <ConfigSection v-model:enabled="enableSsh" label="SSH" :description="description" disabled anti-freeze>
-    <FieldString disabled :holder="holder" fieldName="ansible_host" :prop="isNode ? `all.hosts.${nodeName}` : ''"
-      :placeholder="t('ansible_host_placeholder')"></FieldString>
-    <FieldString :holder="holder" fieldName="ansible_port" anti-freeze></FieldString>
-    <FieldCommon :holder="holder" fieldName="ansible_user" anti-freeze>
+    <EditString disabled v-model="holder.ansible_host" :label="t('ansible_host')"
+      :prop="isNode ? `all.hosts.${nodeName}` : ''" :placeholder="t('ansible_host_placeholder')"></EditString>
+    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" anti-freeze></EditString>
+    <EditCommon v-model="holder.ansible_user" :label="t('ansible_user')" anti-freeze>
       <template #edit>
         <el-input v-model.trim="ansible_user"></el-input>
-        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ t('rootuser') }}</el-tag>
+        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">
+          {{ t('rootuser') }} </el-tag>
       </template>
-    </FieldCommon>
-    <FieldSelect :holder="holder" fieldName="ansible_ssh_private_key_file" :loadOptions="loadSshKeyList" anti-freeze clearable>
+    </EditCommon>
+    <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
+      :loadOptions="loadSshKeyList" anti-freeze clearable>
       <template #edit>
-        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus" @click="$refs.addPrivateKey.show()">{{t('addSshKey')}}</el-button>
+        <el-button type="primary" plain style="margin-left: 10px;" icon="el-icon-plus"
+          @click="$refs.addPrivateKey.show()">{{ t('addSshKey') }}</el-button>
       </template>
-    </FieldSelect>
-    <FieldString :holder="holder" fieldName="ansible_password" anti-freeze show-password clearable></FieldString>
-    <el-alert type="warning" :closable="false" v-if="cluster && cluster.inventory.all.hosts.bastion && holder.ansible_password" style="margin-left: 120px; width: calc(100% - 120px);">
+    </EditSelect>
+    <EditString v-model="holder.ansible_password" :label="t('ansible_password')" anti-freeze show-password clearable>
+    </EditString>
+    <el-alert type="warning" :closable="false"
+      v-if="cluster && cluster.inventory.all.hosts.bastion && holder.ansible_password"
+      style="margin-left: 120px; width: calc(100% - 120px);">
       {{ t('password_and_bastion') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12"></KuboardSprayLink>
+      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12">
+      </KuboardSprayLink>
     </el-alert>
-    <!-- <FieldCommon :holder="holder" fieldName="ansible_become" anti-freeze>
-      <template #view>
-        <el-switch v-model="ansible_become" disabled></el-switch>
-      </template>
-      <template #edit>
-        <el-switch v-model="ansible_become" disabled></el-switch>
-      </template>
-    </FieldCommon>
-    <template v-if="holder.ansible_become">
-      <FieldString :holder="holder" fieldName="ansible_become_user" anti-freeze disabled></FieldString>
-      <FieldString :holder="holder" fieldName="ansible_become_password" show-password anti-freeze clearable></FieldString>
-      <div v-if="editMode !== 'view'">{{ t('become_password_desc', {ansible_user}) }}</div>
-    </template> -->
-    <FieldSelect :holder="holder" fieldName="ansible_python_interpreter" anti-freeze clearable :loadOptions="loadPythonInterpreter" allow-create filterable></FieldSelect>
+    <EditSelect v-model="holder.ansible_python_interpreter" :label="t('ansible_python_interpreter')" anti-freeze
+      clearable :loadOptions="loadPythonInterpreter" allow-create filterable></EditSelect>
     <slot></slot>
     <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
   </ConfigSection>
@@ -74,22 +88,22 @@ export default {
   inject: ['editMode'],
   computed: {
     enableSsh: {
-      get () {
+      get() {
         return true
       },
-      set (v) {
+      set(v) {
         console.log(v)
       }
     },
     holderRef: {
-      get () {return this.holder || {}},
-      set () {}
+      get() { return this.holder || {} },
+      set() { }
     },
     ansible_user: {
-      get () {
+      get() {
         return this.holder.ansible_user
       },
-      set (v) {
+      set(v) {
         this.holderRef.ansible_user = 'root'
         if (v === 'root') {
           this.ansible_become = false
@@ -99,10 +113,10 @@ export default {
       }
     },
     ansible_become: {
-      get () {
+      get() {
         return this.holder.ansible_become
       },
-      set (v) {
+      set(v) {
         this.holderRef.ansible_become = v
         if (v) {
           this.holderRef.ansible_become_user = 'root'
@@ -118,10 +132,10 @@ export default {
     }
   },
   components: { SshAddPrivateKey },
-  mounted () {
+  mounted() {
   },
   methods: {
-    async loadSshKeyList () {
+    async loadSshKeyList() {
       let result = []
       await this.kuboardSprayApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
         for (let item of resp.data.data) {
@@ -152,6 +166,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>
