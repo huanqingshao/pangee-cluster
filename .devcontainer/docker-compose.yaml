@@ -2,5 +2,6 @@ services:
   devcontainer:
     build: .
     command: sleep infinity
+    privileged: true
     volumes:
       - ../..:/workspaces:cached

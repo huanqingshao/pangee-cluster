@@ -50,3 +50,15 @@ RUN python3 -m venv /root/.cmcc-venv \
 
 RUN apt install -y rsync netcat
 
+RUN  export https_proxy=${HTTP_PROXY} \
+  && wget https://github.com/containerd/containerd/releases/download/v2.0.5/containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+  && tar Cxzvf /usr/local containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+  && rm containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+  && wget https://github.com/opencontainers/runc/releases/download/v1.3.0/runc.$(dpkg --print-architecture) \
+  && install -m 755 runc.$(dpkg --print-architecture) /usr/local/sbin/runc \
+  && rm runc.$(dpkg --print-architecture) \
+  && wget https://github.com/containerd/nerdctl/releases/download/v2.0.4/nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
+  && tar Cxzvf /usr/local/bin nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
+  && rm nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz
+
+ENTRYPOINT [ "containerd" ]
