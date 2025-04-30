@@ -26,6 +26,9 @@ import checkNewVersion from "./utils/version-checker.js";
 
 import i18nMixin from "./mixins/i18n-mixin.js";
 
+// 自有组件库样式
+import "@paas-front/paas-css/index.scss";
+
 axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
   window.KuboardSpray = { version: resp.data };
   window.KuboardSpray.version.trimed = window.KuboardSpray.version.version.slice(

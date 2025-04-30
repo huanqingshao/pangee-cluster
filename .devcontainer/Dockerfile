@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ARG HTTP_PROXY http://host.docker.internal:7890
+ARG HTTP_PROXY http://10.2.193.51:10811
 
 RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
   && sed -i 's/ports\.ubuntu\.com/mirrors\.tuna\.tsinghua\.edu\.cn/g' /etc/apt/sources.list \

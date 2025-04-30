@@ -20,10 +20,10 @@
 </i18n>
 
 <template>
-  <div class="leftColumn">
-    <div class="menuTitle noselect nowrap" :style="menuStyle" @click="$router.push('/home')">
+  <div class="leftColumn" :style="menuStyle" >
+    <!-- <div class="menuTitle noselect nowrap" :style="menuStyle" @click="$router.push('/home')">
       Kuboard Spray
-    </div>
+    </div> -->
     <el-menu :default-active="defaultActive" class="kuboard_namespaced_menu" unique-opened :collapse="isCollapse"
       background-color="white" ref="menu" router>
       <el-menu-item index="1" :route="`/clusters`" class="toplevel">
@@ -81,7 +81,8 @@ export default {
       if (this.isCollapse) {
         return 'width: 64px;'
       } else {
-        return 'width: calc(6vw + 150px);'
+        return 'width: 220px;'
+        // return 'width: calc(6vw + 220px);'
       }
     }
   },
@@ -137,7 +138,6 @@ export default {
 @import "./menu.scss";
 
 .kuboard_global_menu {
-
   text-align: left;
   background-color: rgb(244, 244, 245);
   padding: 10px 0 0 0;
