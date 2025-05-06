@@ -21,7 +21,7 @@ zh:
   <div style="height: calc(100% - 2px); display: flex; flex-direction: column">
     <div style="margin-bottom: 10px">
       <el-radio-group v-model="currentOperation" size="default">
-        <template v-for="(operation, index) in cluster.resourcePackage.operations" :key="'op_' + index">
+        <template v-for="(operation, index) in cluster.resourcePackage.data.operations" :key="'op_' + index">
           <el-radio-button :label="operation.title[locale]" :value="index"></el-radio-button>
         </template>
       </el-radio-group>
@@ -34,7 +34,7 @@ zh:
         <div class="noselect operation-steps">
           <div>
             <el-steps direction="vertical" :active="currentStep">
-              <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
+              <template v-for="(step, index) in cluster.resourcePackage.data.operations[currentOperation].steps"
                 :key="'step_' + index">
                 <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index"
                   :status="currentStep >= index || true ? 'success' : ''"
@@ -47,7 +47,7 @@ zh:
       <div class="operation-card" style="max-width: 50%; min-width: 50%;" :body-style="{ height: 'calc(100% - 40px)' }">
         <div class="markdown-title">
           <div style="flex-grow: 1; font-weight: bolder;">{{
-            cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale] }}</div>
+            cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale] }}</div>
           <el-button style="float: right" @click="showFileBrowser" type="primary"
             icon="el-icon-pointer">查看代码</el-button>
         </div>
@@ -149,8 +149,8 @@ export default {
       return "step";
     },
     showFileBrowser() {
-      let path = "/operations/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
-      path += "/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
+      let path = "/operations/" + this.cluster.resourcePackage.data.operations[this.currentOperation].name;
+      path += "/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
       this.$refs.filebrowser.show([{
         isDir: true,
         path: path

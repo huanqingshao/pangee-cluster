@@ -1,11 +1,10 @@
 <template>
   <div>
-    <ClusterTask action="backup_etcd" :cluster="cluster"
-      :operation="cluster.resourcePackage.operations[currentOperation].name"
-      :step="cluster.resourcePackage.operations[currentOperation].steps[currentStep].name"
-      :title="cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale]"
+    <ClusterTask :cluster="cluster" :operation="cluster.resourcePackage.data.operations[currentOperation].name"
+      :step="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].name"
+      :title="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale]"
       :populateRequest="populateRequest" @refresh="$emit('refresh')" :width="600">
-      <el-form-item :label="cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale]">
+      <el-form-item :label="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale]">
         <!-- <div style="font-weight: bolder; line-height: 28px;">{{ t('backup_desc') }}</div>
         <el-tag class="app_text_mono">/data/cluster/{{ cluster.name }}/backup</el-tag> -->
         <div>参数</div>

@@ -90,15 +90,15 @@ export default {
   computed: {
     apiPath() {
       let path = "/clusters/" + this.cluster.name;
-      if (this.cluster.resourcePackage.operations[this.currentOperation] == undefined) {
+      if (this.cluster.resourcePackage.data.operations[this.currentOperation] == undefined) {
         return "";
       }
-      path += "/history/" + this.cluster.resourcePackage.operations[this.currentOperation]?.name;
+      path += "/history/" + this.cluster.resourcePackage.data.operations[this.currentOperation]?.name;
 
-      if (this.cluster.resourcePackage.operations[this.currentOperation]?.steps[this.currentStep] == undefined) {
+      if (this.cluster.resourcePackage.data.operations[this.currentOperation]?.steps[this.currentStep] == undefined) {
         return "";
       }
-      path += "/step/" + this.cluster.resourcePackage.operations[this.currentOperation]?.steps[this.currentStep]?.name;
+      path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation]?.steps[this.currentStep]?.name;
       return path;
     }
   },
@@ -137,14 +137,14 @@ export default {
     },
     viewTaskLogs(item) {
       let path = `/#/tail/cluster/${this.cluster.name}/history/`
-      path = `${path}${this.cluster.resourcePackage.operations[this.currentOperation]?.name}/`
-      path = `${path}${this.cluster.resourcePackage.operations[this.currentOperation]?.steps[this.currentStep]?.name}/`
+      path = `${path}${this.cluster.resourcePackage.data.operations[this.currentOperation]?.name}/`
+      path = `${path}${this.cluster.resourcePackage.data.operations[this.currentOperation]?.steps[this.currentStep]?.name}/`
       path = `${path}${item.time}/execute.log`
       this.openUrlInBlank(path)
     },
     viewTaskResult(item) {
-      let path = "/clusters/" + this.cluster.name + "/history/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
-      path += "/step/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
+      let path = "/clusters/" + this.cluster.name + "/history/" + this.cluster.resourcePackage.data.operations[this.currentOperation].name;
+      path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
       path += "/" + item.time;
       console.log(path)
       this.kuboardSprayApi.get(path).then(resp => {

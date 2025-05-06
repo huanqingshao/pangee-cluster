@@ -26,14 +26,14 @@ export default {
     path() {
       let result = this.cluster.resourcePackage.metadata.version;
       result += "/content/operations/";
-      if (this.cluster.resourcePackage.operations[this.operationIndex] == undefined) {
+      if (this.cluster.resourcePackage.data.operations[this.operationIndex] == undefined) {
         return "";
       }
-      result += this.cluster.resourcePackage.operations[this.operationIndex]?.name;
-      if (this.cluster.resourcePackage.operations[this.operationIndex]?.steps[this.stepIndex] == undefined) {
+      result += this.cluster.resourcePackage.data.operations[this.operationIndex]?.name;
+      if (this.cluster.resourcePackage.data.operations[this.operationIndex]?.steps[this.stepIndex] == undefined) {
         return "";
       }
-      result += "/" + this.cluster.resourcePackage.operations[this.operationIndex]?.steps[this.stepIndex]?.name;
+      result += "/" + this.cluster.resourcePackage.data.operations[this.operationIndex]?.steps[this.stepIndex]?.name;
       return result;
     },
     docsHtml() {

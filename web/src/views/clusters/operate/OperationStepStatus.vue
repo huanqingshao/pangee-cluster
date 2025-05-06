@@ -80,8 +80,8 @@ export default {
       this.loading = true;
       this.status = undefined;
       this.error = undefined;
-      let path = "/clusters/" + this.cluster.name + "/operation/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
-      path += "/step/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
+      let path = "/clusters/" + this.cluster.name + "/operation/" + this.cluster.resourcePackage.data.operations[this.currentOperation].name;
+      path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
       this.kuboardSprayApi.get(path).then(resp => {
         this.status = resp.data;
         this.loading = false;
