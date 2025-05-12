@@ -48,12 +48,12 @@ zh:
         <el-radio value="socks5">SOCKS5</el-radio>
       </el-radio-group>
     </el-form-item>
-    <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}`" anti-freeze
-      :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
-    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}`"
+    <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}.ansible_host`"
+      anti-freeze :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
+    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}.ansible_port`"
       :placeholder="placeholder('ansible_port')" anti-freeze required></EditString>
     <template v-if="computedBastionType == 'ssh'">
-      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}.ansible_user`"
         :placeholder="placeholder('ansible_user')" anti-freeze required></EditString>
       <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
         :loadOptions="loadSshKeyList" anti-freeze clearable :placeholder="placeholder('ansible_ssh_private_key_file')">
@@ -67,7 +67,7 @@ zh:
       <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
     </template>
     <template v-else-if="computedBastionType == 'socks5'">
-      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}.ansible_user`"
         :placeholder="placeholder('ansible_user')" anti-freeze></EditString>
       <EditString v-model="holder.ansible_password" :label="t('ansible_password')" show-password anti-freeze clearable
         :placeholder="placeholder('ansible_password')"></EditString>
@@ -150,7 +150,7 @@ export default {
             if (bastion['ansible_password']) {
               sshPass = `sshpass -p '${bastion['ansible_password']}' `
             }
-            let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ControlMaster=auto -o ControlPersist=30m -o ControlPath={{kuboardspray_cluster_dir}}/%%r@%%h:%%p -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
+            let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
             temp += bastion["ansible_port"] + " " + bastion["ansible_user"] + "@" + bastion["ansible_host"]
             if (bastion["ansible_ssh_private_key_file"]) {
               temp += " -i " + bastion["ansible_ssh_private_key_file"]

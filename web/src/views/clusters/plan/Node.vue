@@ -16,17 +16,24 @@ zh:
 <template>
   <div class="node_wrapper">
     <div class="status" v-if="name !== 'localhost' && name !== 'bastion'">
-      <el-button v-if="cluster.type === 'gap'" type="primary" circle icon="el-icon-document-checked" :loading="pingpong_loading"></el-button>
-      <el-button v-else-if="pendingAction === 'remove_node'" type="danger" circle icon="el-icon-delete" :loading="pingpong_loading"></el-button>
-      <el-button v-else-if="pendingAction === 'add_node'" type="warning" circle icon="el-icon-plus" :loading="pingpong_loading"></el-button>
+      <el-button v-if="cluster.type === 'gap'" type="primary" circle icon="el-icon-document-checked"
+        :loading="pingpong_loading"></el-button>
+      <el-button v-else-if="pendingAction === 'remove_node'" type="danger" circle icon="el-icon-delete"
+        :loading="pingpong_loading"></el-button>
+      <el-button v-else-if="pendingAction === 'add_node'" type="warning" circle icon="el-icon-plus"
+        :loading="pingpong_loading"></el-button>
       <template v-else-if="k8sNode">
-        <el-button v-if="k8sNodeStatus === 'Ready'" type="success" circle :plain="onlineNodes[name] === undefined" icon="el-icon-check" :loading="pingpong_loading"></el-button>
-        <el-button v-else type="danger" circle :plain="onlineNodes[name] === undefined" icon="el-icon-moon-night" :loading="pingpong_loading"></el-button>
+        <el-button v-if="k8sNodeStatus === 'Ready'" type="success" circle :plain="onlineNodes[name] === undefined"
+          icon="el-icon-check" :loading="pingpong_loading"></el-button>
+        <el-button v-else type="danger" circle :plain="onlineNodes[name] === undefined" icon="el-icon-moon-night"
+          :loading="pingpong_loading"></el-button>
       </template>
     </div>
     <div class="delete_button" v-if="!hideDeleteButton && editMode !== 'view'">
-      <el-button v-if="pendingAction === 'remove_node'" icon="el-icon-check" type="success" circle @click="cancelDelete"></el-button>
-      <el-popconfirm v-else icon="el-icon-info" icon-color="red" :title="t('confirmDelete')" @confirm="deleteNode" placement="right-start">
+      <el-button v-if="pendingAction === 'remove_node'" icon="el-icon-check" type="success" circle
+        @click="cancelDelete"></el-button>
+      <el-popconfirm v-else icon="el-icon-info" icon-color="red" :title="t('confirmDelete')" @confirm="deleteNode"
+        placement="right-start">
         <template #reference>
           <el-button icon="el-icon-delete" type="danger" circle @submit.prevent.stop></el-button>
         </template>
@@ -38,7 +45,9 @@ zh:
         <span v-else>{{ $t('obj.' + name) }}</span>
       </div>
       <div class="app_text_mono" v-if="inventory.all.hosts[name]">
-        {{ inventory.all.hosts[name].ansible_host || (name !== 'localhost' && name !== 'bastion' ? '???.???.???.???' : '') }}
+        {{ inventory.all.hosts[name].ansible_host || (name !== 'localhost' && name !== 'bastion' ? '???.???.???.???' :
+          '')
+        }}
       </div>
       <div :class="role + ' role app_text_mono'" v-for="(_, role) in roles" :key="'r' + role">{{ roleName(role) }}</div>
       <slot></slot>
@@ -54,22 +63,22 @@ export default {
     cluster: { type: Object, required: true },
     active: { type: Boolean, required: false, default: false },
     hideDeleteButton: { type: Boolean, required: false, default: false },
-    pingpong: { type: Object, required: false, default: () => {return {}} },
+    pingpong: { type: Object, required: false, default: () => { return {} } },
     pingpong_loading: { type: Boolean, required: false, default: false },
   },
   inject: ['editMode', 'isClusterInstalled', 'isClusterOnline', 'pendingAddNodes', 'onlineNodes'],
   computed: {
     inventory: {
-      get () { return this.cluster.inventory },
-      set () {}
+      get() { return this.cluster.inventory },
+      set() { }
     },
-    pendingAction () {
+    pendingAction() {
       if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].kuboardspray_node_action) {
         return this.inventory.all.hosts[this.name].kuboardspray_node_action
       }
       return undefined
     },
-    nodeClass () {
+    nodeClass() {
       let result = 'node'
       if (this.active) {
         result += ' active'
@@ -97,7 +106,7 @@ export default {
       }
       return result
     },
-    roles () {
+    roles() {
       let result = {}
       for (let role in this.inventory.all.children.target.children.k8s_cluster.children) {
         for (let n in this.inventory.all.children.target.children.k8s_cluster.children[role].hosts) {
@@ -113,13 +122,13 @@ export default {
       }
       return result
     },
-    k8sNode () {
+    k8sNode() {
       if (this.cluster.state && this.cluster.state.nodes) {
         return this.cluster.state.nodes[this.name]
       }
       return undefined
     },
-    k8sNodeStatus () {
+    k8sNodeStatus() {
       if (this.k8sNode) {
         for (let index in this.k8sNode.status.conditions) {
           let con = this.k8sNode.status.conditions[index]
@@ -131,7 +140,7 @@ export default {
       return 'Unknown'
     }
   },
-  mounted () {
+  mounted() {
   },
   methods: {
     roleName(role) {
@@ -141,7 +150,7 @@ export default {
         return this.$t('node.' + role)
       }
     },
-    deleteNode () {
+    deleteNode() {
       if (this.isClusterInstalled && !this.isClusterOnline) {
         this.$message.error(this.t('noRemoveOffline'))
         return
@@ -155,7 +164,7 @@ export default {
         for (let key in this.inventory.all.children.target.children.etcd.hosts) {
           let host = this.inventory.all.children.target.children.etcd.hosts[key]
           if (host.kuboardspray_node_action === undefined) {
-            count ++
+            count++
           }
         }
         if (count === 1) {
@@ -168,7 +177,7 @@ export default {
         for (let key in this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
           let host = this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[key]
           if (host.kuboardspray_node_action === undefined) {
-            count ++
+            count++
           }
         }
         if (count === 1) {
@@ -185,14 +194,16 @@ export default {
           this.inventory.all.children.target.children.etcd.hosts[this.name].kuboardspray_node_action = 'remove_node'
         }
       } else {
-        delete this.inventory.all.hosts[this.name]
-        delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]
-        delete this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.name]
-        delete this.inventory.all.children.target.children.etcd.hosts[this.name]
         this.$emit('deleted')
+        setTimeout(() => {
+          delete this.inventory.all.hosts[this.name]
+          delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]
+          delete this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.name]
+          delete this.inventory.all.children.target.children.etcd.hosts[this.name]
+        }, 50)
       }
     },
-    cancelDelete () {
+    cancelDelete() {
       delete this.inventory.all.hosts[this.name].kuboardspray_node_action
       if (this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]) {
         delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].kuboardspray_node_action
@@ -206,16 +217,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.node_wrapper{
+.node_wrapper {
   .status {
     height: 0px;
     text-align: left;
   }
+
   .delete_button {
     height: 0px;
     text-align: right;
     display: none;
   }
+
   .node {
     border: solid 1px var(--el-border-color-light);
     border-radius: 5px;
@@ -224,6 +237,7 @@ export default {
     padding: 15px;
     font-size: 13px;
     cursor: pointer;
+
     .role {
       font-size: 12px;
       margin-top: 5px;
@@ -233,96 +247,122 @@ export default {
       width: calc(100% - 20px);
       text-align: center;
     }
+
     .kube_control_plane {
       background-color: var(--el-color-primary-light-9);
     }
+
     .kube_node {
       background-color: var(--el-color-success-light-9);
     }
+
     .etcd {
       background-color: var(--el-color-warning-light-9);
     }
   }
+
   .node:hover {
     border-color: var(--el-color-primary);
     background-color: var(--el-color-primary-light-9);
+
     .role {
       color: white;
     }
+
     .kube_control_plane {
       background-color: var(--el-color-primary);
     }
+
     .kube_node {
       background-color: var(--el-color-success);
     }
+
     .etcd {
       background-color: var(--el-color-warning);
     }
   }
+
   .node.active {
     border-color: var(--el-color-warning);
     background-color: var(--el-color-warning-light-9);
+
     .role {
       color: white;
     }
+
     .kube_control_plane {
       background-color: var(--el-color-primary);
     }
+
     .kube_node {
       background-color: var(--el-color-success);
     }
+
     .etcd {
       background-color: var(--el-color-warning);
     }
   }
+
   .node.delete_node {
     text-decoration-line: line-through;
     border-color: var(--el-color-danger) !important;
   }
+
   .node.delete_node.active {
     background-color: var(--el-color-danger-light-9) !important;
   }
+
   .node.unknown_status {
     border-block-style: dashed;
     border-inline-style: dashed;
   }
+
   .node.online_node {
     border-color: var(--el-color-success);
     border-block-style: solid;
     border-inline-style: solid;
   }
+
   .node.online_node.active {
     background-color: var(--el-color-success-light-9);
   }
+
   .node.offline_node {
     border-block-style: dashed;
     border-inline-style: dashed;
     background-color: var(--el-color-info-light-9);
     border-color: var(--el-color-info);
+
     .role {
       background-color: var(--el-color-info-light-9);
     }
   }
+
   .node.offline_node.active {
     .role {
       opacity: 0.5;
       background-color: var(--el-color-info);
     }
+
     border-color: var(--el-color-warning);
   }
+
   .node.gap {
     background-color: var(--el-color-primary-light-9) !important;
     border-color: var(--el-color-primary);
   }
+
   .node.gap.active {
     background-color: var(--el-color-primary-light-7) !important;
   }
+
   .node.error_node {
     .role {
       opacity: 0.5;
       background-color: var(--el-color-info);
     }
   }
+
   .node.error_node.active {
     border-color: var(--el-color-danger) !important;
     background-color: var(--el-color-danger-light-9) !important;
@@ -332,5 +372,4 @@ export default {
 .node_wrapper:hover .delete_button {
   display: block;
 }
-
 </style>

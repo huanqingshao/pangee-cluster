@@ -53,7 +53,7 @@ zh:
 <template>
   <ConfigSection ref="configSection" v-model:enabled="enableSsh" label="SSH" :description="description" disabled
     anti-freeze>
-    <EditCommon v-model="holder.ansible_host" :prop="`all.hosts.${nodeName}`" :label="t('ansible_host')"
+    <EditCommon v-model="holder.ansible_host" :prop="`all.hosts.${nodeName}.ansible_host`" :label="t('ansible_host')"
       :anti-freeze="onlineNodes[nodeName] === undefined || holder.kuboardspray_node_action === 'add_node'"
       :rules="hostRules">
       <template #edit>
@@ -67,8 +67,8 @@ zh:
       anti-freeze>
       <template #edit>
         <el-input v-model.trim="ansible_user" :placeholder="placeholder('ansible_user')"></el-input>
-        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">{{ t('rootuser')
-          }}</el-tag>
+        <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">
+          {{ t('rootuser') }} </el-tag>
       </template>
     </EditCommon>
     <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
@@ -93,8 +93,9 @@ zh:
       clearable :loadOptions="loadPythonInterpreter" :placeholder="placeholder('ansible_python_interpreter')"
       allow-create filterable>
     </EditSelect>
-    <EditCommon v-model="holder.ip" :prop="`all.hosts.${nodeName}`" :anti-freeze="onlineNodes[nodeName] === undefined"
-      :label="t('ip')" :placeholder="t('ip_placeholder', { default_value: holder.ansible_host })" :rules="ipRules">
+    <EditCommon v-model="holder.ip" :prop="`all.hosts.${nodeName}.ip`"
+      :anti-freeze="onlineNodes[nodeName] === undefined" :label="t('ip')"
+      :placeholder="t('ip_placeholder', { default_value: holder.ansible_host })" :rules="ipRules">
       <template #edit>
         <el-select v-model="holderRef.ip" style="width: 100%;" :loading="optionIpsLoading"
           @visible-change="loadOptionIps" :loading-text="t('longTimeLoading')">
@@ -158,14 +159,14 @@ export default {
               }
             }
 
-            let block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_pods_subnet)
+            let block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
             if (block.contains(value)) {
-              return callback('IP 不能被包含在容器组子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_pods_subnet)
+              return callback('IP 不能被包含在容器组子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
             }
 
-            block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_addresses)
+            block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
             if (block.contains(value)) {
-              return callback('IP 不能被包含在服务子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_addresses)
+              return callback('IP 不能被包含在服务子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
             }
 
             // A类地址：10.0.0.0--10.255.255.255

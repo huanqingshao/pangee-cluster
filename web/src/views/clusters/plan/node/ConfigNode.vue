@@ -123,7 +123,7 @@ zh:
       <EditString v-model="inventory.all.children.target.children.etcd.hosts[nodeName].etcd_member_name"
         :rules="etcd_member_name_rules" :label="t('etcd_member_name')"
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
-        :prop="`all.children.target.children.etcd.hosts.${nodeName}`" required></EditString>
+        :prop="`all.children.target.children.etcd.hosts.${nodeName}.etcd_member_name`" required></EditString>
     </ConfigSection>
   </el-form>
 </template>

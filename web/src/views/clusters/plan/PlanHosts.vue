@@ -54,7 +54,7 @@ zh:
         <div
           style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
           <span style="margin-right: 20px">Kubernetes Cluster</span>
-          <AddNode :inventory="inventory" v-model:computedCurrentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
+          <AddNode :inventory="inventory" v-model:currentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
           <el-button v-if="mode == 'view'" type="primary" plain icon="el-icon-lightning" @click="ping"
             :loading="pingpong_loading">
             <span class="app_text_mono">PING</span>
@@ -153,7 +153,6 @@ zh:
 </template>
 
 <script>
-import { computed } from "vue";
 import Node from "./Node.vue";
 import ConfigNode from "./node/ConfigNode.vue";
 import CopyGapNodeToInventory from "./node/CopyGapNodeToInventory.vue";
@@ -181,6 +180,7 @@ export default {
         return this.currentPropertiesTab;
       },
       set(v) {
+        console.log("=---", v);
         if (this.editMode == "view") {
           this.currentPropertiesTab = v;
           return;
