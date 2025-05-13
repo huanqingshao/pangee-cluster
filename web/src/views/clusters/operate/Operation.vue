@@ -45,9 +45,10 @@ zh:
         </div>
       </div>
       <div class="operation-card" style="max-width: 50%; min-width: 50%;" :body-style="{ height: 'calc(100% - 40px)' }">
-        <div class="markdown-title">
-          <div style="flex-grow: 1; font-weight: bolder;">{{
-            cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale] }}</div>
+        <div class="markdown-title" v-if="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep]">
+          <div style="flex-grow: 1; font-weight: bolder;">
+            {{ cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale] }}
+          </div>
           <el-button style="float: right" @click="showFileBrowser" type="primary"
             icon="el-icon-pointer">查看代码</el-button>
         </div>
@@ -118,6 +119,10 @@ export default {
           return 0;
         }
         if (this.$store.state.cluster[this.cluster.name].operation == undefined) {
+          return 0;
+        }
+        let t = this.$store.state.cluster[this.cluster.name].operation.currentStep;
+        if (this.cluster.resourcePackage.data.operations[this.currentOperation].steps[t] == undefined) {
           return 0;
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentStep || 0
