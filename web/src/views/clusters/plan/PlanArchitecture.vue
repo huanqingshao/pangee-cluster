@@ -74,6 +74,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="css">
 @import "./markdown.scss";
 </style>
