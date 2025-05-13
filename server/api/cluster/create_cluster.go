@@ -71,6 +71,8 @@ func CreateCluster(c *gin.Context) {
 	// 	return
 	// }
 
+	common.MapSet(inventory, "all.vars.kuboardspray_resource_package_dir", resourcePackagePath)
+
 	common.PopulateKuboardSprayVars(inventory, "cluster", req.Name)
 
 	// addons := common.MapGet(resourcePackage, "data.addon").([]interface{})
