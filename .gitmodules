@@ -1,12 +1,3 @@
-[submodule "server/ansible-script/roles/ansible-apt-mirror"]
-	path = server/ansible-script/roles/ansible-apt-mirror
-	url = https://github.com/eip-work/ansible-apt-mirror.git
-[submodule "server/ansible-script/roles/ansible-apache2"]
-	path = server/ansible-script/roles/ansible-apache2
-	url = https://github.com/mrlesmithjr/ansible-apache2.git
-[submodule "server/ansible-script/roles/ansible-offline-yum-repo"]
-	path = server/ansible-script/roles/ansible-offline-yum-repo
-	url = https://github.com/eip-work/ansible-offline-yum-repo.git
 [submodule "go-yaml"]
 	path = go-yaml
 	url = https://github.com/eip-work/yaml.git

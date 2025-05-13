@@ -367,19 +367,19 @@ export default {
           this.stateNodesLoaded(temp);
         });
       // this.percentage += 20
-      this.kuboardSprayApi
-        .get(`/clusters/${this.name}/state/addons`)
-        .then(resp => {
-          temp.addon_code = 200;
-          temp.addons = resp.data.data;
-          this.stateNodesLoaded(temp);
-        })
-        .catch(e => {
-          temp.addon_code = 500;
-          temp.addons = {};
-          console.error(e);
-          this.stateNodesLoaded(temp);
-        });
+      // this.kuboardSprayApi
+      //   .get(`/clusters/${this.name}/state/addons`)
+      //   .then(resp => {
+      //     temp.addon_code = 200;
+      //     temp.addons = resp.data.data;
+      //     this.stateNodesLoaded(temp);
+      //   })
+      //   .catch(e => {
+      //     temp.addon_code = 500;
+      //     temp.addons = {};
+      //     console.error(e);
+      //     this.stateNodesLoaded(temp);
+      //   });
       // this.percentage += 20
       // this.cluster.state = temp
     },
