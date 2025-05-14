@@ -72,15 +72,6 @@ func (execute *Execute) Exec() error {
 	return execute.R_Error
 }
 
-func (execute *Execute) symlink(target string, link string) {
-	if _, err := os.Lstat(link); os.IsNotExist(err) {
-		err = os.Symlink(target, link)
-		if err != nil {
-			logrus.Warn("Failed to create Symlink: ", target, link)
-		}
-	}
-}
-
 func (execute *Execute) exec() {
 
 	lockFile, err := LockOwner(execute.OwnerType, execute.OwnerName)
@@ -123,7 +114,7 @@ func (execute *Execute) exec() {
 	}
 	common.SaveYamlFile(execute_dir_path+"/status.yaml", status)
 
-	execute.symlink(execute.Dir+"/group_vars", execute_dir_path+"/group_vars")
+	common.Symlink(execute.Dir+"/group_vars", execute_dir_path+"/group_vars")
 	// execute.symlink(execute.Dir+"/cache", execute_dir_path+"/cache")
 
 	if execute.PreExec != nil {
