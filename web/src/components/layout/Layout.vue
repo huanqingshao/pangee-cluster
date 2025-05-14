@@ -62,7 +62,7 @@ export default {
         return 'width: calc(100vw - 64px);' + background
       } else {
         // return 'width: 220px;' + background
-        return 'width: calc(100vw - 220px);' + background
+        return 'width: calc(100vw - 240px);' + background
       }
     }
   },

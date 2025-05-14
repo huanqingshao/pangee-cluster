@@ -385,7 +385,7 @@ export default {
   height: 24px;
   background-color: var(--border-color-sub);
   position: absolute;
-  left: 220px;
+  left: 240px;
   top: 19px;
 }
 </style>

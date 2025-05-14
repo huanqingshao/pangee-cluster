@@ -81,7 +81,7 @@ export default {
       if (this.isCollapse) {
         return 'width: 64px;'
       } else {
-        return 'width: 220px;'
+        return 'width: 240px;'
         // return 'width: calc(6vw + 220px);'
       }
     }
