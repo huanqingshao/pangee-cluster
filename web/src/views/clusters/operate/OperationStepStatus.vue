@@ -36,7 +36,8 @@ export default {
     return {
       status: undefined,
       error: undefined,
-      loading: false
+      loading: false,
+      axiosController: undefined
     }
   },
   computed: {
@@ -76,19 +77,30 @@ export default {
   },
   methods: {
     async checkStatus() {
-      let req = {}
+      if (this.axiosController != undefined) {
+        try {
+          this.axiosController.abort();
+        } catch (e) {
+          console.log(e)
+        }
+      }
       this.loading = true;
+      this.axiosController = new AbortController();
       this.status = undefined;
       this.error = undefined;
       let path = "/clusters/" + this.cluster.name + "/operation/" + this.cluster.resourcePackage.data.operations[this.currentOperation].name;
       path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
-      this.kuboardSprayApi.get(path).then(resp => {
+      this.kuboardSprayApi.get(path, {
+        signal: this.axiosController.signal
+      }).then(resp => {
         this.status = resp.data;
         this.loading = false;
       }).catch(e => {
-        console.log(e);
-        this.error = e;
-        this.loading = false;
+        if (e.code != "ERR_CANCELED") {
+          console.log(e);
+          this.error = e;
+          this.loading = false;
+        }
       })
     }
   }
