@@ -37,7 +37,7 @@ func updateResourcePackageVarsToInventory(req ExecuteStepRequest) (map[string]in
 
 	common.PopulateKuboardSprayVars(inventory, "cluster", req.Cluster)
 
-	common.MapSet(inventory, "all.vars.ansible_ssh_pipelining", true)
+	common.MapSet(inventory, "all.vars.ansible_ssh_pipelining", false)
 
 	return inventory, resourcePackage, nil
 }
