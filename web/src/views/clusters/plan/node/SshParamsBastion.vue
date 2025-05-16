@@ -6,6 +6,8 @@ en:
   default_value: 'Default: {default_value} (inhirit from value configured in Global Config tab)'
   duplicateIP: "IP address conflict with {node}"
   description: Access target nodes throguh bastion/jumpserver
+
+  AllowTcpForwarding: 跳板机 /etc/ssh/sshd_config 文件中的 AllowTcpForwarding 属性必须设置为 true
 zh:
   bastionUsage: KuboardSpray 可以通过跳板机或堡垒机访问将要安装 K8S 集群的目标节点。
   addSshKey: 添加私钥
@@ -33,6 +35,8 @@ zh:
   ansible_become_password_placeholder: '切换密码'
 
   ansible_python_interpreter: 'Python 路径'
+
+  AllowTcpForwarding: 跳板机 /etc/ssh/sshd_config 文件中的 AllowTcpForwarding 属性必须设置为 true
 </i18n>
 
 
@@ -50,6 +54,11 @@ zh:
     </el-form-item>
     <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}.ansible_host`"
       anti-freeze :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
+    <div
+      style="margin-left: 120px;margin-bottom: 10px; margin-top: -10px; color: var(--el-color-white); background-color: var(--el-color-warning); padding: 5px 15px; font-weight: bolder"
+      class="app_text_mono">
+      {{ t("AllowTcpForwarding") }}
+    </div>
     <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}.ansible_port`"
       :placeholder="placeholder('ansible_port')" anti-freeze required></EditString>
     <template v-if="computedBastionType == 'ssh'">
