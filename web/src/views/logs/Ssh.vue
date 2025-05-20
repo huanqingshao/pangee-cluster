@@ -19,16 +19,14 @@ zh:
 
 <template>
   <div>
-    <div
-      style="
+    <div style="
         background-color: #3a3333;
         color: #fffeff;
         font-weight: 500;
         padding: 8px 20px 8px 20px;
         line-height: 22px;
         text-align: center;
-      "
-    >
+      ">
       {{ this.t("terminal") }} - <span class="app_text_mono">{{ ownerType }}/{{ ownerName }}/{{ nodeName }}</span>
       <span style="float: left">
         <ChangeFontSize class="button" :terminal="xterm" :fitAddon="fitAddon"></ChangeFontSize>
@@ -36,7 +34,8 @@ zh:
         <el-button type="info" icon="el-icon-search" @click="$refs.find.show()">{{ t("find") }}</el-button>
         <Find ref="find" class="button" :terminal="xterm"></Find>
       </span>
-      <span :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
+      <span
+        :style="`float: right; font-size: 14px; font-weight: 600; color: ${socketReadyState === 1 ? '#33FF33' : '#FF6600'};`">
         {{ stateStr }}
       </span>
     </div>
@@ -189,9 +188,9 @@ export default {
                 setTimeout(() => {
                   _this.socket.send(
                     "0" +
-                      (inventory.all.hosts[_this.nodeName].ansible_become_password ||
-                        inventory.all.children.target.vars.ansible_become_password) +
-                      "\n"
+                    (inventory.all.hosts[_this.nodeName].ansible_become_password ||
+                      inventory.all.children.target.vars.ansible_become_password) +
+                    "\n"
                   );
                 }, 300);
               }, 1000);
@@ -201,10 +200,11 @@ export default {
               setTimeout(() => {
                 _this.socket.send(
                   "0" +
-                    `export ETCDCTL_API=3
-export ETCDCTL_CERT=/etc/ssl/etcd/ssl/admin-$(hostname).pem
-export ETCDCTL_KEY=/etc/ssl/etcd/ssl/admin-$(hostname)-key.pem
-export ETCDCTL_CACERT=/etc/ssl/etcd/ssl/ca.pem
+                  `export ETCDCTL_API=3
+export ETCDCTL_CERT=/etc/kubernetes/ssl/etcd_server.crt
+export ETCDCTL_KEY=/etc/kubernetes/ssl/etcd_server.key
+export ETCDCTL_CACERT=/etc/kubernetes/ssl/ca.crt
+export ETCDCTL_ENDPOINTS=https://127.0.0.1:${inventory.all.children.target.children.etcd.vars.etcd_client_port || 2379}
 # 此处开始，执行您想要执行的 etcdctl 命令
 `
                 );
@@ -263,6 +263,7 @@ export ETCDCTL_CACERT=/etc/ssl/etcd/ssl/ca.pem
   vertical-align: top;
   background-color: gray;
 }
+
 .confirmText {
   font-size: 15px;
   font-weight: bolder;

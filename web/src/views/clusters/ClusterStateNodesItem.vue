@@ -8,20 +8,19 @@ zh:
 
 <template>
   <div class="nodeInfo app_text_mono">
-    <div style="display: flex">
+    <div style="display: flex; align-items: center;">
       <div style="min-width: 120px">
         {{ name }}
       </div>
       <div style="flex-grow: 1">
         <template v-if="node.k8s_node">
-          <el-tag
-            type="primary"
-            effect="dark"
-            style="margin-left: 10px"
-            v-if="node.k8s_node.metadata.labels['node-role.kubernetes.io/control-plane'] !== undefined"
-            >{{ $t("node.kube_control_plane") }}</el-tag
-          >
-          <el-tag type="success" effect="dark" style="margin-left: 10px" v-if="isKubeNode">{{ $t("node.kube_node") }}</el-tag>
+          <el-tag type="primary" effect="dark" style="margin-left: 10px"
+            v-if="node.k8s_node.metadata.labels['node-role.kubernetes.io/control-plane'] !== undefined">
+            {{ $t("node.kube_control_plane") }}
+          </el-tag>
+          <el-tag type="success" effect="dark" style="margin-left: 10px" v-if="isKubeNode">
+            {{ $t("node.kube_node") }}
+          </el-tag>
         </template>
         <template v-if="node.etcd_member">
           <el-tag type="warning" effect="dark" style="margin-left: 10px; padding: 0 8px">
@@ -33,9 +32,10 @@ zh:
           <template v-for="(addr, index) in node.k8s_node.status.addresses" :key="name + index">
             <el-tag type="primary" style="float: right" v-if="addr.type === 'InternalIP'">{{ addr.address }}</el-tag>
           </template>
-          <el-tag v-if="node.k8s_node.spec.unschedulable" type="danger" effect="dark" style="margin-right: 10px; float: right">{{
-            t("unschedulable")
-          }}</el-tag>
+          <el-tag v-if="node.k8s_node.spec.unschedulable" type="danger" effect="dark"
+            style="margin-right: 10px; float: right">{{
+              t("unschedulable")
+            }}</el-tag>
         </template>
         <template v-else-if="node.etcd_member">
           <el-tag type="primary" style="float: right">{{ node.etcd_member.health.endpoint }}</el-tag>
@@ -46,7 +46,8 @@ zh:
       etcd endpoint unhealthy: {{ node.etcd_member.health.endpoint }} {{ node.etcd_member.health.error }}
     </div>
     <div v-if="node.k8s_node">
-      <div v-for="(condition, index) in node.k8s_node.status.conditions" :key="'condition' + index" style="margin-left: 130px">
+      <div v-for="(condition, index) in node.k8s_node.status.conditions" :key="'condition' + index"
+        style="margin-left: 130px">
         <StateNodeCondition :condition="condition" hideSuccess></StateNodeCondition>
       </div>
     </div>
@@ -81,7 +82,7 @@ export default {
     }
   },
   components: { StateNodeCondition },
-  mounted() {},
+  mounted() { },
   methods: {}
 };
 </script>
@@ -91,6 +92,7 @@ export default {
   padding: 10px 20px;
   margin-bottom: 10px;
   background-color: var(--el-color-info-light-9);
+
   .etcd_error {
     font-size: 12px;
     padding: 2px 10px;
