@@ -36,7 +36,7 @@ zh:
         </el-popconfirm>
       </template>
     </ControlBar>
-    <el-card>
+    <el-card class="no-radius">
       <el-skeleton v-if="loading"></el-skeleton>
       <ResourceDetails v-else-if="resource" :releaseNote="releaseNote" :resourcePackage="resource.package" expandAll></ResourceDetails>
     </el-card>
@@ -66,7 +66,7 @@ export default {
     name: { type: String, required: true },
     mode: { type: String, required: false, default: 'view' },
   },
-  data() {
+  data () {
     return {
       resource: undefined,
       releaseNote: undefined,
@@ -101,12 +101,12 @@ export default {
         console.log(e)
       })
     },
-    removeResource() {
+    removeResource () {
       this.kuboardSprayApi.delete(`/resources/${this.name}`).then(() => {
         this.$message.success(this.$t('msg.delete_succeeded'))
         this.$router.replace(`/settings/resources`)
       }).catch(e => {
-        this.$message.error(this.$t('msg.delete_failed', {msg: e.response.data.message}))
+        this.$message.error(this.$t('msg.delete_failed', { msg: e.response.data.message }))
       })
     }
   }
@@ -114,5 +114,4 @@ export default {
 </script>
 
 <style scoped lang="css">
-
 </style>

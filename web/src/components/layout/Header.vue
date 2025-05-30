@@ -206,6 +206,7 @@ export default {
   width: 100vw;
   height: 62px;
   background: var(--el-color-white);
+  box-shadow: 0px 0px 16px 0px #24515D19;
 }
 
 .bg {
@@ -383,7 +384,7 @@ export default {
   content: "";
   width: 1px;
   height: 24px;
-  background-color: var(--border-color-sub);
+  background-color: var(--border-color);
   position: absolute;
   left: 240px;
   top: 19px;

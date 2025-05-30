@@ -66,7 +66,7 @@ export default {
   display: inline-block;
   width: 40px;
   height: 40px;
-  color: var(--icon-default-color);
+  color: var(--text-3);
   /* border-radius: 20px; */
   /* background: var(--el-color-primary); */
   vertical-align: middle;

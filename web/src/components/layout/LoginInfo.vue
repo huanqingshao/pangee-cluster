@@ -105,7 +105,7 @@ export default {
   transition: 0.2s;
   margin-right: 15px;
   vertical-align: top;
-  color: var(--text-sub-color);
+  color: var(--text-2);
   border-radius: 4px;
   background: var(--el-color-white);
   border: 1px solid var(--border-color);

@@ -12,8 +12,8 @@ importers:
         specifier: ^2.0.10
         version: 2.3.1(vue@3.5.13(typescript@5.8.2))
       '@paas-front/paas-css':
-        specifier: ^1.0.7
-        version: 1.0.7(less@4.3.0)(scss@0.2.4)
+        specifier: ^0.1.29
+        version: 0.1.29(less@4.3.0)(scss@0.2.4)
       '@soerenmartius/vue3-clipboard':
         specifier: ^0.1.2
         version: 0.1.2
@@ -1089,8 +1089,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@paas-front/paas-css@1.0.7':
-    resolution: {integrity: sha512-znwLtCJqDROdK5FcA7YeJsC1l6QgeMkDLYM0h/sRPpAWRttuRI5fLXJ05HafudS6K02yhuqYc2GhWskofz3kSA==, tarball: https://artifactory.dep.devops.cmit.cloud:20101/artifactory/api/npm/paas-npm-front/@paas-front/paas-css/-/@paas-front/paas-css-1.0.7.tgz}
+  '@paas-front/paas-css@0.1.29':
+    resolution: {integrity: sha512-eP21ois8f0cWp6BhZllpXF8546Giq3czOYZqzVB96KrTgt2eWJ5m75vnZagsOl9IoiCGq6zkAEXvrKcfNjWwWg==, tarball: https://artifactory.dep.devops.cmit.cloud:20101/artifactory/api/npm/paas-npm-front/@paas-front/paas-css/-/@paas-front/paas-css-0.1.29.tgz}
     peerDependencies:
       less: ^4.2.0
       scss: ^0.2.4
@@ -6214,7 +6214,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@paas-front/paas-css@1.0.7(less@4.3.0)(scss@0.2.4)':
+  '@paas-front/paas-css@0.1.29(less@4.3.0)(scss@0.2.4)':
     dependencies:
       less: 4.3.0
       scss: 0.2.4

@@ -1,29 +1,29 @@
 @use "sass:map";
 
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
   $colors: (
-    'primary': (
-      'base': #234883,
+    "primary": (
+      "base": #234883
     ),
-    'success': (
-      'base': #0FBE8F,
+    "success": (
+      "base": #0fbe8f
     ),
-    'warning': (
-      'base': #FF8807,
+    "warning": (
+      "base": #ff8807
     ),
-    'danger': (
-      'base': #F44656,
+    "danger": (
+      "base": #f44656
     ),
-    'error': (
-      'base': #F44656,
-    ),
+    "error": (
+      "base": #f44656
+    )
   ),
   $common-component-size: (
-    'small': 28px,
+    "small": 28px
   ),
   $table: (
-    'header-bg-color': var(--el-color-primary-light-8),
-  ),
+    "header-bg-color": var(--bg-color2)
+  )
 );
 
 @use "element-plus/theme-chalk/src/index.scss" as *;

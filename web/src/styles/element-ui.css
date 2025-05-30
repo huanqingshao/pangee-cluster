@@ -18,7 +18,9 @@
   font-size: 12px !important;
 }
 .app_block_title_small {
-  padding: 5px 0; font-size: 14px; font-weight: 500; 
+  padding: 5px 0;
+  font-size: 14px;
+  font-weight: 500;
 }
 .app_alert_mini.el-alert {
   padding: 0 8px 3px;
@@ -72,13 +74,13 @@
 }
 .app_text_strong {
   font-weight: 600;
-  color: #3EAF7C;
+  color: #3eaf7c;
 }
 .app_text_left {
-  text-align: left
+  text-align: left;
 }
 .app_text_right {
-  text-align: right
+  text-align: right;
 }
 .app_text_error {
   font-weight: 500;
@@ -87,11 +89,11 @@
 .noselect {
   -moz-user-select: -moz-none;
   -moz-user-select: none;
-  -o-user-select:none;
-  -khtml-user-select:none;
-  -webkit-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .nowrap {
   overflow: hidden;
@@ -99,24 +101,24 @@
   white-space: nowrap;
 }
 .app_text_mono {
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
-.app_input_mono textarea{
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+.app_input_mono textarea {
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
-textarea{
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+textarea {
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
-.app_input_mono input{
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+.app_input_mono input {
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
 input {
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
-.app_button_mono button{
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+.app_button_mono button {
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
 }
-.app_input_right input{
+.app_input_right input {
   text-align: right;
 }
 .app_input_no_border textarea {
@@ -147,7 +149,7 @@ input {
 }
 .app_code {
   padding: 20px;
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace !important;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace !important;
   font-size: 13px;
   color: var(--el-color-white);
   background-color: var(--el-text-color-primary);
@@ -181,20 +183,21 @@ input {
   background-color: rgba(46, 80, 133, 0.8);
   border-radius: 10px;
   box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.42);
-} 
+}
 
 /* ::-webkit-scrollbar-thumb:window-inactive {
   background-color: rgba(0, 0, 0, 0.4); 
   box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
-} */ 
+} */
 a {
-  color: #007AF5;
+  color: #007af5;
   text-decoration: none;
 }
 .app_codemirror_auto_height .CodeMirror {
   height: auto;
 }
-.app_codemirror_auto_height .CodeMirror-wrap pre.CodeMirror-line, .CodeMirror-wrap pre.CodeMirror-line-like {
+.app_codemirror_auto_height .CodeMirror-wrap pre.CodeMirror-line,
+.CodeMirror-wrap pre.CodeMirror-line-like {
   word-break: break-all;
 }
 .app_codemirror_auto_height .CodeMirror-scroll {
@@ -204,16 +207,17 @@ a {
 }
 .cm-s-darcula {
   /* font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', '"Bitstream Vera Sans Mono"', 'Courier New', "微软雅黑", monospace, serif !important; */
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace !important;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace !important;
 }
 .CodeMirror {
   /* font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', '"Bitstream Vera Sans Mono"', 'Courier New', "微软雅黑", monospace, serif !important; */
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace !important;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace !important;
   font-size: 13px;
   line-height: 18px;
 }
-.CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like {
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace !important;
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace !important;
 }
 .kuboard-spray-upgrade-notification {
   width: 400px;
@@ -233,7 +237,46 @@ a {
 }
 pre {
   margin: 0;
-  font-family: Consolas,Menlo,"Bitstream Vera Sans Mono",Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, "Bitstream Vera Sans Mono", Monaco, "微软雅黑", monospace;
   word-spacing: normal;
   white-space: pre-wrap;
+}
+.el-table__header {
+  height: 56px;
+  color: #24515d !important;
+}
+
+.el-table thead {
+  color: #24515d;
+}
+
+.el-table th.el-table__cell {
+  background-color: #f9fbfb;
+}
+
+.no-radius {
+  border-radius: 0 !important;
+}
+
+/* 整个滚动条 */
+::-webkit-scrollbar {
+  width: 6px; /* 垂直滚动条宽度 */
+  height: 6px; /* 水平滚动条高度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: rgba(144, 147, 153, 0.3);
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(144, 147, 153, 0.5);
+}
+
+/* 鼠标悬停时的滑块样式 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

@@ -20,7 +20,7 @@ export default {
   props: {
     title: { type: String, required: false, default: '' }
   },
-  data() {
+  data () {
     return {
 
     }
@@ -28,7 +28,7 @@ export default {
   computed: {
   },
   components: {},
-  mounted() {
+  mounted () {
   },
   methods: {
 
@@ -45,18 +45,20 @@ export default {
   display: flex;
   height: 52px;
   overflow: hidden;
-  background-color: #f1f4fa;
+  border-bottom: 1px solid var(--line-color);
+  background-color: #fff;
+  /* background-color: #f1f4fa; */
 }
 
 .app_page_operations {
-  box-shadow: 0 1px 8px 0 rgba(100, 100, 100, 0.8);
+  /* box-shadow: 0 1px 8px 0 rgba(100, 100, 100, 0.8);
   padding-bottom: 10px;
   margin: auto;
-  height: 33px;
+  margin-bottom: 10px;
+  height: 33px; */
   width: 100%;
   line-height: 32px;
   text-align: left;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
 }
@@ -73,7 +75,7 @@ export default {
 }
 
 .title::after {
-  content: '';
+  content: "";
   width: 0px;
   height: 12px;
   position: relative;

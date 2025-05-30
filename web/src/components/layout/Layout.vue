@@ -94,7 +94,7 @@ export default {
   overflow-x: auto;
   text-align: left;
   background-color: var(--el-color-white);
-  padding: 0 20px;
+  /* padding: 0 20px; */
 }
 .footplaceholder {
   height: 30px;

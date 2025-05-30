@@ -34,11 +34,8 @@ zh:
         <div class="noselect operation-steps">
           <div>
             <el-steps direction="vertical" :active="currentStep">
-              <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps"
-                :key="'step_' + index">
-                <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index"
-                  :status="currentStep >= index || true ? 'success' : ''"
-                  :class="currentStep == index ? 'is-selected-step' : ''" />
+              <template v-for="(step, index) in cluster.resourcePackage.operations[currentOperation].steps" :key="'step_' + index">
+                <el-step :title="step.name" :description="step.title[locale]" @click="currentStep = index" :status="currentStep >= index || true ? 'finish' : ''" :class="currentStep == index ? 'is-selected-step' : ''" />
               </template>
             </el-steps>
           </div>
@@ -48,8 +45,7 @@ zh:
         <div class="markdown-title">
           <div style="flex-grow: 1; font-weight: bolder;">{{
             cluster.resourcePackage.operations[currentOperation].steps[currentStep].title[locale] }}</div>
-          <el-button style="float: right" @click="showFileBrowser" type="primary"
-            icon="el-icon-pointer">查看代码</el-button>
+          <el-button style="float: right" @click="showFileBrowser" type="primary" icon="el-icon-pointer">查看代码</el-button>
         </div>
         <div class="markdown-content">
           <OperationStepMarkdown :cluster="cluster" :operation-index="currentOperation" :step-index="currentStep">
@@ -58,15 +54,12 @@ zh:
       </div>
       <div class="operation-card">
         <div class="markdown-title">
-          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep"
-            @refresh="$emit('refresh')">
+          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$emit('refresh')">
           </OperationStepExecute>
-          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation"
-            :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
+          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
         </div>
         <div class="operation-history">
-          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation"
-            :currentStep="currentStep">
+          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
           </OperationStepHistory>
         </div>
       </div>
@@ -86,13 +79,13 @@ export default {
   props: {
     cluster: { type: Object, required: true },
   },
-  data() {
+  data () {
     return {
     };
   },
   computed: {
     currentOperation: {
-      get() {
+      get () {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -101,7 +94,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentOperation || 0
       },
-      set(v) {
+      set (v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -113,7 +106,7 @@ export default {
       }
     },
     currentStep: {
-      get() {
+      get () {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -122,7 +115,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentStep || 0
       },
-      set(v) {
+      set (v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -142,13 +135,13 @@ export default {
     OperationStepStatus
   },
   methods: {
-    stepClass(step) {
+    stepClass (step) {
       if (this.currentStep == step) {
         return "step active";
       }
       return "step";
     },
-    showFileBrowser() {
+    showFileBrowser () {
       let path = "/operations/" + this.cluster.resourcePackage.operations[this.currentOperation].name;
       path += "/" + this.cluster.resourcePackage.operations[this.currentOperation].steps[this.currentStep].name;
       this.$refs.filebrowser.show([{
@@ -223,7 +216,6 @@ export default {
     font-size: 14px;
     font-weight: bolder;
   }
-
 }
 
 .operation-card .is-selected-step {

@@ -58,13 +58,13 @@ export default {
   opacity: 1;
 }
 .label {
-  color: var(--icon-default-color);
+  color: var(--text-3);
   font-weight: bold;
   font-size: 14px;
   /* border-bottom: dashed 1px var(--el-color-primary); */
 }
 .isLeaf {
-  color: var(--text-color);
+  color: var(--text-1);
   font-weight: bold;
   font-size: 14px;
   border-bottom: none;
