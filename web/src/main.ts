@@ -3,6 +3,7 @@ import router from "./router/index.js";
 import { initKuboardMfe } from "./micro-front-end.js";
 
 import ElementPlus from "element-plus";
+// import "element-plus/theme-chalk/src/index.scss";
 import "./styles/element-variables.scss";
 import "./styles/element-ui.css";
 import icons from "./styles/el-icons.js";
@@ -25,6 +26,9 @@ import axios from "axios";
 import checkNewVersion from "./utils/version-checker.js";
 
 import i18nMixin from "./mixins/i18n-mixin.js";
+
+// 自有组件库样式
+import "@paas-front/paas-css/css/index.css";
 
 axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
   window.KuboardSpray = { version: resp.data };

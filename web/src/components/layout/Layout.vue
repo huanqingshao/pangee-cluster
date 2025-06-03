@@ -10,17 +10,22 @@
 <template>
   <div>
     <div class="main">
-      <Menu @collapse="isCollapse = $event"></Menu>
-      <div class="rightColumn" :style="contentStyle">
+      <div class="main-header">
         <Header :pageLevel="pageLevel" :namespace="namespace" :percentage="percentage" :errorMsg="errorMsg" @collapse="isCollapse = $event"
           :breadcrumb="breadcrumb" :cluster="cluster" :switchToNamespaceHome="switchToNamespaceHome">
         </Header>
-        <div class="content">
-          <router-view :key="$route.path" v-slot="{ Component }">
-            <transition name="el-fade-in" mode="out-in">
-              <component :is="Component"></component>
-            </transition>
-          </router-view>
+      </div>
+      <div class="main-content">
+        <Menu @collapse="isCollapse = $event"></Menu>
+        <!-- <div class="rightColumn" > -->
+        <div class="rightColumn" :style="contentStyle">
+          <div class="content">
+            <router-view :key="$route.path" v-slot="{ Component }">
+              <transition name="el-fade-in" mode="out-in">
+                <component :is="Component"></component>
+              </transition>
+            </router-view>
+          </div>
         </div>
       </div>
     </div>
@@ -53,9 +58,11 @@ export default {
         background = 'background: ' + this.$route.meta.background + ';'
       }
       if (this.isCollapse) {
+        // return 'width:  64px;' + background
         return 'width: calc(100vw - 64px);' + background
       } else {
-        return 'width: calc(94vw - 150px);' + background
+        // return 'width: 220px;' + background
+        return 'width: calc(100vw - 240px);' + background
       }
     }
   },
@@ -78,14 +85,16 @@ export default {
   padding: 0 0px;
   display: flex;
   background-color: #f1f4fa;
+  flex-wrap: wrap; 
 }
 .content {
   display: inline-block;
   height: calc(100vh - 96px);
-  width: calc(100% - 30px);
-  padding: 0px 15px 0 15px;
+  width: 100%;
   overflow-x: auto;
   text-align: left;
+  background-color: var(--el-color-white);
+  /* padding: 0 20px; */
 }
 .footplaceholder {
   height: 30px;

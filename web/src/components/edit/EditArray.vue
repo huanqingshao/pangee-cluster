@@ -3,24 +3,21 @@
     <template #edit>
       <div style="flex-wrap: wrap; margin: -5px; width: 100%;" class="app_form_mini app_form_item_hide_label">
         <template v-for="(item, index) in modelValue" :key="index + 'item'">
-          <el-form-item :rules="itemRules" :prop="`${prop}.${index}`"
-            :class="isBlockItem ? 'block_item_in_array' : 'item_in_array'">
+          <el-form-item :rules="itemRules" :prop="`${prop}.${index}`" :class="isBlockItem ? 'block_item_in_array' : 'item_in_array'">
             <template v-if="isBlockItem">
               <div style="display: flex; gap: 0">
                 <div style="width: calc(100% - 20px);">
                   <slot name="editItem" :index="index" :item="item"></slot>
                 </div>
                 <div style="width: 20px;">
-                  <el-button style="margin-left: 0px;" icon="el-icon-delete" type="primary" text
-                    @click="modelValue!.splice(index, 1)">s</el-button>
+                  <el-button style="margin-left: 0px;" icon="el-icon-delete" type="primary" text @click="modelValue!.splice(index, 1)">s</el-button>
                 </div>
               </div>
             </template>
             <template v-else>
               <div style="display: flex; gap: 0">
                 <slot name="editItem" :index="index" :item="item" style="flex-grow: 1"></slot>
-                <el-button style="margin-left: 5px;" icon="el-icon-delete" type="primary" text
-                  @click="modelValue!.splice(index, 1)"></el-button>
+                <el-button style="margin-left: 5px;" icon="el-icon-delete" type="primary" text @click="modelValue!.splice(index, 1)"></el-button>
               </div>
             </template>
           </el-form-item>
@@ -45,27 +42,28 @@
 </template>
 
 <script lang="ts" setup>
-import clone from "clone"
-import EditCommon from "./EditCommon.vue"
+import clone from "clone";
+import EditCommon from "./EditCommon.vue";
 
-const props = withDefaults(defineProps<{
-  prop: string;
-  itemRules?: any[];
-  newItemTemplate?: any;
-  isBlockItem?: boolean;
-}>(), {
-  itemRules: () => [],
-  newItemTemplate: "",
-  isBlockItem: false
-})
-
-
+const props = withDefaults(
+  defineProps<{
+    prop: string;
+    itemRules?: any[];
+    newItemTemplate?: any;
+    isBlockItem?: boolean;
+  }>(),
+  {
+    itemRules: () => [],
+    newItemTemplate: "",
+    isBlockItem: false
+  }
+);
 
 const modelValue = defineModel<any[]>();
 
 function addNewItem() {
-  modelValue.value = modelValue.value || []
-  modelValue.value.push(clone(props.newItemTemplate))
+  modelValue.value = modelValue.value || [];
+  modelValue.value.push(clone(props.newItemTemplate));
 }
 </script>
 
@@ -95,7 +93,7 @@ function addNewItem() {
   align-items: center;
   margin: 5px;
   padding: 0px 12px 0px 12px;
-  border-radius: 50px;
+  border-radius: 4px;
   border: solid 1px var(--el-color-primary-light-8);
   background-color: white;
   height: 28px;

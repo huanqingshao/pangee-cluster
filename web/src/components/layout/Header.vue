@@ -18,6 +18,7 @@ zh:
     <div :class="'header kuboard-header'">
       <el-progress class="progress" :percentage="percentage" status="success" :stroke-width="3"></el-progress>
       <div style="display: flex;" :class="transparent ? '' : 'header-background'">
+        <div class="logo-area"  @click="$router.push('/home')">Kuboard Spray</div>
         <div :class="`slot ${pageLevel ? 'slot-cluster' : ''}`" :style="transparent ? 'background: transparent' : ''">
           <transition-group name="el-fade-in-linear">
             <HeaderBreadCrumb :label="t('homePage')" to="/home" :kind="t('homePage')" key="home"
@@ -29,7 +30,7 @@ zh:
           </transition-group>
         </div>
         <div class="header-right">
-          <div class="msg">
+          <!-- <div class="msg">
             <div class="version" :style="showGithubStar ? '' : 'line-height: 70px;'">
               <div class="dot"></div>
               <div
@@ -43,7 +44,7 @@ zh:
                 :src="`https://addons.kuboard.cn/downloads/github-star-kuboard-spray.html?nocache=${Math.random()}`"
                 frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe>
             </div>
-          </div>
+          </div> -->
           <LoginInfo></LoginInfo>
         </div>
       </div>
@@ -173,7 +174,7 @@ export default {
 }
 
 .setting {
-  height: 70px;
+  height: 60px;
   vertical-align: top;
   display: inline-block;
 }
@@ -191,23 +192,25 @@ export default {
 }
 
 .header {
-  height: 72px;
+  height: 60px;
   position: fixed;
   top: 0;
   z-index: 1000;
 }
 
 .header-background {
-  background: transparent;
+  background: var(--el-color-white);
 }
 
 .header-warpper {
-  height: 72px;
-  background: transparent;
+  width: 100vw;
+  height: 62px;
+  background: var(--el-color-white);
+  box-shadow: 0px 0px 16px 0px #24515D19;
 }
 
 .bg {
-  height: 70px;
+  height: 60px;
   overflow: hidden;
 }
 
@@ -217,11 +220,11 @@ export default {
 }
 
 .slot {
-  height: 70px;
+  height: 60px;
   overflow: hidden;
   padding: 0px 0 0px 20px;
   text-align: left;
-  line-height: 70px;
+  line-height: 60px;
   background: transparent;
   z-index: 1;
   color: var(--el-color-white);
@@ -238,8 +241,8 @@ export default {
   right: 0;
   overflow: hidden;
   color: var(--el-color-white);
-  line-height: 70px;
-  height: 70px;
+  line-height: 60px;
+  height: 60px;
   text-align: right;
 }
 
@@ -365,5 +368,25 @@ export default {
   top: 2px;
   z-index: 5000;
   width: calc(100vw - 0px);
+}
+.logo-area{
+  width: calc(6vw + 110px);
+  padding: 0px 20px;
+  color: #24515D;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 60px;
+  letter-spacing: 0px;
+  text-align: left;
+  cursor: pointer;
+}
+.logo-area::after{
+  content: "";
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-color);
+  position: absolute;
+  left: 240px;
+  top: 19px;
 }
 </style>

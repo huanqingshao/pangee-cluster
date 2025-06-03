@@ -7,7 +7,8 @@
         class="app_text_mono" @click="$emit('click')">{{label}}</span>
       <slot></slot>
       <el-icon v-if="hasNext" class="icon" :size="24">
-        <el-icon-arrow-right></el-icon-arrow-right>
+        <!-- <el-icon-arrow-right></el-icon-arrow-right> -->
+        /
       </el-icon>
     </div>
   </div>
@@ -38,13 +39,13 @@ export default {
 
 <style scoped lang="css">
 .bread-crumb {
-  height: 70px;
-  line-height: 70px;
+  height: 60px;
+  line-height: 60px;
   display: inline-block;
 }
 .wrapper {
-  height: 70px;
-  line-height: 70px;
+  height: 60px;
+  line-height: 60px;
 }
 .kind {
   opacity: 0.6;
@@ -57,13 +58,13 @@ export default {
   opacity: 1;
 }
 .label {
-  color: var(--el-color-primary);
+  color: var(--text-3);
   font-weight: bold;
   font-size: 14px;
-  border-bottom: dashed 1px var(--el-color-primary);
+  /* border-bottom: dashed 1px var(--el-color-primary); */
 }
 .isLeaf {
-  color: var(--el-color-primary);
+  color: var(--text-1);
   font-weight: bold;
   font-size: 14px;
   border-bottom: none;
@@ -71,7 +72,7 @@ export default {
 .icon {
   margin: 0 5px;
   color: var(--el-color-primary-light-5);
-  font-weight: 800;
+  /* font-weight: 800; */
   vertical-align: middle;
 }
 </style>

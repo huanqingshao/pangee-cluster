@@ -26,7 +26,8 @@ zh:
         <div @click="visible = !visible">
           <span class="font-weight" style="margin-right: 5px;">{{ displayName }}</span>
           <el-icon>
-            <el-icon-caret-bottom></el-icon-caret-bottom>
+            <!-- <el-icon-caret-bottom></el-icon-caret-bottom> -->
+            <el-icon-ArrowDown></el-icon-ArrowDown>
           </el-icon>
         </div>
       </template>
@@ -94,12 +95,21 @@ export default {
 <style scoped lang="css">
 .user {
   display: inline-block;
+  width: 90px;
+  height: 32px;
+  margin-top: 14px;
+  line-height: 32px;
+  text-align: center;
   user-select: none;
   cursor: pointer;
   transition: 0.2s;
   margin-right: 15px;
   vertical-align: top;
-  color: var(--el-color-primary);
+  color: var(--text-2);
+  border-radius: 4px;
+  background: var(--el-color-white);
+  border: 1px solid var(--border-color);
+
 }
 
 .user:hover {

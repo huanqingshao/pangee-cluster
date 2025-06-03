@@ -54,7 +54,7 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
+<style scoped lang="scss">
 .router a {
   color: var(--el-color-white);
   transition: 0.2s;
@@ -66,20 +66,31 @@ export default {
   display: inline-block;
   width: 40px;
   height: 40px;
-  border-radius: 20px;
-  background: var(--el-color-primary);
+  color: var(--text-3);
+  /* border-radius: 20px; */
+  /* background: var(--el-color-primary); */
   vertical-align: middle;
   cursor: pointer;
-  transition: 0.2s;
+  /* transition: 0.2s; */
+
+  border-radius: 4px;
+  background: #FFFFFF;
+  border: 1px solid #EAEEEF;
+
 }
 .kb-button:hover {
-  background-color: var(--el-color-primary-light-3);
-  color: var(--el-color-white);
-  transform:rotate(45deg);
-  -ms-transform:rotate(45deg); 	/* IE 9 */
-  -moz-transform:rotate(45deg); 	/* Firefox */
-  -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
-  -o-transform:rotate(45deg); 
+  /* background-color: var(--el-color-primary-light-3); */
+  color: var(--el-color-primary);
+  /* transform:rotate(45deg);
+  -ms-transform:rotate(45deg); 	
+  -moz-transform:rotate(45deg); 	
+  -webkit-transform:rotate(45deg); 
+  -o-transform:rotate(45deg);  */
+
+  border-radius: 4px;
+  background: #FFFFFF;
+  border: 1px solid var(--el-color-primary);
+
 }
 .kb-content {
   width: 24px;

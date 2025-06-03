@@ -8,25 +8,36 @@
   border-bottom: 1px solid var(--el-color-warning);
 }
 
+.main-content {
+  width: 100%;
+  height: calc(100vh - 62px);
+  padding: 0 0px;
+  display: flex;
+  // background-color: #f1f4fa;
+  background: #eef1f4;
+  overflow: hidden;
+}
+
 .leftColumn {
   height: 100vh;
   vertical-align: top;
   display: inline-block;
   border-radius: 3px;
   padding-top: 0px;
-  
-  background-image: url("./images/menu.png");
-  background-repeat:no-repeat;
-  background-color: transparent;
-  background-size: 100% 135%;
-  background-position: 0 -100px;
+  // background-color: #eceff2;
+
+  // background-image: url("./images/menu.png");
+  // background-repeat: no-repeat;
+  // background-color: transparent;
+  // background-size: 100% 135%;
+  // background-position: 0 -100px;
 }
 
 .rightColumn {
+  width: 100%;
   transition-duration: 0.42s;
-  background:linear-gradient(0deg,#f1f4fa, #d2dfed);
-  background-size: 100% 70px;
-  background-repeat: no-repeat;
+  margin: 24px;
+  box-sizing: border-box;
 }
 
 .menuTitle {
@@ -44,57 +55,52 @@
   background-color: transparent !important;
   -moz-user-select: -moz-none;
   -moz-user-select: none;
-  -o-user-select:none;
-  -khtml-user-select:none;
-  -webkit-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .el-menu-item {
   background-color: transparent !important;
-  color: var(--el-color-white);
+  color: var(--text-1);
   font-weight: 500;
 }
 
 .el-menu-item.is-active {
-  border-bottom-left-radius: 50px;
-  border-top-left-radius: 50px;
-  color: var(--el-color-primary);
-  background-color: var(--el-color-white) !important;
-  margin-left: 5px;
+  color: #19bbff !important;
+  background-color: #19bbff26 !important;
   border: 0px;
 }
 
 .el-sub-menu.is-disabled {
   .el-menu-item.is-active {
-    background-color: var(--el-color-white) !important;
+    background-color: var(--text-1) !important;
   }
 }
 
 .el-menu-item.is-active::before {
-  width: 20px;
-  height: 12px;
-  background-image: url("./images/round.png");
-  background-repeat:no-repeat;
-  background-size: 100% 100%;
+  width: 4px;
+  height: 40px;
+  background-color: var(--primary-color);
   content: "";
   position: absolute;
-  right: 0px;
-  top: -12px;
+  left: 0px;
+  // top: -12px;
 }
 
-.el-menu-item.is-active::after {
-  width: 20px;
-  height: 12px;
-  background-image: url("./images/round-1.png");
-  background-repeat:no-repeat;
-  background-size: 100% 100%;
-  content: "";
-  position: absolute;
-  right: 0px;
-  top: 56px;
-}
+// .el-menu-item.is-active::after {
+//   width: 20px;
+//   height: 12px;
+//   background-image: url("./images/round-1.png");
+//   background-repeat: no-repeat;
+//   background-size: 100% 100%;
+//   content: "";
+//   position: absolute;
+//   right: 0px;
+//   top: 56px;
+// }
 
 .el-sub-menu .el-menu-item.is-active::after {
   top: 50px !important;
@@ -103,25 +109,35 @@
 .toplevel.el-menu-item.is-active::after {
   top: 56px !important;
 }
+.toplevel.el-menu-item {
+  color: var(--text-1);
+  font-weight: 500;
+  font-size: 14px;
+}
+.el-sub-menu__title {
+  color: var(--text-1);
+  font-weight: 500;
+  font-size: 14px;
+}
 
 .el-menu-item i {
-  color: var(--el-color-white);
+  color: var(--text-1);
 }
 
 .el-menu--popup {
   background-color: var(--el-color-primary) !important;
-  opacity:0.9;
-  filter:alpha(opacity=90)
+  opacity: 0.9;
+  filter: alpha(opacity=90);
 }
 
 .el-sub-menu__title {
   background-color: transparent !important;
-  color: var(--el-color-white);
+  color: var(--text-1);
   font-weight: 600;
 }
 
 .el-sub-menu__title i {
-  color: var(--el-color-white);
+  color: var(--text-1);
 }
 
 .el-sub-menu__title .el-sub-menu__icon-arrow {
@@ -137,7 +153,8 @@
   line-height: 36px;
   text-align: right;
   padding-right: 10px;
-  color: var(--el-color-white);
+  // color: var(--el-color-white);
+  color: #19bbff;
   z-index: 1;
 }
 
@@ -152,7 +169,7 @@
   border: none;
 }
 .kuboard_namespaced_menu:not(.el-menu--collapse) {
-  width: calc(6vw + 150px);
+  width: 240px;
 }
 .kuboard_namespaced_menu .el-menu-item-group__title {
   padding-left: 25px !important;

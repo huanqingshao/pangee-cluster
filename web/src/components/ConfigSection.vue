@@ -13,11 +13,9 @@ zh:
     <template #label>
       <span v-if="!compute_edit_mode" class="viewLabel">{{label}}</span>
       <template v-else>
-        <el-checkbox v-model="enabledRef" :disabled="disabled"
-          ><span class="enableButton">{{label}}</span>
+        <el-checkbox v-model="enabledRef" :disabled="disabled"><span class="enableButton">{{label}}</span>
         </el-checkbox>
-        <el-popover placement="bottom-start" width="320" trigger="manual"
-          v-model:visible="visiblePopover">
+        <el-popover placement="bottom-start" width="320" trigger="manual" v-model:visible="visiblePopover">
           <p>
             {{ t('clear1') }}
             <i class="strong-text">{{label}}</i>
@@ -75,7 +73,7 @@ export default {
     disabled: { type: Boolean, required: false, default: false },
     antiFreeze: { type: Boolean, required: false, default: false },
     helpLink: { type: String, required: false, default: undefined },
-    labelWidth: { type: String, required: false, default: '80px'},
+    labelWidth: { type: String, required: false, default: '80px' },
   },
   data () {
     return {
@@ -150,16 +148,22 @@ export default {
   font-size: 13px;
 }
 .config_section_header {
-  background-color: var(--el-color-primary-light-5);
-  border: solid 1px var(--el-color-primary-light-5);
-  color: white;
-  height: 26px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #f9fbfb;
+  border: solid 1px #eaeeef;
+  border-radius: 4px;
+  color: #24515d;
   padding: 0 15px;
   cursor: pointer;
   font-size: 13px;
 }
 .config_section_header.expanded {
-  background-color: var(--el-color-primary-light-3);
+  height: 50px;
+  line-height: 50px;
+  background-color: #f9fbfb;
+  border-radius: 4px;
+  color: #24515d;
 }
 .config_section_content {
   padding: 10px 15px 0 15px;

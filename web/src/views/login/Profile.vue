@@ -20,22 +20,25 @@ zh:
 <template>
   <div>
     <div class="app_block_title">{{ t('changePassword') }}</div>
-    <div class="block">
-      <el-form ref="form" :model="form" label-position="left" label-width="120px" v-if="userInfo" style="width: 420px;">
-        <el-form-item :label="t('username')">
-          <span>{{userInfo.username}}</span>
-        </el-form-item>
-        <el-form-item :label="t('password')" prop="password" :rules="passwordRules">
-          <el-input v-model.trim="form.password" show-password :placeholder="t('password_placeholer')"></el-input>
-        </el-form-item>
-        <el-form-item :label="t('password2')" prop="password2" :rules="passwordRules">
-          <el-input v-model.trim="form.password2" show-password :placeholder="t('password2_placeholder')"></el-input>
-        </el-form-item>
-        <div style="text-align: right;">
-          <el-button type="primary" @click="save">{{t('changePassword')}}</el-button>
-        </div>
-      </el-form>
+    <div class="app_block_content">
+      <div class="block">
+        <el-form ref="form" :model="form" label-position="left" label-width="120px" v-if="userInfo" style="width: 420px;">
+          <el-form-item :label="t('username')">
+            <span>{{userInfo.username}}</span>
+          </el-form-item>
+          <el-form-item :label="t('password')" prop="password" :rules="passwordRules">
+            <el-input v-model.trim="form.password" show-password :placeholder="t('password_placeholer')"></el-input>
+          </el-form-item>
+          <el-form-item :label="t('password2')" prop="password2" :rules="passwordRules">
+            <el-input v-model.trim="form.password2" show-password :placeholder="t('password2_placeholder')"></el-input>
+          </el-form-item>
+          <div style="text-align: right;">
+            <el-button type="primary" @click="save">{{t('changePassword')}}</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -48,14 +51,14 @@ export default {
     return this.userInfo ? 100 : 0
   },
   breadcrumb () {
-    return [ { label: this.t('changePassword') } ]
+    return [{ label: this.t('changePassword') }]
   },
   refresh () {
     this.refresh()
   },
   props: {
   },
-  data() {
+  data () {
     return {
       userInfo: undefined,
       form: {
@@ -82,7 +85,7 @@ export default {
   },
   computed: {
   },
-  components: { },
+  components: {},
   mounted () {
     this.refresh()
   },

@@ -19,7 +19,7 @@ zh:
         <li>如果您发现 Kuboard Spray 的 BUG，请及时提出 <a href="https://github.com/eip-work/kuboard-spray/issues" target="_blank">https://github.com/eip-work/kuboard-spray/issues</a></li>
       </div>
     </el-alert>
-    <div style="display: flex; margin-top: 20px;">
+    <div style="display: flex; margin-top: 20px;padding: 0 20px;">
       <el-card class="card">
         <template #header>
           <el-icon :size="20" style="margin-right: 10px;"><el-icon-box /></el-icon>
@@ -78,14 +78,14 @@ export default {
   breadcrumb () {
     return []
   },
-  data() {
+  data () {
     return {
       kuboardIcon,
     }
   },
   computed: {
   },
-  components: { },
+  components: {},
   mounted () {
   },
   methods: {

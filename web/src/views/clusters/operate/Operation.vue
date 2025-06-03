@@ -59,15 +59,12 @@ zh:
       </div>
       <div class="operation-card">
         <div class="markdown-title">
-          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep"
-            @refresh="$emit('refresh')">
+          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$emit('refresh')">
           </OperationStepExecute>
-          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation"
-            :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
+          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
         </div>
         <div class="operation-history">
-          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation"
-            :currentStep="currentStep">
+          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
           </OperationStepHistory>
         </div>
       </div>
@@ -87,13 +84,13 @@ export default {
   props: {
     cluster: { type: Object, required: true },
   },
-  data() {
+  data () {
     return {
     };
   },
   computed: {
     currentOperation: {
-      get() {
+      get () {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -102,7 +99,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentOperation || 0
       },
-      set(v) {
+      set (v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -114,7 +111,7 @@ export default {
       }
     },
     currentStep: {
-      get() {
+      get () {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -127,7 +124,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentStep || 0
       },
-      set(v) {
+      set (v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -147,7 +144,7 @@ export default {
     OperationStepStatus
   },
   methods: {
-    stepClass(step) {
+    stepClass (step) {
       if (this.currentStep == step) {
         return "step active";
       }
@@ -228,7 +225,6 @@ export default {
     font-size: 14px;
     font-weight: bolder;
   }
-
 }
 
 .operation-card .is-selected-step {
