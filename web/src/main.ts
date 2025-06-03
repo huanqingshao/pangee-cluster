@@ -28,7 +28,8 @@ import checkNewVersion from "./utils/version-checker.js";
 import i18nMixin from "./mixins/i18n-mixin.js";
 
 // 自有组件库样式
-import "@paas-front/paas-css/css/index.css";
+// import "@paas-front/paas-css/css/index.css";
+import "./styles/paas-index.css";
 
 axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
   window.KuboardSpray = { version: resp.data };

@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
-    "@paas-front/paas-css": "^0.1.29",
     "@soerenmartius/vue3-clipboard": "^0.1.2",
     "axios": "^1.2.2",
     "base64-url": "^2.3.3",
