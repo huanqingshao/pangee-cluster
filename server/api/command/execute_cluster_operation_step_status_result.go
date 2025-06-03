@@ -38,6 +38,8 @@ func CheckStepStatusExec(request CheckStepStatusRequest) (*CheckStepStatusRespon
 
 	playbook := "operations/" + request.Operation + "/" + request.Step + "/status.yaml"
 
+	common.Symlink(cluster.ResourcePackageDir+"/group_vars", constants.GET_DATA_CLUSTER_DIR()+"/"+cluster.ClusterName+"/group_vars")
+
 	if !common.PathExists(cluster.ResourcePackageDir + "/" + playbook) {
 		// c.JSON(http.StatusNotFound, common.KuboardSprayResponse{
 		// 	Code:    http.StatusNotFound,

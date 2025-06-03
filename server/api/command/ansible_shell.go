@@ -47,10 +47,11 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 		"hosts":        target,
 		"tasks":        tasks,
 		"environment": gin.H{
-			"ETCDCTL_API":    "3",
-			"ETCDCTL_CERT":   "/etc/ssl/etcd/ssl/admin-{{inventory_hostname}}.pem",
-			"ETCDCTL_KEY":    "/etc/ssl/etcd/ssl/admin-{{inventory_hostname}}-key.pem",
-			"ETCDCTL_CACERT": "/etc/ssl/etcd/ssl/ca.pem",
+			"ETCDCTL_API":       "3",
+			"ETCDCTL_CERT":      "{{ kube_ssl_dir }}/etcd_server.crt",
+			"ETCDCTL_KEY":       "{{ kube_ssl_dir }}/etcd_server.key",
+			"ETCDCTL_CACERT":    "{{ kube_ssl_dir }}/ca.crt",
+			"ETCDCTL_ENDPOINTS": "https://{{ hostvars[inventory_hostname]['ip'] }}:{{etcd_client_port}}",
 		},
 	}
 

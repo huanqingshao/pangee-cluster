@@ -2,8 +2,8 @@ package fact
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/eip-work/kuboard-spray/api/command"
 	"github.com/eip-work/kuboard-spray/common"
@@ -71,7 +71,7 @@ func nodefacts(req GetNodeFactRequest) (*command.AnsibleResultNode, error) {
 
 	stdout, _ := json.Marshal(fact[0])
 	factPath := factDir + "/" + req.Node + "_" + req.Ip + "_" + req.Port
-	ioutil.WriteFile(factPath, stdout, 0666)
+	os.WriteFile(factPath, stdout, 0666)
 
 	return &fact[0], nil
 }

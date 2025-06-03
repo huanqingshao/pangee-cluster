@@ -1,0 +1,11 @@
+# javascript node项目：
+#   - npm
+#   - npm-cmd
+# yaml应与package.json在同一目录
+---
+approaches: # 启用以下扫描方式(全选)
+  - npm # 扫描使用npm管理依赖的javascript项目
+  - npm-cmd # 调用npm命令获得依赖信息
+
+javascript: # javascript扫描参数。
+  npm_cmd_options: ["--registry", "https://registry.npmjs.org"] # npm命令行参数，设置待扫描项目实际的npm源

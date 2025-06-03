@@ -8,7 +8,7 @@ zh:
 </i18n>
 
 <template>
-  <el-form-item :rules="computedRules" :prop="prop" :label-width="labelWidth">
+  <el-form-item :rules="computedRules" :prop="prop" :label-width="compute_label_width">
     <template #label>
       {{ label }}
     </template>
@@ -64,6 +64,8 @@ const modelValue = defineModel();
 
 const editMode = inject<"view" | "edit" | "create" | "frozen">('editMode')
 
+const defaultLabelWidth = inject<string>("defaultLabelWidth", "")
+
 const compute_edit_mode = computed(() => {
   if (props.readOnly) {
     return false
@@ -78,6 +80,13 @@ const compute_edit_mode = computed(() => {
     return false
   }
   return true
+})
+
+const compute_label_width = computed(() => {
+  if (props.labelWidth != undefined && props.labelWidth != "") {
+    return props.labelWidth;
+  }
+  return defaultLabelWidth || "";
 })
 
 const compute_display_value = computed(() => {

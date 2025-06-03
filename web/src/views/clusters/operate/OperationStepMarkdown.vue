@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="markdownContent" v-html="docsHtml" class="operation-step-markdown"></div>
-    <div id="markdown-image-modal" class="markdown-image-modal" onclick="hideMarkdownImageModal()">
-      <img id="markdown-image-modal-image" class="markdown-image-modal-content">
+    <div v-if="markdownContent" v-html="docsHtml" class="plan-markdown"></div>
+    <div id="markdown-image-modal" class="plan-markdown-image-modal" onclick="hideMarkdownImageModal()">
+      <img id="markdown-image-modal-image" class="plan-markdown-image-modal-content">
     </div>
   </div>
 </template>
@@ -26,14 +26,14 @@ export default {
     path () {
       let result = this.cluster.resourcePackage.metadata.version;
       result += "/content/operations/";
-      if (this.cluster.resourcePackage.operations[this.operationIndex] == undefined) {
+      if (this.cluster.resourcePackage.data.operations[this.operationIndex] == undefined) {
         return "";
       }
-      result += this.cluster.resourcePackage.operations[this.operationIndex]?.name;
-      if (this.cluster.resourcePackage.operations[this.operationIndex]?.steps[this.stepIndex] == undefined) {
+      result += this.cluster.resourcePackage.data.operations[this.operationIndex]?.name;
+      if (this.cluster.resourcePackage.data.operations[this.operationIndex]?.steps[this.stepIndex] == undefined) {
         return "";
       }
-      result += "/" + this.cluster.resourcePackage.operations[this.operationIndex]?.steps[this.stepIndex]?.name;
+      result += "/" + this.cluster.resourcePackage.data.operations[this.operationIndex]?.steps[this.stepIndex]?.name;
       return result;
     },
     docsHtml () {
@@ -84,6 +84,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../plan/markdown.scss";
+
 .markdown-image-modal {
   z-index: 900000;
   display: none;
@@ -202,4 +204,5 @@ export default {
     }
   }
 }
+
 </style>

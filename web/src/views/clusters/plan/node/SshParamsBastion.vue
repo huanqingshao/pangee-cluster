@@ -6,6 +6,8 @@ en:
   default_value: 'Default: {default_value} (inhirit from value configured in Global Config tab)'
   duplicateIP: "IP address conflict with {node}"
   description: Access target nodes throguh bastion/jumpserver
+
+  AllowTcpForwarding: 跳板机 /etc/ssh/sshd_config 文件中的 AllowTcpForwarding 属性必须设置为 true
 zh:
   bastionUsage: KuboardSpray 可以通过跳板机或堡垒机访问将要安装 K8S 集群的目标节点。
   addSshKey: 添加私钥
@@ -33,6 +35,8 @@ zh:
   ansible_become_password_placeholder: '切换密码'
 
   ansible_python_interpreter: 'Python 路径'
+
+  AllowTcpForwarding: 跳板机 /etc/ssh/sshd_config 文件中的 AllowTcpForwarding 属性必须设置为 true
 </i18n>
 
 
@@ -48,12 +52,17 @@ zh:
         <el-radio value="socks5">SOCKS5</el-radio>
       </el-radio-group>
     </el-form-item>
-    <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}`" anti-freeze
-      :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
-    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}`"
+    <EditString v-model="holder.ansible_host" :label="t('ansible_host')" :prop="`all.hosts.${nodeName}.ansible_host`"
+      anti-freeze :placeholder="t('ansible_host_placeholder')" :rules="hostRules"></EditString>
+    <div
+      style="margin-left: 120px;margin-bottom: 10px; margin-top: -10px; color: var(--el-color-white); background-color: var(--el-color-warning); padding: 5px 15px; font-weight: bolder"
+      class="app_text_mono">
+      {{ t("AllowTcpForwarding") }}
+    </div>
+    <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}.ansible_port`"
       :placeholder="placeholder('ansible_port')" anti-freeze required></EditString>
     <template v-if="computedBastionType == 'ssh'">
-      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}.ansible_user`"
         :placeholder="placeholder('ansible_user')" anti-freeze required></EditString>
       <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
         :loadOptions="loadSshKeyList" anti-freeze clearable :placeholder="placeholder('ansible_ssh_private_key_file')">
@@ -67,7 +76,7 @@ zh:
       <SshAddPrivateKey ref="addPrivateKey" ownerType="cluster" :ownerName="cluster.name"></SshAddPrivateKey>
     </template>
     <template v-else-if="computedBastionType == 'socks5'">
-      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}`"
+      <EditString v-model="holder.ansible_user" :label="t('ansible_user')" :prop="`all.hosts.${nodeName}.ansible_user`"
         :placeholder="placeholder('ansible_user')" anti-freeze></EditString>
       <EditString v-model="holder.ansible_password" :label="t('ansible_password')" show-password anti-freeze clearable
         :placeholder="placeholder('ansible_password')"></EditString>
@@ -150,7 +159,7 @@ export default {
             if (bastion['ansible_password']) {
               sshPass = `sshpass -p '${bastion['ansible_password']}' `
             }
-            let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ControlMaster=auto -o ControlPersist=30m -o ControlPath={{kuboardspray_cluster_dir}}/%%r@%%h:%%p -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
+            let temp = `-o ProxyCommand="${sshPass}ssh -F /dev/null -o ConnectTimeout=10 -o ConnectionAttempts=100 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p`
             temp += bastion["ansible_port"] + " " + bastion["ansible_user"] + "@" + bastion["ansible_host"]
             if (bastion["ansible_ssh_private_key_file"]) {
               temp += " -i " + bastion["ansible_ssh_private_key_file"]

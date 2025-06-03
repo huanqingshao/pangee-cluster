@@ -3,7 +3,7 @@
     <template #edit>
       <el-radio-group v-model="modelValue" :disabled="disabled">
         <template v-for="(option, index) in options" :key="index">
-          <el-radio-button :label="option.label" :value="option.value">
+          <el-radio-button :label="option.label" :value="option.value" :disabled="option.disabled">
             {{ option.label }}
           </el-radio-button>
         </template>
@@ -28,6 +28,7 @@ withDefaults(defineProps<{
   options: {
     label: string;
     value: any;
+    disabled?: boolean;
   }[];
   disabled?: boolean;
 }>(), {

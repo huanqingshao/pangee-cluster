@@ -46,31 +46,37 @@ zh:
 
 <template>
   <div>
-    <el-popover v-if="roles.kube_control_plane" v-model:visible="control_plane_commands_visible" placement="top-start" width="50vw" trigger="click">
+    <el-popover v-if="roles.kube_control_plane" v-model:visible="control_plane_commands_visible" placement="top-start"
+      width="50vw" trigger="click">
       <template #reference>
         <el-button style="margin-left: 10px" type="primary">{{ t('kube_control_plane_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in control_plane_commands" :key="type">
-        <div class="app_text_mono commands_title">{{type}}</div>
-        <SshQuickCommand v-model:visible="control_plane_commands_visible" v-for="(command, index) in cmds" :key="type + index" :command="command" :socket="socket"></SshQuickCommand>
+        <div class="app_text_mono commands_title">{{ type }}</div>
+        <SshQuickCommand v-model:visible="control_plane_commands_visible" v-for="(command, index) in cmds"
+          :key="type + index" :command="command" :socket="socket"></SshQuickCommand>
       </div>
     </el-popover>
-    <el-popover v-if="roles.etcd" v-model:visible="etcd_commands_visible" placement="top-start" width="50vw" trigger="click">
+    <el-popover v-if="roles.etcd" v-model:visible="etcd_commands_visible" placement="top-start" width="50vw"
+      trigger="click">
       <template #reference>
         <el-button style="margin-left: 10px" type="warning">{{ t('etcd_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in etcd_commands" :key="type">
-        <div class="app_text_mono commands_title">{{type}}</div>
-        <SshQuickCommand v-model:visible="etcd_commands_visible" v-for="(command, index) in cmds" :key="type + index" :command="command" :socket="socket"></SshQuickCommand>
+        <div class="app_text_mono commands_title">{{ type }}</div>
+        <SshQuickCommand v-model:visible="etcd_commands_visible" v-for="(command, index) in cmds" :key="type + index"
+          :command="command" :socket="socket"></SshQuickCommand>
       </div>
     </el-popover>
-    <el-popover v-if="roles.kube_node" v-model:visible="kube_node_commands_visible" placement="top-start" width="50vw" trigger="click">
+    <el-popover v-if="roles.kube_node" v-model:visible="kube_node_commands_visible" placement="top-start" width="50vw"
+      trigger="click">
       <template #reference>
         <el-button style="margin-left: 10px" type="success">{{ t('kube_node_cmds') }}</el-button>
       </template>
       <div v-for="(cmds, type) in kube_node_commands" :key="type">
-        <div class="app_text_mono commands_title">{{type}}</div>
-        <SshQuickCommand v-model:visible="kube_node_commands_visible" v-for="(command, index) in cmds" :key="type + index" :command="command" :socket="socket"></SshQuickCommand>
+        <div class="app_text_mono commands_title">{{ type }}</div>
+        <SshQuickCommand v-model:visible="kube_node_commands_visible" v-for="(command, index) in cmds"
+          :key="type + index" :command="command" :socket="socket"></SshQuickCommand>
       </div>
     </el-popover>
   </div>
@@ -81,8 +87,8 @@ import SshQuickCommand from './SshQuickCommand.vue'
 
 export default {
   props: {
-    roles: { type: Object, required: false, default: () => {return {}} },
-    socket: { type: Object, required: false, default: () => {return {}} },
+    roles: { type: Object, required: false, default: () => { return {} } },
+    socket: { type: Object, required: false, default: () => { return {} } },
     cluster: { type: Object, required: false, default: undefined },
   },
   data() {
@@ -107,29 +113,29 @@ export default {
           { name: this.t('kubelet_version'), cmd: 'kubelet version' },
           { name: this.t('kubelet_status'), cmd: 'systemctl status kubelet' },
         ],
-        crictl: [
-          { name: this.t('crictl_ps'), cmd: 'crictl ps'},
-          { name: this.t('crictl_images'), cmd: 'crictl images'},
+        nerdctl: [
+          { name: this.t('nerdctl_ps'), cmd: 'nerdctl ps --namespace k8s.io' },
+          { name: this.t('nerdctl_images'), cmd: 'nerdctl images --namespace k8s.io' },
         ]
       }
       temp = Object.assign(temp, this.kube_node_commands)
       return temp
-    } ,
-    etcd_commands () {
+    },
+    etcd_commands() {
       let statusCmd = 'etcdctl endpoint health'
-      if (this.cluster && this.cluster.inventory) {
-        let inventory = this.cluster.inventory
-        statusCmd += ' --endpoints='
-        for (let key in inventory.all.children.target.children.etcd.hosts) {
-          statusCmd += inventory.all.hosts[key].ip || inventory.all.hosts[key].ansible_host
-          statusCmd += ':2379,'
-        }
-        statusCmd = statusCmd.slice(0, statusCmd.length - 1)
-      }
+      // if (this.cluster && this.cluster.inventory) {
+      //   let inventory = this.cluster.inventory
+      //   statusCmd += ' --endpoints='
+      //   for (let key in inventory.all.children.target.children.etcd.hosts) {
+      //     statusCmd += inventory.all.hosts[key].ip || inventory.all.hosts[key].ansible_host
+      //     statusCmd += ':2379,'
+      //   }
+      //   statusCmd = statusCmd.slice(0, statusCmd.length - 1)
+      // }
       return {
         etcdctl: [
           { name: this.t('etcd_member_list'), cmd: 'etcdctl member list' },
-          { name: this.t('etcd_member_status'), cmd: statusCmd},
+          { name: this.t('etcd_member_status'), cmd: statusCmd },
         ],
       }
     },
@@ -138,11 +144,11 @@ export default {
         kubelet: [
           { name: this.t('kubelet_version'), cmd: 'kubelet version' },
           { name: this.t('kubelet_status'), cmd: 'systemctl status kubelet' },
-          { name: this.t('kubelet_journal'), cmd: 'journalctl -u kubelet.service'}
+          { name: this.t('kubelet_journal'), cmd: 'journalctl -u kubelet.service' }
         ],
-        crictl: [
-          { name: this.t('crictl_ps'), cmd: 'crictl ps'},
-          { name: this.t('crictl_images'), cmd: 'crictl images'},
+        nerdctl: [
+          { name: this.t('nerdctl_ps'), cmd: 'nerdctl ps --namespace k8s.io' },
+          { name: this.t('nerdctl_images'), cmd: 'nerdctl images --namespace k8s.io' },
         ]
       }
       if (this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_network_plugin === 'calico') {
@@ -155,7 +161,7 @@ export default {
     }
   },
   components: { SshQuickCommand },
-  mounted () {
+  mounted() {
   },
   methods: {
 

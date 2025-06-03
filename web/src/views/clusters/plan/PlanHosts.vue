@@ -39,7 +39,7 @@ zh:
                 }}</el-tag>
               <el-tag v-else type="info" effect="light" size="small" style="width: 100px; text-align: center">{{
                 t("disabledBation")
-              }}</el-tag>
+                }}</el-tag>
             </div>
           </Node>
           <div class="horizontalConnection" :style="bastionEnabled ? '' : 'border-color: white;'"></div>
@@ -54,7 +54,7 @@ zh:
         <div
           style="padding: 5px; font-weight: bolder; font-size: 14px; height: 28px; line-height: 28px; margin-bottom: 10px">
           <span style="margin-right: 20px">Kubernetes Cluster</span>
-          <AddNode :inventory="inventory" v-model:computedCurrentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
+          <AddNode :inventory="inventory" v-model:currentPropertiesTab="computedCurrentPropertiesTab"></AddNode>
           <el-button v-if="mode == 'view'" type="primary" plain icon="el-icon-lightning" @click="ping"
             :loading="pingpong_loading">
             <span class="app_text_mono">PING</span>
@@ -153,7 +153,6 @@ zh:
 </template>
 
 <script>
-import { computed } from "vue";
 import Node from "./Node.vue";
 import ConfigNode from "./node/ConfigNode.vue";
 import CopyGapNodeToInventory from "./node/CopyGapNodeToInventory.vue";
@@ -181,6 +180,7 @@ export default {
         return this.currentPropertiesTab;
       },
       set(v) {
+        console.log("=---", v);
         if (this.editMode == "view") {
           this.currentPropertiesTab = v;
           return;
@@ -210,6 +210,13 @@ export default {
     },
     bastionEnabled() {
       return this.cluster.inventory.all.hosts.bastion !== undefined;
+    },
+    ipSet() {
+      let ips = [];
+      for (let i in this.cluster.inventory.all.hosts) {
+        ips.push(this.cluster.inventory.all.hosts[i].ansible_host)
+      }
+      return ips;
     },
     nodeGap() {
       let temp = {
@@ -246,7 +253,7 @@ export default {
       temp.inventory.all.children.target.vars = this.cluster.inventory.all.children.target.vars;
       for (let nodeName in this.cluster.state.nodes) {
         let node = this.cluster.state.nodes[nodeName];
-        if (this.cluster.inventory.all.hosts[nodeName] === undefined) {
+        if (this.cluster.inventory.all.hosts[nodeName] === undefined && this.ipSet.indexOf(nodeName) < 0) {
           let ip = "";
           for (let i in node.status.addresses) {
             if (node.status.addresses[i].type === "InternalIP") {

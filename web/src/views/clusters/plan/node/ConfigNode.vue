@@ -2,10 +2,9 @@
 en:
   terminal: Open ssh terminal
   sshcommon: SSH Params (apply to node {nodeName})
-  etcd: "ETCD params (scope: node {nodeName})"
-  etcd_member_name: ETCD Member Name
-  etcd_member_name_required: Please input etcd_member_name
-  etcd_member_name_conflict: "etcd_member_name conflict with that in node {nodeName}"
+  Keepalived: "Keepalived params (scope: node {nodeName})"
+  keepalived_state: keepalived_state
+  keepalived_priority: keepalived_priority
   invalidName: Hostname must consist of lower case alphanumeric characters or digit, and must start with an alphanumeric character
   roles: Node Role
   roleDescription: 'Node Role (scope: node {nodeName})'
@@ -17,10 +16,9 @@ en:
 zh:
   terminal: 打开 SSH 终端
   sshcommon: SSH 连接参数（适用范围：节点 {nodeName}）
-  etcd: "ETCD 参数（适用范围：节点 {nodeName}）"
-  etcd_member_name: ETCD 成员名称
-  etcd_member_name_required: 请填写 ETCD 成员名称
-  etcd_member_name_conflict: "ETCD成员名称与节点 {nodeName} 的ETCD成员名称冲突"
+  Keepalived: "Keepalived 参数（适用范围：节点 {nodeName}）"
+  keepalived_state: keepalived_state
+  keepalived_priority: keepalived_priority
   invalidName: 必须由小写字母、数字组成，且必须以字母开头，以字母/数字结尾
   roles: 节点角色
   roleDescription: 节点角色（适用范围：节点 {nodeName}）
@@ -118,12 +116,22 @@ zh:
         </template>
       </EditCommon>
     </ConfigSection>
-    <ConfigSection v-if="enabledEtcd" v-model:enabled="enabledEtcd" label="ETCD"
-      :description="t('etcd', { nodeName: nodeName })" disabled anti-freeze>
-      <EditString v-model="inventory.all.children.target.children.etcd.hosts[nodeName].etcd_member_name"
-        :rules="etcd_member_name_rules" :label="t('etcd_member_name')"
+    <ConfigSection v-if="isKubeControlPlane" v-model:enabled="isKubeControlPlane" label="Keepalived"
+      :description="t('Keepalived', { nodeName: nodeName })" disabled anti-freeze>
+      <EditRadio
+        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_state"
+        :label="t('keepalived_state')"
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
-        :prop="`all.children.target.children.etcd.hosts.${nodeName}`" required></EditString>
+        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_state`"
+        :options="keepAliveStateOptions" required></EditRadio>
+      <EditNumber
+        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_priority"
+        :label="t('keepalived_priority')"
+        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
+        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_priority`"
+        :min="0" :max="100" required>
+      </EditNumber>
+
     </ConfigSection>
   </el-form>
 </template>
@@ -144,23 +152,6 @@ export default {
   data() {
     return {
       enabledRoles: true,
-
-      etcd_member_name_rules: [
-        {
-          validator: (rule, value, callback) => {
-            if (!/^[a-z]([_a-z0-9]*[a-z0-9])?$/.test(value)) {
-              return callback(this.t('invalidName'))
-            }
-            for (let key in this.inventory.all.children.target.children.etcd.hosts) {
-              if (key !== this.nodeName && this.inventory.all.children.target.children.etcd.hosts[key].etcd_member_name === value) {
-                return callback(this.t('etcd_member_name_conflict', { nodeName: key }))
-              }
-            }
-            return callback()
-          },
-          trigger: 'blur',
-        }
-      ]
     }
   },
   inject: ['editMode', 'onlineNodes'],
@@ -265,6 +256,18 @@ export default {
         }
       }
     },
+    keepAliveStateOptions() {
+      return [
+        {
+          label: "MASTER",
+          value: "MASTER"
+        },
+        {
+          label: "BACKUP",
+          value: "BACKUP"
+        }
+      ]
+    }
   },
   components: { SshParamsNode, NodeRoleTag, NodeFact, StateNode },
   mounted() {

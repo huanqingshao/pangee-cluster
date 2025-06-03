@@ -26,11 +26,11 @@ zh:
 </i18n>
 
 <template>
-  <el-popover placement="right-start" :title="t('addNode')" v-if="editMode !== 'view'"
-    v-model:visible="visible" :width="540" trigger="manual">
+  <el-popover placement="right-start" :title="t('addNode')" v-if="editMode !== 'view'" v-model:visible="visible"
+    :width="540" trigger="manual">
     <template #reference>
       <el-button icon="el-icon-plus" type="primary" @click="visible = true"
-        :disabled="editMode === 'view'">{{t('addNode')}}</el-button>
+        :disabled="editMode === 'view'">{{ t('addNode') }}</el-button>
     </template>
     <el-form label-position="left" label-width="80px" ref="addNodeForm" :model="addNodeForm" @submit.enter.prevent>
       <el-form-item :label="t('nodeName')" prop="name" :rules="nodeNameRules">
@@ -38,9 +38,10 @@ zh:
       </el-form-item>
       <el-form-item :label="t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
         <el-checkbox-group v-model="addNodeForm.roles">
-          <el-checkbox label="kube_control_plane" value="kube_control_plane">{{$t('node.kube_control_plane')}}</el-checkbox>
-          <el-checkbox label="etcd" value="etcd">{{$t('node.etcd')}}</el-checkbox>
-          <el-checkbox label="kube_node" value="kube_node">{{$t('node.kube_node')}}</el-checkbox>
+          <el-checkbox label="kube_control_plane"
+            value="kube_control_plane">{{ $t('node.kube_control_plane') }}</el-checkbox>
+          <el-checkbox label="etcd" value="etcd">{{ $t('node.etcd') }}</el-checkbox>
+          <el-checkbox label="kube_node" value="kube_node">{{ $t('node.kube_node') }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div class="app_margin_bottom">
@@ -50,9 +51,10 @@ zh:
       </div>
     </el-form>
     <div style="text-align: right;">
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" style="float: left;"></KuboardSprayLink>
-      <el-button icon="el-icon-close" @click="addNodeForm.visible = false">{{$t('msg.cancel')}}</el-button>
-      <el-button icon="el-icon-plus" @click="addNode" type="primary">{{$t('msg.ok')}}</el-button>
+      <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" style="float: left;">
+      </KuboardSprayLink>
+      <el-button icon="el-icon-close" @click="addNodeForm.visible = false">{{ $t('msg.cancel') }}</el-button>
+      <el-button icon="el-icon-plus" @click="addNode" type="primary">{{ $t('msg.ok') }}</el-button>
     </div>
   </el-popover>
 </template>
@@ -61,9 +63,9 @@ zh:
 export default {
   props: {
     inventory: { type: Object, required: true },
-    currentPropertiesTab: { type: String, required: false},
+    currentPropertiesTab: { type: String, required: false },
   },
-  data () {
+  data() {
     return {
       addNodeForm: {
         name: '',
@@ -79,7 +81,7 @@ export default {
               return callback(this.t('cannotUseKeyword', { keyword: value }))
             }
             if (this.inventory.all.hosts[value] !== undefined) {
-              return callback(this.t('conflict', {name: value}))
+              return callback(this.t('conflict', { name: value }))
             }
             if (!/^[a-z]([-a-z0-9]*[a-z0-9])?$/.test(value)) {
               return callback(this.t('invalidName'))
@@ -96,12 +98,12 @@ export default {
   },
   computed: {
     inventoryRef: {
-      get () {return this.inventory},
-      set () {},
+      get() { return this.inventory },
+      set() { },
     },
     visible: {
-      get () { return this.addNodeForm.visible },
-      set (v) {
+      get() { return this.addNodeForm.visible },
+      set(v) {
         if (v) {
           if (this.isClusterInstalled && this.isClusterOnline) {
             if (this.pendingRemoveNodes.length > 0) {
@@ -116,7 +118,7 @@ export default {
   },
   inject: ['editMode', 'isClusterInstalled', 'isClusterOnline', 'pendingRemoveNodes'],
   methods: {
-    addNode () {
+    addNode() {
       this.$refs.addNodeForm.validate(flag => {
         if (flag) {
           this.inventoryRef.all.hosts[this.addNodeForm.name] = {

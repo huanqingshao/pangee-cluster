@@ -56,10 +56,7 @@ zh:
         <ExecuteTask :history="cluster.history" @refresh="refresh" :prompt-on-processing="true"></ExecuteTask>
       </template>
       <template v-if="cluster && isClusterInstalled">
-        <span style="color: var(--el-text-color-placeholder); margin-left: 10px;">
-          FIXME 检查集群状态
-        </span>
-        <!-- <ClusterStateNodes :cluster="cluster"></ClusterStateNodes> -->
+        <ClusterStateNodes :cluster="cluster"></ClusterStateNodes>
       </template>
     </ControlBar>
     <el-card shadow="never" v-if="loading">
@@ -205,10 +202,11 @@ export default {
           }
           for (let key in this.cluster.state.etcd_members) {
             for (let nodeName in this.cluster.inventory.all.children.target.children.etcd.hosts) {
-              let etcdNode = this.cluster.inventory.all.children.target.children.etcd.hosts[nodeName];
-              if (etcdNode.etcd_member_name === key) {
+              // let etcdNode = this.cluster.inventory.all.hosts[nodeName];
+              let etcdState = this.cluster.state.etcd_members[key];
+              if (etcdState.name.indexOf(nodeName) > 0) {
                 result[nodeName] = result[nodeName] || {};
-                result[nodeName].etcd_member = this.cluster.state.etcd_members[key];
+                result[nodeName].etcd_member = etcdState;
               }
             }
           }
@@ -300,7 +298,7 @@ export default {
         });
     },
     stateNodesLoaded(state) {
-      if (state.code > 0 && state.etcd_code > 0 && state.addon_code > 0) {
+      if (state.code > 0 && state.etcd_code > 0) {
         this.cluster.state = state;
       }
     },
@@ -367,19 +365,19 @@ export default {
           this.stateNodesLoaded(temp);
         });
       // this.percentage += 20
-      this.kuboardSprayApi
-        .get(`/clusters/${this.name}/state/addons`)
-        .then(resp => {
-          temp.addon_code = 200;
-          temp.addons = resp.data.data;
-          this.stateNodesLoaded(temp);
-        })
-        .catch(e => {
-          temp.addon_code = 500;
-          temp.addons = {};
-          console.error(e);
-          this.stateNodesLoaded(temp);
-        });
+      // this.kuboardSprayApi
+      //   .get(`/clusters/${this.name}/state/addons`)
+      //   .then(resp => {
+      //     temp.addon_code = 200;
+      //     temp.addons = resp.data.data;
+      //     this.stateNodesLoaded(temp);
+      //   })
+      //   .catch(e => {
+      //     temp.addon_code = 500;
+      //     temp.addons = {};
+      //     console.error(e);
+      //     this.stateNodesLoaded(temp);
+      //   });
       // this.percentage += 20
       // this.cluster.state = temp
     },

@@ -90,6 +90,7 @@ function addNewItem() {
 
 .view_item_in_array {
   display: flex;
+  align-items: center;
   margin: 5px;
   padding: 0px 12px 0px 12px;
   border-radius: 4px;

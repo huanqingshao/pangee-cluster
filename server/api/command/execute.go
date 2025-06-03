@@ -2,7 +2,6 @@ package command
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"runtime/debug"
@@ -114,6 +113,9 @@ func (execute *Execute) exec() {
 	}
 	common.SaveYamlFile(execute_dir_path+"/status.yaml", status)
 
+	common.Symlink(execute.Dir+"/group_vars", execute_dir_path+"/group_vars")
+	// execute.symlink(execute.Dir+"/cache", execute_dir_path+"/cache")
+
 	if execute.PreExec != nil {
 		if err := execute.PreExec(execute_dir_path); err != nil {
 			execute.R_Error = errors.New("failed to prepare for the task : " + err.Error())
@@ -151,8 +153,8 @@ func (execute *Execute) exec() {
 	runningProcesses[pid] = cmd.Process
 
 	logrus.Trace("started command " + cmd.String())
-	ioutil.WriteFile(execute_dir_path+"/execute.command", []byte(cmd.String()), 0666)
-	ioutil.WriteFile(execute_dir_path+"/execute.yaml", []byte(execute.ToString(execute_dir_path, pid)), 0666)
+	os.WriteFile(execute_dir_path+"/execute.command", []byte(cmd.String()), 0666)
+	os.WriteFile(execute_dir_path+"/execute.yaml", []byte(execute.ToString(execute_dir_path, pid)), 0666)
 
 	if err := lockFile.Truncate(0); err != nil {
 		execute.R_Error = errors.New("failed to truncate lockFile : " + err.Error())
@@ -171,7 +173,7 @@ func (execute *Execute) exec() {
 
 	if execute.PostExec != nil {
 		logFile.WriteString("\n\n\nKUBOARD SPRAY *****************************************************************\n")
-		logs, err := ioutil.ReadFile(logFilePath)
+		logs, err := os.ReadFile(logFilePath)
 		if err != nil {
 			return
 		}
@@ -192,7 +194,7 @@ func (execute *Execute) exec() {
 				status = append(status, parseAnsibleRecapLine(line))
 			}
 		}
-		success := len(status) > 0
+		success := len(status) >= 0
 		for _, nodestatus := range status {
 			if nodestatus.Unreachable != "0" || nodestatus.Failed != "0" {
 				success = false

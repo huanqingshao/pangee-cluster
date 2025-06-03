@@ -65,27 +65,29 @@ func CreateCluster(c *gin.Context) {
 	inventory := map[string]interface{}{}
 	yaml.Unmarshal([]byte(template), inventory)
 
-	resourcePackage, err := common.ParseYamlFile(resourcePackagePath + "/package.yaml")
-	if err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "cannot parse package.yaml", err)
-		return
-	}
+	// resourcePackage, err := common.ParseYamlFile(resourcePackagePath + "/package.yaml")
+	// if err != nil {
+	// 	common.HandleError(c, http.StatusInternalServerError, "cannot parse package.yaml", err)
+	// 	return
+	// }
+
+	common.MapSet(inventory, "all.vars.kuboardspray_resource_package_dir", resourcePackagePath)
 
 	common.PopulateKuboardSprayVars(inventory, "cluster", req.Name)
 
-	addons := common.MapGet(resourcePackage, "data.addon").([]interface{})
-	for _, a := range addons {
-		addon := a.(map[string]interface{})
-		target := addon["target"].(string)
-		if addon["lifecycle"] != nil {
-			lifecycle := addon["lifecycle"].(map[string]interface{})
-			if lifecycle["install_by_default"] == true {
-				common.MapSet(inventory, "all.children.target.children.k8s_cluster.vars."+target, true)
-			} else {
-				common.MapSet(inventory, "all.children.target.children.k8s_cluster.vars."+target, false)
-			}
-		}
-	}
+	// addons := common.MapGet(resourcePackage, "data.addon").([]interface{})
+	// for _, a := range addons {
+	// 	addon := a.(map[string]interface{})
+	// 	target := addon["target"].(string)
+	// 	if addon["lifecycle"] != nil {
+	// 		lifecycle := addon["lifecycle"].(map[string]interface{})
+	// 		if lifecycle["install_by_default"] == true {
+	// 			common.MapSet(inventory, "all.children.target.children.k8s_cluster.vars."+target, true)
+	// 		} else {
+	// 			common.MapSet(inventory, "all.children.target.children.k8s_cluster.vars."+target, false)
+	// 		}
+	// 	}
+	// }
 
 	// if runtime.GOARCH == "arm64" {
 	// 	common.MapSet(inventory, "all.children.target.vars.container_manager", "docker")

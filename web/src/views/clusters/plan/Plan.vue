@@ -19,7 +19,7 @@ zh:
         style="width: 100%; margin-bottom: -5px">
         <el-tab-pane name="architecture">
           <template #label> {{ t("architecture") }} </template>
-          <PlanArchitecture></PlanArchitecture>
+          <PlanArchitecture :cluster="cluster"></PlanArchitecture>
         </el-tab-pane>
         <el-tab-pane name="config_remote">
           <template #label> {{ t("remote_global_config") }} </template>

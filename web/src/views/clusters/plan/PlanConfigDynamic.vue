@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import { loadModule } from 'vue3-sfc-loader';
 import * as Vue from 'vue';
-import { defineAsyncComponent, computed, provide, onMounted, reactive, ref, nextTick } from "vue";
+import { defineAsyncComponent, computed, provide } from "vue";
 import axios from "axios";
 import yaml from "js-yaml";
 import { useI18n } from 'vue-i18n';
