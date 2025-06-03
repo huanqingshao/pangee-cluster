@@ -17,13 +17,13 @@ export default {
     operationIndex: { type: Number, required: true },
     stepIndex: { type: Number, required: true }
   },
-  data () {
+  data() {
     return {
       markdownContent: ""
     }
   },
   computed: {
-    path () {
+    path() {
       let result = this.cluster.resourcePackage.metadata.version;
       result += "/content/operations/";
       if (this.cluster.resourcePackage.data.operations[this.operationIndex] == undefined) {
@@ -36,7 +36,7 @@ export default {
       result += "/" + this.cluster.resourcePackage.data.operations[this.operationIndex]?.steps[this.stepIndex]?.name;
       return result;
     },
-    docsHtml () {
+    docsHtml() {
       if (this.markdownContent) {
         let md = new markdown();
         let temp = md.render(this.markdownContent);
@@ -47,11 +47,11 @@ export default {
     }
   },
   watch: {
-    path (newValue, oldValue) {
+    path(newValue, oldValue) {
       this.refresh();
     }
   },
-  mounted () {
+  mounted() {
     this.refresh();
     window.showMarkdownImageModal = (img) => {
       document.getElementById('markdown-image-modal').style.display = 'block';
@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    refresh () {
+    refresh() {
       if (this.path) {
         axios
           .get(`/resource-package/${this.path}/README.md`).then(resp => {
@@ -83,9 +83,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 @import "../plan/markdown.scss";
+</style>
 
+<style lang="scss" scoped>
 .markdown-image-modal {
   z-index: 900000;
   display: none;
@@ -204,5 +206,4 @@ export default {
     }
   }
 }
-
 </style>
