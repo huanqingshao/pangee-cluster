@@ -145,7 +145,10 @@ func (execute *Execute) exec() {
 
 	if err := cmd.Start(); err != nil {
 		execute.R_Error = errors.New("failed to start command " + cmd.String() + " : " + err.Error())
-		os.Remove(execute_dir_path)
+		err = os.Remove(execute_dir_path)
+		if err != nil {
+			logrus.Warn(err.Error())
+		}
 		execute.mutex.Unlock()
 		return
 	}
@@ -167,12 +170,18 @@ func (execute *Execute) exec() {
 	execute.R_Pid = pid
 
 	execute.mutex.Unlock()
-	cmd.Wait()
+	err = cmd.Wait()
+	if err != nil {
+		logrus.Warn(err.Error())
+	}
 
 	delete(runningProcesses, pid)
 
 	if execute.PostExec != nil {
-		logFile.WriteString("\n\n\nPangee Cluster *****************************************************************\n")
+		_, err := logFile.WriteString("\n\n\nPangee Cluster *****************************************************************\n")
+		if err != nil {
+			logrus.Warn(err.Error())
+		}
 		logs, err := os.ReadFile(logFilePath)
 		if err != nil {
 			return
@@ -261,7 +270,10 @@ func (execute *Execute) exec() {
 			}
 		}
 
-		logFile.WriteString(message)
+		_, err = logFile.WriteString(message)
+		if err != nil {
+			logrus.Warn(err.Error())
+		}
 	}
 }
 

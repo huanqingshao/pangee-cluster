@@ -79,7 +79,10 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		success := status.Success
 		var message string
 		if success {
-			ioutil.WriteFile(versionDir+"/content/package.yaml", pkg, 0655)
+			err := os.WriteFile(versionDir+"/content/package.yaml", pkg, 0655)
+			if err != nil {
+				logrus.Warn(err.Error())
+			}
 
 			message = "\033[32m[ " + "Kuboardspray resource package has been loaded successfully." + " ]\033[0m \n"
 			message += "\033[32m[ " + "Kuboardspray 资源包已成功加载到本地，请回到资源包页面查看。" + " ]\033[0m \n"

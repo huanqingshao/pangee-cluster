@@ -31,5 +31,8 @@ func UnlockOwner(lockFile *os.File) {
 	if err != nil {
 		logrus.Warn("UnlockOwner ", lockFile.Name(), err.Error())
 	}
-	lockFile.Close()
+	err = lockFile.Close()
+	if err != nil {
+		logrus.Warn("Close ", lockFile.Name(), err.Error())
+	}
 }

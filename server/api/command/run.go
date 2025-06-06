@@ -95,12 +95,18 @@ func (run *Run) Run() ([]byte, []byte, error) {
 	if run.Timeout > 0 {
 		go func() {
 			time.Sleep(time.Duration(time.Second * time.Duration(run.Timeout)))
-			cmd.Process.Kill()
+			err = cmd.Process.Kill()
+			if err != nil {
+				logrus.Warn(err.Error())
+			}
 			outContent += "KilledByPangeeCluster[Timeout]"
 		}()
 	}
 
-	cmd.Wait()
+	err = cmd.Wait()
+	if err != nil {
+		logrus.Warn(err.Error())
+	}
 	for !flagErr || !flagOut {
 		logrus.Trace("wait..")
 		time.Sleep(time.Millisecond * 100)
