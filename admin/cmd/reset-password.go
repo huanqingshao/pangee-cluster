@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -39,7 +38,7 @@ func reset(cmd *cobra.Command, args []string) {
 func resetPassword() {
 	logrus.Info("try to reset-password")
 
-	userFileContent, err := ioutil.ReadFile(userFilePath)
+	userFileContent, err := os.ReadFile(userFilePath)
 	if err != nil {
 		logrus.Error("不能读取文件 "+userFilePath, err)
 		os.Exit(-1)
