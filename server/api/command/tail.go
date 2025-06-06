@@ -2,8 +2,8 @@ package command
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -120,7 +120,7 @@ func TailFile(c *gin.Context) {
 	if reqParams.Pid == "lastrun" {
 		lockFilePath := constants.GET_DATA_DIR() + "/" + reqParams.OwnerType + "/" + reqParams.OwnerName + "/inventory.lastrun"
 		logrus.Trace("read pid from : ", lockFilePath)
-		b, err := ioutil.ReadFile(lockFilePath)
+		b, err := os.ReadFile(lockFilePath)
 		if err != nil {
 			common.HandleError(c, http.StatusInternalServerError, "Cannot read file "+lockFilePath, err)
 			return

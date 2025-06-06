@@ -2,7 +2,7 @@ package command
 
 import (
 	"errors"
-	"io/ioutil"
+	"os"
 
 	"github.com/opencmit/pangee-cluster/constants"
 )
@@ -34,7 +34,7 @@ func ReadTaskHistory(taskType string, taskName string) (*TaskStatus, error) {
 		taskStatus.Processing = true
 	}
 	lockFilePath := constants.GET_DATA_DIR() + "/" + taskType + "/" + taskName + "/inventory.lastrun"
-	pid, err := ioutil.ReadFile(lockFilePath)
+	pid, err := os.ReadFile(lockFilePath)
 	if err != nil {
 		return nil, errors.New("cannot read pid: " + err.Error())
 	}

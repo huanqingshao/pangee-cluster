@@ -61,7 +61,7 @@ func resetPassword() {
 		os.Exit(-1)
 	}
 
-	err = ioutil.WriteFile(userFilePath, content, 0666)
+	err = os.WriteFile(userFilePath, content, 0666)
 	if err != nil {
 		logrus.Error("写入文件时出错: "+userFilePath, err)
 		os.Exit(-1)
