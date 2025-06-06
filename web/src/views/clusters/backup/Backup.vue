@@ -23,15 +23,20 @@ zh:
       <div v-if="cluster">
         <template v-if="cluster.resourcePackage && cluster.resourcePackage.data.supported_playbooks.backup_etcd">
           <div style="display: flex;">
-            <ConfirmButton type="danger" :text="$t('msg.delete')" icon="el-icon-delete" @confirm="remove_backups" placement="right" :message="t('delete_message')"
-              :disabled="selection.length === 0" style="margin-right: 10px;">
+            <ConfirmButton type="danger" :text="$t('msg.delete')" icon="el-icon-delete" @confirm="remove_backups"
+              placement="right" :message="t('delete_message')" :disabled="selection.length === 0"
+              style="margin-right: 10px;">
             </ConfirmButton>
-            <el-button type="primary" plain icon="el-icon-refresh" style="margin-right: 10px;" @click="list">{{ t('refresh') }}</el-button>
-            <BackupTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')"></BackupTask>
-            <RestoreTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')" 
+            <el-button type="primary" plain icon="el-icon-refresh" style="margin-right: 10px;" @click="list">{{
+              t('refresh') }}</el-button>
+            <BackupTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')">
+            </BackupTask>
+            <RestoreTask :cluster="cluster" style="margin-right: 10px;" :loading="loading" @refresh="$emit('refresh')"
               :disabled="selection.length !== 1" :backupFile="selection[0]"></RestoreTask>
-            <span style="font-size: 12px; color: var(--el-text-color-secondary); line-height: 28px;">{{ t('select_one_backup_to_restore') }}</span>
-            <kuboard-spray-link href="https://kuboard-spray.cn/guide/maintain/backup.html" style="margin-left: 20px;" size="12px;"></kuboard-spray-link>
+            <span style="font-size: 12px; color: var(--el-text-color-secondary); line-height: 28px;">{{
+              t('select_one_backup_to_restore') }}</span>
+            <pangee-cluster-link href="https://pangee-cluster.cn/guide/maintain/backup.html" style="margin-left: 20px;"
+              size="12px;"></pangee-cluster-link>
           </div>
           <div class="app_margin_bottom"></div>
           <el-alert v-if="backups.length === 0" type="warning" :closable="false">
@@ -47,7 +52,7 @@ zh:
               <el-table-column prop="size" :label="t('size')" sortable align="right" width="200">
                 <template #default="scope">
                   <span style="margin-right: 10px;">
-                    {{ scope.row.size ? String(scope.row.size).replace(/(\d)(?=(\d{3})+$)/g, "$1,") : ''}}
+                    {{ scope.row.size ? String(scope.row.size).replace(/(\d)(?=(\d{3})+$)/g, "$1,") : '' }}
                   </span>
                 </template>
               </el-table-column>
@@ -56,7 +61,8 @@ zh:
         </template>
         <el-alert v-else :closable="false">
           当前资源包不支持备份 ETCD 数据，请升级到最新的资源包。
-          <kuboard-spray-link href="https://kuboard-spray.cn/guide/maintain/backup.html" style="margin-left: 20px;" size="12px;"></kuboard-spray-link>
+          <pangee-cluster-link href="https://pangee-cluster.cn/guide/maintain/backup.html" style="margin-left: 20px;"
+            size="12px;"></pangee-cluster-link>
         </el-alert>
       </div>
     </el-scrollbar>
@@ -82,14 +88,14 @@ export default {
   computed: {
   },
   components: { BackupTask, RestoreTask },
-  mounted () {
+  mounted() {
     this.list()
   },
   methods: {
-    list () {
+    list() {
       this.loading = true
       if (this.cluster.resourcePackage && this.cluster.resourcePackage.data.supported_playbooks.backup_etcd) {
-        this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/backup`).then(resp => {
+        this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/backup`).then(resp => {
           this.selection = []
           this.backups = resp.data.data
           this.loading = false
@@ -102,7 +108,7 @@ export default {
     handleSelectionChange(val) {
       this.selection = val
     },
-    remove_backups () {
+    remove_backups() {
       let req = {
         backups_to_remove: []
       }
@@ -110,7 +116,7 @@ export default {
         req.backups_to_remove.push(`${item.node_name}/${item.etcd_member_name}/${item.backup_name}`)
       }
       this.loading = true
-      this.kuboardSprayApi.post(`/clusters/${this.cluster.name}/backup/remove`, req).then(resp => {
+      this.pangeeClusterApi.post(`/clusters/${this.cluster.name}/backup/remove`, req).then(resp => {
         console.log(resp.data)
         this.list()
       }).catch(e => {
@@ -122,6 +128,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

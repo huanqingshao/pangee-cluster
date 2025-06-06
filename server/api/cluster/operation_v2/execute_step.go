@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 type ExecuteStepRequest struct {

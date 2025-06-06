@@ -90,7 +90,7 @@ export default {
       this.error = undefined;
       let path = "/clusters/" + this.cluster.name + "/operation/" + this.cluster.resourcePackage.data.operations[this.currentOperation].name;
       path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
-      this.kuboardSprayApi.get(path, {
+      this.pangeeClusterApi.get(path, {
         signal: this.axiosController.signal
       }).then(resp => {
         this.status = resp.data;

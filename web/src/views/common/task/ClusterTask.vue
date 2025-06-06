@@ -167,7 +167,7 @@ export default {
       this.pingpong = {}
       this.pingpong_loading = true
       let req = { nodes: nodes }
-      this.kuboardSprayApi.post(`/clusters/${this.cluster.name}/state/ping`, req).then(resp => {
+      this.pangeeClusterApi.post(`/clusters/${this.cluster.name}/state/ping`, req).then(resp => {
         this.pingpong = resp.data.data.items
         this.pingpong_loading = false
       }).catch(e => {
@@ -210,7 +210,7 @@ export default {
                 path = `/clusters/${_this.cluster.name}/operation/${_this.operation}/step/${_this.step}`
               }
               console.log(path)
-              _this.kuboardSprayApi.post(path, req).then(resp => {
+              _this.pangeeClusterApi.post(path, req).then(resp => {
                 let pid = resp.data.data.pid
                 resolve(pid)
               }).catch(e => {

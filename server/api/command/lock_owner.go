@@ -5,7 +5,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 

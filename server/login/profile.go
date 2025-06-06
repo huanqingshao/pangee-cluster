@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 func GetProfile(c *gin.Context) {
 	username, exists := c.Get("username")
 	if exists {
-		c.JSON(http.StatusOK, common.KuboardSprayResponse{
+		c.JSON(http.StatusOK, common.PangeeClusterResponse{
 			Code:    http.StatusOK,
 			Message: "success",
 			Data: UserInfo{
@@ -54,7 +54,7 @@ func ChangePassword(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, common.KuboardSprayResponse{
+		c.JSON(http.StatusOK, common.PangeeClusterResponse{
 			Code:    http.StatusOK,
 			Message: "success",
 			Data: UserInfo{

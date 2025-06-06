@@ -42,7 +42,7 @@ RUN curl -o docker-ce-cli.deb https://mirrors.tuna.tsinghua.edu.cn/docker-ce/lin
 # (and potentially other packages)
 # See: https://github.com/pypa/pip/issues/10219
 
-WORKDIR /kuboard-spray
+WORKDIR /pangee-cluster
 COPY ./requirements.txt ./requirements.txt
 RUN /usr/bin/python3 -m pip install --no-cache-dir pip -U \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
@@ -53,18 +53,18 @@ COPY .docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.8/
 COPY .docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/callback/__init__.py
 COPY .docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/action/raw.py
 
-ENV KUBOARD_SPRAY_WEB_DIR="/kuboard-spray/ui"
+ENV KUBOARD_SPRAY_WEB_DIR="/pangee-cluster/ui"
 ENV KUBOARD_SPRAY_PORT=":80"
 ENV GIN_MODE=release
 ENV KUBOARD_SPRAY_LOGRUS_LEVEL="info"
 ENV KUBOARD_SPRAY_ADMIN_LOGRUS_LEVEL = "info"
 
-COPY ./admin/kuboard-spray-admin kuboard-spray-admin
+COPY ./admin/pangee-cluster-admin pangee-cluster-admin
 COPY ./server/ansible-script ansible-script
 COPY ./server/ansible-rpc ansible-rpc
-COPY ./server/kuboard-spray kuboard-spray
-COPY ./web/dist /kuboard-spray/ui
+COPY ./server/pangee-cluster pangee-cluster
+COPY ./web/dist /pangee-cluster/ui
 COPY ./server/pull-resource-package.sh pull-resource-package.sh
-RUN chmod +x kuboard-spray kuboard-spray-admin
+RUN chmod +x pangee-cluster pangee-cluster-admin
 
-CMD [ "./kuboard-spray" ]
+CMD [ "./pangee-cluster" ]

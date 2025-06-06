@@ -4,10 +4,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"gopkg.in/yaml.v3"
 )
 

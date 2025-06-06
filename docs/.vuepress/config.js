@@ -8,7 +8,7 @@ module.exports = {
 
   // 站点配置
   lang: 'zh-CN',
-  title: 'Kuboard Spray',
+  title: 'Pangee Cluster',
   description: '在图形界面种离线安装高可用 Kubernetes 集群',
 
   head: [
@@ -27,7 +27,7 @@ module.exports = {
   ],
   themeConfig: {
     logo: 'https://kuboard.cn/favicon.png',
-    repo: 'eip-work/kuboard-spray',
+    repo: 'opencmit/pangee-cluster',
     docsDir: 'docs',
     nav: [
       {
@@ -95,8 +95,8 @@ module.exports = {
         {
           title: '其他',
           children: [
-            '/kuboard-spray/backup.md',
-            '/kuboard-spray/reset-password.md'
+            '/pangee-cluster/backup.md',
+            '/pangee-cluster/reset-password.md'
           ]
         },
         {

@@ -28,7 +28,7 @@ var userFilePath = userDir + "/user.yaml"
 var resetPasswordCmd = &cobra.Command{
 	Use:   "reset-password",
 	Short: "重置 admin 的密码",
-	Long:  "重置 KuboardSpray 管理员 admin 的密码。",
+	Long:  "重置 PangeeCluster 管理员 admin 的密码。",
 	Run:   reset,
 }
 

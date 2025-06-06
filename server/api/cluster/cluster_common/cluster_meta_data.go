@@ -1,7 +1,7 @@
 package cluster_common
 
 import (
-	"github.com/eip-work/kuboard-spray/common"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 type ClusterMetadata struct {

@@ -73,8 +73,8 @@ export default {
       set() { }
     },
     pendingAction() {
-      if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].kuboardspray_node_action) {
-        return this.inventory.all.hosts[this.name].kuboardspray_node_action
+      if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].pangeecluster_node_action) {
+        return this.inventory.all.hosts[this.name].pangeecluster_node_action
       }
       return undefined
     },
@@ -163,7 +163,7 @@ export default {
         let count = 0
         for (let key in this.inventory.all.children.target.children.etcd.hosts) {
           let host = this.inventory.all.children.target.children.etcd.hosts[key]
-          if (host.kuboardspray_node_action === undefined) {
+          if (host.pangeecluster_node_action === undefined) {
             count++
           }
         }
@@ -176,7 +176,7 @@ export default {
         let count = 0
         for (let key in this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
           let host = this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[key]
-          if (host.kuboardspray_node_action === undefined) {
+          if (host.pangeecluster_node_action === undefined) {
             count++
           }
         }
@@ -186,12 +186,12 @@ export default {
         }
       }
       if (this.onlineNodes[this.name]) {
-        this.inventory.all.hosts[this.name].kuboardspray_node_action = 'remove_node'
+        this.inventory.all.hosts[this.name].pangeecluster_node_action = 'remove_node'
         if (this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]) {
-          this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].kuboardspray_node_action = 'remove_node'
+          this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].pangeecluster_node_action = 'remove_node'
         }
         if (this.inventory.all.children.target.children.etcd.hosts[this.name]) {
-          this.inventory.all.children.target.children.etcd.hosts[this.name].kuboardspray_node_action = 'remove_node'
+          this.inventory.all.children.target.children.etcd.hosts[this.name].pangeecluster_node_action = 'remove_node'
         }
       } else {
         this.$emit('deleted')
@@ -204,12 +204,12 @@ export default {
       }
     },
     cancelDelete() {
-      delete this.inventory.all.hosts[this.name].kuboardspray_node_action
+      delete this.inventory.all.hosts[this.name].pangeecluster_node_action
       if (this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]) {
-        delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].kuboardspray_node_action
+        delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].pangeecluster_node_action
       }
       if (this.inventory.all.children.target.children.etcd.hosts[this.name]) {
-        delete this.inventory.all.children.target.children.etcd.hosts[this.name].kuboardspray_node_action
+        delete this.inventory.all.children.target.children.etcd.hosts[this.name].pangeecluster_node_action
       }
     }
   }

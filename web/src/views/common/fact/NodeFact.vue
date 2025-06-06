@@ -30,76 +30,87 @@ zh:
 
 <template>
   <div>
-      <div style="text-align: right;">
-        <el-button type="primary" :loading="loadingFact" icon="el-icon-refresh-left" @click="loadFacts(false)">{{t('validate')}}</el-button>
+    <div style="text-align: right;">
+      <el-button type="primary" :loading="loadingFact" icon="el-icon-refresh-left"
+        @click="loadFacts(false)">{{ t('validate') }}</el-button>
+    </div>
+    <el-skeleton v-if="loadingFact" animated></el-skeleton>
+    <div v-if="fact" class="app_form_mini app_margin_top">
+      <div v-if="fact.msg" style="margin-bottom: 20px;">
+        <el-alert :closable="false" type="error">
+          <pre class="app_text_mono">{{ fact.msg }}</pre>
+          <pre v-if="fact.module_stdout"><el-tag style="margin-right: 5px;">stdout</el-tag>{{ fact.module_stdout }}</pre>
+          <pre
+            v-if="fact.module_stderr"><el-tag type="danger" effect="dark" style="margin-right: 5px;">stderr</el-tag>{{ fact.module_stderr }}</pre>
+        </el-alert>
       </div>
-      <el-skeleton v-if="loadingFact" animated></el-skeleton>
-      <div v-if="fact" class="app_form_mini app_margin_top">
-        <div v-if="fact.msg" style="margin-bottom: 20px;">
-          <el-alert :closable="false" type="error">
-            <pre class="app_text_mono">{{fact.msg}}</pre>
-            <pre v-if="fact.module_stdout"><el-tag style="margin-right: 5px;">stdout</el-tag>{{fact.module_stdout}}</pre>
-            <pre v-if="fact.module_stderr"><el-tag type="danger" effect="dark" style="margin-right: 5px;">stderr</el-tag>{{fact.module_stderr}}</pre>
-          </el-alert>
+      <el-form v-if="fact.ansible_facts" label-width="160px" label-position="left">
+        <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{ t('facts') }} ]
         </div>
-        <el-form v-if="fact.ansible_facts" label-width="160px" label-position="left">
-          <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[ {{t('facts')}} ]</div>
-          <el-collapse v-model="activeNames">
-            <el-collapse-item name="1">
-              <template #title>
-                <span class="package_title">{{t('baseInfo')}}</span>
-              </template>
-              <div class="package_info">
-                <NodeFactField :holder="fact.ansible_facts.ansible_python" fieldName="executable" :label="t('python_executable')"></NodeFactField>
-                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_python_version" :label="t('python_version')"></NodeFactField>
-                <el-divider style="margin: 10px 0;"></el-divider>
-                <NodeFactField v-if="fact.ansible_facts.ansible_lsb && fact.ansible_facts.ansible_lsb.description" :holder="fact.ansible_facts.ansible_lsb" fieldName="description" :label="t('os')"></NodeFactField>
-                <el-form-item v-else :label="t('os')">
-                  <span class="field_value app_text_mono">{{fact.ansible_facts.ansible_distribution}} {{fact.ansible_facts.ansible_distribution_version}}</span>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item name="1">
+            <template #title>
+              <span class="package_title">{{ t('baseInfo') }}</span>
+            </template>
+            <div class="package_info">
+              <NodeFactField :holder="fact.ansible_facts.ansible_python" fieldName="executable"
+                :label="t('python_executable')">
+              </NodeFactField>
+              <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_python_version"
+                :label="t('python_version')">
+              </NodeFactField>
+              <el-divider style="margin: 10px 0;"></el-divider>
+              <NodeFactField v-if="fact.ansible_facts.ansible_lsb && fact.ansible_facts.ansible_lsb.description"
+                :holder="fact.ansible_facts.ansible_lsb" fieldName="description" :label="t('os')"></NodeFactField>
+              <el-form-item v-else :label="t('os')">
+                <span class="field_value app_text_mono">{{ fact.ansible_facts.ansible_distribution }}
+                  {{ fact.ansible_facts.ansible_distribution_version }}</span>
+              </el-form-item>
+              <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_machine" :label="t('ansible_machine')">
+              </NodeFactField>
+              <el-form-item :label="t('cpumem')">
+                <span class="field_value app_text_mono">{{ fact.ansible_facts.ansible_processor_vcpus }}core /
+                  {{ Math.round(fact.ansible_facts.ansible_memtotal_mb * 10 / 1024) / 10 }}Gi</span>
+              </el-form-item>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item name="2">
+            <template #title>
+              <span class="package_title">{{ t('network') }}</span>
+            </template>
+            <div class="package_info" v-for="(ipv4, index) in ipv4s" :key="'ip' + index">
+              <el-divider v-if="index !== 0" style="margin: 10px 0;"></el-divider>
+              <NodeFactField :holder="ipv4.ipv4" fieldName="type"></NodeFactField>
+              <NodeFactField :holder="ipv4.ipv4" fieldName="device"></NodeFactField>
+              <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="address">
+                <el-tag type="success" effect="dark" v-if="ipv4.isPrefered">{{ t('choosen') }}</el-tag>
+              </NodeFactField>
+              <!-- <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="network"></NodeFactField> -->
+              <!-- <NodeFactField :holder="ipv4" fieldName="gateway"></NodeFactField> -->
+              <!-- <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="broadcast"></NodeFactField> -->
+              <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="netmask"></NodeFactField>
+              <NodeFactField :holder="ipv4.ipv4" fieldName="macaddress"></NodeFactField>
+              <!-- <NodeFactField :holder="ipv4.ipv4" fieldName="mtu"></NodeFactField> -->
+            </div>
+          </el-collapse-item>
+          <el-collapse-item name="3">
+            <template #title>
+              <span class="package_title">{{ t('disk') }}</span>
+            </template>
+            <div class="package_info">
+              <template v-for="(item, key) in fact.ansible_facts.ansible_devices" :key="'disk' + key">
+                <el-form-item :label="key" v-if="item.model">
+                  <el-form-item label="vendor" label-width="80px">{{ item.vendor }}</el-form-item>
+                  <el-form-item label="model" label-width="80px">{{ item.model }}</el-form-item>
+                  <el-form-item label="size" label-width="80px">{{ item.size }}</el-form-item>
                 </el-form-item>
-                <NodeFactField :holder="fact.ansible_facts" fieldName="ansible_machine" :label="t('ansible_machine')"></NodeFactField>
-                <el-form-item :label="t('cpumem')">
-                  <span class="field_value app_text_mono">{{fact.ansible_facts.ansible_processor_vcpus}}core / {{Math.round(fact.ansible_facts.ansible_memtotal_mb * 10 / 1024)/10}}Gi</span>
-                </el-form-item>
-              </div>
-            </el-collapse-item>
-            <el-collapse-item name="2">
-              <template #title>
-                <span class="package_title">{{t('network')}}</span>
               </template>
-              <div class="package_info" v-for="(ipv4, index) in ipv4s" :key="'ip'+index">
-                <el-divider v-if="index !== 0" style="margin: 10px 0;"></el-divider>
-                <NodeFactField :holder="ipv4.ipv4" fieldName="type"></NodeFactField>
-                <NodeFactField :holder="ipv4.ipv4" fieldName="device"></NodeFactField>
-                <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="address">
-                  <el-tag type="success" effect="dark" v-if="ipv4.isPrefered">{{t('choosen')}}</el-tag>
-                </NodeFactField>
-                <!-- <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="network"></NodeFactField> -->
-                <!-- <NodeFactField :holder="ipv4" fieldName="gateway"></NodeFactField> -->
-                <!-- <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="broadcast"></NodeFactField> -->
-                <NodeFactField :holder="ipv4.ipv4.ipv4" fieldName="netmask"></NodeFactField>
-                <NodeFactField :holder="ipv4.ipv4" fieldName="macaddress"></NodeFactField>
-                <!-- <NodeFactField :holder="ipv4.ipv4" fieldName="mtu"></NodeFactField> -->
-              </div>
-            </el-collapse-item>
-            <el-collapse-item name="3">
-              <template #title>
-                <span class="package_title">{{t('disk')}}</span>
-              </template>
-              <div class="package_info">
-                <template v-for="(item, key) in fact.ansible_facts.ansible_devices" :key="'disk' + key">
-                  <el-form-item :label="key" v-if="item.model">
-                    <el-form-item label="vendor" label-width="80px">{{item.vendor}}</el-form-item>
-                    <el-form-item label="model" label-width="80px">{{item.model}}</el-form-item>
-                    <el-form-item label="size" label-width="80px">{{item.size}}</el-form-item>
-                  </el-form-item>
-                </template>
-                <el-form-item></el-form-item>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-        </el-form>
-      </div>
+              <el-form-item></el-form-item>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -120,7 +131,7 @@ export default {
     }
   },
   computed: {
-    ipv4s () {
+    ipv4s() {
       let result = []
       if (this.fact) {
         let defaultIp = this.ip || this.ansible_host
@@ -138,10 +149,10 @@ export default {
     }
   },
   components: { NodeFactField },
-  mounted () {
+  mounted() {
   },
   methods: {
-    clear () {
+    clear() {
       this.fact = undefined
     },
     loadFacts(fromCache = true) {
@@ -156,7 +167,7 @@ export default {
         this.doLoad(fromCache)
       }
     },
-    async doLoad (fromCache) {
+    async doLoad(fromCache) {
       this.loadingFact = true
       let _this = this
       let req = {
@@ -173,7 +184,7 @@ export default {
         ansible_python_interpreter: this.ansible_python_interpreter,
         gather_subset: '!all,network,hardware',
       }
-      await this.kuboardSprayApi.post(`/facts/${this.node_owner_type}/${this.node_owner}/${this.node_name}`, req).then(resp => {
+      await this.pangeeClusterApi.post(`/facts/${this.node_owner_type}/${this.node_owner}/${this.node_name}`, req).then(resp => {
         if (fromCache) {
           if (resp.data.ansible_facts !== undefined) {
             this.fact = resp.data
@@ -184,7 +195,7 @@ export default {
       }).catch(e => {
         if (e.response.status !== 417) {
           let msg = '' + e
-          if (e.response && e.response.data && e.response.data.message){
+          if (e.response && e.response.data && e.response.data.message) {
             msg = e.response.data.message
           }
           this.fact = {
@@ -208,9 +219,11 @@ export default {
 .package_title {
   font-weight: bolder;
 }
+
 .package_info {
   margin-left: 20px;
 }
+
 .field_value {
   font-size: 13px;
 }

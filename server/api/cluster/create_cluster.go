@@ -5,10 +5,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"gopkg.in/yaml.v3"
 )
 
@@ -54,7 +54,7 @@ func CreateCluster(c *gin.Context) {
 		return
 	}
 	template := string(templateContent)
-	template = strings.ReplaceAll(template, "KUBOARDSPRAY_RESOURCE_PACKAGE", req.ResourcePackage)
+	template = strings.ReplaceAll(template, "PANGEECLUSTER_RESOURCE_PACKAGE", req.ResourcePackage)
 	for strings.Contains(template, "GENERATE_UUID_PLACEHOLDER") {
 		template = strings.Replace(template, "GENERATE_UUID_PLACEHOLDER", uuid.New().String(), 1)
 	}
@@ -71,9 +71,9 @@ func CreateCluster(c *gin.Context) {
 	// 	return
 	// }
 
-	common.MapSet(inventory, "all.vars.kuboardspray_resource_package_dir", resourcePackagePath)
+	common.MapSet(inventory, "all.vars.pangeecluster_resource_package_dir", resourcePackagePath)
 
-	common.PopulateKuboardSprayVars(inventory, "cluster", req.Name)
+	common.PopulatePangeeClusterVars(inventory, "cluster", req.Name)
 
 	// addons := common.MapGet(resourcePackage, "data.addon").([]interface{})
 	// for _, a := range addons {

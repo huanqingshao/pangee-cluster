@@ -5,7 +5,7 @@ const language = ((navigator.language ? navigator.language : navigator.userLangu
 
 const messages = {
   en: {
-    kuboardspray: "Kuboard Spray",
+    pangeecluster: "Pangee Cluster",
     loginRequired: "Login Required.",
     isRequiredField: "is required.",
     pkg: pkg.en,
@@ -58,7 +58,7 @@ const messages = {
     }
   },
   zh: {
-    kuboardspray: "Kuboard Spray",
+    pangeecluster: "Pangee Cluster",
     loginRequired: "请先登录。",
     isRequiredField: "为必填字段",
     pkg: pkg.zh,

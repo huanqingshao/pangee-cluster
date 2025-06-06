@@ -15,7 +15,7 @@ else
   echo ""
   echo "TASK [拉取镜像： $1] ******"
   echo "      镜像大小大概 1GB 左右，根据您的网速不同，需要等候的时间不等。"
-  echo "      如果想要查看下载进度，您可以在运行 kuboard-spray 的服务器上执行以下命令。"
+  echo "      如果想要查看下载进度，您可以在运行 pangee-cluster 的服务器上执行以下命令。"
   echo -e "     \033[34m docker pull $1 \033[0m"
   echo ""
 
@@ -23,7 +23,7 @@ else
 
   if [ $? -ne 0 ]; then
     echo -e "      \033[31m\033[01m\033[05m[ 拉取镜像失败。]\033[0m "
-    echo -e "      如果您需要离线下载，请参考 https://kuboard.cn/support/kuboard-spray"
+    echo -e "      如果您需要离线下载，请参考 https://kuboard.cn/support/pangee-cluster"
     exit
   fi
   echo -e "      \033[32m[ 拉取镜像成功。]\033[0m "
@@ -37,7 +37,7 @@ dataDir=$(pwd)
 dataDir=${dataDir%/*}/data
 
 rm -rf "${dataDir}/resource/${version}/content/"
-docker cp "${version}:/kuboard-spray/resource/content/" "${dataDir}/resource/${version}/content/"
+docker cp "${version}:/pangee-cluster/resource/content/" "${dataDir}/resource/${version}/content/"
 
 if [ $? -ne 0 ]; then
   echo -e "      \033[31m\033[01m\033[05m[ 加载资源包失败。]\033[0m "
@@ -60,4 +60,4 @@ echo -e "      \033[32m[ 清理完成。]\033[0m "
 echo ""
 
 echo "PLAY RECAP *********************************************************************"
-echo "kuboardspray : ok=3    unreachable=0    failed=0"
+echo "pangeecluster : ok=3    unreachable=0    failed=0"

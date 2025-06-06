@@ -1,12 +1,12 @@
 package cluster_common
 
 import (
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 func ResourcePackageDirForInventory(inventory map[string]interface{}) string {
-	return constants.GET_DATA_RESOURCE_DIR() + "/" + common.MapGet(inventory, "all.hosts.localhost.kuboardspray_resource_package").(string) + "/content"
+	return constants.GET_DATA_RESOURCE_DIR() + "/" + common.MapGet(inventory, "all.hosts.localhost.pangeecluster_resource_package").(string) + "/content"
 }
 
 func ClusterInventoryYamlPath(cluster string) string {

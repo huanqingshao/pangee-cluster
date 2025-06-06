@@ -1,7 +1,7 @@
 #!/bin/bash
 datetime=`date +%Y%m%d-%H%M%S`
 echo $datetime
-tag=swr.cn-east-2.myhuaweicloud.com/kuboard/kuboard-spray-docs
+tag=swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster-docs
 
 yarn install
 yarn docs:build

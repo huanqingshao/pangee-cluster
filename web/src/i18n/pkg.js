@@ -3,7 +3,6 @@ const pkg = {
     ingress_nginx_enabled: 'Includes Ingress Nginx',
   },
   zh: {
-    kuboardspray_kubespray_version: 'Kubespray 版本',
     image_arch: 'CPU 架构',
     gcr_image_repo: 'gcr 源镜像仓库',
     kube_image_repo: 'Kubernetes 源镜像仓库',
@@ -12,8 +11,8 @@ const pkg = {
     crun_version: 'crun 版本',
     runc_version: 'runc 版本',
     calico_version: 'calico 版本',
-    kuboardspray_docker_enabled: '支持 docker 作为容器引擎',
-    kuboardspray_containerd_enabled: '支持 containerd 作为容器引擎',
+    pangeecluster_docker_enabled: '支持 docker 作为容器引擎',
+    pangeecluster_containerd_enabled: '支持 containerd 作为容器引擎',
     containerd_version: 'containerd 版本',
     helm_enabled: '包含 Helm',
     registry_enabled: '包含 registry',

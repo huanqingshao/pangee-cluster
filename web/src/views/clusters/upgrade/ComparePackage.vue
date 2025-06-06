@@ -16,13 +16,14 @@ zh:
     <el-dialog v-model="dialogVisible" width="80%" top="5vh" :close-on-click-modal="false">
       <template #header>
         <div style="background-color: var(--el-color-primary-light-9); margin-right: 25px; padding: 10px;">
-          {{t('compareTitle')}}
+          {{ t('compareTitle') }}
           <el-tag>
-            <span class="app_text_mono" style="font-size: 14px;">{{cluster.resourcePackage.metadata.version}}</span>
+            <span class="app_text_mono" style="font-size: 14px;">{{ cluster.resourcePackage.metadata.version }}</span>
           </el-tag>
           <span style="margin: 0 10px; font-size: 12px;">v.s.</span>
           <el-tag type="warning" effect="dark">
-            <span class="app_text_mono" style="font-size: 14px; font-weight: bolder;">{{target ? target.yaml.metadata.version : ''}}</span>
+            <span class="app_text_mono" style="font-size: 14px; font-weight: bolder;">{{ target ?
+              target.yaml.metadata.version : '' }}</span>
           </el-tag>
         </div>
       </template>
@@ -48,7 +49,8 @@ zh:
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" icon="el-icon-close" type="primary">{{$t('msg.close')}}</el-button>
+          <el-button @click="dialogVisible = false" icon="el-icon-close" type="primary">{{ $t('msg.close')
+            }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -75,7 +77,7 @@ export default {
     }
   },
   computed: {
-    releaseNoteHtml () {
+    releaseNoteHtml() {
       if (this.releaseNote) {
         let md = new markdown()
         return md.render(this.releaseNote)
@@ -84,7 +86,7 @@ export default {
     },
   },
   components: { ResourcePackage, ComparePackageTable },
-  mounted () {
+  mounted() {
   },
   methods: {
     show(target) {
@@ -93,13 +95,13 @@ export default {
       this.releaseNoteLoading = true
       this.target = target
       if (this.target.imported || this.target.isOffline) {
-        this.kuboardSprayApi.get(`/resources/${this.target.version}/release_note`).then(resp => {
+        this.pangeeClusterApi.get(`/resources/${this.target.version}/release_note`).then(resp => {
           this.releaseNote = resp.data.data.release_note
         }).catch(e => {
           console.log(e)
         })
       } else {
-        axios.get(`https://addons.kuboard.cn/v-kuboard-spray/${this.target.version}/release.md?nocache=${new Date().getTime()}`).then(resp => {
+        axios.get(`https://addons.kuboard.cn/v-pangee-cluster/${this.target.version}/release.md?nocache=${new Date().getTime()}`).then(resp => {
           this.releaseNote = resp.data
         }).catch(e => {
           console.log(e)
@@ -114,12 +116,14 @@ export default {
 
 <style lang="scss">
 .markdown {
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
   font-size: 13px;
+
   h1 {
     font-size: 18px;
     display: none;
   }
+
   h2 {
     font-size: 16px;
     background-color: var(--el-color-primary-light-9);
@@ -132,10 +136,11 @@ export default {
 <style scoped lang="css">
 .package_title {
   font-weight: bolder;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
+
 .package_info {
   margin-left: 20px;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
 </style>

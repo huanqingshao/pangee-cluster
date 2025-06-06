@@ -3,13 +3,13 @@ en:
   clusters: Cluster Management
   clusterList: Clusters List
   addCluster: Add Cluster Installation Plan
-  confirmToDelete: Do you confirm to delete the cluster info in KuboardSpray? Cluster itself will not be impacted.
+  confirmToDelete: Do you confirm to delete the cluster info in PangeeCluster? Cluster itself will not be impacted.
   rename: 重命名
 zh:
   clusters: 集群管理
   clusterList: 集群列表
   addCluster: 添加集群安装计划
-  confirmToDelete: 是否删除此集群在 KuboardSpray 的信息？（该集群本身将继续运行不受影响。）
+  confirmToDelete: 是否删除此集群在 PangeeCluster 的信息？（该集群本身将继续运行不受影响。）
   rename: 重命名
 </i18n>
 
@@ -24,7 +24,7 @@ zh:
           <div style="line-height: 20px;">
             您可以：
             <li>制定新的集群安装计划，并安装 kubernetes 集群</li>
-            <li>维护使用 KuboardSpray 安装的集群</li>
+            <li>维护使用 PangeeCluster 安装的集群</li>
           </div>
         </el-alert>
       </div>
@@ -34,7 +34,9 @@ zh:
           <div v-for="(item, index) in clusters" :key="'cluster' + index" class="cluster">
             <div class="deleteButton">
               <ClustersRename :clusterName="item" @success="refresh"></ClustersRename>
-              <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')" icon="el-icon-warning" icon-color="red" placement="top-start" :title="t('confirmToDelete')" @confirm="deleteCluster(item)">
+              <el-popconfirm :confirm-button-text="$t('msg.ok')" :cancel-button-text="$t('msg.cancel')"
+                icon="el-icon-warning" icon-color="red" placement="top-start" :title="t('confirmToDelete')"
+                @confirm="deleteCluster(item)">
                 <template #reference>
                   <el-button icon="el-icon-delete" circle type="danger"></el-button>
                 </template>
@@ -46,7 +48,8 @@ zh:
               </div>
             </el-card>
           </div>
-          <el-button class="cluster" style="margin-bottom: 10px;" type="primary" size="large" icon="el-icon-plus" @click="$refs.create.show()">{{ t('addCluster') }}</el-button>
+          <el-button class="cluster" style="margin-bottom: 10px;" type="primary" size="large" icon="el-icon-plus"
+            @click="$refs.create.show()">{{ t('addCluster') }}</el-button>
         </div>
       </el-card>
     </div>
@@ -64,18 +67,18 @@ export default {
   mixins: [mixin],
   props: {
   },
-  percentage () {
+  percentage() {
     return this.loading ? 10 : 100
   },
-  breadcrumb () {
+  breadcrumb() {
     return [
       { label: this.t('clusterList') }
     ]
   },
-  refresh () {
+  refresh() {
     this.refresh()
   },
-  data () {
+  data() {
     return {
       clusters: [],
       loading: false,
@@ -84,21 +87,21 @@ export default {
   computed: {
   },
   components: { CreateCluster, ClustersRename },
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    async refresh () {
+    async refresh() {
       this.loading = true
-      await this.kuboardSprayApi.get('/clusters').then(resp => {
+      await this.pangeeClusterApi.get('/clusters').then(resp => {
         this.clusters = resp.data.data
       }).catch(e => {
         this.$message.error('Error: ' + e)
       })
       this.loading = false
     },
-    deleteCluster (cluster) {
-      this.kuboardSprayApi.delete('/clusters/' + cluster).then(() => {
+    deleteCluster(cluster) {
+      this.pangeeClusterApi.delete('/clusters/' + cluster).then(() => {
         this.refresh()
         this.$message.success(this.$t('msg.delete_succeeded'))
       }).catch(e => {

@@ -4,18 +4,18 @@ sidebarDepth: 0
 
 # WebSocket
 
-当您进入这个页面时，通常是因为您已经在使用 kuboard-spray 时碰到了下面截图中的这个错误：
+当您进入这个页面时，通常是因为您已经在使用 pangee-cluster 时碰到了下面截图中的这个错误：
 
 ![WebSocket Error](./websocket.assets/websocket-error.png)
 
-这个问题产生的最直接原因是因为浏览器不能使用 websocket 协议访问截图中的链接地址，而在 kuboard-spray 中，日志界面及 Web 终端界面都是依赖于 websocket 协议才能正常工作的。
+这个问题产生的最直接原因是因为浏览器不能使用 websocket 协议访问截图中的链接地址，而在 pangee-cluster 中，日志界面及 Web 终端界面都是依赖于 websocket 协议才能正常工作的。
 
 具体到您的实际环境中，导致此问题的原因可能是如下几种当中的一种或多种：
 
-* 您为 kuboard-spray 配置了反向代理，但未转发 websocket；
-* 您所在的公司有上网行为管理软件，禁用了 websocket；
-* 您使用深信服等防火墙为 kuboard-spray 做了端口映射，禁用了 websocket；
-* 您的浏览器版本过低或浏览器限制使用 websocket。
+- 您为 pangee-cluster 配置了反向代理，但未转发 websocket；
+- 您所在的公司有上网行为管理软件，禁用了 websocket；
+- 您使用深信服等防火墙为 pangee-cluster 做了端口映射，禁用了 websocket；
+- 您的浏览器版本过低或浏览器限制使用 websocket。
 
 本文后面的章节中，具体介绍了各种问题可能的解决办法。
 
@@ -23,13 +23,13 @@ sidebarDepth: 0
 
 如果您尝试了各种办法还解决不了，此问题的终极解决办法是：
 
-* 在 kuboard-spray 所在的内网启动一个 windows 或带图形界面的 linux 服务器，并使用该机器上的浏览器直接访问 kuboard-spray。
+- 在 pangee-cluster 所在的内网启动一个 windows 或带图形界面的 linux 服务器，并使用该机器上的浏览器直接访问 pangee-cluster。
 
 :::
 
 ## 反向代理配置
 
-如果您使用 nginx 作为反向代理，请参考下面的配置为 kuboard-spray 启用 websocket 转发：
+如果您使用 nginx 作为反向代理，请参考下面的配置为 pangee-cluster 启用 websocket 转发：
 
 ```nginx{2,3,4,5,18,19}
 http {
@@ -39,7 +39,7 @@ http {
   }
 
   server {
-    listen       80; 
+    listen       80;
     # server_name  kuboard.this-is-a-sample.com; # 替换成你的域名
 
     location / {

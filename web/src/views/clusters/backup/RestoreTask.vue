@@ -11,22 +11,24 @@ zh:
 
 <template>
   <div>
-    <ClusterTask v-if="!cluster.history.processing"
-      action="restore_etcd" :cluster="cluster" :title="t('title')" :populateRequest="populateRequest"
-      :disabled="disabled" type="primary" @refresh="$emit('refresh')" :width="600">
+    <ClusterTask v-if="!cluster.history.processing" action="restore_etcd" :cluster="cluster" :title="t('title')"
+      :populateRequest="populateRequest" :disabled="disabled" type="primary" @refresh="$emit('refresh')" :width="600">
       <el-form-item :label="t('operation')">
-        <el-alert type="warning" show-icon :closable="false" style="font-weight: bolder; line-height: 28px; margin: 10px 0 20px 0;">
+        <el-alert type="warning" show-icon :closable="false"
+          style="font-weight: bolder; line-height: 28px; margin: 10px 0 20px 0;">
           {{ t('restore_desc') }}
-          <kuboard-spray-link href="https://kuboard-spray.cn/guide/maintain/backup.html#影响" style="float: right;" size="12px;" type="warning"></kuboard-spray-link>
+          <pangee-cluster-link href="https://pangee-cluster.cn/guide/maintain/backup.html#影响" style="float: right;"
+            size="12px;" type="warning"></pangee-cluster-link>
         </el-alert>
-        已选定从 ETCD 成员 <el-tag class="app_text_mono">{{backupFile.etcd_member_name}}</el-tag> 备份的快照文件 <el-tag class="app_text_mono">{{backupFile.backup_name}}</el-tag>
+        已选定从 ETCD 成员 <el-tag class="app_text_mono">{{ backupFile.etcd_member_name }}</el-tag> 备份的快照文件 <el-tag
+          class="app_text_mono">{{ backupFile.backup_name }}</el-tag>
       </el-form-item>
     </ClusterTask>
   </div>
 </template>
 
 <script>
-import KuboardSprayLink from '../../../components/KuboardSprayLink.vue'
+import PangeeClusterLink from '../../../components/PangeeClusterLink.vue'
 import ClusterTask from '../../common/task/ClusterTask.vue'
 
 export default {
@@ -42,12 +44,12 @@ export default {
   },
   computed: {
   },
-  components: { ClusterTask, KuboardSprayLink },
+  components: { ClusterTask, PangeeClusterLink },
   emits: ['refresh'],
-  mounted () {
+  mounted() {
   },
   methods: {
-    async populateRequest () {
+    async populateRequest() {
       let req = {
         backup_file_path: `${this.backupFile.node_name}/${this.backupFile.etcd_member_name}`,
         backup_file_name: this.backupFile.backup_name
@@ -59,6 +61,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

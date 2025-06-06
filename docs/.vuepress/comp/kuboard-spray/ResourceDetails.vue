@@ -3,11 +3,13 @@
     <el-collapse v-model="activeNames">
       <el-collapse-item name="1">
         <template #title>
-          <span class="package_title">kuboardspray</span>
+          <span class="package_title">pangeecluster</span>
         </template>
         <div class="package_info">
-          <PackageContentField :holder="resourcePackage.metadata" fieldName="version" label="资源包版本"></PackageContentField>
-          <PackageContentField :holder="resourcePackage.metadata" fieldName="issue_date" label="发布时间"></PackageContentField>
+          <PackageContentField :holder="resourcePackage.metadata" fieldName="version" label="资源包版本">
+          </PackageContentField>
+          <PackageContentField :holder="resourcePackage.metadata" fieldName="issue_date" label="发布时间">
+          </PackageContentField>
           <PackageContentField :holder="resourcePackage.data" fieldName="kubespray_version"></PackageContentField>
         </div>
       </el-collapse-item>
@@ -19,20 +21,24 @@
           <el-form-item label="操作系统">
             <div>
               <div v-for="(item, key) in resourcePackage.metadata.supported_os" :key="'os' + key">
-                <el-tag effect="dark">{{item.distribution}}</el-tag>
-                <el-tag style="margin-left: 10px;" v-for="(version, i) in item.versions" :key="'v' + key + '' + i">{{version}}</el-tag>
+                <el-tag effect="dark">{{ item.distribution }}</el-tag>
+                <el-tag style="margin-left: 10px;" v-for="(version, i) in item.versions"
+                  :key="'v' + key + '' + i">{{ version }}</el-tag>
               </div>
             </div>
           </el-form-item>
           <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="image_arch"></PackageContentField>
-          <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="gcr_image_repo"></PackageContentField>
-          <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="kube_image_repo"></PackageContentField>
+          <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="gcr_image_repo">
+          </PackageContentField>
+          <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="kube_image_repo">
+          </PackageContentField>
           <PackageContentField :holder="resourcePackage.data.kubernetes" fieldName="kube_version"></PackageContentField>
           <el-form-item label="容器引擎">
             <div>
               <div v-for="(engine, index) in resourcePackage.data.container_engine" :key="'ce' + index">
                 <el-tag>
-                  <span class="app_text_mono">{{engine.container_manager}}_{{engine.params.containerd_version || engine.params.docker_version}}</span>
+                  <span class="app_text_mono">{{ engine.container_manager }}_{{ engine.params.containerd_version ||
+                    engine.params.docker_version}}</span>
                 </el-tag>
               </div>
             </div>
@@ -48,7 +54,7 @@
           <el-form-item label="etcd_deployment_type">
             <div>
               <div v-for="(item, key) in resourcePackage.data.etcd.etcd_deployment_type" :key="'k' + key">
-                <el-tag>{{item}}</el-tag>
+                <el-tag>{{ item }}</el-tag>
               </div>
             </div>
           </el-form-item>
@@ -60,11 +66,12 @@
         </template>
         <div class="package_info">
           <div v-for="(item, index) in resourcePackage.data.network_plugin" :key="index + 'network_plugin'">
-            <div style="font-weight: bolder;">{{item.name}}</div>
+            <div style="font-weight: bolder;">{{ item.name }}</div>
             <div class="package_info">
-              <el-form-item v-for="(value, key) in item.params" :key="index + 'p' + key" :label="key" label-width="180px">
-                <div class="app_text_mono" style="font-size: 13px" >
-                  {{value}}
+              <el-form-item v-for="(value, key) in item.params" :key="index + 'p' + key" :label="key"
+                label-width="180px">
+                <div class="app_text_mono" style="font-size: 13px">
+                  {{ value }}
                 </div>
               </el-form-item>
             </div>
@@ -79,7 +86,7 @@
           <div v-for="(item, index) in resourcePackage.data.dependency" :key="index + 'dependency'">
             <el-form-item :label="item.target">
               <div class="app_text_mono" style="font-size: 13px">
-                {{item.version}}
+                {{ item.version }}
               </div>
             </el-form-item>
           </div>
@@ -93,7 +100,7 @@
           <div v-for="(item, index) in resourcePackage.data.addon" :key="index + 'addons'">
             <el-form-item>
               <template #label>
-                <div style="font-weight: bolder;">{{item.name}}</div>
+                <div style="font-weight: bolder;">{{ item.name }}</div>
               </template>
               <div class="app_text_mono">
                 <el-tag type="success">已包含</el-tag>
@@ -102,22 +109,25 @@
             </el-form-item>
             <div class="package_info">
               <template v-for="(value, key) in item.params">
-                <el-form-item :label="key" label-width="280px" v-if="(value + '').indexOf('{{') < 0 && key.indexOf('version') >= 0" :key="key + 'addons' + index">
+                <el-form-item :label="key" label-width="280px"
+                  v-if="(value + '').indexOf('{{') < 0 && key.indexOf('version') >= 0" :key="key + 'addons' + index">
                   <template #label>
-                    <div style="font-size: 12px">{{key}}</div>
+                    <div style="font-size: 12px">{{ key }}</div>
                   </template>
                   <div class="app_text_mono" style="font-size: 12px">
-                    {{value}}
+                    {{ value }}
                   </div>
                 </el-form-item>
               </template>
               <template v-for="(value, key) in item.params_default">
-                <el-form-item :label="key" label-width="280px" v-if="(value + '').indexOf('{{') < 0 && key.indexOf('version') >= 0" :key="key + 'addons_default_' + index">
+                <el-form-item :label="key" label-width="280px"
+                  v-if="(value + '').indexOf('{{') < 0 && key.indexOf('version') >= 0"
+                  :key="key + 'addons_default_' + index">
                   <template #label>
-                    <div style="font-size: 12px">{{key}}</div>
+                    <div style="font-size: 12px">{{ key }}</div>
                   </template>
                   <div class="app_text_mono" style="font-size: 12px">
-                    {{value}}
+                    {{ value }}
                   </div>
                 </el-form-item>
               </template>
@@ -139,15 +149,15 @@ export default {
   },
   data() {
     return {
-      activeNames: this.expandAll ? ['1','2','3','4','5','6'] : ['2'],
+      activeNames: this.expandAll ? ['1', '2', '3', '4', '5', '6'] : ['2'],
     }
   },
   computed: {
   },
-  components: { 
+  components: {
     PackageContentField,
   },
-  mounted () {
+  mounted() {
   },
   methods: {
   }
@@ -174,10 +184,11 @@ export default {
 <style scoped lang="css">
 .package_title {
   font-weight: bolder;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
+
 .package_info {
   margin-left: 20px;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
 </style>

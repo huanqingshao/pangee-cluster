@@ -3,9 +3,9 @@ package operation_v2
 import (
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 func CheckStepStatus(c *gin.Context) {
@@ -19,7 +19,7 @@ func CheckStepStatus(c *gin.Context) {
 		common.HandleError(c, http.StatusInternalServerError, err.Error(), err)
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 		Data:    stepStatus,

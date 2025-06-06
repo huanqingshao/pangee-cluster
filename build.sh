@@ -11,8 +11,8 @@ fi
 
 echo "【构建】 ${1}-${arch}"
 
-tag=eipwork/kuboard-spray
-tag_backup=swr.cn-east-2.myhuaweicloud.com/kuboard/kuboard-spray
+tag=eipwork/pangee-cluster
+tag_backup=swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster
 
 echo
 echo "【构建 web】"
@@ -26,23 +26,23 @@ cd ..
 
 echo
 echo "【构建 server】"
-rm -f ./server/kuboard-spray
-docker run --rm -v ${PWD}:/usr/src/kuboard-spray \
+rm -f ./server/pangee-cluster
+docker run --rm -v ${PWD}:/usr/src/pangee-cluster \
   -v ~/temp/build-temp/pkg:/go/pkg \
-  -w /usr/src/kuboard-spray/server golang:1.18.0-buster \
-  sh -c "export GOPROXY=https://goproxy.io,direct && go build kuboard-spray.go"
+  -w /usr/src/pangee-cluster/server golang:1.18.0-buster \
+  sh -c "export GOPROXY=https://goproxy.io,direct && go build pangee-cluster.go"
 
-ls -lh ./server/kuboard-spray
+ls -lh ./server/pangee-cluster
 
 echo
 echo "【构建 admin】"
-rm -f ./admin/kuboard-spray-admin
-docker run --rm -v ${PWD}:/usr/src/kuboard-spray \
+rm -f ./admin/pangee-cluster-admin
+docker run --rm -v ${PWD}:/usr/src/pangee-cluster \
   -v ~/temp/build-temp/pkg:/go/pkg \
-  -w /usr/src/kuboard-spray/admin golang:1.18.0-buster \
-  sh -c "export GOPROXY=https://goproxy.io,direct && go build kuboard-spray-admin.go"
+  -w /usr/src/pangee-cluster/admin golang:1.18.0-buster \
+  sh -c "export GOPROXY=https://goproxy.io,direct && go build pangee-cluster-admin.go"
 
-ls -lh ./admin/kuboard-spray-admin
+ls -lh ./admin/pangee-cluster-admin
 
 echo
 echo "【构建 镜像】"

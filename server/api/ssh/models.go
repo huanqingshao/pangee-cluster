@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 )
@@ -81,7 +81,7 @@ func populateNodeInfo(inventory map[string]interface{}, node string) *NodeInfo {
 		result.Port = 22
 	}
 	result.PrivateKeyPath = getNodeInfo(inventory, node, "ansible_ssh_private_key_file")
-	result.PrivateKeyPath = strings.ReplaceAll(result.PrivateKeyPath, "{{ kuboardspray_cluster_dir }}", common.MapGetString(inventory, "all.vars.kuboardspray_cluster_dir"))
+	result.PrivateKeyPath = strings.ReplaceAll(result.PrivateKeyPath, "{{ pangeecluster_cluster_dir }}", common.MapGetString(inventory, "all.vars.pangeecluster_cluster_dir"))
 	result.Become = getNodeInfoBool(inventory, node, "ansible_become")
 	result.BecomeUser = getNodeInfo(inventory, node, "ansible_become_user")
 	result.BecomePassword = getNodeInfo(inventory, node, "ansible_become_password")
@@ -92,14 +92,14 @@ func populateNodeInfo(inventory map[string]interface{}, node string) *NodeInfo {
 func getNodeInfo(inventory map[string]interface{}, node, prop string) string {
 	v := common.MapGetString(inventory, "all.hosts."+node+"."+prop)
 	if v == "" {
-		v = common.MapGetString(inventory, "all.children.target.vars."+prop)
+		v = common.MapGetString(inventory, "all.vars."+prop)
 	}
 	return v
 }
 func getNodeInfoBool(inventory map[string]interface{}, node, prop string) bool {
 	v := common.MapGet(inventory, "all.hosts."+node+"."+prop)
 	if v == nil {
-		v = common.MapGet(inventory, "all.children.target.vars."+prop)
+		v = common.MapGet(inventory, "all.vars."+prop)
 	}
 	if v != nil {
 		return v.(bool)

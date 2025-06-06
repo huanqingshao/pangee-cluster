@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
@@ -69,7 +69,7 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 			tempPlayBookFilePath,
 			"-i", inventoryPath,
 			"-f", "200",
-			"-e", "kuboardspray_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
+			"-e", "pangeecluster_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
 		},
 		Env:     []string{"ANSIBLE_CONFIG=./ansible-rpc/ansible.cfg", "ANSIBLE_CACHE_PLUGIN_CONNECTION=" + constants.GET_DATA_DIR() + "/" + owner_type + "/" + owner_name + "/fact"},
 		Timeout: 20,

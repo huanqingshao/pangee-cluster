@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 
@@ -43,7 +43,7 @@ func ExecuteAdhocCommandWithIp(req AdhocCommandRequestWithIP, args []string) ([]
 					"ansible_become_password":      req.BecomePassword,
 					"ansible_ssh_common_args":      "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=1 -F /dev/null " + req.SshCommonArgs,
 					"ansible_ssh_pipelining":       true,
-					"kuboardspray_cluster_dir":     constants.GET_DATA_DIR() + "/" + req.NodeOwnerType + "/" + req.NodeOwner,
+					"pangeecluster_cluster_dir":    constants.GET_DATA_DIR() + "/" + req.NodeOwnerType + "/" + req.NodeOwner,
 					"ansible_python_interpreter":   "auto",
 				},
 			},
@@ -103,7 +103,7 @@ func ExecuteAdhocCommandWithIp(req AdhocCommandRequestWithIP, args []string) ([]
 
 func ExecuteAdhocCommandWithInventory(inventoryPath string, args []string) ([]AnsibleResultNode, error) {
 
-	arguments := []string{"-i", inventoryPath, "--timeout", "3", "--forks", "200", "-e", "kuboardspray_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'"}
+	arguments := []string{"-i", inventoryPath, "--timeout", "3", "--forks", "200", "-e", "pangeecluster_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'"}
 	arguments = append(arguments, args...)
 
 	run := Run{

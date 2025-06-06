@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 type SuccessTask struct {

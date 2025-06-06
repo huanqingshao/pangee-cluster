@@ -68,14 +68,14 @@ zh:
     <el-alert v-if="pendingDelete" :title="t('pendingDelete')" type="error" :closable="false" effect="dark"
       class="app_margin_bottom" show-icon>
       {{ t('pendingDeleteAction') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12"
-        style="margin-left: 20px; color: white;"></KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12"
+        style="margin-left: 20px; color: white;"></PangeeClusterLink>
     </el-alert>
     <el-alert v-if="pendingAdd" :title="t('pendingAdd')" type="warning" :closable="false" effect="dark"
       class="app_margin_bottom" show-icon>
       {{ t('pendingAddAction') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12"
-        style="margin-left: 20px; color: white;"></KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12"
+        style="margin-left: 20px; color: white;"></PangeeClusterLink>
     </el-alert>
     <StateNode v-if="onlineNodes[nodeName]" :cluster="cluster" :nodeName="nodeName"></StateNode>
     <SshParamsNode :cluster="cluster" v-if="inventory.all.hosts[nodeName]" :holder="inventory.all.hosts[nodeName]"
@@ -83,22 +83,22 @@ zh:
       :description="t('sshcommon', { nodeName: nodeName })">
       <NodeFact ref="nodeFact" class="app_margin_bottom" v-if="inventory.all.hosts[nodeName]" :form="$refs.form"
         node_owner_type="cluster" :node_owner="cluster.name" :node_name="nodeName"
-        :ansible_host="inventory.all.hosts[nodeName].ansible_host || inventory.all.children.target.vars.ansible_host"
-        :ansible_port="inventory.all.hosts[nodeName].ansible_port || inventory.all.children.target.vars.ansible_port"
-        :ansible_user="inventory.all.hosts[nodeName].ansible_user || inventory.all.children.target.vars.ansible_user"
-        :ansible_password="inventory.all.hosts[nodeName].ansible_password || inventory.all.children.target.vars.ansible_password"
-        :ansible_ssh_private_key_file="inventory.all.hosts[nodeName].ansible_ssh_private_key_file || inventory.all.children.target.vars.ansible_ssh_private_key_file"
-        :ansible_become="inventory.all.hosts[nodeName].ansible_become !== undefined ? inventory.all.hosts[nodeName].ansible_become : inventory.all.children.target.vars.ansible_become"
-        :ansible_become_user="inventory.all.hosts[nodeName].ansible_become_user || inventory.all.children.target.vars.ansible_become_user"
-        :ansible_become_password="inventory.all.hosts[nodeName].ansible_become_password || inventory.all.children.target.vars.ansible_become_password"
-        :ansible_python_interpreter="inventory.all.hosts[nodeName].ansible_python_interpreter || inventory.all.children.target.vars.ansible_python_interpreter"
-        :ip="inventory.all.hosts[nodeName].ip"
-        :ansible_ssh_common_args="inventory.all.children.target.vars.ansible_ssh_common_args"></NodeFact>
+        :ansible_host="inventory.all.hosts[nodeName].ansible_host"
+        :ansible_port="inventory.all.hosts[nodeName].ansible_port || inventory.all.vars.ansible_port"
+        :ansible_user="inventory.all.hosts[nodeName].ansible_user || inventory.all.vars.ansible_user"
+        :ansible_password="inventory.all.hosts[nodeName].ansible_password || inventory.all.vars.ansible_password"
+        :ansible_ssh_private_key_file="inventory.all.hosts[nodeName].ansible_ssh_private_key_file || inventory.all.vars.ansible_ssh_private_key_file"
+        :ansible_become="inventory.all.hosts[nodeName].ansible_become !== undefined ? inventory.all.hosts[nodeName].ansible_become : inventory.all.vars.ansible_become"
+        :ansible_become_user="inventory.all.hosts[nodeName].ansible_become_user || inventory.all.vars.ansible_become_user"
+        :ansible_become_password="inventory.all.hosts[nodeName].ansible_become_password || inventory.all.vars.ansible_become_password"
+        :ansible_python_interpreter="inventory.all.hosts[nodeName].ansible_python_interpreter || inventory.all.vars.ansible_python_interpreter"
+        :ip="inventory.all.hosts[nodeName].ip" :ansible_ssh_common_args="inventory.all.vars.ansible_ssh_common_args">
+      </NodeFact>
     </SshParamsNode>
     <ConfigSection v-model:enabled="enabledRoles" :label="t('roles')"
       :description="t('roleDescription', { nodeName: nodeName })" disabled anti-freeze>
       <EditCommon :label="t('roles')"
-        :anti-freeze="inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'">
+        :anti-freeze="inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'">
         <template #edit>
           <div class="roles">
             <NodeRoleTag :enabled="isKubeControlPlane" role="kube_control_plane"
@@ -121,13 +121,13 @@ zh:
       <EditRadio
         v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_state"
         :label="t('keepalived_state')"
-        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
+        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
         :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_state`"
         :options="keepAliveStateOptions" required></EditRadio>
       <EditNumber
         v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_priority"
         :label="t('keepalived_priority')"
-        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].kuboardspray_node_action === 'add_node'"
+        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
         :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_priority`"
         :min="0" :max="100" required>
       </EditNumber>
@@ -171,13 +171,13 @@ export default {
       }
     },
     pendingDelete() {
-      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].kuboardspray_node_action === 'remove_node') {
+      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].pangeecluster_node_action === 'remove_node') {
         return true
       }
       return false
     },
     pendingAdd() {
-      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].kuboardspray_node_action === 'add_node') {
+      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].pangeecluster_node_action === 'add_node') {
         return true
       }
       return false

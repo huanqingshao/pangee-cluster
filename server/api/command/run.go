@@ -92,7 +92,7 @@ func (run *Run) Run() ([]byte, []byte, error) {
 		go func() {
 			time.Sleep(time.Duration(time.Second * time.Duration(run.Timeout)))
 			cmd.Process.Kill()
-			outContent += "KilledByKuboardSpray[Timeout]"
+			outContent += "KilledByPangeeCluster[Timeout]"
 		}()
 	}
 

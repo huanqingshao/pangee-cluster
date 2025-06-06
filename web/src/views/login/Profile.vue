@@ -22,9 +22,10 @@ zh:
     <div class="app_block_title">{{ t('changePassword') }}</div>
     <div class="app_block_content">
       <div class="block">
-        <el-form ref="form" :model="form" label-position="left" label-width="120px" v-if="userInfo" style="width: 420px;">
+        <el-form ref="form" :model="form" label-position="left" label-width="120px" v-if="userInfo"
+          style="width: 420px;">
           <el-form-item :label="t('username')">
-            <span>{{userInfo.username}}</span>
+            <span>{{ userInfo.username }}</span>
           </el-form-item>
           <el-form-item :label="t('password')" prop="password" :rules="passwordRules">
             <el-input v-model.trim="form.password" show-password :placeholder="t('password_placeholer')"></el-input>
@@ -33,7 +34,7 @@ zh:
             <el-input v-model.trim="form.password2" show-password :placeholder="t('password2_placeholder')"></el-input>
           </el-form-item>
           <div style="text-align: right;">
-            <el-button type="primary" @click="save">{{t('changePassword')}}</el-button>
+            <el-button type="primary" @click="save">{{ t('changePassword') }}</el-button>
           </div>
         </el-form>
       </div>
@@ -47,18 +48,18 @@ import mixin from '../../mixins/mixin.js'
 
 export default {
   mixins: [mixin],
-  percentage () {
+  percentage() {
     return this.userInfo ? 100 : 0
   },
-  breadcrumb () {
+  breadcrumb() {
     return [{ label: this.t('changePassword') }]
   },
-  refresh () {
+  refresh() {
     this.refresh()
   },
   props: {
   },
-  data () {
+  data() {
     return {
       userInfo: undefined,
       form: {
@@ -86,21 +87,21 @@ export default {
   computed: {
   },
   components: {},
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    refresh () {
-      this.kuboardSprayApi.get(`/profile`).then(resp => {
+    refresh() {
+      this.pangeeClusterApi.get(`/profile`).then(resp => {
         this.userInfo = resp.data.data
       }).catch(e => {
         console.log(e)
       })
     },
-    save () {
+    save() {
       this.$refs.form.validate(flag => {
         if (flag) {
-          this.kuboardSprayApi.post(`/profile/change_password`, this.form).then(resp => {
+          this.pangeeClusterApi.post(`/profile/change_password`, this.form).then(resp => {
             console.log(resp.data)
             this.$message.success(this.$t('msg.save_succeeded'))
             this.form.password = undefined

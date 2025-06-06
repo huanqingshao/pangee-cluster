@@ -1,17 +1,17 @@
 <i18n>
 en:
-  bastionUsage: KuboardSpray can access Kubernetes Cluster Nodes through bastion.
+  bastionUsage: PangeeCluster can access Kubernetes Cluster Nodes through bastion.
   addSshKey: Add Private Key
-  ansible_host_placeholder: 'KuboardSpray use this ip or hostname to connect to the node.'
+  ansible_host_placeholder: 'PangeeCluster use this ip or hostname to connect to the node.'
   default_value: 'Default: {default_value} (inhirit from value configured in Global Config tab)'
   duplicateIP: "IP address conflict with {node}"
   description: Access target nodes throguh bastion/jumpserver
 
   AllowTcpForwarding: 跳板机 /etc/ssh/sshd_config 文件中的 AllowTcpForwarding 属性必须设置为 true
 zh:
-  bastionUsage: KuboardSpray 可以通过跳板机或堡垒机访问将要安装 K8S 集群的目标节点。
+  bastionUsage: PangeeCluster 可以通过跳板机或堡垒机访问将要安装 K8S 集群的目标节点。
   addSshKey: 添加私钥
-  ansible_host_placeholder: 'KuboardSpray 连接该主机时所使用的主机名或 IP 地址'
+  ansible_host_placeholder: 'PangeeCluster 连接该主机时所使用的主机名或 IP 地址'
   default_value: '默认值：{default_value} （继承自全局设置标签页中的配置）'
   duplicateIP: "IP 地址不能与其他节点相同：{node}"
   description: 通过跳板机或者堡垒机访问目标节点
@@ -19,18 +19,18 @@ zh:
 
   ansible_host: '主机'
   ansible_port: 'SSH 端口'
-  ansible_port_placeholder: 'KuboardSpray 连接该主机时所使用的 SHH 端口'
+  ansible_port_placeholder: 'PangeeCluster 连接该主机时所使用的 SHH 端口'
   
   ansible_user: '用户名'
-  ansible_user_placeholder: 'KuboardSpray 连接该主机时所使用的用户名'
+  ansible_user_placeholder: 'PangeeCluster 连接该主机时所使用的用户名'
   ansible_password: '密码'
-  ansible_password_placeholder: 'KuboardSpray 连接该主机时所使用的密码'
+  ansible_password_placeholder: 'PangeeCluster 连接该主机时所使用的密码'
   ansible_ssh_private_key_file: '私钥文件'
-  ansible_ssh_private_key_file_placeholder: 'KuboardSpray 连接该主机时所使用的私钥文件'
+  ansible_ssh_private_key_file_placeholder: 'PangeeCluster 连接该主机时所使用的私钥文件'
   ansible_become: '切换身份'
-  ansible_become_placeholder: 'KuboardSpray 登录到该主机后，是否使用 su 命令切换身份'
+  ansible_become_placeholder: 'PangeeCluster 登录到该主机后，是否使用 su 命令切换身份'
   ansible_become_user: '切换到用户'
-  ansible_become_user_placeholder: 'KuboardSpray 登录该主机后，使用 su 命令切换到用户名'
+  ansible_become_user_placeholder: 'PangeeCluster 登录该主机后，使用 su 命令切换到用户名'
   ansible_become_password: '切换密码'
   ansible_become_password_placeholder: '切换密码'
 
@@ -127,7 +127,7 @@ export default {
           this.inventory.all.hosts.bastion = this.inventory.all.hosts.bastion || { ansible_host: '', ansible_user: '' }
         } else {
           delete this.inventory.all.hosts.bastion
-          delete this.inventory.all.children.target.vars.ansible_ssh_common_args
+          delete this.inventory.all.vars.ansible_ssh_common_args
         }
       }
     },
@@ -140,7 +140,7 @@ export default {
         if (this.holder.ansible_become !== undefined) {
           return this.holder.ansible_become
         }
-        return this.cluster.inventory.all.children.target.vars.ansible_become
+        return this.cluster.inventory.all.vars.ansible_become
       },
       set(v) {
         this.holderRef.ansible_become = v
@@ -165,7 +165,7 @@ export default {
               temp += " -i " + bastion["ansible_ssh_private_key_file"]
             }
             temp += '"'
-            this.inventory.all.children.target.vars.ansible_ssh_common_args = temp
+            this.inventory.all.vars.ansible_ssh_common_args = temp
           } else if (this.computedBastionType == 'socks5') {
             let temp = `-o ProxyCommand="nc -X 5 -x ${bastion.ansible_host}:${bastion.ansible_port} %h %p"`
             if (bastion['ansible_user']) {
@@ -174,12 +174,12 @@ export default {
             if (bastion['ansible_password'] && bastion['ansible_user']) {
               temp = `-o ProxyCommand="nc -X 5 -x ${bastion['ansible_user']}:${bastion['ansible_password']}@${bastion.ansible_host}:${bastion.ansible_port} %h %p"`
             }
-            this.inventory.all.children.target.vars.ansible_ssh_common_args = temp
+            this.inventory.all.vars.ansible_ssh_common_args = temp
           } else {
-            delete this.inventory.all.children.target.vars.ansible_ssh_common_args
+            delete this.inventory.all.vars.ansible_ssh_common_args
           }
         } else {
-          delete this.inventory.all.children.target.vars.ansible_ssh_common_args
+          delete this.inventory.all.vars.ansible_ssh_common_args
         }
       },
       deep: true,
@@ -191,9 +191,9 @@ export default {
     },
     async loadSshKeyList() {
       let result = []
-      await this.kuboardSprayApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
+      await this.pangeeClusterApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
         for (let item of resp.data.data) {
-          result.push({ label: item, value: '{{ kuboardspray_cluster_dir }}/private-key/' + item })
+          result.push({ label: item, value: '{{ pangeecluster_cluster_dir }}/private-key/' + item })
         }
       })
       return result

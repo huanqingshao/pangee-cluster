@@ -12,8 +12,10 @@ zh:
     <div class="app_block_title">{{ t('cert_expiration_check') }}</div>
     <div class="app_description">
       {{ t('cert_expiration_check_desc') }}
-      <el-button type="primary" style="margin-left: 20px;" icon="el-icon-promotion" @click="checkCertExpiration">{{t('cert_expiration_check')}}</el-button>
-      <CertRenew v-if="cluster.resourcePackage.data.supported_playbooks.renew_cert && !cluster.history.processing" :cluster="cluster" @refresh="$emit('refresh')"></CertRenew>
+      <el-button type="primary" style="margin-left: 20px;" icon="el-icon-promotion"
+        @click="checkCertExpiration">{{ t('cert_expiration_check') }}</el-button>
+      <CertRenew v-if="cluster.resourcePackage.data.supported_playbooks.renew_cert && !cluster.history.processing"
+        :cluster="cluster" @refresh="$emit('refresh')"></CertRenew>
     </div>
     <el-skeleton v-if="loading" animated class="app_margin_top"></el-skeleton>
     <div v-else-if="checkResult">
@@ -22,7 +24,7 @@ zh:
           <el-scrollbar class="result" :max-height="285">
             <pre class="app_code"><span style="color: var(--el-color-success); font-weight: bolder;">[root@{{ nodeName }}]</span># kubeadm certs check-expiration
 
-{{result.stdout}}</pre>
+{{ result.stdout }}</pre>
           </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
@@ -45,7 +47,7 @@ export default {
     }
   },
   computed: {
-    certExpiration () {
+    certExpiration() {
       if (this.checkResult) {
         return this.checkResult.plays[0].tasks[0].hosts
       }
@@ -53,28 +55,26 @@ export default {
     }
   },
   components: { CertRenew },
-  mounted () {
+  mounted() {
   },
   methods: {
-    checkCertExpiration () {
+    checkCertExpiration() {
       this.loading = true
-      this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/state/check_cert_expiration`).then(resp => {
+      this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/state/check_cert_expiration`).then(resp => {
         this.checkResult = resp.data.data
         this.loading = false
       }).catch(e => {
         console.error(e)
         this.loading = false
         if (e.response && e.response.data.message)
-        this.$message.error(e.response.data.message)
+          this.$message.error(e.response.data.message)
       })
     },
-    renewCert () {
+    renewCert() {
 
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

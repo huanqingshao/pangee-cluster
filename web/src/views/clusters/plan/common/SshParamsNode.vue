@@ -1,7 +1,7 @@
 <i18n>
 en:
   addSshKey: Add Private Key
-  ansible_host_placeholder: 'KuboardSpray use this ip or hostname to connect to the node.'
+  ansible_host_placeholder: 'PangeeCluster use this ip or hostname to connect to the node.'
   default_value: 'Default: {default_value} (inhirit from value configured in Global Config tab)'
   duplicateIP: "IP address conflict with {node}"
   ip: Bind to IP
@@ -10,39 +10,39 @@ en:
   password_and_bastion: You are using bastion/jumpserver to access the node, if you use password here, it takes longer time to create ssh connection, it would be better to clear the password and provide ssh_private_key.
   password_in_global: You defined password in global configuration, it's suggested that you clear it.
   speedup: SSH Multiplexing
-  cannotUseLocalhostAsTarget: Cannot use the machine that kuboardspray runs on as a target node.
+  cannotUseLocalhostAsTarget: Cannot use the machine that pangeecluster runs on as a target node.
   inhirit: inhirit from value configured in Global Config tab
   rootuser: Must use root user
 zh:
   addSshKey: 添加私钥
-  ansible_host_placeholder: 'KuboardSpray 连接该主机时所使用的主机名或 IP 地址'
+  ansible_host_placeholder: 'PangeeCluster 连接该主机时所使用的主机名或 IP 地址'
   default_value: '默认值：{default_value} （继承自全局设置标签页中的配置）'
   duplicateIP: "IP 地址不能与其他节点相同：{node}"
   ip: 绑定到 IP
   ip_placeholder: '默认值：{default_value} （默认与主机 IP 相同）'
   longTimeLoading: 加载中... 可能需要 20-30 秒
-  ipDescription: kubernetes 使用的地址有可能与 kuboard-spray 访问该机器时所使用的地址不同，此处指定 kubernetes 所使用的地址（必须为内网地址）
+  ipDescription: kubernetes 使用的地址有可能与 pangee-cluster 访问该机器时所使用的地址不同，此处指定 kubernetes 所使用的地址（必须为内网地址）
   password_and_bastion: 您将使用跳板机访问节点，如果在此处使用密码访问，创建 ssh 连接的时间较长，并且有很大的概率会发生ssh连接断开的情况，建议清除密码并提供 “私钥文件”。
   password_in_global: 您在全局参数中配置了密码，建议清除。
   speedup: 加速执行
-  cannotUseLocalhostAsTarget: 不能使用 KuboardSpray 所在机器作为目标节点
+  cannotUseLocalhostAsTarget: 不能使用 PangeeCluster 所在机器作为目标节点
   inhirit: 继承自全局设置标签页中的配置
   rootuser: 必须使用 root 用户
 
   ansible_host: '主机'
   ansible_port: 'SSH 端口'
-  ansible_port_placeholder: 'KuboardSpray 连接该主机时所使用的 SHH 端口'
+  ansible_port_placeholder: 'PangeeCluster 连接该主机时所使用的 SHH 端口'
   
   ansible_user: '用户名'
-  ansible_user_placeholder: 'KuboardSpray 连接该主机时所使用的用户名'
+  ansible_user_placeholder: 'PangeeCluster 连接该主机时所使用的用户名'
   ansible_password: '密码'
-  ansible_password_placeholder: 'KuboardSpray 连接该主机时所使用的密码'
+  ansible_password_placeholder: 'PangeeCluster 连接该主机时所使用的密码'
   ansible_ssh_private_key_file: '私钥文件'
-  ansible_ssh_private_key_file_placeholder: 'KuboardSpray 连接该主机时所使用的私钥文件'
+  ansible_ssh_private_key_file_placeholder: 'PangeeCluster 连接该主机时所使用的私钥文件'
   ansible_become: '切换身份'
-  ansible_become_placeholder: 'KuboardSpray 登录到该主机后，是否使用 su 命令切换身份'
+  ansible_become_placeholder: 'PangeeCluster 登录到该主机后，是否使用 su 命令切换身份'
   ansible_become_user: '切换到用户'
-  ansible_become_user_placeholder: 'KuboardSpray 登录该主机后，使用 su 命令切换到用户名'
+  ansible_become_user_placeholder: 'PangeeCluster 登录该主机后，使用 su 命令切换到用户名'
   ansible_become_password: '切换密码'
   ansible_become_password_placeholder: '切换密码'
 
@@ -54,7 +54,7 @@ zh:
   <ConfigSection ref="configSection" v-model:enabled="enableSsh" label="SSH" :description="description" disabled
     anti-freeze>
     <EditCommon v-model="holder.ansible_host" :prop="`all.hosts.${nodeName}.ansible_host`" :label="t('ansible_host')"
-      :anti-freeze="onlineNodes[nodeName] === undefined || holder.kuboardspray_node_action === 'add_node'"
+      :anti-freeze="onlineNodes[nodeName] === undefined || holder.pangeecluster_node_action === 'add_node'"
       :rules="hostRules">
       <template #edit>
         <el-input v-model.trim="ansible_host" :placeholder="t('ansible_host_placeholder')"></el-input>
@@ -84,8 +84,9 @@ zh:
       v-if="cluster && cluster.inventory.all.hosts.bastion && (holder.ansible_password || cluster.inventory.all.children.target.vars.ansible_password)"
       style="margin-left: 120px; width: calc(100% - 120px);">
       {{ t('password_and_bastion') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12">
-      </KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/extra/speedup.html" style="margin-left: 10px;"
+        :size="12">
+      </PangeeClusterLink>
       <li v-if="cluster && cluster.inventory.all.children.target.vars.ansible_password">{{ t('password_in_global') }}
       </li>
     </el-alert>
@@ -285,9 +286,9 @@ export default {
     },
     async loadSshKeyList() {
       let result = []
-      await this.kuboardSprayApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
+      await this.pangeeClusterApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
         for (let item of resp.data.data) {
-          result.push({ label: item, value: '{{ kuboardspray_cluster_dir }}/private-key/' + item })
+          result.push({ label: item, value: '{{ pangeecluster_cluster_dir }}/private-key/' + item })
         }
       })
       return result
@@ -310,7 +311,7 @@ export default {
           gather_subset: '!all,!min,network',
           filter: 'ansible_all_ipv4_addresses',
         }
-        await this.kuboardSprayApi.post(`/facts/cluster/${this.cluster.name}/${this.nodeName}`, req).then(resp => {
+        await this.pangeeClusterApi.post(`/facts/cluster/${this.cluster.name}/${this.nodeName}`, req).then(resp => {
           if (resp.data.ansible_facts) {
             this.optionIps = resp.data.ansible_facts.ansible_all_ipv4_addresses
           } else {

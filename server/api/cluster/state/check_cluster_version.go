@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 
@@ -41,7 +41,7 @@ func CheckClusterVersion(c *gin.Context) {
 			"-i", cluster.InventoryPath,
 			"--forks", "200",
 			"--timeout", "3",
-			"-e", "kuboardspray_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
+			"-e", "pangeecluster_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
 		},
 		Env:     []string{"ANSIBLE_CONFIG=./ansible.cfg", "ANSIBLE_CACHE_PLUGIN_CONNECTION=" + constants.GET_DATA_CLUSTER_DIR() + "/" + request.ClusterName + "/fact"},
 		Timeout: 60,
@@ -77,7 +77,7 @@ func CheckClusterVersion(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 		Data:    clusterVersion,

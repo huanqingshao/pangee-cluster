@@ -6,8 +6,8 @@ sidebarDepth: 2
 
 ## 前提条件
 
-* kuboard-spray 版本不低于 v1.0.0-rc.1
-* kuboard-spray-resources 资源包版本不低于 
+- pangee-cluster 版本不低于 v1.0.0-rc.1
+- pangee-cluster-resources 资源包版本不低于
 
 ## 备份 ETCD 数据
 

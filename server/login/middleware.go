@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 func JWTAuthMiddleware() func(c *gin.Context) {
@@ -23,9 +23,9 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			token = parts[1]
 		} else { // Token 也可以放在 Cookie 中
 			var err error
-			token, err = c.Cookie("KuboardSprayToken")
+			token, err = c.Cookie("PangeeClusterToken")
 			if err != nil {
-				common.HandleError(c, http.StatusBadRequest, "Authorization header or Cookie KuboardSprayToken can't be empty", err)
+				common.HandleError(c, http.StatusBadRequest, "Authorization header or Cookie PangeeClusterToken can't be empty", err)
 				return
 			}
 		}

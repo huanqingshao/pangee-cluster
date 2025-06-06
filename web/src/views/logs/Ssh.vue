@@ -163,7 +163,7 @@ export default {
       this.socket.onopen = function () {
         _this.fitAddon.fit();
         _this.socketReadyState = _this.socket.readyState;
-        _this.kuboardSprayApi
+        _this.pangeeClusterApi
           .get(`/${_this.ownerType}s/${_this.ownerName}`)
           .then(resp => {
             let inventory = resp.data.data.inventory;
@@ -208,13 +208,13 @@ export ETCDCTL_ENDPOINTS=https://127.0.0.1:${inventory.all.children.target.child
 # 此处开始，执行您想要执行的 etcdctl 命令
 `
                 );
-                if (inventory.all.hosts[_this.nodeName].kuboardspray_node_action === undefined) {
+                if (inventory.all.hosts[_this.nodeName].pangeecluster_node_action === undefined) {
                   _this.socket.send("0etcdctl member list\n");
                   _this.socket.send("0\n");
                 }
                 if (inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[_this.nodeName]) {
                   _this.socket.send("0# 或者 kubectl 命令\n");
-                  if (inventory.all.hosts[_this.nodeName].kuboardspray_node_action === undefined) {
+                  if (inventory.all.hosts[_this.nodeName].pangeecluster_node_action === undefined) {
                     _this.socket.send("0kubectl get nodes -o wide\n\n");
                   }
                 }

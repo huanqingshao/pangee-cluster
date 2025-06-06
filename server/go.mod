@@ -1,10 +1,10 @@
-module github.com/eip-work/kuboard-spray
+module github.com/opencmit/pangee-cluster
 
 go 1.18
 
 toolchain go1.24.1
 
-replace github.com/eip-work/kuboard-spray => ./
+replace github.com/opencmit/pangee-cluster => ./
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible

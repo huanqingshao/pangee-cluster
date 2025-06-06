@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 type GetPrivateKeyRequest struct {

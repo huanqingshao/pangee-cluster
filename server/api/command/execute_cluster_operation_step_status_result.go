@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 
@@ -41,7 +41,7 @@ func CheckStepStatusExec(request CheckStepStatusRequest) (*CheckStepStatusRespon
 	common.Symlink(cluster.ResourcePackageDir+"/group_vars", constants.GET_DATA_CLUSTER_DIR()+"/"+cluster.ClusterName+"/group_vars")
 
 	if !common.PathExists(cluster.ResourcePackageDir + "/" + playbook) {
-		// c.JSON(http.StatusNotFound, common.KuboardSprayResponse{
+		// c.JSON(http.StatusNotFound, common.PangeeClusterResponse{
 		// 	Code:    http.StatusNotFound,
 		// 	Message: playbook + " is not found.",
 		// })
@@ -55,7 +55,7 @@ func CheckStepStatusExec(request CheckStepStatusRequest) (*CheckStepStatusRespon
 			"-i", cluster.InventoryPath,
 			"--forks", "200",
 			"--timeout", "3",
-			"-e", "kuboardspray_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
+			"-e", "pangeecluster_ssh_args='-o ConnectionAttempts=1 -o UserKnownHostsFile=/dev/null -F /dev/null'",
 		},
 		Env:     []string{"ANSIBLE_CONFIG=./ansible.cfg", "ANSIBLE_CACHE_PLUGIN_CONNECTION=" + constants.GET_DATA_CLUSTER_DIR() + "/" + request.Cluster + "/fact"},
 		Timeout: 60,

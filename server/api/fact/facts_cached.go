@@ -5,8 +5,8 @@ import (
 	"errors"
 	"io/ioutil"
 
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 func nodefact_cached(req GetNodeFactRequest) (*command.AnsibleResultNode, error) {

@@ -45,12 +45,14 @@ zh:
                 {{ t('currentVersion') }}
               </el-tag>
               <template v-else-if="scope.row.yaml">
-                <el-tag v-if="compareVersions(cluster.resourcePackage.data.kubernetes.kube_version, scope.row.yaml.data.kubernetes.kube_version) > 0"
+                <el-tag
+                  v-if="compareVersions(cluster.resourcePackage.data.kubernetes.kube_version, scope.row.yaml.data.kubernetes.kube_version) > 0"
                   type="info" effect="dark">
-                  {{t('cannot_down_grade')}}
+                  {{ t('cannot_down_grade') }}
                 </el-tag>
                 <template v-else>
-                  <el-button icon="el-icon-view" type="primary" plain @click="$refs.comparePackage.show(scope.row)">{{ $t('msg.view') }}</el-button>
+                  <el-button icon="el-icon-view" type="primary" plain @click="$refs.comparePackage.show(scope.row)">{{
+                    $t('msg.view') }}</el-button>
                   <template v-if="!matchComponents(scope.row)">
                     <el-button disabled icon="el-icon-circle-close" type="info">{{ t('not_supported_cm') }}</el-button>
                   </template>
@@ -74,7 +76,8 @@ zh:
                       @confirm="changeToVersion('upgrade', scope.row.version)">
                     </confirm-button>
                   </template>
-                  <el-button v-else type="info" disabled icon="el-icon-circle-close">{{ t('cannotUpgradeToTargetVersion') }}</el-button>
+                  <el-button v-else type="info" disabled icon="el-icon-circle-close">{{
+                    t('cannotUpgradeToTargetVersion') }}</el-button>
                 </template>
               </template>
             </template>
@@ -83,7 +86,8 @@ zh:
       </Resources>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" icon="el-icon-close" type="primary">{{$t('msg.cancel')}}</el-button>
+          <el-button @click="dialogVisible = false" icon="el-icon-close" type="primary">{{ $t('msg.cancel')
+            }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -106,12 +110,12 @@ export default {
     }
   },
   computed: {
-    currentVersion () {
-      return this.cluster.inventory.all.hosts.localhost.kuboardspray_resource_package
+    currentVersion() {
+      return this.cluster.inventory.all.hosts.localhost.pangeecluster_resource_package
     },
   },
   components: { Resources, ComparePackage },
-  mounted () {
+  mounted() {
   },
   methods: {
     compareVersions,
@@ -158,7 +162,7 @@ export default {
         type: type,
         target_version: targetVersion,
       }
-      this.kuboardSprayApi.post(`/clusters/${this.cluster.name}/change_resource_package_version`, req).then(resp => {
+      this.pangeeClusterApi.post(`/clusters/${this.cluster.name}/change_resource_package_version`, req).then(resp => {
         console.log(resp.data)
         this.dialogVisible = false
         this.$message.success(this.t('change_resource_package_version_success'))
@@ -169,13 +173,11 @@ export default {
         if (e.response && e.response.data && e.response.data.message) {
           msg = e.response.data.message
         }
-        this.$message.error(this.t('change_resource_package_version_failed', {msg}))
+        this.$message.error(this.t('change_resource_package_version_failed', { msg }))
       })
     }
   }
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

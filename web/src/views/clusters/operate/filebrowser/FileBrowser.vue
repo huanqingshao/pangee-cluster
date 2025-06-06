@@ -156,7 +156,7 @@ export default {
           resolve(items);
         })
       } else {
-        this.kuboardSprayApi
+        this.pangeeClusterApi
           .get(`/filebrowser?rootPath=data:///resource/${this.packageName + "/content" + nodeToPath(node)}`).then(resp => {
             let items = resp.data.data;
             let path = nodeToPath(node);

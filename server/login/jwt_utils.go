@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 
-type KuboardSprayClaims struct {
+type PangeeClusterClaims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
@@ -76,25 +76,25 @@ func GenerateToken(username string) (string, error) {
 
 	prepareJwtSecret()
 
-	c := KuboardSprayClaims{
+	c := PangeeClusterClaims{
 		username,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(),
-			Issuer:    "kuboard-spray",
+			Issuer:    "pangee-cluster",
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
 	return token.SignedString(JwtSecret)
 }
 
-func ParseToken(tokenString string) (*KuboardSprayClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &KuboardSprayClaims{}, func(token *jwt.Token) (i interface{}, err error) {
+func ParseToken(tokenString string) (*PangeeClusterClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &PangeeClusterClaims{}, func(token *jwt.Token) (i interface{}, err error) {
 		return JwtSecret, nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	if claims, ok := token.Claims.(*KuboardSprayClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*PangeeClusterClaims); ok && token.Valid {
 		return claims, nil
 	}
 	return nil, errors.New("invalid token")

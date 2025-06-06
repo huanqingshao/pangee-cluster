@@ -23,33 +23,32 @@ zh:
 
 <template>
   <div>
-    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true"
-      :title="t('manageSshKey')" width="60%">
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :modal="true" :title="t('manageSshKey')"
+      width="60%">
       <div class="app_block_title_small">
-        {{t('existingSshKeyFiles', {ownerType, ownerName})}}
+        {{ t('existingSshKeyFiles', { ownerType, ownerName }) }}
         <el-button circle type="primary" icon="el-icon-refresh" @click="load"></el-button>
       </div>
       <el-skeleton :rows="1" animated :loading="loading">
         <el-alert v-if="keyFiles.length === 0" :title="t('noKeyFiles')" :closable="false" type="warning"></el-alert>
         <template v-else>
-          <el-tag v-for="(item, index) in keyFiles" :key="'file' + index"
-            @close="deleteSshKey(item)"
-            size="default" style="margin-top: 10px; margin-right: 10px;" closable>
-            {{item}}
+          <el-tag v-for="(item, index) in keyFiles" :key="'file' + index" @close="deleteSshKey(item)" size="default"
+            style="margin-top: 10px; margin-right: 10px;" closable>
+            {{ item }}
           </el-tag>
         </template>
       </el-skeleton>
 
       <div class="app_margin_top uploadSection">
         <div class="app_block_title_small">
-          {{t('addSshKey')}}
+          {{ t('addSshKey') }}
         </div>
         <el-upload ref="upload" :action="`${baseURL}/private-keys/${ownerType}/${ownerName}/${form.name}`"
           :headers="headers" :on-change="changeFileList" :multiple="false" :limit="2" :file-list="fileListToUpload"
           :auto-upload="false">
           <template #trigger>
             <div class="step">1</div>
-            <el-button size="small" type="primary" icon="el-icon-files">{{t('selectFile')}}</el-button>
+            <el-button size="small" type="primary" icon="el-icon-files">{{ t('selectFile') }}</el-button>
           </template>
           <div style="display: inline-block;">
             <el-form :model="form" class="app_form_mini" ref="form">
@@ -60,17 +59,19 @@ zh:
             </el-form>
           </div>
           <div class="step" style="margin-left: 20px">3</div>
-          <el-button size="small" type="success" :loading="uploading" @click="submitUpload" icon="el-icon-upload">{{$t('msg.upload')}}</el-button>
+          <el-button size="small" type="success" :loading="uploading" @click="submitUpload" icon="el-icon-upload">{{
+            $t('msg.upload') }}</el-button>
           <template #tip>
             <div class="el-upload__tip">
-              {{t('copyFile')}}
+              {{ t('copyFile') }}
             </div>
           </template>
         </el-upload>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false" icon="el-icon-close" type="warning" plain>{{$t('msg.close')}}</el-button>
+          <el-button @click="dialogVisible = false" icon="el-icon-close" type="warning" plain>{{ $t('msg.close')
+            }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -78,7 +79,7 @@ zh:
 </template>
 
 <script>
-import {baseURL} from '../../utils/axios.js'
+import { baseURL } from '../../utils/axios.js'
 import Cookie from 'js-cookie'
 import { useI18n } from 'vue-i18n';
 
@@ -101,7 +102,7 @@ export default {
         { required: true, message: this.i18n('nameRequired'), trigger: 'blur' },
         {
           validator: async (rule, value, callback) => {
-            await this.kuboardSprayApi.get(`/private-keys/${this.ownerType}/${this.ownerName}/${value}`).then(() => {
+            await this.pangeeClusterApi.get(`/private-keys/${this.ownerType}/${this.ownerName}/${value}`).then(() => {
               callback(this.i18n('duplicatedPrivateKeyFile'))
             }).catch(e => {
               if (e.response.status === 500) {
@@ -114,7 +115,7 @@ export default {
       ],
       baseURL,
       headers: {
-        Authorization: `Bearer ${Cookie.get('KuboardSprayToken')}`
+        Authorization: `Bearer ${Cookie.get('PangeeClusterToken')}`
       }
     }
   },
@@ -127,24 +128,24 @@ export default {
   },
   computed: {
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   methods: {
-    changeFileList (file, fileList) {
+    changeFileList(file, fileList) {
       console.log(file, fileList)
       if (file && file.percentage === 0) {
         this.form.name = file.name
         this.fileListToUpload = [file]
       }
     },
-    async show () {
+    async show() {
       this.dialogVisible = true
-      this.load ()
+      this.load()
     },
-    async load () {
+    async load() {
       this.loading = true
-      await this.kuboardSprayApi.get(`/private-keys/${this.ownerType}/${this.ownerName}`).then(resp => {
+      await this.pangeeClusterApi.get(`/private-keys/${this.ownerType}/${this.ownerName}`).then(resp => {
         this.keyFiles = resp.data.data
       }).catch(e => {
         console.log(e)
@@ -153,7 +154,7 @@ export default {
         this.loading = false
       }, 400)
     },
-    submitUpload () {
+    submitUpload() {
       this.$refs.form.validate(flag => {
         if (flag) {
           this.uploading = true
@@ -168,9 +169,9 @@ export default {
         }
       })
     },
-    deleteSshKey (name) {
+    deleteSshKey(name) {
       this.$confirm(
-        this.t('deleteSshKey', {name}),
+        this.t('deleteSshKey', { name }),
         'Warning',
         {
           confirmButtonText: this.$t('msg.ok'),
@@ -178,7 +179,7 @@ export default {
           type: 'warning',
         }
       ).then(() => {
-        this.kuboardSprayApi.delete(`/private-keys/${this.ownerType}/${this.ownerName}/${name}`).then(resp => {
+        this.pangeeClusterApi.delete(`/private-keys/${this.ownerType}/${this.ownerName}/${name}`).then(resp => {
           this.$message.success("Delete " + resp.data.message)
           this.load()
         }).catch(e => {
@@ -199,6 +200,7 @@ export default {
   border-radius: 10px;
   padding: 20px;
 }
+
 .step {
   border: solid 1px var(--el-color-warning);
   border-radius: 30px;

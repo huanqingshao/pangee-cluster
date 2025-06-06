@@ -14,19 +14,19 @@ zh:
 <template>
   <div>
     <ControlBar :title="$t('obj.resource')">
-      <span class="app_text_mono" style="margin-right: 20px;">{{name}}</span>
+      <span class="app_text_mono" style="margin-right: 20px;">{{ name }}</span>
       <template v-if="resource">
         <el-tag v-if="isInstalled" type="success" effect="dark" style="margin-right: 20px;">
           <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
             <el-icon-cloudy></el-icon-cloudy>
           </el-icon>
-          {{t('loaded')}}
+          {{ t('loaded') }}
         </el-tag>
         <el-tag v-else type="danger" effect="dark" style="margin-right: 20px;">
           <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
             <el-icon-cloudy></el-icon-cloudy>
           </el-icon>
-          {{t('not_load')}}
+          {{ t('not_load') }}
         </el-tag>
         <ResourceDownload :resource="resource" action="reload" :loading="loading" @refresh="refresh"></ResourceDownload>
         <el-popconfirm v-if="!resource.history.processing" :title="t('confirmToDelete')" @confirm="removeResource">
@@ -38,7 +38,8 @@ zh:
     </ControlBar>
     <el-card class="no-radius">
       <el-skeleton v-if="loading"></el-skeleton>
-      <ResourceDetails v-else-if="resource" :releaseNote="releaseNote" :resourcePackage="resource.package" expandAll></ResourceDetails>
+      <ResourceDetails v-else-if="resource" :releaseNote="releaseNote" :resourcePackage="resource.package" expandAll>
+      </ResourceDetails>
     </el-card>
   </div>
 </template>
@@ -50,23 +51,23 @@ import ResourceDownload from './ResourceDownload.vue'
 
 export default {
   mixins: [mixin],
-  percentage () {
+  percentage() {
     return 100
   },
-  breadcrumb () {
+  breadcrumb() {
     return [
       { label: this.t('resourceList'), to: '/settings/resources' },
       { label: this.name },
     ]
   },
-  refresh () {
+  refresh() {
     this.refresh()
   },
   props: {
     name: { type: String, required: true },
     mode: { type: String, required: false, default: 'view' },
   },
-  data () {
+  data() {
     return {
       resource: undefined,
       releaseNote: undefined,
@@ -74,7 +75,7 @@ export default {
     }
   },
   computed: {
-    isInstalled () {
+    isInstalled() {
       if (this.resource) {
         return this.resource.history.success_tasks.length > 0
       }
@@ -82,27 +83,27 @@ export default {
     }
   },
   components: { ResourceDetails, ResourceDownload },
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    refresh () {
+    refresh() {
       this.loading = true
-      this.kuboardSprayApi.get(`/resources/${this.name}`).then(resp => {
+      this.pangeeClusterApi.get(`/resources/${this.name}`).then(resp => {
         this.resource = resp.data.data
         this.loading = false
       }).catch(e => {
         this.loading = false
         console.log(e)
       })
-      this.kuboardSprayApi.get(`/resources/${this.name}/release_note`).then(resp => {
+      this.pangeeClusterApi.get(`/resources/${this.name}/release_note`).then(resp => {
         this.releaseNote = resp.data.data.release_note
       }).catch(e => {
         console.log(e)
       })
     },
-    removeResource () {
-      this.kuboardSprayApi.delete(`/resources/${this.name}`).then(() => {
+    removeResource() {
+      this.pangeeClusterApi.delete(`/resources/${this.name}`).then(() => {
         this.$message.success(this.$t('msg.delete_succeeded'))
         this.$router.replace(`/settings/resources`)
       }).catch(e => {
@@ -113,5 +114,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-</style>
+<style scoped lang="css"></style>

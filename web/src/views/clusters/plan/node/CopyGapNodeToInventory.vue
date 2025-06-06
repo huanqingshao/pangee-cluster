@@ -1,12 +1,12 @@
 <i18n>
 en:
   gapNode: Node in cluster, not in inventory
-  message: Please fulfill its info here, and add to kuboardspray.
-  addToKuboardSpray: Add to KubaordSpray
+  message: Please fulfill its info here, and add to pangeecluster.
+  addToPangeeCluster: Add to KubaordSpray
 zh:
-  gapNode: 集群中存在，而 KuboardSpray 中未记录的节点
-  message: 该节点在集群中存在，但是却不存在于 KuboardSpray 记录的信息中，可能是因为您通过其他途径向集群添加了该节点。
-  addToKuboardSpray: 添加到 KuboardSpray
+  gapNode: 集群中存在，而 PangeeCluster 中未记录的节点
+  message: 该节点在集群中存在，但是却不存在于 PangeeCluster 记录的信息中，可能是因为您通过其他途径向集群添加了该节点。
+  addToPangeeCluster: 添加到 PangeeCluster
 </i18n>
 
 <template>
@@ -15,7 +15,7 @@ zh:
       <div style="width: 100%;">
         <div>{{ t('message') }}</div>
         <!-- <div style="text-align: right;">
-          <el-button type="primary" icon="el-icon-plus">{{ t('addToKuboardSpray') }}</el-button>
+          <el-button type="primary" icon="el-icon-plus">{{ t('addToPangeeCluster') }}</el-button>
         </div> -->
       </div>
     </el-alert>
@@ -30,7 +30,7 @@ export default {
   props: {
     cluster: { type: Object, required: true },
     nodeName: { type: String, required: true },
-    nodes: { type: Object, required: false, default: () => {return {}} },
+    nodes: { type: Object, required: false, default: () => { return {} } },
     realCluster: { type: Object, required: false, default: undefined },
   },
   data() {
@@ -41,7 +41,7 @@ export default {
   computed: {
   },
   components: { StateNode },
-  mounted () {
+  mounted() {
   },
   methods: {
 
@@ -49,6 +49,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

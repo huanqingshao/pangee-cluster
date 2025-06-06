@@ -188,7 +188,7 @@ export default {
       });
     },
     killProcess() {
-      this.kuboardSprayApi
+      this.pangeeClusterApi
         .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") ? "kill-v2" : "kill"}/${this.pid}`)
         .then(resp => {
           if (resp.data.code === 200) {
@@ -226,7 +226,7 @@ export default {
 
       this.socket.onmessage = function (event) {
         _this.xterm.writeln(event.data);
-        if (event.data.indexOf("KUBOARD SPRAY *****************************************************************") >= 0) {
+        if (event.data.indexOf("Pangee Cluster *****************************************************************") >= 0) {
           _this.isRunning = false;
         }
       };

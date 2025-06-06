@@ -1,9 +1,9 @@
 {
-  "name": "kuboard-spray",
+  "name": "pangee-cluster",
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "kuboard-spray",
+  "description": "pangee-cluster",
   "scripts": {
     "preview": "vite preview",
     "build": "vite build --mode production",

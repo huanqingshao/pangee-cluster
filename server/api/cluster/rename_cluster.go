@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 type RenameClusterRequest struct {
@@ -30,14 +30,14 @@ func RenameCluster(c *gin.Context) {
 		return
 	}
 
-	common.PopulateKuboardSprayVars(inventory, "cluster", req.NewClusterName)
+	common.PopulatePangeeClusterVars(inventory, "cluster", req.NewClusterName)
 
 	if err := cluster_common.SaveInventory(req.NewClusterName, inventory); err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "保存 Cluster 信息失败", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 	})

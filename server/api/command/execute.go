@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
 )
 
@@ -172,7 +172,7 @@ func (execute *Execute) exec() {
 	delete(runningProcesses, pid)
 
 	if execute.PostExec != nil {
-		logFile.WriteString("\n\n\nKUBOARD SPRAY *****************************************************************\n")
+		logFile.WriteString("\n\n\nPangee Cluster *****************************************************************\n")
 		logs, err := os.ReadFile(logFilePath)
 		if err != nil {
 			return

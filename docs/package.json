@@ -3,7 +3,7 @@
     "docs:dev": "vuepress dev .",
     "docs:build": "vuepress build ."
   },
-  "name": "kuboard-spray-docs",
+  "name": "pangee-cluster-docs",
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {

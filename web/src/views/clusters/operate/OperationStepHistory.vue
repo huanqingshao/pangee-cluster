@@ -117,7 +117,7 @@ export default {
       return dayjs(temp, "YYYY-MM-DD_HH-mm-ss.SSS").format("YYYY-MM-DD HH:mm:ss")
     },
     /**
-     * 这是一个异步刷新函数。如果存在apiPath，则通过kuboardSprayApi获取数据，并将返回的数据赋值给history变量，同时在控制台打印出返回的数据。
+     * 这是一个异步刷新函数。如果存在apiPath，则通过pangeeClusterApi获取数据，并将返回的数据赋值给history变量，同时在控制台打印出返回的数据。
      *
      * @async
      * @function refresh
@@ -126,7 +126,7 @@ export default {
     async refresh() {
       if (this.apiPath) {
         this.loading = true;
-        this.kuboardSprayApi.get(this.apiPath).then(resp => {
+        this.pangeeClusterApi.get(this.apiPath).then(resp => {
           this.history = resp.data.data.history
           this.loading = false;
         }).catch(e => {
@@ -147,7 +147,7 @@ export default {
       path += "/step/" + this.cluster.resourcePackage.data.operations[this.currentOperation].steps[this.currentStep].name;
       path += "/" + item.time;
       console.log(path)
-      this.kuboardSprayApi.get(path).then(resp => {
+      this.pangeeClusterApi.get(path).then(resp => {
         let status = resp.data;
         this.$refs.statusDialog.show(status);
       }).catch(e => {

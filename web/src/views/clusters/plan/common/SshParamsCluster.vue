@@ -14,18 +14,18 @@ zh:
   
   ansible_host: '主机'
   ansible_port: 'SSH 端口'
-  ansible_port_placeholder: 'KuboardSpray 连接该主机时所使用的 SHH 端口'
+  ansible_port_placeholder: 'PangeeCluster 连接该主机时所使用的 SHH 端口'
   
   ansible_user: '用户名'
-  ansible_user_placeholder: 'KuboardSpray 连接该主机时所使用的用户名'
+  ansible_user_placeholder: 'PangeeCluster 连接该主机时所使用的用户名'
   ansible_password: '密码'
-  ansible_password_placeholder: 'KuboardSpray 连接该主机时所使用的密码'
+  ansible_password_placeholder: 'PangeeCluster 连接该主机时所使用的密码'
   ansible_ssh_private_key_file: '私钥文件'
-  ansible_ssh_private_key_file_placeholder: 'KuboardSpray 连接该主机时所使用的私钥文件'
+  ansible_ssh_private_key_file_placeholder: 'PangeeCluster 连接该主机时所使用的私钥文件'
   ansible_become: '切换身份'
-  ansible_become_placeholder: 'KuboardSpray 登录到该主机后，是否使用 su 命令切换身份'
+  ansible_become_placeholder: 'PangeeCluster 登录到该主机后，是否使用 su 命令切换身份'
   ansible_become_user: '切换到用户'
-  ansible_become_user_placeholder: 'KuboardSpray 登录该主机后，使用 su 命令切换到用户名'
+  ansible_become_user_placeholder: 'PangeeCluster 登录该主机后，使用 su 命令切换到用户名'
   ansible_become_password: '切换密码'
   ansible_become_password_placeholder: '切换密码'
 
@@ -38,11 +38,14 @@ zh:
     <EditString disabled v-model="holder.ansible_host" :label="t('ansible_host')"
       :prop="isNode ? `all.hosts.${nodeName}` : ''" :placeholder="t('ansible_host_placeholder')"></EditString>
     <EditString v-model="holder.ansible_port" :label="t('ansible_port')" anti-freeze></EditString>
-    <EditCommon v-model="holder.ansible_user" :label="t('ansible_user')" anti-freeze>
+    <EditCommon v-model="ansible_user" :label="t('ansible_user')" anti-freeze>
       <template #edit>
         <el-input v-model.trim="ansible_user"></el-input>
         <el-tag class="app_text_mono" style="display: block; line-height: 18px;" type="warning">
           {{ t('rootuser') }} </el-tag>
+      </template>
+      <template #view>
+        {{ ansible_user }}
       </template>
     </EditCommon>
     <EditSelect v-model="holder.ansible_ssh_private_key_file" :label="t('ansible_ssh_private_key_file')"
@@ -58,8 +61,9 @@ zh:
       v-if="cluster && cluster.inventory.all.hosts.bastion && holder.ansible_password"
       style="margin-left: 120px; width: calc(100% - 120px);">
       {{ t('password_and_bastion') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/extra/speedup.html" style="margin-left: 10px;" :size="12">
-      </KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/extra/speedup.html" style="margin-left: 10px;"
+        :size="12">
+      </PangeeClusterLink>
     </el-alert>
     <EditSelect v-model="holder.ansible_python_interpreter" :label="t('ansible_python_interpreter')" anti-freeze
       clearable :loadOptions="loadPythonInterpreter" allow-create filterable></EditSelect>
@@ -137,9 +141,9 @@ export default {
   methods: {
     async loadSshKeyList() {
       let result = []
-      await this.kuboardSprayApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
+      await this.pangeeClusterApi.get(`/private-keys/cluster/${this.cluster.name}`).then(resp => {
         for (let item of resp.data.data) {
-          result.push({ label: item, value: '{{ kuboardspray_cluster_dir }}/private-key/' + item })
+          result.push({ label: item, value: '{{ pangeecluster_cluster_dir }}/private-key/' + item })
         }
       })
       return result

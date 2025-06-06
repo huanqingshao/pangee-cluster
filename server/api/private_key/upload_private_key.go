@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
 	"github.com/sirupsen/logrus"
 )
 

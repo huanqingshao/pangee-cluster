@@ -92,7 +92,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  let token = Cookies.get('KuboardSprayToken')
+  let token = Cookies.get('PangeeClusterToken')
   if (to.name == 'Login') {
     next()
   } else if (token == null || token == undefined || token == '') {

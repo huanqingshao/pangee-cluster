@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 type CheckConnectivityRequest struct {
@@ -41,7 +41,7 @@ func CheckConnectivity(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 		Data:    shellResult[0],

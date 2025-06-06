@@ -24,7 +24,7 @@ zh:
     <el-collapse v-model="activeNames">
       <el-collapse-item name="1">
         <template #title>
-          <span class="package_title">kuboardspray</span>
+          <span class="package_title">Pangee Cluster</span>
         </template>
         <div class="package_info">
           <PackageContentField :holder="resourcePackage.metadata" fieldName="version" label="资源包版本">

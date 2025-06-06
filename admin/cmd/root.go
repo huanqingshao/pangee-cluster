@@ -14,10 +14,10 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "kuboard-spray-admin",
+	Use:   "pangee-cluster-admin",
 	Short: "Kuboard 命令行控制",
 	Long: `Kuboard 命令行控制程序，用于执行重置 admin 的密码等操作。
-kuboard-spray-admin reset-password	
+pangee-cluster-admin reset-password	
 `,
 }
 

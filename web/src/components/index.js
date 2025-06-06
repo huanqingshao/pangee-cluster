@@ -3,8 +3,8 @@ import ConfigSection from './ConfigSection.vue'
 import CopyToClipBoard from './clipboard/CopyToClipBoard.vue'
 import ConfirmButton from './page/ConfirmButton.vue'
 import PreviewYaml from './PreviewYaml.vue'
-import KuboardSprayLink from './KuboardSprayLink.vue'
-import KuboardSprayTime from './KuboardSprayTime.vue'
+import PangeeClusterLink from './PangeeClusterLink.vue'
+import PangeeClusterTime from './PangeeClusterTime.vue'
 import EditCommon from "./edit/EditCommon.vue"
 import EditString from "./edit/EditString.vue"
 import EditBool from "./edit/EditBool.vue"
@@ -27,7 +27,7 @@ export default {
     app.component('CopyToClipBoard', CopyToClipBoard)
     app.component('ConfirmButton', ConfirmButton)
     app.component('PreviewYaml', PreviewYaml)
-    app.component('KuboardSprayLink', KuboardSprayLink)
-    app.component('KuboardSprayTime', KuboardSprayTime)
+    app.component('PangeeClusterLink', PangeeClusterLink)
+    app.component('PangeeClusterTime', PangeeClusterTime)
   } 
 }

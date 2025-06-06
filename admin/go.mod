@@ -1,4 +1,4 @@
-module github.com/eip-work/kuboard-spray-admin
+module github.com/opencmit/pangee-cluster-admin
 
 go 1.18
 
@@ -29,4 +29,4 @@ require (
 
 replace gopkg.in/yaml.v3 => ../go-yaml
 
-replace github.com/eip-work/kuboard-spray-admin => ./
+replace github.com/opencmit/pangee-cluster-admin => ./

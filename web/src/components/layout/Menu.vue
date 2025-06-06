@@ -22,7 +22,7 @@
 <template>
   <div class="leftColumn" :style="menuStyle" >
     <!-- <div class="menuTitle noselect nowrap" :style="menuStyle" @click="$router.push('/home')">
-      Kuboard Spray
+      Pangee Cluster
     </div> -->
     <el-menu :default-active="defaultActive" class="kuboard_namespaced_menu" unique-opened :collapse="isCollapse"
       background-color="white" ref="menu" router>

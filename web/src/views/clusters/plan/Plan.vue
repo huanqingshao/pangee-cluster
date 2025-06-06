@@ -224,7 +224,7 @@ export default {
     showBastion() {
       this.currentPropertiesTab = "global_config";
       setTimeout(() => {
-        this.$refs.configKuboardSprayScroll.setScrollTop(0);
+        this.$refs.configPangeeClusterScroll.setScrollTop(0);
       }, 400);
     },
     ping() {
@@ -241,7 +241,7 @@ export default {
         this.pingpong_loading = false;
         return;
       }
-      this.kuboardSprayApi
+      this.pangeeClusterApi
         .post(`/clusters/${this.cluster.name}/state/ping`, req)
         .then(resp => {
           this.pingpong = resp.data.data.items;

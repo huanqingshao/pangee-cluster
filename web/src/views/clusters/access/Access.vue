@@ -201,7 +201,7 @@ etcdctl member list
     fetchKubeconfig() {
       this.kubeconfigLoading = true
       this.kubeconfig = undefined
-      this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/access/kubeconfig`).then(resp => {
+      this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/access/kubeconfig`).then(resp => {
         console.log(resp.data)
         let out = resp.data.data
         this.kubeconfig = out.stdout.replace("127.0.0.1", this.cluster.inventory.all.hosts[out.ansible_inventory_hostname].ansible_host)

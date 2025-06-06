@@ -6,16 +6,16 @@ zh:
 </i18n>
 
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%; overflow: hidden">
     <div class="left-pannel">
       <div class="title">
-        Kuboard Spray
+        Pangee Cluster
       </div>
       <div class="app_block_title" style="margin-left: 5vw; font-size: 20px;">
         离线安装 / 维护 Kubernetes 集群
       </div>
       <div style="display: flex;">
-        <img src="./login.png"/>
+        <img src="./login.png" />
         <div class="logintext">登 录</div>
       </div>
     </div>
@@ -23,25 +23,30 @@ zh:
     <div class="right-panel">
       <el-card style="width: 500px; margin: auto; padding: 30px 20px;">
         <h2 class="form-header">
-          <span>Kuboard Spray</span>
+          <span>Pangee Cluster</span>
         </h2>
-        <el-form ref="form" :model="form" label-position="left" label-width="80px" style="width: 360px; margin: auto;" size="large">
-          <el-form-item prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]" ref="usernameFormItem">
+        <el-form ref="form" :model="form" label-position="left" label-width="80px" style="width: 360px; margin: auto;"
+          size="large">
+          <el-form-item prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]"
+            ref="usernameFormItem">
             <template #label>
               <span style="font-weight: bolder">用户名</span>
             </template>
-            <el-input v-model.trim="form.username" placeholder="请输入用户名" @keyup.enter="$refs.passwordInput.focus()" autofocus></el-input>
+            <el-input v-model.trim="form.username" placeholder="请输入用户名" @keyup.enter="$refs.passwordInput.focus()"
+              autofocus></el-input>
           </el-form-item>
           <el-form-item prop="password" :rules="passwordRules" ref="passwordFormItem">
             <template #label>
               <span style="font-weight: bolder">密 码</span>
             </template>
-            <el-input ref="passwordInput" v-model="form.password" placeholder="请输入密码" autofocus show-password @keyup.enter="login"></el-input>
+            <el-input ref="passwordInput" v-model="form.password" placeholder="请输入密码" autofocus show-password
+              @keyup.enter="login"></el-input>
           </el-form-item>
           <div style="height: 40px;">
             <!-- <el-checkbox v-if="!mfaPolicy.forceSession" style="float: left;" v-model="rememberLogin" @change="changeRememberLogin">7天内保持登录</el-checkbox> -->
             <span style="float: right;">
-              <a style="text-decoration: none; font-size: 13px" href="https://kuboard-spray.cn/kuboard-spray/reset-password.html" target="_blank">
+              <a style="text-decoration: none; font-size: 13px"
+                href="https://pangee-cluster.cn/pangee-cluster/reset-password.html" target="_blank">
                 <el-icon>
                   <el-icon-link></el-icon-link>
                 </el-icon>
@@ -50,7 +55,8 @@ zh:
             </span>
           </div>
           <div>
-            <el-button style="width: 100%;" size="large" type="primary" icon="el-icon-promotion" @click="login">登 录</el-button>
+            <el-button style="width: 100%;" size="large" type="primary" icon="el-icon-promotion" @click="login">登
+              录</el-button>
           </div>
         </el-form>
       </el-card>
@@ -60,7 +66,7 @@ zh:
 </template>
 
 <script>
-import {setupCookie} from '../../utils/axios.js'
+import { setupCookie } from '../../utils/axios.js'
 
 export default {
   props: {
@@ -75,7 +81,7 @@ export default {
         { required: true, message: '请输入密码', trigger: 'blur' },
         {
           validator: (rule, value, callback) => {
-            this.kuboardSprayApi.post(`/validate_password`, this.form).then(resp => {
+            this.pangeeClusterApi.post(`/validate_password`, this.form).then(resp => {
               if (resp.data.data === 'ok') {
                 return callback()
               } else {
@@ -92,14 +98,14 @@ export default {
   },
   computed: {
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
   },
   methods: {
     login() {
       this.$refs.form.validate(flag => {
         if (flag) {
-          this.kuboardSprayApi.post('/login', this.form).then(resp => {
+          this.pangeeClusterApi.post('/login', this.form).then(resp => {
             setupCookie(resp.data.data.token, 7)
             this.$router.replace('/')
           }).catch(e => {
@@ -113,7 +119,6 @@ export default {
 </script>
 
 <style scoped lang="css">
-
 .form-header {
   font-size: 24px;
   font-weight: bolder;
@@ -176,5 +181,4 @@ export default {
   /* border: 1px solid #EBEEF5; */
   /* border-radius: 10px; */
 }
-
 </style>

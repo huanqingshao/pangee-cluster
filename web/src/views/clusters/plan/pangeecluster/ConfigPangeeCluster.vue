@@ -2,24 +2,24 @@
 en:
   createResource: "Add Resource Package"
   goToResourcePage: It's about to open Resource Package Download page in new window, do you confirm?
-  kuboardspray_resource_package: 'Resource Package'
+  pangeecluster_resource_package: 'Resource Package'
 zh:
   createResource: '添加资源包'
   goToResourcePage: '此操作将在新窗口打开资源包导入页面，完成设置后，您可以切换窗口会到当前页面，是否继续？'
-  kuboardspray_resource_package: '资源包'
-  kuboardspray_resource_package_placeholder: '请选择资源包'
+  pangeecluster_resource_package: '资源包'
+  pangeecluster_resource_package_placeholder: '请选择资源包'
 </i18n>
 
 <template>
   <div>
     <ConfigSection v-model:enabled="useResourcePackage" disabled anti-freeze :label="$t('obj.resource')" :description="$t('obj.resource') +
       ' ' +
-      (inventory.all.hosts.localhost.kuboardspray_resource_package
-        ? inventory.all.hosts.localhost.kuboardspray_resource_package
+      (inventory.all.hosts.localhost.pangeecluster_resource_package
+        ? inventory.all.hosts.localhost.pangeecluster_resource_package
         : '')
       ">
-      <EditSelect v-model="inventory.all.hosts.localhost.kuboardspray_resource_package"
-        :label="t('kuboardspray_resource_package')" :placeholder="t('kuboardspray_resource_package_placeholder')"
+      <EditSelect v-model="inventory.all.hosts.localhost.pangeecluster_resource_package"
+        :label="t('pangeecluster_resource_package')" :placeholder="t('pangeecluster_resource_package_placeholder')"
         :loadOptions="loadResourceList" prop="all.hosts.localhost" required :disabled="isClusterInstalled">
         <template #edit>
           <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus"
@@ -81,7 +81,7 @@ export default {
   methods: {
     async loadResourceList() {
       let result = [];
-      await this.kuboardSprayApi
+      await this.pangeeClusterApi
         .get("/resources")
         .then(resp => {
           for (let res of resp.data.data) {

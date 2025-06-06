@@ -3,9 +3,9 @@ package operation_v2
 import (
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 type GetHistoryStepResultRequest struct {
@@ -24,7 +24,7 @@ func GetHistoryStepResult(c *gin.Context) {
 
 	result, err := common.ParseYamlFile(historyDir)
 	if err == nil {
-		c.JSON(http.StatusOK, common.KuboardSprayResponse{
+		c.JSON(http.StatusOK, common.PangeeClusterResponse{
 			Code:    http.StatusOK,
 			Message: "success",
 			Data:    result,

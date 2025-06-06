@@ -3,22 +3,24 @@ en:
   resourceList: Resources List
   online: 'On Air '
   download: Download
-  minVersionRequired: Min version required to kuboardspray
+  minVersionRequired: Min version required to pangeecluster
 zh:
   resourceList: 资源包列表
   online: 未下载
   download: 下 载
-  minVersionRequired: KuboardSpray最低版本要求
+  minVersionRequired: PangeeCluster最低版本要求
 </i18n>
 
 <template>
   <div>
     <ControlBar :title="name">
       <template v-if="resourcePackage">
-        <ResourceDownload  v-if="meetVersionRequirement" action="download" :resource="{package: resourcePackage, history:{task_type: 'resource', task_name: name, processing: false, success_tasks: []}}"></ResourceDownload>
+        <ResourceDownload v-if="meetVersionRequirement" action="download"
+          :resource="{ package: resourcePackage, history: { task_type: 'resource', task_name: name, processing: false, success_tasks: [] } }">
+        </ResourceDownload>
         <template v-else>
           <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
-          <el-tag type="danger" class="app_text_mono">{{resourcePackage.metadata.kuboard_spray_version.min}}</el-tag>
+          <el-tag type="danger" class="app_text_mono">{{ resourcePackage.metadata.kuboard_spray_version.min }}</el-tag>
         </template>
       </template>
     </ControlBar>
@@ -28,12 +30,14 @@ zh:
         <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
           <el-icon-cloudy></el-icon-cloudy>
         </el-icon>
-        {{t('online')}}
+        {{ t('online') }}
       </el-tag>
     </div>
     <el-card>
       <el-skeleton v-if="loading" animated></el-skeleton>
-      <ResourceDetails v-else-if="resourcePackage" :releaseNote="releaseNote" :resourcePackage="resourcePackage" expandAll></ResourceDetails>
+      <ResourceDetails v-else-if="resourcePackage" :releaseNote="releaseNote" :resourcePackage="resourcePackage"
+        expandAll>
+      </ResourceDetails>
     </el-card>
   </div>
 </template>
@@ -49,16 +53,16 @@ import repositoryPrefix from './repository_prefix.js'
 
 export default {
   mixins: [mixin],
-  percentage () {
+  percentage() {
     return 100
   },
-  breadcrumb () {
+  breadcrumb() {
     return [
       { label: this.t('resourceList'), to: '/settings/resources' },
       { label: this.name },
     ]
   },
-  refresh () {
+  refresh() {
     this.refresh()
   },
   props: {
@@ -77,15 +81,15 @@ export default {
       if (this.resourcePackage === undefined) {
         return false
       }
-      return compareVersions(window.KuboardSpray.version.trimed, this.resourcePackage.metadata.kuboard_spray_version.min) >= 0
+      return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.kuboard_spray_version.min) >= 0
     },
   },
   components: { ResourceDetails, ResourceDownload },
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    async refresh () {
+    async refresh() {
       this.loading = true
       await axios.get(`${repositoryPrefix()}/${this.name}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
         this.resourcePackage = yaml.load(resp.data)
@@ -104,6 +108,4 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
-
-</style>
+<style scoped lang="css"></style>

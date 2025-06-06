@@ -2,12 +2,12 @@
 en:
   proxy: Proxy
   proxyDescription: Proxy (Generally speaking, you don't need this.)
-  proxyUsage1: KuboardSpray can use the following proxy params to fetch content from internet that are not included in the resource package.
+  proxyUsage1: PangeeCluster can use the following proxy params to fetch content from internet that are not included in the resource package.
   proxyUsage2: "Usually speaking, all the resources (exclude docker-ce / OS mirror) are already included in the resource package, you don't need the proxy params here."
 zh:
   proxy: 代理
   proxyDescription: 代理（通常不需要设置）
-  proxyUsage1: KuboardSpray 可以使用如下代理参数从外网获取资源包中未找到的资源；
+  proxyUsage1: PangeeCluster 可以使用如下代理参数从外网获取资源包中未找到的资源；
   proxyUsage2: 通常资源包中包含所需资源，您无需设置此处的代理参数；
 </i18n>
 

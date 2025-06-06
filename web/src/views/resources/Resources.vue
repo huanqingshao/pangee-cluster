@@ -2,9 +2,9 @@
 en:
   title: Resource Packages
   resourceDescription1: Kuboard provides a set of pre-verified resource packages.
-  resourceDescription2: You can also refer to https://github.com/eip-work/kuboard-spray-resource to create your own resource package.
-  kuboardspray_version_min: KuboardSpray min version
-  kuboardspray_version_max: KuboardSpray max version
+  resourceDescription2: You can also refer to https://github.com/opencmit/pangee-cluster-resource to create your own resource package.
+  pangeecluster_version_min: PangeeCluster min version
+  pangeecluster_version_max: PangeeCluster max version
   version: Version
   container_engine: Supported Container Engine
   supported_os: Supported OS
@@ -14,14 +14,14 @@ en:
   import_status: Import status
   import_status_true: True
   import_status_false: False
-  minVersionRequired: Min version required to kuboardspray
-  cannot_reach_online_repository: Current browser cannot reach https://kuboard-spray.cn/support
+  minVersionRequired: Min version required to pangeecluster
+  cannot_reach_online_repository: Current browser cannot reach https://pangee-cluster.cn/support
 zh:
   title: 资源包列表
   resourceDescription1: Kuboard 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装
-  resourceDescription2: 您也可以参考项目 https://github.com/eip-work/kuboard-spray-resource 自己创建资源包
-  kuboardspray_version_min: KuboardSpray最低版本
-  kuboardspray_version_max: KuboardSpray最高版本
+  resourceDescription2: 您也可以参考项目 https://github.com/opencmit/pangee-cluster-resource 自己创建资源包
+  pangeecluster_version_min: PangeeCluster最低版本
+  pangeecluster_version_max: PangeeCluster最高版本
   version: 资源包版本
   container_engine: 支持的容器引擎
   supported_os: 支持的操作系统
@@ -31,22 +31,24 @@ zh:
   import_status: 导入状态
   import_status_true: 已导入
   import_status_false: 未导入
-  minVersionRequired: KuboardSpray最低版本要求
-  cannot_reach_online_repository: 当前浏览器不能在线获取可选的资源包列表，请在可以访问外网的浏览器打开地址 https://kuboard-spray.cn/support
+  minVersionRequired: PangeeCluster最低版本要求
+  cannot_reach_online_repository: 当前浏览器不能在线获取可选的资源包列表，请在可以访问外网的浏览器打开地址 https://pangee-cluster.cn/support
 </i18n>
 
 <template>
   <div>
-    <div class="app_block_title">{{t('title')}}</div>
+    <div class="app_block_title">{{ t('title') }}</div>
     <div class="app_block_content">
       <el-alert :title="t('title')" type="info" :closable="false" class="app_white_alert">
         <div class="description">
-          <li>{{t('resourceDescription1')}}</li>
-          <li>{{t('resourceDescription2')}}</li>
+          <li>{{ t('resourceDescription1') }}</li>
+          <li>{{ t('resourceDescription2') }}</li>
         </div>
       </el-alert>
       <div style="text-align: right;">
-        <KuboardSprayLink v-if="cannot_reach_online_repository" href="https://kuboard-spray.cn/support" type="danger" style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}</KuboardSprayLink>
+        <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://pangee-cluster.cn/support" type="danger"
+          style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
+        </PangeeClusterLink>
         <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
       </div>
       <div class="contentList">
@@ -54,20 +56,21 @@ zh:
           <el-table-column prop="version" :label="t('version')" width="200px">
             <template #default="scope">
               <template v-if="hideLink">
-                {{scope.row.version}}
+                {{ scope.row.version }}
               </template>
               <template v-else-if="importedPackageMap">
-                <router-link v-if="importedPackageMap[scope.row.version]" :to="`/settings/resources/${scope.row.version}`">
+                <router-link v-if="importedPackageMap[scope.row.version]"
+                  :to="`/settings/resources/${scope.row.version}`">
                   <el-icon :size="12" style="width: 12px; height: 12px; vertical-align: middle;">
                     <el-icon-link></el-icon-link>
                   </el-icon>
-                  {{scope.row.version}}
+                  {{ scope.row.version }}
                 </router-link>
                 <router-link v-else :to="`/settings/resources/${scope.row.version}/on_air`">
                   <el-icon :size="12" style="width: 12px; height: 12px; vertical-align: middle;">
                     <el-icon-link></el-icon-link>
                   </el-icon>
-                  {{scope.row.version}}
+                  {{ scope.row.version }}
                 </router-link>
               </template>
             </template>
@@ -96,7 +99,8 @@ zh:
             <template #default="scope">
               <template v-if="scope.row.yaml">
                 <div v-for="(engine, key) in scope.row.yaml.data.container_engine" :key="`c${scope.index}_${key}`">
-                  <el-tag>{{ engine.container_manager }}_{{ engine.params[engine.container_manager + '_version'] }}</el-tag>
+                  <el-tag>{{ engine.container_manager }}_{{ engine.params[engine.container_manager + '_version']
+                    }}</el-tag>
                 </div>
               </template>
               <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
@@ -107,9 +111,10 @@ zh:
           <el-table-column :label="t('supported_os')">
             <template #default="scope">
               <template v-if="scope.row.yaml">
-                <span v-for="(os, key) in scope.row.yaml.metadata.supported_os" :key="`os${scope.index}_${key}`" style="margin-right: 10px;">
+                <span v-for="(os, key) in scope.row.yaml.metadata.supported_os" :key="`os${scope.index}_${key}`"
+                  style="margin-right: 10px;">
                   <el-tag>
-                    {{ os.distribution }}<span v-for="(v, i) in os.versions" :key="key + 'v' + i">_{{v}}</span>
+                    {{ os.distribution }}<span v-for="(v, i) in os.versions" :key="key + 'v' + i">_{{ v }}</span>
                   </el-tag>
                 </span>
               </template>
@@ -130,7 +135,7 @@ zh:
                     {{ t('import_status_true') }}
                   </el-tag>
                 </template>
-                <el-tag v-else-if="scope.row.meetKuboardSprayVersion" type="warning" effect="dark">
+                <el-tag v-else-if="scope.row.meetPangeeClusterVersion" type="warning" effect="dark">
                   <el-icon :size="14" style="width: 14px; height: 14px; vertical-align: bottom;">
                     <el-icon-circle-close></el-icon-circle-close>
                   </el-icon>
@@ -138,7 +143,8 @@ zh:
                 </el-tag>
                 <template v-else-if="scope.row.yaml">
                   <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
-                  <el-tag type="danger" class="app_text_mono">{{scope.row.yaml.metadata.kuboard_spray_version.min}}</el-tag>
+                  <el-tag type="danger" class="app_text_mono">{{ scope.row.yaml.metadata.kuboard_spray_version.min
+                  }}</el-tag>
                 </template>
               </template>
               <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
@@ -151,12 +157,19 @@ zh:
               <template #default="scope">
                 <template v-if="importedPackageMap">
                   <template v-if="importedPackageMap[scope.row.version]">
-                    <el-button type="primary" plain icon="el-icon-view" @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.view') }}</el-button>
-                    <el-button type="danger" icon="el-icon-delete" @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.delete') }}</el-button>
+                    <el-button type="primary" plain icon="el-icon-view"
+                      @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.view') }}</el-button>
+                    <el-button type="danger" icon="el-icon-delete"
+                      @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.delete')
+                      }}</el-button>
                   </template>
                   <template v-else>
-                    <el-button type="primary" plain icon="el-icon-view" @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ $t('msg.view') }}</el-button>
-                    <el-button type="primary" v-if="scope.row.meetKuboardSprayVersion" icon="el-icon-download" @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ t('import') }}</el-button>
+                    <el-button type="primary" plain icon="el-icon-view"
+                      @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ $t('msg.view')
+                      }}</el-button>
+                    <el-button type="primary" v-if="scope.row.meetPangeeClusterVersion" icon="el-icon-download"
+                      @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ t('import')
+                      }}</el-button>
                   </template>
                 </template>
               </template>
@@ -180,7 +193,7 @@ export default {
   props: {
     hideLink: { type: Boolean, required: false, default: false }
   },
-  data () {
+  data() {
     return {
       availablePackageList: undefined,
       importedPackageMap: {},
@@ -189,7 +202,7 @@ export default {
     }
   },
   computed: {
-    mergedPackageList () {
+    mergedPackageList() {
       let result = []
       for (let i in this.importedPackageMap) {
         let flag = false
@@ -212,11 +225,11 @@ export default {
     },
   },
   components: { ResourcesCreateOffline },
-  mounted () {
+  mounted() {
     this.refresh()
   },
   methods: {
-    async refresh () {
+    async refresh() {
       this.importedPackageMap = {}
       this.availablePackageList = undefined
       this.cannot_reach_online_repository = false
@@ -227,7 +240,7 @@ export default {
         // this.$message.error('离线环境')
         this.cannot_reach_online_repository = true
       })
-      await this.kuboardSprayApi.get(`/resources`).then(resp => {
+      await this.pangeeClusterApi.get(`/resources`).then(resp => {
         for (let i in resp.data.data) {
           this.importedPackageMap[resp.data.data[i]] = true
           for (let j in this.availablePackageList) {
@@ -249,20 +262,20 @@ export default {
         }
       }
     },
-    loadPackageLocal (packageVersion) {
-      this.kuboardSprayApi.get(`/resources/${packageVersion.version}`).then(resp => {
+    loadPackageLocal(packageVersion) {
+      this.pangeeClusterApi.get(`/resources/${packageVersion.version}`).then(resp => {
         this.packageYaml[packageVersion.version] = resp.data.data.package
         packageVersion.yaml = resp.data.data.package
-        packageVersion.meetKuboardSprayVersion = compareVersions(window.KuboardSpray.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
+        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
       })
     },
-    loadPackageFromRepository (packageVersion) {
+    loadPackageFromRepository(packageVersion) {
       axios.get(`${repositoryPrefix()}/${packageVersion.version}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
         setTimeout(() => {
           let temp = yaml.load(resp.data)
           this.packageYaml[packageVersion.version] = temp
           packageVersion.yaml = temp
-          packageVersion.meetKuboardSprayVersion = compareVersions(window.KuboardSpray.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
+          packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
         }, 500)
       }).catch(e => {
         this.$message.error(e + '')
@@ -276,8 +289,8 @@ export default {
 .description {
   line-height: 28px;
 }
+
 .contentList {
   margin: 10px 0;
 }
 </style>
-

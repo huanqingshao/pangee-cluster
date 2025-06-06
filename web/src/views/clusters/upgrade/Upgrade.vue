@@ -22,32 +22,41 @@ zh:
           <div class="app_text_mono version_no">
             <span style="margin-right: 20px;">{{ resource.metadata.version }}</span>
             <template v-if="!cluster.history.processing">
-              <UpgradeTask v-if="pendingUpgrade" :cluster="cluster" :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></UpgradeTask>
+              <UpgradeTask v-if="pendingUpgrade" :cluster="cluster"
+                :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></UpgradeTask>
               <template v-else>
-                <el-button type="danger" icon="el-icon-upload" @click="$refs.choose.show()" style="margin-left: 20px;">{{t('chooseNewResourcePackage')}}</el-button>
-                <template v-if="cluster.inventory.all.hosts.localhost.kuboardspray_resource_package_previous">
+                <el-button type="danger" icon="el-icon-upload" @click="$refs.choose.show()"
+                  style="margin-left: 20px;">{{ t('chooseNewResourcePackage') }}</el-button>
+                <template v-if="cluster.inventory.all.hosts.localhost.pangeecluster_resource_package_previous">
                   <el-popover placement="top-start" :title="t('finished_upgrade_title')" :width="350" trigger="hover">
                     <template #reference>
-                      <el-button type="success" round icon="el-icon-circle-check">{{ t('finished_upgrade_title') }}</el-button>
+                      <el-button type="success" round icon="el-icon-circle-check">{{ t('finished_upgrade_title')
+                      }}</el-button>
                     </template>
-                    <div>{{t('finished_upgrade')}}</div>
-                    <div class="app_text_mono" style="line-height: 36px; color: var(--el-color-primary);">{{cluster.inventory.all.hosts.localhost.kuboardspray_resource_package_previous}}</div>
+                    <div>{{ t('finished_upgrade') }}</div>
+                    <div class="app_text_mono" style="line-height: 36px; color: var(--el-color-primary);">
+                      {{ cluster.inventory.all.hosts.localhost.pangeecluster_resource_package_previous }}</div>
                   </el-popover>
                 </template>
               </template>
             </template>
-            <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/upgrade.html" style="margin-left: 20px;" :size="12"></KuboardSprayLink>
+            <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/upgrade.html" style="margin-left: 20px;"
+              :size="12">
+            </PangeeClusterLink>
           </div>
         </el-form-item>
       </el-form>
     </div>
-    <el-alert v-if="resource.data.supported_playbooks['cluster_version_'+cluster.inventory.all.children.target.vars.container_manager] === undefined" type="warning" :closable="false">
+    <el-alert
+      v-if="resource.data.supported_playbooks['cluster_version_' + cluster.inventory.all.children.target.vars.container_manager] === undefined"
+      type="warning" :closable="false">
       {{ t('not_support_cluster_version') }}
     </el-alert>
     <el-alert v-else-if="errMsg" type="error" :closable="false">
-      <pre>{{errMsg}}</pre>
+      <pre>{{ errMsg }}</pre>
     </el-alert>
-    <CompareVersion v-else :cluster="cluster" :version="version" :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></CompareVersion>
+    <CompareVersion v-else :cluster="cluster" :version="version"
+      :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></CompareVersion>
     <ChooseNewResourcePackage ref="choose" :cluster="cluster" @refresh="$emit('refresh')"></ChooseNewResourcePackage>
   </el-scrollbar>
 </template>
@@ -69,44 +78,44 @@ export default {
     }
   },
   computed: {
-    pendingUpgrade () {
+    pendingUpgrade() {
       for (let k in this.cluster.inventory.all.hosts) {
         let host = this.cluster.inventory.all.hosts[k]
-        if (host.kuboardspray_node_action === 'upgrade_node') {
+        if (host.pangeecluster_node_action === 'upgrade_node') {
           return true
         }
       }
       return false
     },
-    controlPlanePendingUpgrade () {
+    controlPlanePendingUpgrade() {
       for (let key in this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
-        if (this.cluster.inventory.all.hosts[key].kuboardspray_node_action === 'upgrade_node') {
+        if (this.cluster.inventory.all.hosts[key].pangeecluster_node_action === 'upgrade_node') {
           return true
         }
       }
       for (let key in this.cluster.inventory.all.children.target.children.etcd.hosts) {
-        if (this.cluster.inventory.all.hosts[key].kuboardspray_node_action === 'upgrade_node') {
+        if (this.cluster.inventory.all.hosts[key].pangeecluster_node_action === 'upgrade_node') {
           return true
         }
       }
       return false
     },
-    resource () {
+    resource() {
       return this.cluster.resourcePackage
     }
   },
   components: { CompareVersion, ChooseNewResourcePackage, UpgradeTask },
-  mounted () {
+  mounted() {
     this.loadClusterVersion()
   },
   methods: {
     async loadClusterVersion() {
-      if (this.resource.data.supported_playbooks['cluster_version_'+this.cluster.inventory.all.children.target.vars.container_manager] === undefined) {
+      if (this.resource.data.supported_playbooks['cluster_version_' + this.cluster.inventory.all.children.target.vars.container_manager] === undefined) {
         return
       }
       this.loading = true
       this.errMsg = undefined
-      await this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/state/version`).then(resp => {
+      await this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/state/version`).then(resp => {
         this.version = resp.data.data
       }).catch(e => {
         console.log(e)

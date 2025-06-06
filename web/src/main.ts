@@ -32,12 +32,12 @@ import i18nMixin from "./mixins/i18n-mixin.js";
 import "./styles/paas-index.css";
 
 axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
-  window.KuboardSpray = { version: resp.data };
-  window.KuboardSpray.version.trimed = window.KuboardSpray.version.version.slice(
+  window.PangeeCluster = { version: resp.data };
+  window.PangeeCluster.version.trimed = window.PangeeCluster.version.version.slice(
     0,
-    window.KuboardSpray.version.version.length - 6
+    window.PangeeCluster.version.version.length - 6
   );
-  window.KuboardSpray.version.arch = window.KuboardSpray.version.version.slice(window.KuboardSpray.version.version.length - 5);
+  window.PangeeCluster.version.arch = window.PangeeCluster.version.version.slice(window.PangeeCluster.version.version.length - 5);
   const app = createApp(App);
   app.use(ElementPlus, { size: "small", locale: zhCn, zIndex: 3000 });
   app.use(store);

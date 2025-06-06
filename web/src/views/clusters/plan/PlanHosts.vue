@@ -19,7 +19,7 @@ zh:
   <div style="display: flex; height: 100%; overflow: visible">
     <div class="plan">
       <div class="left">
-        <div style="padding: 5px; font-weight: bolder; font-size: 14px">Kuboard Spray</div>
+        <div style="padding: 5px; font-weight: bolder; font-size: 14px">Pangee Cluster</div>
         <div>
           <Node class="localhost" name="localhost" :cluster="cluster" hideDeleteButton
             :active="computedCurrentPropertiesTab === 'localhost'" @click="computedCurrentPropertiesTab = 'localhost'">
@@ -45,9 +45,9 @@ zh:
           <div class="horizontalConnection" :style="bastionEnabled ? '' : 'border-color: white;'"></div>
         </div>
         <div style="line-height: 28px">
-          <KuboardSprayLink href="https://kuboard-spray.cn/guide/maintain/add-replace-node.html" :size="12">
+          <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12">
             添加/删除节点？
-          </KuboardSprayLink>
+          </PangeeClusterLink>
         </div>
       </div>
       <div class="right">
@@ -108,8 +108,8 @@ zh:
             {{ t("defaultSshParams") }}
           </template>
           <div v-if="computedCurrentPropertiesTab === 'localhost'">
-            <SshParamsCluster :cluster="cluster" :holder="cluster.inventory.all.children.target.vars"
-              prop="all.children.target.vars" :description="t('sshcommon')"></SshParamsCluster>
+            <SshParamsCluster :cluster="cluster" :holder="cluster.inventory.all.vars" prop="all.vars"
+              :description="t('sshcommon')"></SshParamsCluster>
             <HttpProxy v-if="showHttpProxy" :cluster="cluster"></HttpProxy>
           </div>
         </el-tab-pane>
@@ -364,7 +364,7 @@ export default {
         this.pingpong_loading = false;
         return;
       }
-      this.kuboardSprayApi
+      this.pangeeClusterApi
         .post(`/clusters/${this.cluster.name}/state/ping`, req)
         .then(resp => {
           this.pingpong = resp.data.data.items;

@@ -51,7 +51,7 @@ export default {
             if (!/^[a-zA-Z][a-zA-Z0-9_]{3,21}$/.test(value)) {
               return callback('必须以字母开头，可以包含数字和字母')
             }
-            this.kuboardSprayApi.get(`/clusters/${value}`).then(() => {
+            this.pangeeClusterApi.get(`/clusters/${value}`).then(() => {
               callback(this.t('conflict', { name: value }))
             }).catch(e => {
               // console.log(e.response)
@@ -77,7 +77,7 @@ export default {
     renameCluster() {
       this.$refs.form.validate(flag => {
         if (flag) {
-          this.kuboardSprayApi.patch(`/clusters/${this.clusterName}?newName=${this.form.name}`).then(resp => {
+          this.pangeeClusterApi.patch(`/clusters/${this.clusterName}?newName=${this.form.name}`).then(resp => {
             console.log(resp.data)
             this.show = false
             this.$message.success(this.$t('msg.save_succeeded'))

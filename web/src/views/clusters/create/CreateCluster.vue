@@ -25,7 +25,7 @@ zh:
       <el-form :model="form" label-position="left" label-width="120px" v-if="dialogVisible" ref="form">
         <EditString v-model="form.cluster_name" prop="cluster_name" :label="t('name')" required
           :placeholder="t('requiresName')" :rules="nameRules"></EditString>
-        <EditSelect v-model="form.kuboardspray_resource_package" :label="t('resourcePackage')"
+        <EditSelect v-model="form.pangeecluster_resource_package" :label="t('resourcePackage')"
           :loadOptions="loadResourceList" required>
           <template #edit>
             <ConfirmButton buttonStyle="margin-left: 10px;" icon="el-icon-plus"
@@ -68,7 +68,7 @@ export default {
       form: {
         create: {
           cluster_name: '',
-          kuboardspray_resource_package: '',
+          pangeecluster_resource_package: '',
         }
       },
       nameRules: [
@@ -83,7 +83,7 @@ export default {
             if (!/^[a-zA-Z][a-zA-Z0-9_]{3,21}$/.test(value)) {
               return callback('必须以字母开头，可以包含数字和字母')
             }
-            this.kuboardSprayApi.get(`/clusters/${value}`).then(() => {
+            this.pangeeClusterApi.get(`/clusters/${value}`).then(() => {
               callback(this.t('conflict', { name: value }))
             }).catch(e => {
               // console.log(e.response)
@@ -110,7 +110,7 @@ export default {
     },
     async loadResourceList() {
       let result = []
-      await this.kuboardSprayApi.get('/resources').then(resp => {
+      await this.pangeeClusterApi.get('/resources').then(resp => {
         for (let res of resp.data.data) {
           result.push({ label: res, value: res })
         }
@@ -125,9 +125,9 @@ export default {
           this.saving = true
           let req = {
             name: this.form.cluster_name,
-            resource_package: this.form.kuboardspray_resource_package,
+            resource_package: this.form.pangeecluster_resource_package,
           }
-          await this.kuboardSprayApi.post('/clusters', req).then(resp => {
+          await this.pangeeClusterApi.post('/clusters', req).then(resp => {
             if (resp.status === 500) {
               console.log(resp.data.data)
             }

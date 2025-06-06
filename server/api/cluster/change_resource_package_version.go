@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/cluster/cluster_common"
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
 	"github.com/sirupsen/logrus"
 )
 
@@ -32,19 +32,19 @@ func ChangeResourcePackageVersion(c *gin.Context) {
 	if req.Type == "upgrade" {
 		for hostName, v := range hosts {
 			host := v.(map[string]interface{})
-			if host["kuboardspray_node_action"] != nil {
-				common.HandleError(c, http.StatusInternalServerError, hostName+" is pending to "+host["kuboardspray_node_action"].(string), nil)
+			if host["pangeecluster_node_action"] != nil {
+				common.HandleError(c, http.StatusInternalServerError, hostName+" is pending to "+host["pangeecluster_node_action"].(string), nil)
 				return
 			}
 			if hostName != "localhost" && hostName != "bastion" {
-				common.MapSet(metadata.Inventory, "all.hosts."+hostName+".kuboardspray_node_action", "upgrade_node")
-				common.MapSet(metadata.Inventory, "all.hosts."+hostName+".kuboardspray_require_download", true)
+				common.MapSet(metadata.Inventory, "all.hosts."+hostName+".pangeecluster_node_action", "upgrade_node")
+				common.MapSet(metadata.Inventory, "all.hosts."+hostName+".pangeecluster_require_download", true)
 			}
 		}
 	}
 
-	common.MapSet(metadata.Inventory, "all.hosts.localhost.kuboardspray_resource_package_previous", common.MapGetString(metadata.Inventory, "all.hosts.localhost.kuboardspray_resource_package"))
-	common.MapSet(metadata.Inventory, "all.hosts.localhost.kuboardspray_resource_package", req.TargetVersion)
+	common.MapSet(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package_previous", common.MapGetString(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package"))
+	common.MapSet(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package", req.TargetVersion)
 
 	netmanager := common.MapGetString(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.kube_network_plugin")
 
@@ -106,7 +106,7 @@ func ChangeResourcePackageVersion(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 	})

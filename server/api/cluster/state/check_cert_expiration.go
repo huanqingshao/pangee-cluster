@@ -3,9 +3,9 @@ package state
 import (
 	"net/http"
 
-	"github.com/eip-work/kuboard-spray/api/command"
-	"github.com/eip-work/kuboard-spray/common"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/api/command"
+	"github.com/opencmit/pangee-cluster/common"
 )
 
 type CheckCertExpirationRequest struct {
@@ -26,7 +26,7 @@ func CheckCertExpiration(c *gin.Context) {
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to check certificate expiration", err)
 	}
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 		Data:    results,

@@ -31,25 +31,31 @@ zh:
     <div class="app_description">
       {{ t('connectivity_check_desc') }}
       <el-button @click="refresh" icon="el-icon-refresh" type="primary">{{ $t('msg.refresh') }}</el-button>
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/addons/netchecker.html" style="margin-left: 20px;" :size="13"></KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
+        :size="13"></PangeeClusterLink>
     </div>
     <div v-if="installed">
       <el-skeleton v-if="loading" animated class="app_margin_top"></el-skeleton>
       <div v-else-if="connectivityCheck">
-        <el-alert :type="status === 'pass' ? 'success' : 'error'" effect="dark" :closable="false" :title="t(status)" show-icon>
+        <el-alert :type="status === 'pass' ? 'success' : 'error'" effect="dark" :closable="false" :title="t(status)"
+          show-icon>
           <span class="app_text_mono">{{ errorMsg || connectivityCheck.stdout_obj.Message }}</span>
         </el-alert>
         <div v-if="status === 'fail'" style="display: flex;" class="app_description">
           <el-scrollbar style="margin-bottom: 10px; min-width: 285px;" height="450px">
-            <div v-for="(item, index) in connectivityCheck.stdout_obj.Absent" :key="'absent' + index" style="margin-bottom: 10px;">
-              <el-button type="danger" style="width: 280px;" icon="el-icon-check" :plain="connectivityCheckLog.pod !== item"
-                @click="connectivityCheckLog.pod = item" :loading="connectivityCheckLog.pod === item && connectivityLogsLoading">
+            <div v-for="(item, index) in connectivityCheck.stdout_obj.Absent" :key="'absent' + index"
+              style="margin-bottom: 10px;">
+              <el-button type="danger" style="width: 280px;" icon="el-icon-check"
+                :plain="connectivityCheckLog.pod !== item" @click="connectivityCheckLog.pod = item"
+                :loading="connectivityCheckLog.pod === item && connectivityLogsLoading">
                 <span class="app_text_mono">{{ item }}</span>
               </el-button>
             </div>
-            <div v-for="(item, index) in connectivityCheck.stdout_obj.Outdated" :key="'outdated' + index" style="margin-bottom: 10px;">
-              <el-button type="danger" style="width: 280px;" icon="el-icon-clock" :plain="connectivityCheckLog.pod !== item"
-                @click="connectivityCheckLog.pod = item" :loading="connectivityCheckLog.pod === item && connectivityLogsLoading">
+            <div v-for="(item, index) in connectivityCheck.stdout_obj.Outdated" :key="'outdated' + index"
+              style="margin-bottom: 10px;">
+              <el-button type="danger" style="width: 280px;" icon="el-icon-clock"
+                :plain="connectivityCheckLog.pod !== item" @click="connectivityCheckLog.pod = item"
+                :loading="connectivityCheckLog.pod === item && connectivityLogsLoading">
                 <span class="app_text_mono">{{ item }}</span>
               </el-button>
             </div>
@@ -58,31 +64,39 @@ zh:
             <el-radio-group v-model="connectivityCheckLog.type" size="default">
               <el-radio-button label="podList" value="podList">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
-                  <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-copy-document'"></component>
+                  <component
+                    :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-copy-document'">
+                  </component>
                 </el-icon>
                 {{ t('podList') }}
               </el-radio-button>
               <el-radio-button label="podDetails" value="podDetails">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
-                  <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document-copy'"></component>
+                  <component
+                    :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document-copy'">
+                  </component>
                 </el-icon>
                 {{ t('podDetails') }}
               </el-radio-button>
               <el-radio-button label="events" value="events">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
-                  <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-files'"></component>
+                  <component
+                    :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-files'">
+                  </component>
                 </el-icon>
                 {{ t('events') }}
               </el-radio-button>
               <el-radio-button label="logs" value="logs">
                 <el-icon style="vertical-align: top; margin-right: 5px;">
-                  <component :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document'"></component>
+                  <component
+                    :is="connectivityCheckLog.type === 'podList' && connectivityLogsLoading ? 'el-icon-loading' : 'el-icon-document'">
+                  </component>
                 </el-icon>
                 {{ t('logs') }}
               </el-radio-button>
             </el-radio-group>
             <el-scrollbar :max-height="400" style="margin-top: 10px;">
-              <pre class="app_code" style="min-height: 360px;">{{connectivityLogsCompute}}</pre>
+              <pre class="app_code" style="min-height: 360px;">{{ connectivityLogsCompute }}</pre>
             </el-scrollbar>
           </div>
         </div>
@@ -102,7 +116,8 @@ zh:
     </div>
     <el-alert v-else type="warning" :closable="false" :title="t('installNetchecker')">
       {{ t('netcheckerNotInstalled') }}
-      <KuboardSprayLink href="https://kuboard-spray.cn/guide/addons/netchecker.html" style="margin-left: 20px;" :size="12">{{ t('installNetchecker') }}</KuboardSprayLink>
+      <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
+        :size="12">{{ t('installNetchecker') }}</PangeeClusterLink>
     </el-alert>
   </div>
 </template>
@@ -126,10 +141,10 @@ export default {
     }
   },
   computed: {
-    installed () {
+    installed() {
       return this.cluster.state && this.cluster.state.addons.netchecker && this.cluster.state.addons.netchecker.is_installed
     },
-    status () {
+    status() {
       if (this.connectivityCheck && this.connectivityCheck.stdout_obj) {
         if (!this.connectivityCheck.stdout_obj.Absent && !this.connectivityCheck.stdout_obj.Outdated) {
           return 'pass'
@@ -138,14 +153,14 @@ export default {
       return 'fail'
     },
     connectivityLogsCompute: {
-      get () {
+      get() {
         return this.connectivityLogs + ''
       },
-      set () {}
+      set() { }
     }
   },
-  components: { },
-  mounted () {
+  components: {},
+  mounted() {
     this.refresh()
   },
   watch: {
@@ -155,7 +170,7 @@ export default {
           this.connectivityLogs = 'loading ...'
           this.connectivityLogsLoading = true
           let namespace = this.cluster.inventory.all.children.target.children.k8s_cluster.vars.netcheck_namespace || 'default'
-          this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/health_check/details?namespace=${namespace}&&pod=${newValue.pod}&&type=${newValue.type}`).then(resp => {
+          this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/health_check/details?namespace=${namespace}&&pod=${newValue.pod}&&type=${newValue.type}`).then(resp => {
             console.log(resp.data.data)
             this.connectivityLogs = resp.data.data.stdout || resp.data.data.stderr
             this.connectivityLogsLoading = false
@@ -163,7 +178,7 @@ export default {
             this.connectivityLogsLoading = false
             if (e.response.status === 500) {
               this.connectivityLogs = e.response.data.message
-            } else if (e.response.status === 400){
+            } else if (e.response.status === 400) {
               this.connectivityLogs = e.response.data
             }
           })
@@ -175,13 +190,13 @@ export default {
     }
   },
   methods: {
-    async refresh () {
+    async refresh() {
       if (!this.installed) {
         return
       }
       this.loading = true
       this.errorMsg = undefined
-      await this.kuboardSprayApi.get(`/clusters/${this.cluster.name}/health_check/connectivity_check`).then(resp => {
+      await this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/health_check/connectivity_check`).then(resp => {
         console.log(resp.data)
         resp.data.data.stdout_obj = JSON.parse(resp.data.data.stdout)
         this.connectivityCheck = resp.data.data
@@ -194,5 +209,4 @@ export default {
 }
 </script>
 
-<style lang="css">
-</style>
+<style lang="css"></style>

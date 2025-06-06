@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/eip-work/kuboard-spray/common"
-	"github.com/eip-work/kuboard-spray/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/opencmit/pangee-cluster/common"
+	"github.com/opencmit/pangee-cluster/constants"
 )
 
 type ListBackupRequest struct {
@@ -30,7 +30,7 @@ func ListBackup(c *gin.Context) {
 
 	files, err := ioutil.ReadDir(backupDir)
 	if err != nil {
-		c.JSON(http.StatusOK, common.KuboardSprayResponse{
+		c.JSON(http.StatusOK, common.PangeeClusterResponse{
 			Code:    http.StatusOK,
 			Message: "success",
 			Data:    []BackupInfo{},
@@ -62,7 +62,7 @@ func ListBackup(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, common.KuboardSprayResponse{
+	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",
 		Data:    result,

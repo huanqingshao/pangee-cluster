@@ -68,7 +68,7 @@ zh:
           {{ t("resourcePackage") }}
         </template>
         <div class="app_scroll_content">
-          <ConfigKuboardSpray :cluster="cluster"></ConfigKuboardSpray>
+          <ConfigPangeeCluster :cluster="cluster"></ConfigPangeeCluster>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="t('plan')" name="plan" style="overflow: visible;">
@@ -116,7 +116,7 @@ import Plan from "./plan/Plan.vue";
 import Upgrade from "./upgrade/Upgrade.vue";
 import ClusterHealthCheck from "./health_check/ClusterHealthCheck.vue";
 import Operation from "./operate/Operation.vue";
-import ConfigKuboardSpray from "./plan/kuboardspray/ConfigKuboardSpray.vue";
+import ConfigPangeeCluster from "./plan/pangeecluster/ConfigPangeeCluster.vue";
 import ExecuteTask from "../common/task/ExecuteTask.vue";
 
 export default {
@@ -223,11 +223,11 @@ export default {
     Upgrade,
     Backup,
     Operation,
-    ConfigKuboardSpray,
+    ConfigPangeeCluster,
     ExecuteTask
   },
   watch: {
-    "cluster.inventory.all.hosts.localhost.kuboardspray_resource_package": function () {
+    "cluster.inventory.all.hosts.localhost.pangeecluster_resource_package": function () {
       this.loadResourcePackage();
     }
   },
@@ -240,7 +240,7 @@ export default {
       if (this.isClusterInstalled) {
         for (let key in this.cluster.inventory.all.hosts) {
           let host = this.cluster.inventory.all.hosts[key];
-          if (host.kuboardspray_node_action === action) {
+          if (host.pangeecluster_node_action === action) {
             let h = clone(host);
             h.name = key;
             if (this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[key]) {
@@ -266,13 +266,13 @@ export default {
       // console.log('refresh cluster.')
       this.percentage = 10;
       let _this = this;
-      await this.kuboardSprayApi
+      await this.pangeeClusterApi
         .get(`/clusters/${this.name}`)
         .then(async function (resp) {
           _this.cluster = resp.data.data;
           _this.originalInventoryYaml = yaml.dump(_this.cluster.inventory);
           for (let key in _this.cluster.inventory.all.hosts) {
-            if (_this.cluster.inventory.all.hosts[key].kuboardspray_node_action === "upgrade_node") {
+            if (_this.cluster.inventory.all.hosts[key].pangeecluster_node_action === "upgrade_node") {
               _this.currentTab = "upgrade";
               break;
             }
@@ -304,7 +304,7 @@ export default {
     },
     async loadStateNodes() {
       let temp = { nodes: {}, code: 0, etcd_members: {}, etcd_code: 0, addons: {}, addon_code: 0 };
-      await this.kuboardSprayApi
+      await this.pangeeClusterApi
         .get(`/clusters/${this.name}/state/nodes`)
         .then(resp => {
           if (resp.data.data.stdout_obj && resp.data.data.stdout_obj.items) {
@@ -327,7 +327,7 @@ export default {
           temp.msg = e.response.data.message;
         });
       // this.percentage += 20
-      this.kuboardSprayApi
+      this.pangeeClusterApi
         .get(`/clusters/${this.name}/state/etcd_member_health`)
         .then(resp => {
           // console.log(resp.data.data)
@@ -365,7 +365,7 @@ export default {
           this.stateNodesLoaded(temp);
         });
       // this.percentage += 20
-      // this.kuboardSprayApi
+      // this.pangeeClusterApi
       //   .get(`/clusters/${this.name}/state/addons`)
       //   .then(resp => {
       //     temp.addon_code = 200;
@@ -383,9 +383,9 @@ export default {
     },
     async loadResourcePackage() {
       this.cluster.resourcePackage = undefined;
-      let newValue = this.cluster.inventory.all.hosts.localhost.kuboardspray_resource_package;
+      let newValue = this.cluster.inventory.all.hosts.localhost.pangeecluster_resource_package;
       if (newValue) {
-        await this.kuboardSprayApi
+        await this.pangeeClusterApi
           .get(`/resources/${newValue}`)
           .then(resp => {
             this.cluster.resourcePackage = resp.data.data.package;
@@ -398,7 +398,7 @@ export default {
     save() {
       this.$refs.plan.validate(flag => {
         if (flag) {
-          this.kuboardSprayApi
+          this.pangeeClusterApi
             .put(`/clusters/${this.name}`, this.cluster.inventory)
             .then(() => {
               this.$message.success(this.$t("msg.save_succeeded"));

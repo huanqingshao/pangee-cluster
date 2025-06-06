@@ -18,7 +18,7 @@ zh:
     <div :class="'header kuboard-header'">
       <el-progress class="progress" :percentage="percentage" status="success" :stroke-width="3"></el-progress>
       <div style="display: flex;" :class="transparent ? '' : 'header-background'">
-        <div class="logo-area"  @click="$router.push('/home')">Kuboard Spray</div>
+        <div class="logo-area" @click="$router.push('/home')">Pangee Cluster</div>
         <div :class="`slot ${pageLevel ? 'slot-cluster' : ''}`" :style="transparent ? 'background: transparent' : ''">
           <transition-group name="el-fade-in-linear">
             <HeaderBreadCrumb :label="t('homePage')" to="/home" :kind="t('homePage')" key="home"
@@ -41,7 +41,7 @@ zh:
             <div class="version" v-if="showGithubStar">
               <div class="dot"></div>
               <iframe id="github-star-iframe" style="display:inline-block;vertical-align:middle;"
-                :src="`https://addons.kuboard.cn/downloads/github-star-kuboard-spray.html?nocache=${Math.random()}`"
+                :src="`https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html?nocache=${Math.random()}`"
                 frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe>
             </div>
           </div> -->
@@ -86,7 +86,7 @@ export default {
       return this.percentage < 100
     },
     version() {
-      return window.KuboardSpray.version.version
+      return window.PangeeCluster.version.version
     }
   },
   // watch: {
@@ -100,7 +100,7 @@ export default {
     this.interval = setInterval(() => {
       this.current = this.current + 1
     }, 5000)
-    axios.get('https://addons.kuboard.cn/downloads/github-star-kuboard-spray.html').then(() => {
+    axios.get('https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html').then(() => {
       setTimeout(() => {
         this.showGithubStar = true
       }, 200)
@@ -369,7 +369,8 @@ export default {
   z-index: 5000;
   width: calc(100vw - 0px);
 }
-.logo-area{
+
+.logo-area {
   width: calc(6vw + 110px);
   padding: 0px 20px;
   color: #24515D;
@@ -380,7 +381,8 @@ export default {
   text-align: left;
   cursor: pointer;
 }
-.logo-area::after{
+
+.logo-area::after {
   content: "";
   width: 1px;
   height: 24px;
