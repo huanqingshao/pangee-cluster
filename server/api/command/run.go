@@ -54,11 +54,15 @@ func (run *Run) Run() ([]byte, []byte, error) {
 		return nil, nil, errors.New("Cannot pip stdout: " + err.Error())
 	}
 
-	err = cmd.Start()
+	cmderr := cmd.Start()
 
 	flagOut := false
 	flagErr := false
 	errContent := ""
+
+	if cmderr != nil {
+		errContent = cmderr.Error()
+	}
 	go func() {
 		buf := new(strings.Builder)
 		reader := bufio.NewReader(stderr)

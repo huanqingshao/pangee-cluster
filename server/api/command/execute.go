@@ -179,8 +179,11 @@ func (execute *Execute) exec() {
 		}
 		logStr := string(logs)
 		if strings.LastIndex(logStr, "PLAY RECAP *********************************************************************") < 0 {
-			logFile.WriteString("\033[31m\033[01m\033[05m  No PLAY RECAP found.\033[0m\n")
-			logFile.WriteString("\033[31m\033[01m\033[05m  执行出错。\033[0m\n")
+			msg := "\033[31m\033[01m\033[05m  No PLAY RECAP found.\033[0m\n" + "\033[31m\033[01m\033[05m  执行出错。\033[0m\n"
+			_, err = logFile.WriteString(msg)
+			if err != nil {
+				return
+			}
 			logrus.Warn("No ansbile-playbook recap.")
 			return
 		}
@@ -241,7 +244,10 @@ func (execute *Execute) exec() {
 		// 执行 PostExec
 		message, err := execute.PostExec(exitStatus)
 		if err != nil {
-			logFile.WriteString("Error in PostExec: " + err.Error() + "\n")
+			_, err = logFile.WriteString("Error in PostExec: " + err.Error() + "\n")
+			if err != nil {
+				logrus.Warn(err.Error())
+			}
 		}
 
 		if success {

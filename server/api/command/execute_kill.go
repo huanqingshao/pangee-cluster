@@ -53,13 +53,18 @@ func ExecuteKill(c *gin.Context) {
 			logrus.Warn("cannot write logFile ", logFilePath, err)
 			debug.PrintStack()
 		} else {
-			logFile.WriteString("\n\n")
-			logFile.WriteString("\033[31m\033[01m\033[05m ###############" + "######################" + "###############\033[0m \n")
-			logFile.WriteString("\033[31m\033[01m\033[05m ###############" + " You killed the task. " + "###############\033[0m \n")
-			logFile.WriteString("\033[31m\033[01m\033[05m ###############" + " 您强制结束了该任务。 " + "###############\033[0m \n")
-			logFile.WriteString("\033[31m\033[01m\033[05m ###############" + "######################" + "###############\033[0m \n")
-			logFile.WriteString("\n\n")
+			msg := "\n\n" +
+				"\033[31m\033[01m\033[05m ###############" + "######################" + "###############\033[0m \n" +
+				"\033[31m\033[01m\033[05m ###############" + " You killed the task. " + "###############\033[0m \n" +
+				"\033[31m\033[01m\033[05m ###############" + " 您强制结束了该任务。 " + "###############\033[0m \n" +
+				"\033[31m\033[01m\033[05m ###############" + "######################" + "###############\033[0m \n" +
+				"\n\n"
+			_, err = logFile.WriteString(msg)
+			if err != nil {
+				logrus.Warn(err.Error())
+			}
 		}
+		defer logFile.Close()
 
 		// 检查集群任务执行结果
 		if req.OwnerType == "cluster" && req.Pid == "" {

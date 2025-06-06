@@ -21,7 +21,11 @@ func RenameCluster(c *gin.Context) {
 	c.ShouldBindQuery(&req)
 
 	clusterDir := constants.GET_DATA_CLUSTER_DIR()
-	os.Rename(clusterDir+"/"+req.Cluster, clusterDir+"/"+req.NewClusterName)
+	err := os.Rename(clusterDir+"/"+req.Cluster, clusterDir+"/"+req.NewClusterName)
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "重命名 Cluster 失败", err)
+		return
+	}
 
 	inventoryPath := cluster_common.ClusterInventoryYamlPath(req.NewClusterName)
 	inventory, err := common.ParseYamlFile(inventoryPath)

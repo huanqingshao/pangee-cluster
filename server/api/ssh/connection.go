@@ -235,7 +235,10 @@ func (sshClient *SSHClient) Connect(ws *websocket.Conn) {
 				}
 			} else if string(p[0:1]) == "1" {
 				terminal := TerminalSpec{}
-				json.Unmarshal(p[1:], &terminal)
+				err = json.Unmarshal(p[1:], &terminal)
+				if err != nil {
+					return
+				}
 				size := make([]byte, 16)
 				binary.BigEndian.PutUint32(size, uint32(terminal.Columns))
 				binary.BigEndian.PutUint32(size[4:], uint32(terminal.Rows))

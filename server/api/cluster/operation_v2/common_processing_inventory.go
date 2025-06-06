@@ -27,7 +27,10 @@ func updateResourcePackageVarsToInventory(req ExecuteStepRequest) (map[string]in
 		return nil, nil, err
 	}
 	version := map[string]string{}
-	json.Unmarshal(versionJson, &version)
+	err = json.Unmarshal(versionJson, &version)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	v := version["version"]
 	v = strings.TrimSuffix(v, "-amd64")

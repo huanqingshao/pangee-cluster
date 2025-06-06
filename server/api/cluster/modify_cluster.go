@@ -61,7 +61,11 @@ func ModifyCluster(c *gin.Context) {
 	defer inventoryFile.Close()
 	defer syscall.Flock(int(inventoryFile.Fd()), syscall.LOCK_UN)
 
-	inventoryFile.Truncate(0)
+	err = inventoryFile.Truncate(0)
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "failed to Truncate inventory file.", err)
+		return
+	}
 	_, err = inventoryFile.Write(inventoryYamleBytes)
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to save inventory file.", err)

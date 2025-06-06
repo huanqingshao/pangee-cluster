@@ -61,7 +61,10 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 	}
 
 	logrus.Trace(string(playbookStr))
-	playbookFile.Write(playbookStr)
+	_, err = playbookFile.Write(playbookStr)
+	if err != nil {
+		return nil, err
+	}
 
 	cmd := Run{
 		Cmd: "ansible-playbook",
