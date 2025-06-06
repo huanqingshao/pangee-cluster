@@ -125,7 +125,7 @@ func (execute *Execute) exec() {
 	}
 
 	logFilePath := execute_dir_path + "/execute.log"
-	logFile, err := os.OpenFile(logFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+	logFile, err := os.Create(logFilePath)
 	if err != nil {
 		execute.R_Error = errors.New("cannot create logFile : " + logFilePath + " : " + err.Error())
 		execute.mutex.Unlock()

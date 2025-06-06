@@ -23,7 +23,7 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 	inventoryPath := constants.GetInventoryPath(owner_type, owner_name)
 
 	tempPlayBookFilePath := "./temp_play_" + owner_type + "_" + owner_name + common.RandomString(10) + ".yaml"
-	playbookFile, err := os.OpenFile(tempPlayBookFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0655)
+	playbookFile, err := os.Create(tempPlayBookFilePath)
 	if err != nil {
 		return nil, err
 	}

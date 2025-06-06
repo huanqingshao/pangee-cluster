@@ -44,7 +44,7 @@ func ModifyCluster(c *gin.Context) {
 	}
 
 	inventoryFilePath := constants.GET_DATA_CLUSTER_DIR() + "/" + req.Cluster + "/inventory.yaml"
-	inventoryFile, err := os.OpenFile(inventoryFilePath, os.O_RDWR|os.O_APPEND, 0655)
+	inventoryFile, err := os.Create(inventoryFilePath)
 
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to open inventory file.", err)
