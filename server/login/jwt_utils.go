@@ -51,7 +51,7 @@ func readUserRepository(username string) (*UserInfo, error) {
 		defaultRepository := map[string]*UserInfo{
 			"admin": {
 				Username: "admin",
-				Password: "4df59565aa2497c16ac4f49a073ee318",
+				Password: "2432612431302464617343536e4858706f567278764f532f5274752f755a526c72694f30306d73456657674c7a39644b712f43436c6d64544e506375",
 			},
 		}
 		if err := common.SaveYamlFile(userFilePath, defaultRepository); err != nil {

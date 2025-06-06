@@ -1,9 +1,10 @@
 package login
 
 import (
-	"crypto/md5"
 	"fmt"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/opencmit/pangee-cluster/common"
@@ -45,7 +46,8 @@ func ChangePassword(c *gin.Context) {
 			return
 		}
 
-		m := md5.Sum([]byte(req.Password))
+		// m := md5.Sum([]byte(req.Password))
+		m, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		md5str1 := fmt.Sprintf("%x", m)
 		common.MapSet(userRepository, username.(string)+".password", md5str1)
 

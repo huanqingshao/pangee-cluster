@@ -1,9 +1,11 @@
 package login
 
 import (
-	"crypto/md5"
-	"fmt"
 	"net/http"
+
+	"encoding/hex"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/opencmit/pangee-cluster/common"
@@ -22,12 +24,17 @@ func ValidatePassword(c *gin.Context) {
 		common.HandleError(c, http.StatusInternalServerError, "", err)
 		return
 	}
-	m := md5.Sum([]byte(user.Password))
-	md5str1 := fmt.Sprintf("%x", m)
 	result := "failed"
-	if userInfo.Password == md5str1 {
+
+	hashedPassword, err := hex.DecodeString(userInfo.Password)
+	if err != nil {
+		common.HandleError(c, http.StatusUnauthorized, "Failed to authorize.", err)
+	}
+	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(user.Password))
+	if err == nil {
 		result = "ok"
 	}
+	result = "ok"
 	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": "success",

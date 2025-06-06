@@ -51,7 +51,7 @@ func resetPassword() {
 	}
 
 	admin := result["admin"]
-	admin.Password = "4df59565aa2497c16ac4f49a073ee318"
+	admin.Password = "2432612431302464617343536e4858706f567278764f532f5274752f755a526c72694f30306d73456657674c7a39644b712f43436c6d64544e506375"
 
 	content, err := yaml.Marshal(result)
 	if err != nil {
@@ -66,6 +66,6 @@ func resetPassword() {
 		os.Exit(-1)
 	}
 
-	logrus.Info("已将 admin 的密码重置为 Kuboard123")
+	logrus.Info("已将 admin 的密码重置为 PangeeCluster123")
 
 }
