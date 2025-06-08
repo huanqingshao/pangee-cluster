@@ -29,10 +29,10 @@ func LockOwner(owner_type string, owner_name string) (*os.File, error) {
 func UnlockOwner(lockFile *os.File) {
 	err := syscall.Flock(int(lockFile.Fd()), syscall.LOCK_UN)
 	if err != nil {
-		logrus.Trace("UnlockOwner ", lockFile.Name(), err.Error())
+		logrus.Trace("UnlockOwner ", err.Error())
 	}
 	err = lockFile.Close()
 	if err != nil {
-		logrus.Trace("Close ", lockFile.Name(), err.Error())
+		logrus.Trace("Close ", err.Error())
 	}
 }
