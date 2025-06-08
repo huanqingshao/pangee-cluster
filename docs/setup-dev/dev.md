@@ -43,13 +43,6 @@ meta:
 
 - 使用 VS code 在容器中打开工作区
 
-- 在 vscode 中导航到 `pangee-cluster/requirements`，点击右键，并点击 `在集成终端中打开`，如下图所示
-
-  ```sh
-  # 当前路径为 pangee-cluster
-  pip install -r requirements.txt --break-system-packages
-  ```
-
 - 替换对 `ansible` 定制的文件：（待完善）
 
   ```sh

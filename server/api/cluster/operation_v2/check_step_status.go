@@ -17,6 +17,7 @@ func CheckStepStatus(c *gin.Context) {
 
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, err.Error(), err)
+		return
 	}
 
 	c.JSON(http.StatusOK, common.PangeeClusterResponse{
