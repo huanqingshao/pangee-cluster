@@ -8,6 +8,8 @@ const baseURL = `./api`
 
 var vueapp
 
+let isLoginAlertShowing = false
+
 const comp = {
   install(app) {
     vueapp = app
@@ -25,14 +27,19 @@ const comp = {
         if (error.response.request && error.response.request.responseURL && error.request.responseURL.indexOf('/api/login') >= 0) {
           return Promise.reject(error)
         }
-        window.VueAppComponent.$alert(window.VueAppComponent.$t('loginRequired'), window.VueAppComponent.$t('loginRequired'), {
-          callback: () => {
-            clearAllCookie()
-            window.VueAppComponent.$router.push('/login')
-          }
-        })
+        if (!isLoginAlertShowing) {
+          isLoginAlertShowing = true
+          window.VueAppComponent.$alert(window.VueAppComponent.$t('loginRequired'), window.VueAppComponent.$t('loginRequired'), {
+            callback: () => {
+              isLoginAlertShowing = false
+              clearAllCookie()
+              window.VueAppComponent.$router.push('/login')
+            }
+          })
+        }
+      } else {
+        return Promise.reject(error);
       }
-      return Promise.reject(error);
     });
     app.config.globalProperties.pangeeClusterApi = pangeeClusterApi
   }
