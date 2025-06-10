@@ -73,10 +73,10 @@ export default {
       set() { }
     },
     pendingAction() {
-      if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].pangeecluster_node_action) {
-        return this.inventory.all.hosts[this.name].pangeecluster_node_action
-      }
-      return undefined
+      // if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].pangeecluster_node_action) {
+      //   return this.inventory.all.hosts[this.name].pangeecluster_node_action
+      // }
+      return "none"
     },
     nodeClass() {
       let result = 'node'
@@ -144,11 +144,11 @@ export default {
   },
   methods: {
     roleName(role) {
-      if (role === 'etcd') {
-        return this.inventory.all.children.target.children.etcd.hosts[this.name].etcd_member_name || this.$t('node.' + role)
-      } else {
+      // if (role === 'etcd') {
+      //   return this.inventory.all.children.target.children.etcd.hosts[this.name].etcd_member_name || this.$t('node.' + role)
+      // } else {
         return this.$t('node.' + role)
-      }
+      // }
     },
     deleteNode() {
       if (this.isClusterInstalled && !this.isClusterOnline) {
@@ -244,7 +244,7 @@ export default {
       color: var(--el-text-color-primary);
       padding: 5px 10px;
       border-radius: 5px;
-      width: calc(100% - 20px);
+      width: 100%;
       text-align: center;
     }
 

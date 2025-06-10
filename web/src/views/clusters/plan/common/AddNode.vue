@@ -38,8 +38,9 @@ zh:
       </el-form-item>
       <el-form-item :label="t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
         <el-checkbox-group v-model="addNodeForm.roles">
-          <el-checkbox label="kube_control_plane" value="kube_control_plane">{{ $t('node.kube_control_plane')
-            }}</el-checkbox>
+          <el-checkbox label="kube_control_plane" value="kube_control_plane"> 
+            {{ $t('node.kube_control_plane') }}
+          </el-checkbox>
           <el-checkbox label="etcd" value="etcd">{{ $t('node.etcd') }}</el-checkbox>
           <el-checkbox label="kube_node" value="kube_node">{{ $t('node.kube_node') }}</el-checkbox>
         </el-checkbox-group>
@@ -124,17 +125,17 @@ export default {
           this.inventoryRef.all.hosts[this.addNodeForm.name] = {
             'pangeecluster_node_action': 'add_node',
           }
-          for (let role of this.addNodeForm.roles) {
-            if (role === 'etcd') {
-              this.inventoryRef.all.children.target.children.etcd.hosts[this.addNodeForm.name] = {
-                'pangeecluster_node_action': 'add_node',
-              }
-            } else {
-              this.inventoryRef.all.children.target.children.k8s_cluster.children[role].hosts[this.addNodeForm.name] = {
-                'pangeecluster_node_action': 'add_node',
-              }
-            }
-          }
+          // for (let role of this.addNodeForm.roles) {
+          //   if (role === 'etcd') {
+          //     this.inventoryRef.all.children.target.children.etcd.hosts[this.addNodeForm.name] = {
+          //       'pangeecluster_node_action': 'add_node',
+          //     }
+          //   } else {
+          //     this.inventoryRef.all.children.target.children.k8s_cluster.children[role].hosts[this.addNodeForm.name] = {
+          //       'pangeecluster_node_action': 'add_node',
+          //     }
+          //   }
+          // }
           this.$emit('update:currentPropertiesTab', 'NODE_' + this.addNodeForm.name)
           this.addNodeForm.visible = false
         }
