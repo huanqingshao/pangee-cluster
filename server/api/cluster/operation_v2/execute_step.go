@@ -33,6 +33,7 @@ func ExecuteStep(c *gin.Context) {
 
 	postExec := func(status command.ExecuteExitStatus) (string, error) {
 		if status.Success {
+			// FIXME 如果 pangeecluster_node_action 为 add_node 或 delete_node，在最后一个 Step 将其设置为 none
 			return "\n执行成功: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil
 		}
 		return "\n执行失败: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil

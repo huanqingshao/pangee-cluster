@@ -7,6 +7,9 @@ en:
   disabledBation: Disabled
   selectANode: Please select a node from the diagram to the left.
   resourcePackage: Resource Package
+  add_node_count: "{count} nodes to add"
+  delete_node_count: "{count} nodes to delete"
+  edit: Edit
 zh:
   singleNode: 单个节点
   global_config: 全局设置
@@ -15,6 +18,9 @@ zh:
   disabledBation: 不使用跳板机
   selectANode: 请从左侧图中选择一个节点
   resourcePackage: 资源包
+  add_node_count: 共 {count} 个待添加节点
+  delete_node_count: 共 {count} 个待删除节点
+  edit: 编辑
 </i18n>
 
 <template>
@@ -25,8 +31,11 @@ zh:
           <el-radio-button :label="operation.title[locale]" :value="index"></el-radio-button>
         </template>
       </el-radio-group>
-      <div class="operation-params">
-        参数设置
+      <div class="operation-params" v-if="cluster.resourcePackage.data.operations[currentOperation] && cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action">
+        {{ t(cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action + "_count", {count: pendingNodesLength}) }}
+        <el-link text>{{ t("edit") }}</el-link>
+        <OperationPendingNode v-for="(node, name) in pendingNodes" :node="node" :node-name="name" :inventory="cluster.inventory">
+        </OperationPendingNode>
       </div>
     </div>
     <div style="display: flex; gap: 10px; flex: 1; overflow-y: hidden;">
@@ -79,6 +88,7 @@ import OperationStepMarkdown from "./OperationStepMarkdown.vue"
 import OperationStepExecute from "./OperationStepExecute.vue";
 import OperationStepHistory from "./OperationStepHistory.vue";
 import OperationStepStatus from "./OperationStepStatus.vue";
+import OperationPendingNode from "./OperationPendingNode.vue";
 
 export default {
   props: {
@@ -134,6 +144,26 @@ export default {
           }
         );
       }
+    },
+    pendingNodes() {
+      let result = {};
+      if (this.cluster.resourcePackage.data.operations[this.currentOperation] && this.cluster.resourcePackage.data.operations[this.currentOperation].pangeecluster_node_action) {
+        let node_action = this.cluster.resourcePackage.data.operations[this.currentOperation].pangeecluster_node_action;
+        for (let i in this.cluster.inventory.all.hosts) {
+          let host = this.cluster.inventory.all.hosts[i]
+          if (host.pangeecluster_node_action == node_action) {
+            result[i] = host;
+          }
+        }
+      }
+      return result;
+    },
+    pendingNodesLength() {
+      let length = 0;
+      for (let i in this.pendingNodes) {
+        length ++;
+      }
+      return length;
     }
   },
   components: {
@@ -141,7 +171,8 @@ export default {
     OperationStepExecute,
     OperationStepMarkdown,
     OperationStepHistory,
-    OperationStepStatus
+    OperationStepStatus,
+    OperationPendingNode
   },
   methods: {
     stepClass (step) {
@@ -168,12 +199,16 @@ export default {
   border: 1px solid var(--el-color-info-light-9);
   border-radius: 5px;
   border-top-left-radius: 0;
-  background-color: var(--el-color-primary-light-9);
+  background-color: var(--el-fill-color-extra-light);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .operation-card {
   flex-grow: 1;
-  height: calc(100% - 42px);
+  height: 100%;
   overflow: hidden;
   padding: 20px;
   border: 1px solid var(--el-border-color);
