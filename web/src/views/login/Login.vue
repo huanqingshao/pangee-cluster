@@ -55,8 +55,9 @@ zh:
             </span>
           </div>
           <div>
-            <el-button style="width: 100%;" size="large" type="primary" icon="el-icon-promotion" @click="login">登
-              录</el-button>
+            <el-button style="width: 100%;" size="large" type="primary" icon="el-icon-promotion" @click="login" :loading="form.loading">
+              登 录
+            </el-button>
           </div>
         </el-form>
       </el-card>
@@ -76,6 +77,7 @@ export default {
       form: {
         username: '',
         password: '',
+        loading: false
       },
       passwordRules: [
         { required: true, message: '请输入密码', trigger: 'blur' },
@@ -105,11 +107,14 @@ export default {
     login() {
       this.$refs.form.validate(flag => {
         if (flag) {
+          this.form.loading = true;
           this.pangeeClusterApi.post('/login', this.form).then(resp => {
             setupCookie(resp.data.data.token, 7)
-            this.$router.replace('/')
+            this.$router.replace('/#/clusters')
+            this.form.loading = false;
           }).catch(e => {
             console.log(e.response)
+            this.form.loading = false;
           })
         }
       })

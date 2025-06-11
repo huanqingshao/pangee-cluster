@@ -33,7 +33,10 @@ const comp = {
             callback: () => {
               isLoginAlertShowing = false
               clearAllCookie()
-              window.VueAppComponent.$router.push('/login')
+              // window.VueAppComponent.$router.push('/login')
+              console.log("loginrequired")
+              location.href = "/#/login"
+              location.reload()
             }
           })
         }
