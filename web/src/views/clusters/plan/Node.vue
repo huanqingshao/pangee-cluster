@@ -18,7 +18,7 @@ zh:
     <div class="status" v-if="name !== 'localhost' && name !== 'bastion'">
       <el-button v-if="cluster.type === 'gap'" type="primary" circle icon="el-icon-document-checked"
         :loading="pingpong_loading"></el-button>
-      <el-button v-else-if="pendingAction === 'remove_node'" type="danger" circle icon="el-icon-delete"
+      <el-button v-else-if="pendingAction === 'delete_node'" type="danger" circle icon="el-icon-delete"
         :loading="pingpong_loading"></el-button>
       <el-button v-else-if="pendingAction === 'add_node'" type="warning" circle icon="el-icon-plus"
         :loading="pingpong_loading"></el-button>
@@ -30,7 +30,7 @@ zh:
       </template>
     </div>
     <div class="delete_button" v-if="!hideDeleteButton && editMode !== 'view'">
-      <el-button v-if="pendingAction === 'remove_node'" icon="el-icon-check" type="success" circle
+      <el-button v-if="pendingAction === 'delete_node'" icon="el-icon-check" type="success" circle
         @click="cancelDelete"></el-button>
       <el-popconfirm v-else icon="el-icon-info" icon-color="red" :title="t('confirmDelete')" @confirm="deleteNode"
         placement="right-start">
@@ -73,9 +73,9 @@ export default {
       set() { }
     },
     pendingAction() {
-      // if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].pangeecluster_node_action) {
-      //   return this.inventory.all.hosts[this.name].pangeecluster_node_action
-      // }
+      if (this.inventory.all.hosts[this.name] && this.inventory.all.hosts[this.name].pangeecluster_node_action) {
+        return this.inventory.all.hosts[this.name].pangeecluster_node_action
+      }
       return "none"
     },
     nodeClass() {
@@ -86,7 +86,7 @@ export default {
       if (this.onlineNodes[this.name] && this.onlineNodes[this.name].ping === 'pong') {
         result += ' online_node'
       }
-      if (this.pendingAction === 'remove_node') {
+      if (this.pendingAction === 'delete_node') {
         result += ' delete_node'
       }
       if (this.name !== 'localhost' && this.name !== 'bastion') {
@@ -186,12 +186,12 @@ export default {
         }
       }
       if (this.onlineNodes[this.name]) {
-        this.inventory.all.hosts[this.name].pangeecluster_node_action = 'remove_node'
+        this.inventory.all.hosts[this.name].pangeecluster_node_action = 'delete_node'
         if (this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]) {
-          this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].pangeecluster_node_action = 'remove_node'
+          this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].pangeecluster_node_action = 'delete_node'
         }
         if (this.inventory.all.children.target.children.etcd.hosts[this.name]) {
-          this.inventory.all.children.target.children.etcd.hosts[this.name].pangeecluster_node_action = 'remove_node'
+          this.inventory.all.children.target.children.etcd.hosts[this.name].pangeecluster_node_action = 'delete_node'
         }
       } else {
         this.$emit('deleted')

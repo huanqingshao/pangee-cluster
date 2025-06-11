@@ -171,7 +171,7 @@ export default {
       }
     },
     pendingDelete() {
-      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].pangeecluster_node_action === 'remove_node') {
+      if (this.inventory.all.hosts[this.nodeName] && this.inventory.all.hosts[this.nodeName].pangeecluster_node_action === 'delete_node') {
         return true
       }
       return false

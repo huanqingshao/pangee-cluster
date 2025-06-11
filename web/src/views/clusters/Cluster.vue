@@ -77,7 +77,7 @@ zh:
         </Plan>
       </el-tab-pane>
       <el-tab-pane :label="t('operation')" name="operation">
-        <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster" @refresh="refresh"></Operation>
+        <Operation v-if="currentTab == 'operation'" ref="operation" :cluster="cluster" @refresh="refresh" @go-to-plan-hosts="onGoToPlanHosts"></Operation>
       </el-tab-pane>
       <el-tab-pane :label="t('access')" name="access" :disabled="disableNonePlanTab || !isClusterOnline">
         <Access v-if="currentTab == 'access'" ref="access" :cluster="cluster" :loading="loading"
@@ -189,7 +189,7 @@ export default {
         return this.isClusterOnline;
       }),
       pendingRemoveNodes: computed(() => {
-        return this.pendingNodes("remove_node");
+        return this.pendingNodes("delete_node");
       }),
       pendingAddNodes: computed(() => {
         return this.pendingNodes("add_node");
@@ -235,6 +235,18 @@ export default {
     this.refresh();
   },
   methods: {
+    onGoToPlanHosts() {
+      console.log("onGoToPlanHosts")
+      this.currentTab = 'plan';
+      this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
+        {
+          cluster: this.cluster.name,
+          tab: "plan",
+          key: "currentTab",
+          value: "hosts"
+        }
+      );
+    },
     pendingNodes(action) {
       let result = [];
       if (this.isClusterInstalled) {

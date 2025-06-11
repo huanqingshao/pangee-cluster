@@ -19,6 +19,17 @@ type ExecuteStepRequest struct {
 	ExcludeNodes string `json:"nodes_to_exclude"`
 }
 
+// 对于 inventory 中以 path 指定的 hosts 内所有属性 pangeecluster_resource_package 为 originalAction 的 host，
+// 重置其 pangeecluster_resource_package 字段值为 none
+func resetNodeAction(inventory map[string]interface{}, path string, originalAction string) {
+	hosts := common.MapGet(inventory, path).(map[string](map[string]interface{}))
+	for _, host := range hosts {
+		if common.MapGet(host, "pangeecluster_node_action") == originalAction {
+			common.MapSet(host, "pangeecluster_node_action", "none")
+		}
+	}
+}
+
 func ExecuteStep(c *gin.Context) {
 	var req ExecuteStepRequest
 	c.ShouldBindUri(&req)
@@ -33,7 +44,34 @@ func ExecuteStep(c *gin.Context) {
 
 	postExec := func(status command.ExecuteExitStatus) (string, error) {
 		if status.Success {
-			// FIXME 如果 pangeecluster_node_action 为 add_node 或 delete_node，在最后一个 Step 将其设置为 none
+			// FIXME 待验证
+
+			tempClusterMetadata, err := cluster_common.ClusterMetadataByName(req.Cluster)
+			if err != nil {
+				return "解析数据出错", err
+			}
+
+			operations := common.MapGet(tempClusterMetadata.ResourcePackage, "data.operations").([]map[string]interface{})
+			for _, operation := range operations { // 遍历所有的 operation
+				nodeAction := common.MapGetString(operation, "pangeecluster_node_action")
+				if common.MapGetString(operation, "name") == req.Operation && nodeAction != "" { // 如果当前 operation 的 pangeecluster_node_action 不为空
+					steps := common.MapGet(operation, "steps").([]map[string]interface{})
+					for index, step := range steps { // 遍历所有的 steps
+						if common.MapGetString(step, "name") == req.Step && index == len(steps)-1 { // 如果当前 step 为最后一个，重置 pangeecluster_resource_package 字段
+							resetNodeAction(inventory, "all.hosts", nodeAction)
+							resetNodeAction(inventory, "all.children.target.children.etcd.hosts", nodeAction)
+							resetNodeAction(inventory, "all.children.target.children.harbor.hosts", nodeAction)
+							resetNodeAction(inventory, "all.children.target.children.k8s_cluster.children.kube_control_plane.hosts", nodeAction)
+							resetNodeAction(inventory, "all.children.target.children.k8s_cluster.children.kube_node.hosts", nodeAction)
+
+							// 保存 inventory
+							common.SaveYamlFile(tempClusterMetadata.InventoryPath, inventory)
+						}
+					}
+					break
+				}
+			}
+
 			return "\n执行成功: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil
 		}
 		return "\n执行失败: " + req.Cluster + "/" + req.Operation + "/" + req.Step, nil

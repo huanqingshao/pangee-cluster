@@ -33,7 +33,9 @@ zh:
       </el-radio-group>
       <div class="operation-params" v-if="cluster.resourcePackage.data.operations[currentOperation] && cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action">
         {{ t(cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action + "_count", {count: pendingNodesLength}) }}
-        <el-link text>{{ t("edit") }}</el-link>
+        <el-link type="primary" icon="el-icon-edit" @click="$emit('go-to-plan-hosts')">
+          <span style="margin-left: 5px">{{ t("edit") }}</span>
+        </el-link>
         <OperationPendingNode v-for="(node, name) in pendingNodes" :node="node" :node-name="name" :inventory="cluster.inventory">
         </OperationPendingNode>
       </div>
