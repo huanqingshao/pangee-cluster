@@ -185,7 +185,8 @@ export default {
           return
         }
       }
-      if (this.onlineNodes[this.name]) {
+      let ip = this.inventory.all.hosts[this.name].ip
+      if (this.onlineNodes[this.name] || this.onlineNodes[ip]) {
         this.inventory.all.hosts[this.name].pangeecluster_node_action = 'delete_node'
         if (this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name]) {
           this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.name].pangeecluster_node_action = 'delete_node'

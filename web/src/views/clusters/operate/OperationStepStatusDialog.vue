@@ -126,9 +126,11 @@ export default {
         let node = this.status.data.result[i];
         for (let j in node) {
           let action = node[j];
-          total++;
-          if (action.stdout == "0") {
-            success++;
+          if (!action.skipped) {
+            total++;
+            if (action.stdout == "0") {
+              success++;
+            }
           }
         }
       }
@@ -160,8 +162,16 @@ export default {
       let tmp = [];
       for (let i in this.status.data.result) {
         let t = clone(this.status.data.result[i]);
-        t._nodeName = i;
-        tmp.push(t);
+        let skipped = true;
+        for (let j in t) {
+          if (!t[j].skipped) {
+            skipped = false;
+          }
+        }
+        if (!skipped) {
+          t._nodeName = i;
+          tmp.push(t);
+        }
       }
       return tmp;
     }

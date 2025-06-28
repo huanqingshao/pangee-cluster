@@ -51,9 +51,11 @@ export default {
         let node = this.status.data.result[i];
         for (let j in node) {
           let action = node[j];
-          total++;
-          if (action.stdout == "0") {
-            success++;
+            if (!action.skipped) {
+            total++;
+            if (action.stdout == "0") {
+              success++;
+            }
           }
         }
       }

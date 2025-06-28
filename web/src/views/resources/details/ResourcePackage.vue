@@ -18,7 +18,7 @@ zh:
 </i18n>
 
 <template>
-  <el-form class="app_form_mini" label-position="left" label-width="200px">
+  <el-form class="app_form_mini" label-position="left" label-width="300px">
     <div style="text-align: center; margin-bottom: 10px; margin-top: -10px; font-weight: bold;">[
       {{ t('package_content') }} ]</div>
     <el-collapse v-model="activeNames">

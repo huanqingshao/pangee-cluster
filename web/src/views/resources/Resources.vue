@@ -6,7 +6,7 @@ en:
   pangeecluster_version_min: PangeeCluster min version
   pangeecluster_version_max: PangeeCluster max version
   version: Version
-  container_engine: Supported Container Engine
+  container_engine: Containerd Version
   supported_os: Supported OS
   kube_version: K8S Version
   kubespray_version: Kubespray Version
@@ -23,7 +23,7 @@ zh:
   pangeecluster_version_min: PangeeCluster最低版本
   pangeecluster_version_max: PangeeCluster最高版本
   version: 资源包版本
-  container_engine: 支持的容器引擎
+  container_engine: Containerd 版本
   supported_os: 支持的操作系统
   kube_version: K8S 版本
   kubespray_version: Kubespray 版本
@@ -52,7 +52,7 @@ zh:
         <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
       </div>
       <div class="contentList">
-        <el-table v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%">
+        <el-table ref="table" v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%" row-key="version">
           <el-table-column prop="version" :label="t('version')" width="200px">
             <template #default="scope">
               <template v-if="hideLink">
@@ -75,33 +75,20 @@ zh:
               </template>
             </template>
           </el-table-column>
-          <!-- <el-table-column :label="t('kubespray_version')">
-          <template #default="scope">
-            <span v-if="packageYaml[scope.row.version]">
-              {{ scope.row.yaml.data.kubespray_version }}
-            </span>
-            <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
-              <el-icon-loading></el-icon-loading>
-            </el-icon>
-          </template>
-        </el-table-column> -->
-          <el-table-column :label="t('kube_version')" width="100px">
+          <el-table-column :label="t('kube_version')" width="90px">
             <template #default="scope">
-              <span v-if="scope.row.yaml">
-                {{ scope.row.yaml.data.kubernetes.kube_version }}
+              <span v-if="packageYaml[scope.row.version]">
+                {{ depVersion("kubernetes", scope.row.yaml) }}
               </span>
               <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
                 <el-icon-loading></el-icon-loading>
               </el-icon>
             </template>
           </el-table-column>
-          <el-table-column :label="t('container_engine')" width="180px">
+          <el-table-column :label="t('container_engine')" width="110px">
             <template #default="scope">
-              <template v-if="scope.row.yaml">
-                <div v-for="(engine, key) in scope.row.yaml.data.container_engine" :key="`c${scope.index}_${key}`">
-                  <el-tag>{{ engine.container_manager }}_{{ engine.params[engine.container_manager + '_version']
-                    }}</el-tag>
-                </div>
+              <template v-if="packageYaml[scope.row.version]">
+                {{ depVersion("containerd", scope.row.yaml) }}
               </template>
               <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
                 <el-icon-loading></el-icon-loading>
@@ -110,7 +97,7 @@ zh:
           </el-table-column>
           <el-table-column :label="t('supported_os')">
             <template #default="scope">
-              <template v-if="scope.row.yaml">
+              <template v-if="packageYaml[scope.row.version]">
                 <span v-for="(os, key) in scope.row.yaml.metadata.supported_os" :key="`os${scope.index}_${key}`"
                   style="margin-right: 10px;">
                   <el-tag>
@@ -143,8 +130,9 @@ zh:
                 </el-tag>
                 <template v-else-if="scope.row.yaml">
                   <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
-                  <el-tag type="danger" class="app_text_mono">{{ scope.row.yaml.metadata.kuboard_spray_version.min
-                  }}</el-tag>
+                  <el-tag type="danger" class="app_text_mono">
+                    {{ scope.row.yaml.metadata.kuboard_spray_version.min }}
+                  </el-tag>
                 </template>
               </template>
               <el-icon v-else :size="12" style="width: 12px; height: 12px; vertical-align: middle;" class="is-loading">
@@ -229,6 +217,15 @@ export default {
     this.refresh()
   },
   methods: {
+    depVersion(depName, packageYaml) {
+      for (let i in packageYaml?.data.dependency) {
+        let dep = packageYaml.data.dependency[i];
+        if (dep.name == depName) {
+          return dep.version;
+        }
+      }
+      return undefined;
+    },
     async refresh() {
       this.importedPackageMap = {}
       this.availablePackageList = undefined
