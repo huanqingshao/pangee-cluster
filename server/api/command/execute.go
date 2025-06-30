@@ -3,7 +3,6 @@ package command
 import (
 	"errors"
 	"os"
-	"os/exec"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -135,45 +134,45 @@ func (execute *Execute) exec() {
 	defer logFile.Sync()
 	defer logFile.Close()
 
-	cmd := exec.Command(execute.Cmd, execute.Args(execute_dir_path)...)
+	// cmd := exec.Command(execute.Cmd, execute.Args(execute_dir_path)...)
 
-	cmd.Stdout = logFile
-	cmd.Stderr = logFile
-	cmd.Dir = execute.Dir
-	cmd.Env = append(os.Environ(), execute.Env...)
-	cmd.Env = append(cmd.Env, "ANSIBLE_CACHE_PLUGIN_CONNECTION="+constants.GET_DATA_DIR()+"/"+execute.OwnerType+"/"+execute.OwnerName+"/fact")
+	// cmd.Stdout = logFile
+	// cmd.Stderr = logFile
+	// cmd.Dir = execute.Dir
+	// cmd.Env = append(os.Environ(), execute.Env...)
+	// cmd.Env = append(cmd.Env, "ANSIBLE_CACHE_PLUGIN_CONNECTION="+constants.GET_DATA_DIR()+"/"+execute.OwnerType+"/"+execute.OwnerName+"/fact")
 
-	if err := cmd.Start(); err != nil {
-		execute.R_Error = errors.New("failed to start command " + cmd.String() + " : " + err.Error())
-		err = os.Remove(execute_dir_path)
-		if err != nil {
-			logrus.Warn(err.Error())
-		}
-		execute.mutex.Unlock()
-		return
-	}
+	// if err := cmd.Start(); err != nil {
+	// 	execute.R_Error = errors.New("failed to start command " + cmd.String() + " : " + err.Error())
+	// 	err = os.Remove(execute_dir_path)
+	// 	if err != nil {
+	// 		logrus.Warn(err.Error())
+	// 	}
+	// 	execute.mutex.Unlock()
+	// 	return
+	// }
 
-	runningProcesses[pid] = cmd.Process
+	// runningProcesses[pid] = cmd.Process
 
-	logrus.Trace("started command " + cmd.String())
-	os.WriteFile(execute_dir_path+"/execute.command", []byte(cmd.String()), 0666)
-	os.WriteFile(execute_dir_path+"/execute.yaml", []byte(execute.ToString(execute_dir_path, pid)), 0666)
+	// logrus.Trace("started command " + cmd.String())
+	// os.WriteFile(execute_dir_path+"/execute.command", []byte(cmd.String()), 0666)
+	// os.WriteFile(execute_dir_path+"/execute.yaml", []byte(execute.ToString(execute_dir_path, pid)), 0666)
 
-	if err := lockFile.Truncate(0); err != nil {
-		execute.R_Error = errors.New("failed to truncate lockFile : " + err.Error())
-	}
-	_, err = lockFile.WriteString(pid)
-	if err != nil {
-		execute.R_Error = errors.New("failed to write pid " + err.Error())
-	}
+	// if err := lockFile.Truncate(0); err != nil {
+	// 	execute.R_Error = errors.New("failed to truncate lockFile : " + err.Error())
+	// }
+	// _, err = lockFile.WriteString(pid)
+	// if err != nil {
+	// 	execute.R_Error = errors.New("failed to write pid " + err.Error())
+	// }
 
-	execute.R_Pid = pid
+	// execute.R_Pid = pid
 
-	execute.mutex.Unlock()
-	err = cmd.Wait()
-	if err != nil {
-		logrus.Warn(err.Error())
-	}
+	// execute.mutex.Unlock()
+	// err = cmd.Wait()
+	// if err != nil {
+	// 	logrus.Warn(err.Error())
+	// }
 
 	delete(runningProcesses, pid)
 
