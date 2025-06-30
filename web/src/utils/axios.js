@@ -50,7 +50,7 @@ const comp = {
 
 export default comp
 
-export {baseURL}
+export { baseURL }
 
 export function clearAllCookie() {
   Cookies.remove('PangeeClusterToken', { path: location.pathname })
@@ -60,6 +60,6 @@ export function clearAllCookie() {
 
 export function setupCookie(token, expires) {
   console.log(token)
-  Cookies.set('PangeeClusterToken', token, { path: location.pathname, expires: expires } )
+  Cookies.set('PangeeClusterToken', token, { path: location.pathname, expires: expires })
   comp.install(vueapp)
 }
