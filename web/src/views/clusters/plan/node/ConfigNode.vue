@@ -3,8 +3,8 @@ en:
   terminal: Open ssh terminal
   sshcommon: SSH Params (apply to node {nodeName})
   Keepalived: "Keepalived params (scope: node {nodeName})"
-  keepalived_state: keepalived_state
-  keepalived_priority: keepalived_priority
+  kube_ha_state: kube_ha_state
+  kube_ha_priority: kube_ha_priority
   invalidName: Hostname must consist of lower case alphanumeric characters or digit, and must start with an alphanumeric character
   roles: Node Role
   roleDescription: 'Node Role (scope: node {nodeName})'
@@ -17,8 +17,8 @@ zh:
   terminal: 打开 SSH 终端
   sshcommon: SSH 连接参数（适用范围：节点 {nodeName}）
   Keepalived: "Keepalived 参数（适用范围：节点 {nodeName}）"
-  keepalived_state: keepalived_state
-  keepalived_priority: keepalived_priority
+  kube_ha_state: kube_ha_state
+  kube_ha_priority: kube_ha_priority
   invalidName: 必须由小写字母、数字组成，且必须以字母开头，以字母/数字结尾
   roles: 节点角色
   roleDescription: 节点角色（适用范围：节点 {nodeName}）
@@ -119,16 +119,16 @@ zh:
     <ConfigSection v-if="isKubeControlPlane" v-model:enabled="isKubeControlPlane" label="Keepalived"
       :description="t('Keepalived', { nodeName: nodeName })" disabled anti-freeze>
       <EditRadio
-        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_state"
-        :label="t('keepalived_state')"
+        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].kube_ha_state"
+        :label="t('kube_ha_state')"
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
-        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_state`"
+        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.kube_ha_state`"
         :options="keepAliveStateOptions" required></EditRadio>
       <EditNumber
-        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].keepalived_priority"
-        :label="t('keepalived_priority')"
+        v-model="inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[nodeName].kube_ha_priority"
+        :label="t('kube_ha_priority')"
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
-        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.keepalived_priority`"
+        :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.kube_ha_priority`"
         :min="0" :max="100" required>
       </EditNumber>
 
