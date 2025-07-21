@@ -5,6 +5,8 @@ en:
   Keepalived: "Keepalived params (scope: node {nodeName})"
   kube_ha_state: kube_ha_state
   kube_ha_priority: kube_ha_priority
+  harbor_ha_state: harbor_ha_state
+  harbor_ha_priority: harbor_ha_priority
   invalidName: Hostname must consist of lower case alphanumeric characters or digit, and must start with an alphanumeric character
   roles: Node Role
   roleDescription: 'Node Role (scope: node {nodeName})'
@@ -19,6 +21,8 @@ zh:
   Keepalived: "Keepalived 参数（适用范围：节点 {nodeName}）"
   kube_ha_state: kube_ha_state
   kube_ha_priority: kube_ha_priority
+  harbor_ha_state: harbor_ha_state
+  harbor_ha_priority: harbor_ha_priority
   invalidName: 必须由小写字母、数字组成，且必须以字母开头，以字母/数字结尾
   roles: 节点角色
   roleDescription: 节点角色（适用范围：节点 {nodeName}）
@@ -105,6 +109,7 @@ zh:
               @clickTag="isKubeControlPlane = !isKubeControlPlane"></NodeRoleTag>
             <NodeRoleTag :enabled="isKubeNode" role="kube_node" @clickTag="isKubeNode = !isKubeNode"></NodeRoleTag>
             <NodeRoleTag :enabled="isEtcd" role="etcd" @clickTag="isEtcd = !isEtcd"></NodeRoleTag>
+            <NodeRoleTag :enabled="isHarbor" role="harbor_node" @clickTag="isHarbor = !isHarbor"></NodeRoleTag>
           </div>
         </template>
         <template #view>
@@ -112,6 +117,7 @@ zh:
             <NodeRoleTag :enabled="isKubeControlPlane" role="kube_control_plane"></NodeRoleTag>
             <NodeRoleTag :enabled="isKubeNode" role="kube_node"></NodeRoleTag>
             <NodeRoleTag :enabled="isEtcd" role="etcd"></NodeRoleTag>
+            <NodeRoleTag :enabled="isHarbor" role="harbor_node"></NodeRoleTag>
           </div>
         </template>
       </EditCommon>
@@ -129,6 +135,23 @@ zh:
         :label="t('kube_ha_priority')"
         :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
         :prop="`all.children.target.children.k8s_cluster.children.kube_control_plane.hosts.${nodeName}.kube_ha_priority`"
+        :min="0" :max="100" required>
+      </EditNumber>
+
+    </ConfigSection>
+    <ConfigSection v-if="isHarbor" v-model:enabled="isHarbor" label="Keepalived"
+      :description="t('Keepalived', { nodeName: nodeName })" disabled anti-freeze>
+      <EditRadio
+        v-model="inventory.all.children.target.children.harbor.hosts[nodeName].harbor_ha_state"
+        :label="t('harbor_ha_state')"
+        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
+        :prop="`all.children.target.children.harbor.hosts.${nodeName}.harbor_ha_state`"
+        :options="keepAliveStateOptions" required></EditRadio>
+      <EditNumber
+        v-model="inventory.all.children.target.children.harbor.hosts[nodeName].harbor_ha_priority"
+        :label="t('harbor_ha_priority')"
+        :anti-freeze="onlineNodes[nodeName] === undefined || inventory.all.hosts[nodeName].pangeecluster_node_action === 'add_node'"
+        :prop="`all.children.target.children.harbor.hosts.${nodeName}.harbor_ha_priority`"
         :min="0" :max="100" required>
       </EditNumber>
 
@@ -209,7 +232,7 @@ export default {
         if (v) {
           this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.nodeName] = {}
         } else {
-          if (!this.isEtcd && !this.isKubeNode) {
+          if (!this.isEtcd && !this.isKubeNode && !this.isHarbor) {
             this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[this.nodeName]
@@ -231,7 +254,7 @@ export default {
         if (v) {
           this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.nodeName] = {}
         } else {
-          if (!this.isEtcd && !this.isKubeControlPlane) {
+          if (!this.isEtcd && !this.isKubeControlPlane && !this.isHarbor) {
             this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts[this.nodeName]
@@ -248,10 +271,32 @@ export default {
         if (v) {
           this.inventory.all.children.target.children.etcd.hosts[this.nodeName] = {}
         } else {
-          if (!this.isKubeControlPlane && !this.isKubeNode) {
+          if (!this.isKubeControlPlane && !this.isKubeNode && !this.isHarbor) {
             this.$message.error(this.t('requiresAtLeastOneRole'))
           } else {
             delete this.inventory.all.children.target.children.etcd.hosts[this.nodeName]
+          }
+        }
+      }
+    },
+    isHarbor: {
+      get() {
+        for (let key in this.inventory.all.children.target.children.harbor.hosts) {
+          if (key === this.nodeName) {
+            return true
+          }
+        }
+        return false
+      },
+      set(v) {
+        console.log('setHarbor', v)
+        if (v) {
+          this.inventory.all.children.target.children.harbor.hosts[this.nodeName] = {}
+        } else {
+          if (!this.isKubeControlPlane && !this.isKubeNode && !this.isEtcd) {
+            this.$message.error(this.t('requiresAtLeastOneRole'))
+          } else {
+            delete this.inventory.all.children.target.children.harbor.hosts[this.nodeName]
           }
         }
       }

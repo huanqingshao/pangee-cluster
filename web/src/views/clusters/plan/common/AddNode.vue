@@ -43,6 +43,7 @@ zh:
           </el-checkbox>
           <el-checkbox label="etcd" value="etcd">{{ $t('node.etcd') }}</el-checkbox>
           <el-checkbox label="kube_node" value="kube_node">{{ $t('node.kube_node') }}</el-checkbox>
+          <el-checkbox label="harbor_node" value="harbor_node">{{ $t('node.harbor_node') }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <div class="app_margin_bottom">
@@ -77,7 +78,7 @@ export default {
         { required: true, message: 'Required', trigger: 'blur' },
         {
           validator: (rule, value, callback) => {
-            let keywords = ['bastion', 'target', 'kube_node', 'kube_control_plane', 'etcd', 'calico_rr', 'k8s_cluster', 'localhost', 'all']
+            let keywords = ['bastion', 'target', 'kube_node', 'kube_control_plane', 'etcd', 'calico_rr', 'k8s_cluster', 'localhost', 'all', 'harbor']
             if (keywords.indexOf(value) > 0) {
               return callback(this.t('cannotUseKeyword', { keyword: value }))
             }
@@ -128,6 +129,10 @@ export default {
           for (let role of this.addNodeForm.roles) {
             if (role === 'etcd') {
               this.inventoryRef.all.children.target.children.etcd.hosts[this.addNodeForm.name] = {
+                'pangeecluster_node_action': 'add_node',
+              }
+            } else if (role === 'harbor_node') {
+              this.inventoryRef.all.children.target.children.harbor.hosts[this.addNodeForm.name] = {
                 'pangeecluster_node_action': 'add_node',
               }
             } else {

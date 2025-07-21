@@ -23,6 +23,7 @@ const messages = {
       kube_control_plane: "control plane",
       kube_node: "worker node",
       etcd: "etcd node",
+      harbor_node: "harbor node",
       k8s_cluster: "K8s Cluster"
     },
     cis: {
@@ -76,6 +77,7 @@ const messages = {
       kube_control_plane: "控制节点",
       kube_node: "工作节点",
       etcd: "ETCD节点",
+      harbor_node: "Harbor",
       k8s_cluster: "K8s 集群"
     },
     cis: {
