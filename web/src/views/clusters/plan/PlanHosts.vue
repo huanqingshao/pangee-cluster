@@ -89,6 +89,23 @@ zh:
                   "></Node>
             </template>
           </div>
+          <div class="harbors">
+            <template v-for="(item, index) in inventory.all.children.target.children.harbor.hosts" :key="'node' + index">
+              <Node
+                v-if="isHarborAndNothingElse(index)"
+                :key="'harbor' + index"
+                @deleted="computedCurrentPropertiesTab = 'node_nodes'"
+                @click="computedCurrentPropertiesTab = 'NODE_' + index"
+                :pingpong="pingpong"
+                :pingpong_loading="pingpong_loading"
+                :active="nodeRoles(index)[computedCurrentPropertiesTab] || 'NODE_' + index === computedCurrentPropertiesTab"
+                :name="index"
+                :cluster="cluster"
+                hideDeleteButton
+              ></Node>
+            </template>
+
+          </div>
           <div class="workers">
             <template v-for="(item, index) in nodeGap.inventory.all.hosts" :key="'gap_node' + index">
               <Node :name="index" :cluster="nodeGap" :pingpong="pingpong" :pingpong_loading="pingpong_loading"
@@ -332,13 +349,30 @@ export default {
           roles.etcd = true;
         }
       }
+      for (let n in this.inventory.all.children.target.children.harbor.hosts) {
+        if (n === name) {
+          roles.harbor_node = true;
+        }
+      }
       return roles;
     },
     isNode(name) {
       let roles = this.nodeRoles(name);
       let flag = false;
       for (let key in roles) {
-        if (key === "kube_node") {
+        if (key === "kube_node" || key === "harbor_node") {
+          flag = true;
+        } else {
+          return false;
+        }
+      }
+      return flag;
+    },
+    isHarborAndNothingElse(name) {
+      let roles = this.nodeRoles(name);
+      let flag = false;
+      for (let key in roles) {
+        if (key === "harbor_node") {
           flag = true;
         } else {
           return false;
@@ -438,6 +472,11 @@ export default {
     }
 
     .workers {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .harbors {
       display: flex;
       flex-wrap: wrap;
     }

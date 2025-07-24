@@ -76,4 +76,10 @@ export default {
 .kube_node.selected {
   background-color: var(--el-color-success);
 }
+.harbor_node {
+  background-color: #bad7ec;
+}
+.harbor_node.selected {
+  background-color: #1DA1F2;
+}
 </style>

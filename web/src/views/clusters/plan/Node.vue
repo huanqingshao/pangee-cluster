@@ -120,6 +120,11 @@ export default {
           result['etcd'] = true
         }
       }
+      for (let n in this.inventory.all.children.target.children.harbor.hosts) {
+        if (n === this.name) {
+          result['harbor_node'] = true
+        }
+      }
       return result
     },
     k8sNode() {
@@ -260,6 +265,10 @@ export default {
     .etcd {
       background-color: var(--el-color-warning-light-9);
     }
+
+    .harbor_node {
+      background-color: #bad7ec;
+    }
   }
 
   .node:hover {
@@ -281,6 +290,10 @@ export default {
     .etcd {
       background-color: var(--el-color-warning);
     }
+
+    .harbor_node {
+      background-color: #1DA1F2;
+    }
   }
 
   .node.active {
@@ -301,6 +314,10 @@ export default {
 
     .etcd {
       background-color: var(--el-color-warning);
+    }
+
+    .harbor_node {
+      background-color: #1DA1F2;
     }
   }
 
