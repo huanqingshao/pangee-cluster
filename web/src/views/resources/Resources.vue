@@ -49,6 +49,19 @@ zh:
         <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://pangee-cluster.cn/support" type="danger"
           style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
         </PangeeClusterLink>
+        <!-- <el-select
+          v-model="sourceRepo"
+          size="small"
+          style="width: 120px; margin-right: 10px"
+          @change="refresh"
+        >
+          <el-option
+            v-for="item in repoOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select> -->
         <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
       </div>
       <div class="contentList">
@@ -187,6 +200,11 @@ export default {
       importedPackageMap: {},
       packageYaml: {},
       cannot_reach_online_repository: false,
+      // repoOptions: [
+      //   { value: 'github', label: 'github' },
+      //   { value: 'gitee', label: 'gitee' },
+      // ],
+      // sourceRepo: 'github',
     }
   },
   computed: {
@@ -230,7 +248,7 @@ export default {
       this.importedPackageMap = {}
       this.availablePackageList = undefined
       this.cannot_reach_online_repository = false
-      await axios.get(`${repositoryPrefix()}/package-list.yaml?nocache=${new Date().getTime()}`).then(resp => {
+      await axios.get(`${repositoryPrefix('github')}/list/package-list.yaml?nocache=${new Date().getTime()}`).then(resp => {
         this.availablePackageList = yaml.load(resp.data).items
       }).catch(e => {
         console.log(e)
@@ -267,7 +285,7 @@ export default {
       })
     },
     loadPackageFromRepository(packageVersion) {
-      axios.get(`${repositoryPrefix()}/${packageVersion.version}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
+      axios.get(`${repositoryPrefix('github')}/${packageVersion.version}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
         setTimeout(() => {
           let temp = yaml.load(resp.data)
           this.packageYaml[packageVersion.version] = temp

@@ -2,11 +2,13 @@
 en:
   title: "Load resource package {name}."
   selectSource: "Select a source"
-  download: Download Resource Package
+  download: "Download resource package"
+  useProxy: " Use proxy"
 zh:
   title: "加载资源包 {name}"
   selectSource: "选择一个源"
-  download: '加载资源包'
+  download: "加载资源包"
+  useProxy: " 使用代理"
 </i18n>
 
 <template>
@@ -23,6 +25,12 @@ zh:
             </div>
           </div>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item :label="t('useProxy')">
+        <el-switch v-model="form.enableProxy" />
+      </el-form-item>
+      <el-form-item v-if="form.enableProxy" label="Http proxy">
+        <el-input v-model="form.httpProxy" />
       </el-form-item>
     </el-form>
   </ExecuteTask>
@@ -42,7 +50,9 @@ export default {
   data() {
     return {
       form: {
-        downloadFrom: undefined
+        downloadFrom: undefined,
+        enableProxy: false,
+        httpProxy: ''
       },
       sourceRules: [{ required: true, message: this.i18n("selectSource"), trigger: "change" }]
     };
@@ -66,7 +76,9 @@ export default {
           if (flag) {
             let request = {
               package: clone(this.resource.package),
-              downloadFrom: this.form.downloadFrom
+              downloadFrom: this.form.downloadFrom,
+              enableProxy: this.form.enableProxy.toString(), // 转为 "true" 或 "false"
+              httpProxy: this.form.httpProxy
             };
             this.pangeeClusterApi
               .post(`/resources/${request.package.metadata.version}/${this.action}`, request)

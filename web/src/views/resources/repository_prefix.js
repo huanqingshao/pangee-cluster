@@ -1,6 +1,8 @@
-export default function () {
-  if (window.PangeeCluster.version.arch === 'arm64') {
-    return "https://addons.kuboard.cn/v-pangee-cluster-arm64"
+export default function (source) {
+  if (source === "github") {
+    return "https://raw.githubusercontent.com/Horan-Z/test/refs/heads"
   }
-  return "https://addons.kuboard.cn/v-pangee-cluster"
+  if (source === "gitee") {
+    return "https://gitee.com/Horan-Z/test/raw"
+  }
 }

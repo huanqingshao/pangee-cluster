@@ -98,7 +98,13 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		OwnerName: version,
 		Cmd:       "./pull-resource-package.sh",
 		Args: func(execute_dir string) []string {
-			return []string{common.MapGet(downloadReq, "downloadFrom").(string) + ":" + version}
+			return []string{
+				versionDir,
+				version,
+				common.MapGet(downloadReq, "downloadFrom").(string),
+				common.MapGet(downloadReq, "enableProxy").(string),
+				common.MapGet(downloadReq, "httpProxy").(string),
+			}
 		},
 		Type:     "download",
 		PostExec: postExec,

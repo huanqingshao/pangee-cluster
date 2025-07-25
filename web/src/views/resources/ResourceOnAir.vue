@@ -91,13 +91,13 @@ export default {
   methods: {
     async refresh() {
       this.loading = true
-      await axios.get(`${repositoryPrefix()}/${this.name}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
+      await axios.get(`${repositoryPrefix("github")}/${this.name}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
         this.resourcePackage = yaml.load(resp.data)
       }).catch(e => {
         console.log(e)
         this.$message.error('离线环境')
       })
-      await axios.get(`${repositoryPrefix()}//${this.name}/release.md?nocache=${new Date().getTime()}`).then(resp => {
+      await axios.get(`${repositoryPrefix("github")}/${this.name}/release.md?nocache=${new Date().getTime()}`).then(resp => {
         this.releaseNote = resp.data
       }).catch(e => {
         console.log(e)
