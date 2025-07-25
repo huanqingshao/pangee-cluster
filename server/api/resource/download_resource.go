@@ -2,7 +2,6 @@ package resource
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -68,7 +67,7 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		}
 	}
 	if !pkgExists {
-		if err := ioutil.WriteFile(versionDir+"/package.yaml", pkg, 0655); err != nil {
+		if err := os.WriteFile(versionDir+"/package.yaml", pkg, 0655); err != nil {
 			common.HandleError(c, http.StatusInternalServerError, "Write package.yaml failed. ", err)
 			return
 		}

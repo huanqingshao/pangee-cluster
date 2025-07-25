@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/opencmit/pangee-cluster/common"
@@ -13,7 +13,7 @@ func GetResourceReleaseNote(c *gin.Context) {
 	var req GetResourceRequest
 	c.ShouldBindUri(&req)
 
-	releaseNoteContent, err := ioutil.ReadFile(GET_RESOURCE_RELEASE_NOTE_PATH(req.Name))
+	releaseNoteContent, err := os.ReadFile(GET_RESOURCE_RELEASE_NOTE_PATH(req.Name))
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "cannot open file: "+GET_RESOURCE_RELEASE_NOTE_PATH(req.Name), err)
 		return

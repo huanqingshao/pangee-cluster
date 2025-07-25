@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/opencmit/pangee-cluster/api/command"
@@ -19,7 +19,7 @@ func GetResource(c *gin.Context) {
 	var req GetResourceRequest
 	c.ShouldBindUri(&req)
 
-	packageContent, err := ioutil.ReadFile(GET_RESOURCE_YAML_PATH(req.Name))
+	packageContent, err := os.ReadFile(GET_RESOURCE_YAML_PATH(req.Name))
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "cannot open file: "+GET_RESOURCE_YAML_PATH(req.Name), err)
 		return
