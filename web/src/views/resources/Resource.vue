@@ -89,14 +89,14 @@ export default {
   methods: {
     refresh() {
       this.loading = true
-      this.pangeeClusterApi.get(`/resources/${this.name}`).then(resp => {
+      this.pangeeClusterApi.get(`/resources/local/${this.name}`).then(resp => {
         this.resource = resp.data.data
         this.loading = false
       }).catch(e => {
         this.loading = false
         console.log(e)
       })
-      this.pangeeClusterApi.get(`/resources/${this.name}/release_note`).then(resp => {
+      this.pangeeClusterApi.get(`/resources/local/${this.name}/release_note`).then(resp => {
         this.releaseNote = resp.data.data.release_note
       }).catch(e => {
         console.log(e)
