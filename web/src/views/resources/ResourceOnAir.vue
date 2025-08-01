@@ -15,7 +15,7 @@ zh:
   <div>
     <ControlBar :title="name">
       <template v-if="resourcePackage">
-        <ResourceDownload v-if="meetVersionRequirement" action="download"
+        <ResourceDownload v-if="meetVersionRequirement" action="download" :source="source"
           :resource="{ package: resourcePackage, history: { task_type: 'resource', task_name: name, processing: false, success_tasks: [] } }">
         </ResourceDownload>
         <template v-else>
@@ -74,6 +74,7 @@ export default {
       resourcePackage: undefined,
       releaseNote: undefined,
       loading: false,
+      source: this.$route.params.source,
     }
   },
   computed: {
@@ -86,6 +87,7 @@ export default {
   },
   components: { ResourceDetails, ResourceDownload },
   mounted() {
+
     this.refresh()
   },
   methods: {
@@ -93,7 +95,7 @@ export default {
       this.loading = true
       await this.pangeeClusterApi.get(`/resources/remote/${this.name}`, {
         params: { 
-          source: this.$route.params.source
+          source: this.source
         }
       }).then(resp => {
         this.resourcePackage = yaml.load(resp.data.data.package)
@@ -103,7 +105,7 @@ export default {
       })
       await this.pangeeClusterApi.get(`/resources/remote/${this.name}/release_note`, {
         params: { 
-          source: this.$route.params.source
+          source: this.source
         }
       }).then(resp => {
         this.releaseNote = resp.data.data.release_note

@@ -6,17 +6,15 @@
 # $4: 是否使用 proxy (true / false)
 # $5: proxy 地址
 
-echo "TASK [下载压缩包] ****"
-
-wget -P $1 https://$3/Horan-Z/test/releases/download/$2/$2.tar.gz
-
-echo ""
-
-echo "TASK [解压压缩包] ****"
+echo "TASK [创建文件夹] ****"
 
 mkdir -p $1/content
 
-tar -zxvf $1/$2.tar.gz -C $1/content
+echo ""
+
+echo "TASK [下载资源包] ****"
+
+git clone -b $2 https://$3/Horan-Z/test.git $1/content
 
 echo ""
 

@@ -15,7 +15,7 @@ zh:
   <ExecuteTask v-if="resource" :history="resource.history" :startTask="startTask" :label="t('download')"
     :title="t('title', { name: resource.package.metadata.version })" :loading="loading" @refresh="$emit('refresh')">
     <el-form @submit.prevent.stop :model="form" ref="form" label-position="left" label-width="120px">
-      <el-form-item :label="t('selectSource')" prop="downloadFrom" :rules="sourceRules">
+      <!-- <el-form-item :label="t('selectSource')" prop="downloadFrom" :rules="sourceRules">
         <el-radio-group v-model="form.downloadFrom">
           <div style="line-height: 28px; padding-top: 5px">
             <div v-for="(source, index) in resource.package.metadata.available_at" :key="'source' + index">
@@ -25,7 +25,7 @@ zh:
             </div>
           </div>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="t('useProxy')">
         <el-switch v-model="form.enableProxy" />
       </el-form-item>
@@ -45,7 +45,8 @@ export default {
   props: {
     resource: { type: Object, required: true },
     loading: { type: Boolean, required: false },
-    action: { type: String, required: true }
+    action: { type: String, required: true },
+    source: { type: String, required: true }
   },
   data() {
     return {
@@ -67,7 +68,7 @@ export default {
   components: { ExecuteTask },
   emits: ["refresh"],
   mounted() {
-    this.form.downloadFrom = this.resource.package.metadata.available_at[0];
+    // this.form.downloadFrom = this.resource.package.metadata.available_at[0];
   },
   methods: {
     startTask() {
@@ -76,7 +77,7 @@ export default {
           if (flag) {
             let request = {
               package: clone(this.resource.package),
-              downloadFrom: this.form.downloadFrom,
+              downloadFrom: this.source + '.com',
               enableProxy: this.form.enableProxy.toString(), // 转为 "true" 或 "false"
               httpProxy: this.form.httpProxy
             };
