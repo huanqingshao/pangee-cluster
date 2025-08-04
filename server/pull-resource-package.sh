@@ -6,6 +6,18 @@
 # $4: 是否使用 proxy (true / false)
 # $5: proxy 地址
 
+echo "------------------------------------"
+echo "$1"
+echo "------------------------------------"
+echo "$2"
+echo "------------------------------------"
+echo "$3"
+echo "------------------------------------"
+echo "$4"
+echo "------------------------------------"
+echo "$5"
+echo "------------------------------------"
+
 echo "TASK [创建文件夹] ****"
 
 mkdir -p $1/content
@@ -14,7 +26,11 @@ echo ""
 
 echo "TASK [下载资源包] ****"
 
-git clone -b $2 https://$3/Horan-Z/test.git $1/content
+if [ "$3" != "null" ]; then
+    git clone -b $2 https://$3/Horan-Z/test.git $1/content
+else
+    echo "skip"
+fi
 
 echo ""
 

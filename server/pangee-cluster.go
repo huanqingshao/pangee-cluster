@@ -87,6 +87,7 @@ func setupRouter() *gin.Engine {
 	api.GET("/resources/remote/:name", resource.GetRemoteResource)
 	api.GET("/resources/remote/:name/release_note", resource.GetRemoteResourceReleaseNote)
 	api.POST("/resources/:name/download", resource.CreateAndDownloadResource)
+	api.POST("/resources/upload", resource.UploadResource)
 	api.POST("/resources/:name/reload", resource.ReloadResource)
 	api.DELETE("/resources/:name", resource.DeleteResource)
 

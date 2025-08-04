@@ -3,29 +3,26 @@ en:
   title: "Load resource package {name}."
   selectSource: "Select a source"
   download: "Download resource package"
+  upload: "Upload Resource Package"
   useProxy: " Use proxy"
 zh:
   title: "加载资源包 {name}"
   selectSource: "选择一个源"
   download: "加载资源包"
+  upload: "上传资源包"
   useProxy: " 使用代理"
 </i18n>
 
 <template>
-  <ExecuteTask v-if="resource" :history="resource.history" :startTask="startTask" :label="t('download')"
-    :title="t('title', { name: resource.package.metadata.version })" :loading="loading" @refresh="$emit('refresh')">
+  <ExecuteTask 
+    :history="resource.history"
+    :startTask="action !== 'upload' ? startTask : localPack"
+    :label="action !== 'upload' ? t('download') : t('upload')"
+    :title="action !== 'upload' ? t('title', { name: resource.package.metadata.version }) : t('upload')"
+    :loading="loading"
+    @refresh="$emit('refresh')"
+  >
     <el-form @submit.prevent.stop :model="form" ref="form" label-position="left" label-width="120px">
-      <!-- <el-form-item :label="t('selectSource')" prop="downloadFrom" :rules="sourceRules">
-        <el-radio-group v-model="form.downloadFrom">
-          <div style="line-height: 28px; padding-top: 5px">
-            <div v-for="(source, index) in resource.package.metadata.available_at" :key="'source' + index">
-              <el-radio :label="source" :value="source">
-                <span class="app_text_mono">{{ source }}</span>
-              </el-radio>
-            </div>
-          </div>
-        </el-radio-group>
-      </el-form-item> -->
       <el-form-item :label="t('useProxy')">
         <el-switch v-model="form.enableProxy" />
       </el-form-item>
@@ -33,6 +30,13 @@ zh:
         <el-input v-model="form.httpProxy" />
       </el-form-item>
     </el-form>
+    <input 
+      ref="fileInput" 
+      type="file" 
+      accept=".zip" 
+      class="hidden" 
+      @change="handleFileSelect"
+    >
   </ExecuteTask>
 </template>
 
@@ -73,28 +77,74 @@ export default {
   methods: {
     startTask() {
       return new Promise((resolve, reject) => {
-        this.$refs.form.validate(async flag => {
-          if (flag) {
-            let request = {
-              package: clone(this.resource.package),
-              downloadFrom: this.source + '.com',
-              enableProxy: this.form.enableProxy.toString(), // 转为 "true" 或 "false"
-              httpProxy: this.form.httpProxy
-            };
-            this.pangeeClusterApi
-              .post(`/resources/${request.package.metadata.version}/${this.action}`, request)
-              .then(resp => {
-                this.$router.replace(`/settings/resources/${request.package.metadata.version}`);
-                resolve(resp.data.data.pid);
-              })
-              .catch(e => {
-                reject(e);
-              });
-          } else {
-            resolve();
-          }
-        });
+        let request = {
+          package: clone(this.resource.package),
+          downloadFrom: this.source + '.com',
+          enableProxy: this.form.enableProxy.toString(), // 转为 "true" 或 "false"
+          httpProxy: this.form.httpProxy
+        };
+        this.pangeeClusterApi
+          .post(`/resources/${request.package.metadata.version}/${this.action}`, request)
+          .then(resp => {
+            this.$router.replace(`/settings/resources/${request.package.metadata.version}`);
+            resolve(resp.data.data.pid);
+          })
+          .catch(e => {
+            reject(e);
+          });
       });
+    },
+    localPack() {
+      this.$refs.fileInput.click();
+      // 返回一个Promise供ExecuteTask使用，实际完成在handleFileSelect中
+      return new Promise((resolve) => {
+        this.uploadResolve = resolve;
+      });
+    },
+    
+    async handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) {
+        this.uploadResolve?.();
+        return;
+      }
+      
+      // 验证文件类型
+      if (!file.name.toLowerCase().endsWith('.zip')) {
+        e.target.value = '';
+        this.uploadResolve?.();
+        return;
+      }
+
+      this.resource.history.task_name = file.name.replace(/\.zip$/i, '')
+
+      try {
+        const request = {
+          enableProxy: this.form.enableProxy.toString(),
+          httpProxy: this.form.httpProxy
+        };
+        const formData = new FormData();
+        formData.append('file', file);
+
+        Object.keys(request).forEach(key => {
+          formData.append(key, request[key]);
+        });
+
+        this.pangeeClusterApi
+          .post('/resources/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+          .then(resp => {
+            this.$router.replace(`/settings/resources/${this.resource.history.task_name}`);
+            this.uploadResolve(resp.data.data.pid);
+          })
+          .catch(e => {
+            this.uploadResolve();
+          });
+      } catch (error) {
+        console.error('Upload error:', error);
+        this.uploadResolve();
+      } finally {
+        e.target.value = '';
+      }
     }
   }
 };
@@ -105,5 +155,9 @@ export default {
   font-size: 15px;
   color: var(--el-color-danger);
   font-weight: bold;
+}
+
+.hidden {
+  display: none;
 }
 </style>

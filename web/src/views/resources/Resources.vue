@@ -62,7 +62,10 @@ zh:
             :value="item.value"
           />
         </el-select>
-        <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
+          <ResourceDownload class="app_margin_top"
+            :resource="{ history: { task_type: 'resource', task_name: '', processing: false, success_tasks: [] } }"
+            action="upload">
+          </ResourceDownload>
       </div>
       <div class="contentList">
         <el-table ref="table" v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%" row-key="version">
@@ -189,11 +192,10 @@ zh:
 </template>
 
 <script>
-import axios from 'axios'
 import yaml from 'js-yaml'
 import ResourcesCreateOffline from './ResourcesCreateOffline.vue'
 import compareVersions from 'compare-versions'
-import repositoryPrefix from './repository_prefix.js'
+import ResourceDownload from './ResourceDownload.vue'
 
 export default {
   props: {
@@ -235,7 +237,7 @@ export default {
       return result
     },
   },
-  components: { ResourcesCreateOffline },
+  components: { ResourcesCreateOffline, ResourceDownload },
   mounted() {
     this.refresh()
   },

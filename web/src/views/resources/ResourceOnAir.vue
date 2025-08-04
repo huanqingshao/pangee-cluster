@@ -45,11 +45,9 @@ zh:
 <script>
 import mixin from '../../mixins/mixin.js'
 import ResourceDetails from './details/ResourceDetails.vue'
-import axios from 'axios'
 import yaml from 'js-yaml'
 import ResourceDownload from './ResourceDownload.vue'
 import compareVersions from 'compare-versions'
-import repositoryPrefix from './repository_prefix.js'
 
 export default {
   mixins: [mixin],
