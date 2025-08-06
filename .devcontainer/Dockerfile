@@ -61,4 +61,7 @@ RUN  export https_proxy=${HTTP_PROXY} \
   && tar Cxzvf /usr/local/bin nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
   && rm nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz
 
+RUN /usr/local/go/bin/go install github.com/mikefarah/yq/v4@latest \
+  && apt install -y unzip
+
 ENTRYPOINT [ "containerd" ]
