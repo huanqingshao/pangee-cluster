@@ -9,7 +9,7 @@ zh:
   title: "加载资源包 {name}"
   selectSource: "选择一个源"
   download: "加载资源包"
-  upload: "上传资源包"
+  upload: "加载离线资源包"
   useProxy: " 使用代理"
 </i18n>
 

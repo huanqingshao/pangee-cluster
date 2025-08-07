@@ -37,7 +37,7 @@ echo ""
 
 echo "TASK [执行资源下载脚本] ****"
 
-bash $1/content/2.sh
+bash $1/content/download-dependency.sh
 
 echo ""
 
