@@ -1,5 +1,5 @@
 # Use imutable image tags rather than mutable tags (like ubuntu:18.04)
-FROM ubuntu:focal-20220105
+FROM ubuntu:20.04
 
 ADD .docker/pip.conf /root/.pip/pip.conf
 
@@ -10,40 +10,29 @@ ADD .docker/pip.conf /root/.pip/pip.conf
 #     && rm -rf /var/lib/apt/lists/*
 
 ENV LANG=C.UTF-8
-ENV TZ Asia/Shanghai
+ENV TZ=Asia/Shanghai
 
 RUN apt-get update -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libssl-dev sshpass apt-transport-https moreutils \
+    libssl-dev sshpass apt-transport-https moreutils git wget \
     ca-certificates curl gnupg2 python3-pip unzip rsync tzdata \
     && rm -rf /var/lib/apt/lists/*
 
+RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64 -O /usr/local/bin/yq \
+    && chmod +x /usr/local/bin/yq
 
-# RUN curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/gpg | apt-key add - \
-#     && add-apt-repository \
-#     "deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
-#     $(lsb_release -cs) \
-#     stable" \
-#     && apt-get update -y && apt-get install --no-install-recommends -y docker-ce \
-#     && rm -rf /var/lib/apt/lists/*
-
-ARG arch
-RUN curl -o docker-ce-cli.deb https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/dists/focal/pool/stable/$arch/docker-ce-cli_20.10.12~3-0~ubuntu-focal_$arch.deb \
-    && dpkg -i docker-ce-cli.deb \
-    && rm -rf docker-ce-cli.deb
-
-# RUN curl -o nerdctl.tar.gz https://github.com/containerd/nerdctl/releases/download/v0.15.0/nerdctl-0.15.0-linux-amd64.tar.gz \
-#     && tar -xvf nerdctl.tar.gz \
-#     && mv nerdctl /usr/local/bin/nerdctl \
-#     && rm -f nerdctl.tar.gz containerd-rootless*.sh
-
-# Some tools like yamllint need this
-# Pip needs this as well at the moment to install ansible
-# (and potentially other packages)
-# See: https://github.com/pypa/pip/issues/10219
+RUN wget https://github.com/containerd/containerd/releases/download/v2.0.5/containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+    && tar Cxzvf /usr/local containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+    && rm containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
+    && wget https://github.com/opencontainers/runc/releases/download/v1.3.0/runc.$(dpkg --print-architecture) \
+    && install -m 755 runc.$(dpkg --print-architecture) /usr/local/sbin/runc \
+    && rm runc.$(dpkg --print-architecture) \
+    && wget https://github.com/containerd/nerdctl/releases/download/v2.0.4/nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
+    && tar Cxzvf /usr/local/bin nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
+    && rm nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz
 
 WORKDIR /pangee-cluster
-COPY ./requirements.txt ./requirements.txt
+COPY ./.docker/requirements.txt ./requirements.txt
 RUN /usr/bin/python3 -m pip install --no-cache-dir pip -U \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
@@ -53,11 +42,14 @@ COPY .docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.8/
 COPY .docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/callback/__init__.py
 COPY .docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/action/raw.py
 
-ENV KUBOARD_SPRAY_WEB_DIR="/pangee-cluster/ui"
-ENV KUBOARD_SPRAY_PORT=":80"
+ENV PANGEE_CLUSTER_WEB_DIR="/pangee-cluster/ui"
+ENV PANGEE_CLUSTER_PORT=":8080"
 ENV GIN_MODE=release
-ENV KUBOARD_SPRAY_LOGRUS_LEVEL="info"
-ENV KUBOARD_SPRAY_ADMIN_LOGRUS_LEVEL = "info"
+ENV PANGEE_CLUSTER_LOGRUS_LEVEL="info"
+ENV PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL="info"
+ENV TERM=xterm
+
+EXPOSE 8080
 
 COPY ./admin/pangee-cluster-admin pangee-cluster-admin
 COPY ./server/ansible-script ansible-script
@@ -65,6 +57,9 @@ COPY ./server/ansible-rpc ansible-rpc
 COPY ./server/pangee-cluster pangee-cluster
 COPY ./web/dist /pangee-cluster/ui
 COPY ./server/pull-resource-package.sh pull-resource-package.sh
-RUN chmod +x pangee-cluster pangee-cluster-admin
+COPY .docker/entrypoint.sh entrypoint.sh
+RUN chmod +x pangee-cluster pangee-cluster-admin pull-resource-package.sh entrypoint.sh
 
-CMD [ "./pangee-cluster" ]
+ENTRYPOINT ["./entrypoint.sh"]
+
+CMD ["./pangee-cluster"]

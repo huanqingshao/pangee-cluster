@@ -24,11 +24,11 @@ echo ""
 
 echo "TASK [配置代理] ****"
 
-ENABLE_PROXY=$4         /root/go/bin/yq -i '.all.hosts.localhost.enable_proxy = env(ENABLE_PROXY)' $1/content/inventory.yaml
+ENABLE_PROXY=$4         /usr/local/bin/yq -i '.all.hosts.localhost.enable_proxy = env(ENABLE_PROXY)' $1/content/inventory.yaml
 if [ "$4" = "true" ]; then
     echo "HTTP_PROXY=$5"
-    HTTP_PROXY=$5       /root/go/bin/yq -i '.all.hosts.localhost.http_proxy = env(HTTP_PROXY)' $1/content/inventory.yaml
-    HTTPS_PROXY=$5      /root/go/bin/yq -i '.all.hosts.localhost.https_proxy = env(HTTPS_PROXY)' $1/content/inventory.yaml
+    HTTP_PROXY=$5       /usr/local/bin/yq -i '.all.hosts.localhost.http_proxy = env(HTTP_PROXY)' $1/content/inventory.yaml
+    HTTPS_PROXY=$5      /usr/local/bin/yq -i '.all.hosts.localhost.https_proxy = env(HTTPS_PROXY)' $1/content/inventory.yaml
 else
     echo "No proxy"
 fi

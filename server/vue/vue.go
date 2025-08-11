@@ -20,9 +20,7 @@ func ServeVue(router *gin.Engine, root *gin.RouterGroup) {
 	static.StaticFS("/resource-package", http.Dir(resourceDir))
 
 	router.LoadHTMLGlob(pangeeClusterWebDir + "/**.html")
-	static.StaticFS("/fonts", http.Dir(pangeeClusterWebDir+"/fonts"))
-	static.StaticFS("/js", http.Dir(pangeeClusterWebDir+"/js"))
-	static.StaticFS("/img", http.Dir(pangeeClusterWebDir+"/img"))
+	static.StaticFS("/assets", http.Dir(pangeeClusterWebDir+"/assets"))
 	static.StaticFile("/static/favicon.ico", pangeeClusterWebDir+"/favicon.ico")
 	static.StaticFile("/version.json", pangeeClusterWebDir+"/version.json")
 	static.StaticFile("/index.html", pangeeClusterWebDir+"/index.html")

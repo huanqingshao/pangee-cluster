@@ -37,7 +37,7 @@ func GetInventoryPath(owner_type, owner_name string) string {
 }
 
 func GetPangeeClusterWebDir() string {
-	var pangeeClusterWebDir string = os.Getenv("KUBOARD_SPRAY_WEB_DIR")
+	var pangeeClusterWebDir string = os.Getenv("PANGEE_CLUSTER_WEB_DIR")
 	if pangeeClusterWebDir == "" {
 		dir, _ := os.Getwd()
 		lastindex := strings.LastIndex(dir, "/")
