@@ -1,13 +1,6 @@
-# Use imutable image tags rather than mutable tags (like ubuntu:18.04)
 FROM ubuntu:20.04
 
 ADD .docker/pip.conf /root/.pip/pip.conf
-
-# RUN apt-get update -y \
-#     && apt-get install -y \
-#     libssl-dev python3-dev sshpass apt-transport-https jq moreutils vim \
-#     ca-certificates curl gnupg2 software-properties-common python3-pip unzip rsync git \
-#     && rm -rf /var/lib/apt/lists/*
 
 ENV LANG=C.UTF-8
 ENV TZ=Asia/Shanghai
@@ -43,13 +36,11 @@ COPY .docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.8
 COPY .docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/action/raw.py
 
 ENV PANGEE_CLUSTER_WEB_DIR="/pangee-cluster/ui"
-ENV PANGEE_CLUSTER_PORT=":8080"
+ENV PANGEE_CLUSTER_PORT="8080"
 ENV GIN_MODE=release
 ENV PANGEE_CLUSTER_LOGRUS_LEVEL="info"
 ENV PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL="info"
 ENV TERM=xterm
-
-EXPOSE 8080
 
 COPY ./admin/pangee-cluster-admin pangee-cluster-admin
 COPY ./server/ansible-script ansible-script

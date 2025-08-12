@@ -104,14 +104,14 @@ func main() {
 
 	router := setupRouter()
 
-	port := ":8006"
+	port := "8006"
 
 	logrus.Trace(runtime.GOARCH)
 	if runtime.GOARCH == "aarch64" || runtime.GOARCH == "arm64" {
-		port = ":8007"
+		port = "8007"
 	}
 
-	router.Run(constants.GetEnvDefault("PANGEE_CLUSTER_PORT", port))
+	router.Run(":" + constants.GetEnvDefault("PANGEE_CLUSTER_PORT", port))
 	// s := &http.Server{
 	// 	Addr:         ":8006",
 	// 	Handler:      router,

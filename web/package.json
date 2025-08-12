@@ -68,7 +68,7 @@
     "stylelint-config-standard-scss": "^14.0.0",
     "typescript": "^5.8.2",
     "unplugin-vue-setup-extend-plus": "^1.0.1",
-    "vite": "link:@intlify/unplugin-vue-i18n/vite",
+    "vite": "^7.1.2",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-html": "^3.2.2",
@@ -80,5 +80,6 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
 }
