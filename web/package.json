@@ -68,7 +68,7 @@
     "stylelint-config-standard-scss": "^14.0.0",
     "typescript": "^5.8.2",
     "unplugin-vue-setup-extend-plus": "^1.0.1",
-    "vite": "^7.1.2",
+    "vite": "^6.0.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-html": "^3.2.2",
