@@ -17,6 +17,7 @@ docker run -d \
   -e TZ=Asia/Shanghai \
   -e PANGEE_CLUSTER_PORT=8080 \
   -v ~/pangee-cluster-data:/data \
+  \ # TODO: 修改地址
   eipwork/pangee-cluster:latest-amd64
 ```
 

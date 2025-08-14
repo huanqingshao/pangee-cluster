@@ -19,6 +19,7 @@
 
 ```shell
 # 只克隆保存模板的 main 分支
+# TODO: 修改地址
 git clone -b main --single-branch https://github.com/Horan-Z/test.git
 cd pangee-cluster-resource-package
 ```

@@ -15,6 +15,7 @@ echo ""
 echo "TASK [下载资源包] ****"
 
 if [ "$3" != "null" ]; then
+    # TODO: 修改地址
     git clone -b $2 https://$3/Horan-Z/test.git $1/content
 else
     echo "skip"
