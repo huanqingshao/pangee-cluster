@@ -46,6 +46,13 @@ func setupRouter() *gin.Engine {
 	api.PATCH("/clusters/:cluster", cluster.RenameCluster)
 
 	api.POST("/clusters/:cluster/change_resource_package_version", cluster.ChangeResourcePackageVersion)
+	api.POST("/clusters/:cluster/upgrade_all_nodes", operation_v2.UpgradeCluster)
+	api.POST("/clusters/:cluster/upgrade_master_nodes", operation_v2.UpgradeCluster)
+	api.POST("/clusters/:cluster/upgrade_single_node", operation_v2.UpgradeCluster)
+	api.POST("/clusters/:cluster/upgrade_multi_nodes", operation_v2.UpgradeCluster)
+	api.POST("/clusters/:cluster/download_binaries", operation_v2.DownloadBinaries)
+	api.POST("/clusters/:cluster/drain_node", operation_v2.DrainNode)
+	api.POST("/clusters/:cluster/uncordon_node", operation_v2.UncordonNode)
 
 	api.POST("/clusters/:cluster/operation/:operation/step/:step", operation_v2.ExecuteStep)
 	api.GET("/clusters/:cluster/operation/:operation/step/:step", operation_v2.CheckStepStatus)

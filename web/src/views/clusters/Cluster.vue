@@ -94,7 +94,7 @@ zh:
           @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane v-if="false" :disabled="disableNonePlanTab || !isClusterOnline" :label="t('upgrade')" name="upgrade">
+      <el-tab-pane :label="t('upgrade')" name="upgrade">
         <template v-if="currentTab == 'upgrade'">
           <el-skeleton v-if="loading"></el-skeleton>
           <Upgrade v-else :cluster="cluster" @refresh="refresh"></Upgrade>
@@ -283,12 +283,12 @@ export default {
         .then(async function (resp) {
           _this.cluster = resp.data.data;
           _this.originalInventoryYaml = yaml.dump(_this.cluster.inventory);
-          for (let key in _this.cluster.inventory.all.hosts) {
-            if (_this.cluster.inventory.all.hosts[key].pangeecluster_node_action === "upgrade_node") {
-              _this.currentTab = "upgrade";
-              break;
-            }
-          }
+          // for (let key in _this.cluster.inventory.all.hosts) {
+          //   if (_this.cluster.inventory.all.hosts[key].pangeecluster_node_action === "upgrade_node") {
+          //     _this.currentTab = "upgrade";
+          //     break;
+          //   }
+          // }
           _this.percentage = 30;
           await _this.loadResourcePackage();
           _this.percentage = 40;
@@ -311,11 +311,12 @@ export default {
     },
     stateNodesLoaded(state) {
       if (state.code > 0 && state.etcd_code > 0) {
+        console.log(state)
         this.cluster.state = state;
       }
     },
     async loadStateNodes() {
-      let temp = { nodes: {}, code: 0, etcd_members: {}, etcd_code: 0, addons: {}, addon_code: 0 };
+      let temp = { nodes: {}, code: 0, etcd_members: {}, etcd_code: 0 };
       await this.pangeeClusterApi
         .get(`/clusters/${this.name}/state/nodes`)
         .then(resp => {

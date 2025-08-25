@@ -12,8 +12,6 @@ en:
   downloadFirstCanReplace: Can replace, go download
   change_resource_package_version_success: Succeed in changing resource package version
   change_resource_package_version_failed: Failed to change resource package version {msg}
-
-  not_supported_cm: Container manager not match
 zh:
   title: 选择升级时使用的资源包
   currentVersion: 当前版本
@@ -27,8 +25,6 @@ zh:
   downloadFirstCanReplace: 可替代，去下载
   change_resource_package_version_success: 已成功修改资源包版本
   change_resource_package_version_failed: 修改资源包版本失败 {msg}
-
-  not_supported_cm: 不支持当前容器引擎
 </i18n>
 
 <template>
@@ -46,17 +42,14 @@ zh:
               </el-tag>
               <template v-else-if="scope.row.yaml">
                 <el-tag
-                  v-if="compareVersions(cluster.resourcePackage.data.kubernetes.kube_version, scope.row.yaml.data.kubernetes.kube_version) > 0"
+                  v-if="compareK8sVersion(cluster.resourcePackage) > 0"
                   type="info" effect="dark">
-                  {{ t('cannot_down_grade') }}
+                  {{ $t('cannot_down_grade') }}
                 </el-tag>
                 <template v-else>
                   <el-button icon="el-icon-view" type="primary" plain @click="$refs.comparePackage.show(scope.row)">{{
                     $t('msg.view') }}</el-button>
-                  <template v-if="!matchComponents(scope.row)">
-                    <el-button disabled icon="el-icon-circle-close" type="info">{{ t('not_supported_cm') }}</el-button>
-                  </template>
-                  <template v-else-if="canReplaceBy(scope.row)">
+                  <!-- <template v-if="canReplaceBy(scope.row)">
                     <el-button type="primary" icon="el-icon-download" v-if="!scope.row.isOffline && !scope.row.imported"
                       @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">
                       {{ t('downloadFirstCanReplace') }}
@@ -65,8 +58,8 @@ zh:
                       :message="t('switchToTargetVersionDesc')"
                       @confirm="changeToVersion('replace', scope.row.version)">
                     </confirm-button>
-                  </template>
-                  <template v-else-if="canUpgradeTo(scope.row)">
+                  </template> -->
+                  <template v-if="canUpgrade(scope.row)">
                     <el-button type="primary" icon="el-icon-download" v-if="!scope.row.isOffline && !scope.row.imported"
                       @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">
                       {{ t('downloadFirstCanUpgrade') }}
@@ -122,39 +115,31 @@ export default {
     show() {
       this.dialogVisible = true
     },
-    canUpgradeTo(target) {
-      return this.canTarget(target.yaml.metadata.can_upgrade_from, this.cluster.resourcePackage.metadata.version)
+    compareK8sVersion(target) {
+      let targetVersion = this.getVersion(target)
+      let clusterVersion = this.getVersion(this.cluster.resourcePackage)
+      console.log(targetVersion)
+      return this.compareVersions(clusterVersion, targetVersion)
     },
-    canReplaceBy(target) {
-      return this.canTarget(target.yaml.metadata.can_replace_to, this.cluster.resourcePackage.metadata.version)
+    // 传入yaml
+    getVersion(target) {
+      const k8sComponent = target.data.dependency.find(
+        comp => comp.name === 'kubernetes'
+      )
+      return k8sComponent?.version || undefined
     },
-    matchComponents(target) {
-      let container_manager = this.cluster.inventory.all.children.target.vars.container_manager
-      for (let ce_index in target.yaml.data.container_engine) {
-        if (target.yaml.data.container_engine[ce_index].container_manager == container_manager) {
-          return true
-        }
-      }
-      return false
-    },
-    canTarget(rule, originalVersion) {
-      if (!rule) {
-        return false
-      }
-      for (let k in rule.exclude) {
-        let p = new RegExp('^' + rule.exclude[k] + '$')
-        // console.log('exclude: ', p, ' ', originalVersion, '', p.test(originalVersion))
-        if (p.test(originalVersion)) {
-          return false
-        }
-      }
-      for (let k in rule.include) {
-        let p = new RegExp('^' + rule.include[k] + '$')
-        // console.log('include: ', p, ' ', originalVersion, '', p.test(originalVersion))
-        if (p.test(originalVersion)) {
-          return true
-        }
-      }
+    canUpgrade(target) {
+      let targetVersion = this.getVersion(target.yaml)
+      let clusterVersion = this.getVersion(this.cluster.resourcePackage)
+      console.log(targetVersion)
+
+      const [cMajor, cMinor, cPatch] = clusterVersion.split('.').map(Number)
+      const [tMajor, tMinor, tPatch] = targetVersion.split('.').map(Number)
+      
+      if (tMajor !== cMajor) return false
+      if (tMinor === cMinor + 1) return true
+      if (tMinor === cMinor && tPatch > cPatch) return true
+      
       return false
     },
     changeToVersion(type, targetVersion) {

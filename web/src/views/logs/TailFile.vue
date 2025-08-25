@@ -140,7 +140,8 @@ export default {
     wsUrl() {
       let wsHost = location.host;
       let protocol = location.protocol === "http:" ? "ws:" : "wss:";
-      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") ? "tail-v2" : "tail"}/${this.pid}/${this.file}`;
+      let tail = this.pid.indexOf("/")==-1 ? "tail" : "tail-v2";
+      let str = `${protocol}//${wsHost}${trimSlash(location.pathname)}/api/execute/${this.ownerType}/${this.ownerName}/${tail}/${this.pid}/${this.file}`;
       return str;
     },
     stateStr() {
@@ -189,7 +190,7 @@ export default {
     },
     killProcess() {
       this.pangeeClusterApi
-        .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") ? "kill-v2" : "kill"}/${this.pid}`)
+        .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/")!=-1 ? "kill-v2" : "kill"}/${this.pid}`)
         .then(resp => {
           if (resp.data.code === 200) {
             this.$message.success(this.t("killed"));

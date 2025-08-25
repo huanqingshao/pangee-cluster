@@ -2,19 +2,11 @@
 en:
   versionInResource: Version in installed Resource Package
   componentName: Component Name
-  addon: Addons
-  network_plugin: Cni plugins
-  dependency: Dependencies
-  etcd_cluster: etcd
   target_version: Version in target Resource Package
 
 zh:
   versionInResource: 已安装资源包中的版本
   componentName: 组件名称
-  addon: 可选组件
-  network_plugin: 网络插件
-  dependency: 依赖组件
-  etcd_cluster: etcd
   target_version: 目标资源包中的版本
 </i18n>
 
@@ -79,52 +71,16 @@ export default {
   data() {
     return {
       version: undefined,
-      expanded: ['kubernetes', 'container_engine', 'etcd_cluster', 'network_plugin', 'dependency', 'addon']
+      // expanded: ['kubernetes', 'container_engine', 'etcd_cluster', 'network_plugin', 'dependency', 'addon']
     }
   },
   computed: {
     targetComponents () {
       let result = {}
-      let res = this.target.data
-      let kube_version = res.kubernetes.kube_version
-      let k8s = {
-          'kube-apiserver': kube_version,
-          kubectl: kube_version,
-          kubelet: kube_version,
-          kubeadm: kube_version,
-      }
-      result = Object.assign(result, k8s)
+      let res = this.target.data.dependency
 
-      for (let ce of res.container_engine) {
-        if (ce.container_manager === 'docker') {
-          result.docker = ce.params.docker_version
-          // result.containerd = ce.params.docker_containerd_version
-        } else {
-          result.containerd = ce.params.containerd_version
-        }
-      }
-
-      result.etcd = res.etcd.etcd_version
-      result.etcd_docker = res.etcd.etcd_version
-
-      for (let np of res.network_plugin) {
-        for (let param in np.params) {
-          if (param.indexOf('_version') > 0) {
-            result[param.slice(0, param.length - 8)] = np.params[param]
-          }
-        }
-      }
-      
-      for (let dep of res.dependency) {
-        result[dep.name] = dep.version
-      }
-
-      for (let add of res.addon) {
-        for (let key in add.params) {
-          if (key.indexOf('_version') > 0) {
-            result[add.name] = add.params[key]
-          }
-        }
+      for (let component of res) {
+        result[component.name] = component.version
       }
 
       return result

@@ -213,8 +213,8 @@ func (execute *Execute) exec() {
 			}
 		}
 
-		// 检查集群任务执行结果
-		if execute.OwnerType == "cluster" {
+		// 对于有operation的任务，检查执行结果
+		if execute.OwnerType == "cluster" && strings.Contains(pid, "/") {
 			splited := strings.Split(pid, "/")
 			cssr := CheckStepStatusRequest{
 				Cluster:   execute.OwnerName,
