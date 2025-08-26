@@ -88,7 +88,7 @@ func (execute *Execute) exec() {
 		}
 	}()
 
-	startTime := time.Now().Format(time.RFC3339Nano)
+	startTime := time.Now().Format("2006-01-02_15-04-05.999")
 	pid := startTime + "_" + execute.Type
 	if execute.Pid != "" {
 		pid = execute.Pid
