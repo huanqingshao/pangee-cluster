@@ -13,15 +13,18 @@ PangeeCluster 的在线文档地址为 [https://pangee-cluster.cn](https://pange
 docker run -d \
   --restart=unless-stopped \
   --name=pangee-cluster \
+  --privileged \
   -p 8080:8080/tcp \
   -e TZ=Asia/Shanghai \
   -e PANGEE_CLUSTER_PORT=8080 \
   -v ~/pangee-cluster-data:/data \
   \ # TODO: 修改地址
-  eipwork/pangee-cluster:latest-amd64
+  pangee-cluster:latest-amd64
 ```
 
 ### 可执行文件
+可执行文件方式启动不支持 **资源包下载 & 离线加载资源包**
+ 
 下载 GitHub release 页面的 pangee-cluster-bin 文件，执行如下指令，即可启动 PangeeCluster：
 
 ```sh
