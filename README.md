@@ -13,25 +13,22 @@ PangeeCluster 的在线文档地址为 [https://pangee-cluster.cn](https://pange
 docker run -d \
   --restart=unless-stopped \
   --name=pangee-cluster \
-  --privileged \
   -p 8080:8080/tcp \
-  -e TZ=Asia/Shanghai \
   -e PANGEE_CLUSTER_PORT=8080 \
-  -v ~/pangee-cluster-data:/data \
+  -e TZ=Asia/Shanghai \
+  -v /path/to/data:/data
   \ # TODO: 修改地址
   pangee-cluster:latest-amd64
 ```
 
 ### 可执行文件
-可执行文件方式启动不支持 **资源包下载 & 离线加载资源包**
- 
 下载 GitHub release 页面的 pangee-cluster-bin 文件，执行如下指令，即可启动 PangeeCluster：
 
 ```sh
 /path/to/pangee-cluster-bin \
   -e TZ=Asia/Shanghai \
   -e PANGEE_CLUSTER_PORT=8080 \
-  -v ~/pangee-cluster-data:/data
+  -v /path/to/data:/data
 ```
 
 在浏览器地址栏中输入 `http://这台机器的IP地址:端口号`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 <a href="https://pangee-cluster.cn/guide/install-k8s.html" target="_blank">使用 PangeeCluster 安装 Kubernetes 集群</a>
