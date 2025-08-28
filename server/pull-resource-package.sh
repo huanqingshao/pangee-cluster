@@ -34,8 +34,8 @@ fi
 
 YAML_VERSION=$(/usr/local/bin/yq e '.metadata.version' "$PACKAGE_YAML")
 DIR_NAME=$(basename "$1")
-if [ "$YAML_VERSION" != "$DIR_VERSION" ]; then
-    echo "Version mismatch: YAML version=$YAML_VERSION, Directory version=$DIR_VERSION"
+if [ "$YAML_VERSION" != "$DIR_NAME" ]; then
+    echo "Version mismatch: YAML version=$YAML_VERSION, Directory version=$DIR_NAME"
     
     # 定义目标路径
     PARENT_DIR=$(dirname "$1")
