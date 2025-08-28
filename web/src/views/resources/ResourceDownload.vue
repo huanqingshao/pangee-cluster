@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       form: {
-        downloadFrom: undefined,
+        downloadFrom: '',
         enableProxyOnDownload: false,
         httpProxy: ''
       },
@@ -79,7 +79,7 @@ export default {
       return new Promise((resolve, reject) => {
         let request = {
           package: clone(this.resource.package),
-          downloadFrom: this.source + '.com',
+          downloadFrom: this.source ? this.source + '.com' : 'null',
           enableProxyOnDownload: this.form.enableProxyOnDownload.toString(), // 转为 "true" 或 "false"
           httpProxy: this.form.httpProxy,
           // 只有当值存在时才会添加这些属性
