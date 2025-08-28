@@ -63,7 +63,7 @@ func GetRemoteResource(c *gin.Context) {
 		return
 	}
 
-	requestPath += "/" + req.Name + "/package.yaml?edhjaf=321jkfd"
+	requestPath += "/" + req.Name + "/package.yaml"
 
 	client := &http.Client{}
 	request, err := http.NewRequest("GET", requestPath, nil)
