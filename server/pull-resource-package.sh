@@ -61,11 +61,11 @@ echo ""
 
 echo "TASK [配置代理] ****"
 
-ENABLE_PROXY_ON_DOWNLOAD=$4         /usr/local/bin/yq -i '.all.hosts.localhost.enable_proxy_on_download = env(ENABLE_PROXY_ON_DOWNLOAD)' $1/content/inventory.yaml
+ENABLE_PROXY_ON_DOWNLOAD=$4         /usr/local/bin/yq -i '.all.hosts.localhost.enable_proxy_on_download = env(ENABLE_PROXY_ON_DOWNLOAD)' $TARGET_DIR/content/inventory.yaml
 if [ "$4" = "true" ]; then
     echo "HTTP_PROXY=$5"
-    HTTP_PROXY=$5       /usr/local/bin/yq -i '.all.hosts.localhost.http_proxy = env(HTTP_PROXY)' $1/content/inventory.yaml
-    HTTPS_PROXY=$5      /usr/local/bin/yq -i '.all.hosts.localhost.https_proxy = env(HTTPS_PROXY)' $1/content/inventory.yaml
+    HTTP_PROXY=$5       /usr/local/bin/yq -i '.all.hosts.localhost.http_proxy = env(HTTP_PROXY)' $TARGET_DIR/content/inventory.yaml
+    HTTPS_PROXY=$5      /usr/local/bin/yq -i '.all.hosts.localhost.https_proxy = env(HTTPS_PROXY)' $TARGET_DIR/content/inventory.yaml
 else
     echo "No proxy"
 fi
@@ -74,7 +74,7 @@ echo ""
 
 echo "TASK [执行资源下载脚本] ****"
 
-bash $1/content/download-dependency.sh
+bash $TARGET_DIR/content/download-dependency.sh
 
 echo ""
 
