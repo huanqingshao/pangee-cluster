@@ -72,10 +72,10 @@ const constantRouterMap = [
         props: route => ({ name: route.params.name, mode: route.query.mode })
       },
       {
-        path: 'resources/:source/:name/on_air',
+        path: 'resources/:source/:tag/:file/:version/on_air',
         name: 'ResourceOnAir',
         component: () => import('../views/resources/ResourceOnAir.vue'),
-        props: route => ({ source: route.params.source, name: route.params.name, mode: route.query.mode })
+        props: route => ({ source: route.params.source, version: route.params.version, tag: route.params.tag, file: route.params.file, mode: route.query.mode })
       },
       {
         path: 'profile',

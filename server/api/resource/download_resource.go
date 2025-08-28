@@ -99,9 +99,9 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		Args: func(execute_dir string) []string {
 			return []string{
 				versionDir,
-				version,
+				common.MapGet(downloadReq, "tagName").(string) + "/" + common.MapGet(downloadReq, "fileName").(string),
 				common.MapGet(downloadReq, "downloadFrom").(string),
-				common.MapGet(downloadReq, "enableProxy").(string),
+				common.MapGet(downloadReq, "enableProxyOnDownload").(string),
 				common.MapGet(downloadReq, "httpProxy").(string),
 			}
 		},

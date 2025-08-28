@@ -84,7 +84,7 @@ zh:
                 </router-link>
                 <router-link 
                   v-else 
-                  :to="`/settings/resources/${this.sourceRepo}/${scope.row.version}/on_air`"
+                  :to="`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`"
                 >
                   <el-icon :size="12" style="width: 12px; height: 12px; vertical-align: middle;">
                     <el-icon-link></el-icon-link>
@@ -150,7 +150,7 @@ zh:
                 <template v-else-if="scope.row.yaml">
                   <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
                   <el-tag type="danger" class="app_text_mono">
-                    {{ scope.row.yaml.metadata.kuboard_spray_version.min }}
+                    {{ scope.row.yaml.metadata.pangee_cluster_version.min }}
                   </el-tag>
                 </template>
               </template>
@@ -172,11 +172,11 @@ zh:
                   </template>
                   <template v-else>
                     <el-button type="primary" plain icon="el-icon-view"
-                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.version}/on_air`)">
+                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
                     {{ $t('msg.view') }}
                     </el-button>
                     <el-button type="primary" v-if="scope.row.meetPangeeClusterVersion" icon="el-icon-download"
-                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.version}/on_air`)">
+                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
                     {{ t('import') }}
                     </el-button>
                   </template>
@@ -211,7 +211,7 @@ export default {
         { value: 'github', label: 'github' },
         { value: 'gitee', label: 'gitee' },
       ],
-      sourceRepo: 'gitee',
+      sourceRepo: 'github',
     }
   },
   computed: {
@@ -262,6 +262,7 @@ export default {
         }
       }).then(resp => {
         this.availablePackageList = resp.data.items;
+        console.log(this.availablePackageList)
       }).catch(e => {
         console.log(e);
         this.cannot_reach_online_repository = true;
@@ -292,11 +293,11 @@ export default {
       this.pangeeClusterApi.get(`/resources/local/${packageVersion.version}`).then(resp => {
         this.packageYaml[packageVersion.version] = resp.data.data.package
         packageVersion.yaml = resp.data.data.package
-        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
+        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.pangee_cluster_version.min) >= 0
       })
     },
     loadPackageFromRepository(packageVersion) {
-      this.pangeeClusterApi.get(`/resources/remote/${packageVersion.version}`, {
+      this.pangeeClusterApi.get(`/resources/remote/${packageVersion.tag_name}`, {
         params: { 
           source: this.sourceRepo
         }
@@ -304,7 +305,7 @@ export default {
         const yamlObj = yaml.load(resp.data.data.package)
         this.packageYaml[packageVersion.version] = yamlObj
         packageVersion.yaml = yamlObj
-        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
+        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.pangee_cluster_version.min) >= 0
       })
     }
   }

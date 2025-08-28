@@ -13,14 +13,14 @@ zh:
 
 <template>
   <div>
-    <ControlBar :title="name">
+    <ControlBar :title="version">
       <template v-if="resourcePackage">
         <ResourceDownload v-if="meetVersionRequirement" action="download" :source="source"
-          :resource="{ package: resourcePackage, history: { task_type: 'resource', task_name: name, processing: false, success_tasks: [] } }">
+          :resource="{ package: resourcePackage, tag_name: tag, file_name: file, history: { task_type: 'resource', task_name: version, processing: false, success_tasks: [] } }">
         </ResourceDownload>
         <template v-else>
           <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
-          <el-tag type="danger" class="app_text_mono">{{ resourcePackage.metadata.kuboard_spray_version.min }}</el-tag>
+          <el-tag type="danger" class="app_text_mono">{{ resourcePackage.metadata.pangee_cluster_version.min }}</el-tag>
         </template>
       </template>
     </ControlBar>
@@ -57,14 +57,16 @@ export default {
   breadcrumb() {
     return [
       { label: this.t('resourceList'), to: '/settings/resources' },
-      { label: this.name },
+      { label: this.version },
     ]
   },
   refresh() {
     this.refresh()
   },
   props: {
-    name: { type: String, required: true },
+    tag: { type: String, required: true },
+    file: { type: String, required: true },
+    version: { type: String, required: true },
     mode: { type: String, required: false, default: 'view' },
   },
   data() {
@@ -80,7 +82,7 @@ export default {
       if (this.resourcePackage === undefined) {
         return false
       }
-      return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.kuboard_spray_version.min) >= 0
+      return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.pangee_cluster_version.min) >= 0
     },
   },
   components: { ResourceDetails, ResourceDownload },
@@ -91,7 +93,7 @@ export default {
   methods: {
     async refresh() {
       this.loading = true
-      await this.pangeeClusterApi.get(`/resources/remote/${this.name}`, {
+      await this.pangeeClusterApi.get(`/resources/remote/${this.tag}`, {
         params: { 
           source: this.source
         }
@@ -101,7 +103,7 @@ export default {
         console.log(e)
         this.$message.error('离线环境')
       })
-      await this.pangeeClusterApi.get(`/resources/remote/${this.name}/release_note`, {
+      await this.pangeeClusterApi.get(`/resources/remote/${this.tag}/release_note`, {
         params: { 
           source: this.source
         }

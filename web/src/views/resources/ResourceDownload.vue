@@ -24,9 +24,9 @@ zh:
   >
     <el-form @submit.prevent.stop :model="form" ref="form" label-position="left" label-width="120px">
       <el-form-item :label="t('useProxy')">
-        <el-switch v-model="form.enableProxy" />
+        <el-switch v-model="form.enableProxyOnDownload" />
       </el-form-item>
-      <el-form-item v-if="form.enableProxy" label="Http proxy">
+      <el-form-item v-if="form.enableProxyOnDownload" label="Http proxy">
         <el-input v-model="form.httpProxy" />
       </el-form-item>
     </el-form>
@@ -56,7 +56,7 @@ export default {
     return {
       form: {
         downloadFrom: undefined,
-        enableProxy: false,
+        enableProxyOnDownload: false,
         httpProxy: ''
       },
       sourceRules: [{ required: true, message: this.i18n("selectSource"), trigger: "change" }]
@@ -80,7 +80,9 @@ export default {
         let request = {
           package: clone(this.resource.package),
           downloadFrom: this.source + '.com',
-          enableProxy: this.form.enableProxy.toString(), // 转为 "true" 或 "false"
+          tagName: this.resource.tag_name,
+          fileName: this.resource.file_name,
+          enableProxyOnDownload: this.form.enableProxyOnDownload.toString(), // 转为 "true" 或 "false"
           httpProxy: this.form.httpProxy
         };
         this.pangeeClusterApi
@@ -120,7 +122,7 @@ export default {
 
       try {
         const request = {
-          enableProxy: this.form.enableProxy.toString(),
+          enableProxyOnDownload: this.form.enableProxyOnDownload.toString(),
           httpProxy: this.form.httpProxy
         };
         const formData = new FormData();

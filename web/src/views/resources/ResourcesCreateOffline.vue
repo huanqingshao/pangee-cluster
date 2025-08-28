@@ -88,8 +88,8 @@ export default {
       if (this.resourcePackage === undefined) {
         return false
       }
-      if (this.resourcePackage.metadata && this.resourcePackage.metadata.kuboard_spray_version && this.resourcePackage.metadata.kuboard_spray_version.min) {
-        return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.kuboard_spray_version.min) >= 0
+      if (this.resourcePackage.metadata && this.resourcePackage.metadata.pangee_cluster_version && this.resourcePackage.metadata.pangee_cluster_version.min) {
+        return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.pangee_cluster_version.min) >= 0
       }
       return false
     },
@@ -141,7 +141,7 @@ export default {
         return
       }
       if (!this.meetVersionRequirement) {
-        this.$message.error('PangeeCluster 最低版本要求为：' + this.resourcePackage.metadata.kuboard_spray_version.min + '，当前版本为：' + window.PangeeCluster.version.version)
+        this.$message.error('PangeeCluster 最低版本要求为：' + this.resourcePackage.metadata.pangee_cluster_version.min + '，当前版本为：' + window.PangeeCluster.version.version)
         return
       }
       if (!this.meetArch) {
