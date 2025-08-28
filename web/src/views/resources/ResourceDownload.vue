@@ -80,10 +80,11 @@ export default {
         let request = {
           package: clone(this.resource.package),
           downloadFrom: this.source + '.com',
-          tagName: this.resource.tag_name,
-          fileName: this.resource.file_name,
           enableProxyOnDownload: this.form.enableProxyOnDownload.toString(), // 转为 "true" 或 "false"
-          httpProxy: this.form.httpProxy
+          httpProxy: this.form.httpProxy,
+          // 只有当值存在时才会添加这些属性
+          ...(this.resource.tag_name && { tagName: this.resource.tag_name }),
+          ...(this.resource.file_name && { fileName: this.resource.file_name })
         };
         this.pangeeClusterApi
           .post(`/resources/${request.package.metadata.version}/${this.action}`, request)
