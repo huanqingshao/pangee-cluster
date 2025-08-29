@@ -1,8 +1,10 @@
 package resource
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -29,13 +31,67 @@ func UploadResource(c *gin.Context) {
 		return
 	}
 
-	version := strings.TrimSuffix(file.Filename, ".zip")
-	uploadDir := filepath.Join(constants.GET_DATA_RESOURCE_DIR(), version)
-	os.MkdirAll(uploadDir, 0755)
-	tempFilePath := filepath.Join(uploadDir, "resource-pack.zip")
+	// 创建临时目录保存上传的ZIP文件
+	tempDir, err := os.MkdirTemp("", "resource-upload")
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "failed to create temp directory", err)
+		return
+	}
+	defer os.RemoveAll(tempDir)
+
+	tempFilePath := filepath.Join(tempDir, "resource-pack.zip")
 	err = c.SaveUploadedFile(file, tempFilePath)
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to save file", err)
+		return
+	}
+
+	// 解压ZIP文件
+	unzipDir := filepath.Join(tempDir, strings.TrimSuffix(file.Filename, ".zip"))
+	err = os.MkdirAll(unzipDir, 0755)
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "failed to create unzip directory", err)
+		return
+	}
+
+	// 使用命令行解压
+	unzipCmd := exec.Command("unzip", tempFilePath, "-d", unzipDir)
+	if err := unzipCmd.Run(); err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "failed to unzip file", err)
+		return
+	}
+	defer os.RemoveAll(unzipDir)
+
+	packageYamlPath := filepath.Join(unzipDir, "package.yaml")
+	info, err := os.Stat(packageYamlPath)
+	if err != nil || info.IsDir() {
+		common.HandleError(c, http.StatusInternalServerError, "package.yaml not found in zip root directory", err)
+		return
+	}
+
+	// 使用yq获取版本号
+	yqCmd := exec.Command("yq", "eval", ".metadata.version", packageYamlPath)
+	output, err := yqCmd.Output()
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError, "failed to get version from package.yaml", err)
+		return
+	}
+
+	version := strings.TrimSpace(string(output))
+	if version == "" {
+		common.HandleError(c, http.StatusInternalServerError, "version not found in package.yaml", nil)
+		return
+	}
+
+	uploadDir := filepath.Join(constants.GET_DATA_RESOURCE_DIR(), version)
+	os.MkdirAll(uploadDir, 0755)
+
+	mvCmd := exec.Command("mv", tempFilePath, uploadDir)
+	mvOutput, err := mvCmd.CombinedOutput()
+	if err != nil {
+		common.HandleError(c, http.StatusInternalServerError,
+			fmt.Sprintf("failed to move zip file: %v, output: %s", err, string(mvOutput)),
+			err)
 		return
 	}
 
@@ -81,6 +137,34 @@ func UploadResource(c *gin.Context) {
 			"filename": file.Filename,
 			"size":     file.Size,
 			"pid":      cmd.R_Pid,
+			"version":  version, // 返回获取到的版本号
 		},
 	})
+}
+
+func moveDirContents(src, dst string) error {
+	entries, err := os.ReadDir(src)
+	if err != nil {
+		return err
+	}
+
+	for _, entry := range entries {
+		srcPath := filepath.Join(src, entry.Name())
+		dstPath := filepath.Join(dst, entry.Name())
+
+		if entry.IsDir() {
+			if err := os.MkdirAll(dstPath, 0755); err != nil {
+				return err
+			}
+			if err := moveDirContents(srcPath, dstPath); err != nil {
+				return err
+			}
+			os.RemoveAll(srcPath)
+		} else {
+			if err := os.Rename(srcPath, dstPath); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

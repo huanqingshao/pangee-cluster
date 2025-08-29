@@ -92,12 +92,12 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		return "\n" + message, nil
 	}
 
-	tagName, _ := common.MapGet(downloadReq, "tagName").(string)
+	// tagName, _ := common.MapGet(downloadReq, "tagName").(string)
 	fileName, _ := common.MapGet(downloadReq, "fileName").(string)
-	var path string
-	if tagName != "" && fileName != "" {
-		path = tagName + "/" + fileName
-	}
+	// var path string
+	// if tagName != "" && fileName != "" {
+	// 	path = tagName + "/" + fileName
+	// }
 
 	cmd := command.Execute{
 		OwnerType: "resource",
@@ -106,7 +106,7 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		Args: func(execute_dir string) []string {
 			return []string{
 				versionDir,
-				path,
+				fileName,
 				common.MapGet(downloadReq, "downloadFrom").(string),
 				common.MapGet(downloadReq, "enableProxyOnDownload").(string),
 				common.MapGet(downloadReq, "httpProxy").(string),

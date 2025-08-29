@@ -136,6 +136,7 @@ export default {
         this.pangeeClusterApi
           .post('/resources/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
           .then(resp => {
+            this.resource.history.task_name=resp.data.data.version
             this.$router.replace(`/settings/resources/${this.resource.history.task_name}`);
             this.uploadResolve(resp.data.data.pid);
           })
