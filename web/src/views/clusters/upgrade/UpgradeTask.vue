@@ -64,28 +64,29 @@ zh:
       <el-form-item :label="t('operation')" prop="action" style="margin-top: 10px;">
         <el-radio-group v-model="form.action" class="app_margin_bottom">
           <template v-if="nodeName === undefined">
-            <el-radio-button label="download_binaries" value="download_binaries">
+            <el-radio-button label="download_binaries" value="download_binaries"
+              :disabled="!downloadBinaries">
               {{ t('download_binaries') }}
             </el-radio-button>
             <el-radio-button label="upgrade_all_nodes" value="upgrade_all_nodes"
-              :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
+              :disabled="!controlPlanePendingUpgrade || downloadBinaries">
               {{ t('upgrade_all_nodes') }}
             </el-radio-button>
             <el-radio-button label="upgrade_master_nodes" value="upgrade_master_nodes"
-              :disabled="requireSeparateDownloadAction || !controlPlanePendingUpgrade">
+              :disabled="!controlPlanePendingUpgrade || downloadBinaries">
               {{ t('upgrade_master_nodes') }}
             </el-radio-button>
             <el-radio-button label="upgrade_multi_nodes" value="upgrade_multi_nodes"
-              :disabled="requireSeparateDownloadAction || controlPlanePendingUpgrade">{{ t('upgrade_multi_nodes') }}</el-radio-button>
+              :disabled="controlPlanePendingUpgrade || downloadBinaries">{{ t('upgrade_multi_nodes') }}</el-radio-button>
           </template>
           <template v-else>
             <el-radio-button label="drain_node" value="drain_node"
               v-if="cluster.resourcePackage.data.supported_playbooks.drain_node"
-              :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
+              :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === 'v' + cluster.resourcePackage.data.dependency[0].version">
               {{ t('drain_node', { nodeName }) }}
             </el-radio-button>
             <el-radio-button label="upgrade_single_node" value="upgrade_single_node"
-              :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === cluster.resourcePackage.data.kubernetes.kube_version">
+              :disabled="cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion === 'v' + cluster.resourcePackage.data.dependency[0].version">
               {{ t('upgrade_single_node', { nodeName }) }}
             </el-radio-button>
             <el-radio-button label="uncordon_node" value="uncordon_node"
@@ -151,6 +152,7 @@ zh:
 </template>
 
 <script>
+import UpgradeClusterTask from '../../common/task/UpgradeClusterTask.vue'
 import ClusterTask from '../../common/task/ClusterTask.vue'
 
 function trimMark(str) {
@@ -165,19 +167,21 @@ export default {
     cluster: { type: Object, required: true },
     nodeName: { type: String, required: false, default: undefined },
     controlPlanePendingUpgrade: { type: Boolean, required: false, default: true },
+    downloadBinaries: { type: Boolean, required: false, default: true },
   },
   data() {
     return {
       loading: false,
       form: {
         action: 'upgrade_master_nodes',
+        step: undefined,
         kube_nodes_to_upgrade: [],
         skip_downloads: false,
         drain_node: {
         },
       },
       kube_nodes_to_upgrade_rules: [
-        { required: true, message: this.t('upgrade_multi_nodes_desc') }
+        { required: true, message: this.$t('upgrade_multi_nodes_desc') }
       ],
       pods_on_node: undefined,
     }
@@ -199,7 +203,7 @@ export default {
       return false
     },
   },
-  components: { ClusterTask },
+  components: { UpgradeClusterTask, ClusterTask },
   emits: ['refresh'],
   mounted() {
     this.setAction()
@@ -222,6 +226,7 @@ export default {
     },
     setAction() {
       if (!this.controlPlanePendingUpgrade) {
+        var resourcePackageVersion = "v" + this.cluster.resourcePackage.data.dependency[0].version
         if (this.nodeName === undefined) {
           this.form.action = 'upgrade_multi_nodes'
           this.form.skip_downloads = false
@@ -231,7 +236,7 @@ export default {
           if (this.cluster.state.nodes[this.nodeName].spec.unschedulable) {
             this.form.action = 'upgrade_single_node'
           }
-          if (this.cluster.state.nodes[this.nodeName].status.nodeInfo.kubeletVersion === this.cluster.resourcePackage.data.kubernetes.kube_version) {
+          if (this.cluster.state.nodes[this.nodeName].status.nodeInfo.kubeletVersion == resourcePackageVersion) {
             this.form.action = 'uncordon_node'
           }
           this.form.drain_node = {}

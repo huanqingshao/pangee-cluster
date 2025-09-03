@@ -8,7 +8,6 @@ import (
 	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
 	"github.com/opencmit/pangee-cluster/api/command"
 	"github.com/opencmit/pangee-cluster/common"
-	"github.com/sirupsen/logrus"
 )
 
 type ChangeVersionRequest struct {
@@ -46,20 +45,12 @@ func ChangeResourcePackageVersion(c *gin.Context) {
 	common.MapSet(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package_previous", common.MapGetString(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package"))
 	common.MapSet(metadata.Inventory, "all.hosts.localhost.pangeecluster_resource_package", req.TargetVersion)
 
-	netmanager := common.MapGetString(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.kube_network_plugin")
-
-	if netmanager == "calico" && (common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_ipip_mode") == nil ||
-		common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_vxlan_mode") == nil ||
-		common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_network_backend") == nil) {
+	if common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_ippool_vxlan") == nil {
 		shellReq1 := command.AnsibleCommandsRequest{
 			Name:    "calico",
-			Command: `calicoctl.sh get ipPool default-pool -o json`,
+			Command: `kubectl get ippools.crd.projectcalico.org default-ipv4-ippool -o json`,
 		}
-		shellReq2 := command.AnsibleCommandsRequest{
-			Name:    "calico",
-			Command: `kubectl get cm -n kube-system calico-config -o json`,
-		}
-		shellResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", req.Cluster, "kube_control_plane[0]", []command.AnsibleCommandsRequest{shellReq1, shellReq2})
+		shellResult, err := command.ExecuteShellCommandsAbortOnFirstSuccess("cluster", req.Cluster, "kube_control_plane[0]", []command.AnsibleCommandsRequest{shellReq1})
 		if err != nil {
 			common.HandleError(c, http.StatusInternalServerError, "failed to get calico status", err)
 			return
@@ -67,37 +58,11 @@ func ChangeResourcePackageVersion(c *gin.Context) {
 		stdout := shellResult[0].StdOut
 		calicoIpPool := map[string]interface{}{}
 		if err := json.Unmarshal([]byte(stdout), &calicoIpPool); err == nil {
-			ipipMode := common.MapGetString(calicoIpPool, "spec.ipipMode")
 			vxlanMode := common.MapGetString(calicoIpPool, "spec.vxlanMode")
-			common.MapSet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_ipip_mode", ipipMode)
-			common.MapSet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_vxlan_mode", vxlanMode)
+			common.MapSet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_ippool_vxlan", vxlanMode)
 		} else {
 			common.HandleError(c, http.StatusInternalServerError, "failed to parse calicoIpPool", err)
 			return
-		}
-
-		stdout2 := shellResult[1].StdOut
-		calicoBackend := map[string]interface{}{}
-		if err := json.Unmarshal([]byte(stdout2), &calicoBackend); err == nil {
-			calico_network_backend := common.MapGetString(calicoBackend, "data.calico_backend")
-			common.MapSet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars.calico_network_backend", calico_network_backend)
-		} else {
-			common.HandleError(c, http.StatusInternalServerError, "failed to parse calico_network_backend", err)
-			return
-		}
-
-	}
-
-	addons := common.MapGet(metadata.ResourcePackage, "data.addon").([]interface{})
-	for _, addon := range addons {
-		addonMap := addon.(map[string]interface{})
-		targetName := common.MapGetString(addonMap, "target")
-
-		if common.MapGet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars."+targetName) == nil {
-			logrus.Trace("设置变量： all.children.target.children.k8s_cluster.vars." + targetName + " 为 false")
-			common.MapSet(metadata.Inventory, "all.children.target.children.k8s_cluster.vars."+targetName, false)
-		} else {
-			logrus.Trace("已经设置变量： all.children.target.children.k8s_cluster.vars." + targetName)
 		}
 	}
 

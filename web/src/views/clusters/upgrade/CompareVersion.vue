@@ -2,23 +2,17 @@
 en:
   versionInResource: Version in Resource Package
   componentName: Component Name
-  addon: Addons
-  network_plugin: Cni plugins
-  dependency: Dependencies
-  etcd_cluster: etcd
   loading: Loading versions installed on nodes
   command_for_version: Command
   cordoned: Cordoned
+  nodeName: Node
 zh:
   versionInResource: 资源包中的版本
   componentName: 组件名称
-  addon: 可选组件
-  network_plugin: 网络插件
-  dependency: 依赖组件
-  etcd_cluster: etcd
   loading: 查询节点上已安装的版本
   command_for_version: 查询命令
   cordoned: 已暂停调度
+  nodeName: 节点名称
 </i18n>
 
 
@@ -33,7 +27,7 @@ zh:
           </div>
         </template>
         <template #default="scope">
-          <div class="app_text_mono component_name nowrap">{{ t(scope.row.name) }}</div>
+          <div class="app_text_mono component_name nowrap">{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="version" :label="t('versionInResource')" width="120" fixed>
@@ -70,13 +64,13 @@ zh:
             </div>
           </template>
           <template #default="scope">
-            <template v-if="scope.row.name === 'kubernetes'">
+            <!-- <template v-if="scope.row.name === 'kubernetes'">
               <template v-if="cluster.state.nodes[nodeName]">
                 <el-tag v-if="cluster.state.nodes[nodeName].spec.unschedulable" type="danger" effect="dark">{{
                   t('cordoned') }}</el-tag>
               </template>
-            </template>
-            <template v-else-if="nodeVersion[scope.row.name]">
+            </template> -->
+            <template v-if="nodeVersion[scope.row.name]">
               <el-tag v-if="nodeVersion[scope.row.name].skipped" type="info">skipped</el-tag>
               <el-tooltip v-else-if="nodeVersion[scope.row.name].unreachable" trigger="hover" placement="top"
                 width="420">
@@ -85,12 +79,10 @@ zh:
                   <pre style="margin: 0 10px; width: 450px;">{{ nodeVersion[scope.row.name].msg }}</pre>
                 </template>
               </el-tooltip>
-              <el-tag v-else-if="nodeVersion[scope.row.name].stdout === scope.row.version" type="success">{{
+              <el-tag v-else-if="nodeVersion[scope.row.name].stdout == scope.row.version" type="success">{{
                 nodeVersion[scope.row.name].stdout }}</el-tag>
-              <el-tag v-else-if="nodeVersion[scope.row.name].stdout"
-                :type="scope.row.name === 'docker' && nodeVersion[scope.row.name].stdout.indexOf(scope.row.version) === 0 ? 'success' : 'danger'">
-                {{ nodeVersion[scope.row.name].stdout }}
-              </el-tag>
+              <el-tag v-else-if="nodeVersion[scope.row.name].stdout != scope.row.version && nodeVersion[scope.row.name].stdout != ''" type="danger">{{
+                nodeVersion[scope.row.name].stdout }}</el-tag>
               <el-tooltip v-else-if="nodeVersion[scope.row.name].stderr" trigger="hover" placement="top" width="420">
                 <el-tag type="danger" effect="dark" style="cursor: pointer">error</el-tag>
                 <template #content>
@@ -133,7 +125,7 @@ export default {
   },
   data() {
     return {
-      expanded: ['kubernetes', 'container_engine', 'etcd_cluster', 'network_plugin', 'dependency', 'addon']
+      // expanded: ['kubernetes', 'container_engine', 'etcd_cluster', 'network_plugin', 'dependency', 'addon']
     }
   },
   computed: {
@@ -152,6 +144,7 @@ export default {
   },
   methods: {
     showUpgradeButton(nodeName) {
+      var resourcePackageVersion = "v" + this.cluster.resourcePackage.data.dependency[0].version
       if (this.cluster.history.processing) {
         return false
       }
@@ -166,7 +159,7 @@ export default {
         if (this.cluster.state.nodes[nodeName].spec.unschedulable) {
           return true
         }
-        return this.cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion !== this.cluster.resourcePackage.data.kubernetes.kube_version
+        return this.cluster.state.nodes[nodeName].status.nodeInfo.kubeletVersion != resourcePackageVersion
       }
       return false
     }

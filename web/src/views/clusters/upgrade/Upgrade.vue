@@ -23,7 +23,9 @@ zh:
             <span style="margin-right: 20px;">{{ resource.metadata.version }}</span>
             <template v-if="!cluster.history.processing">
               <UpgradeTask v-if="pendingUpgrade" :cluster="cluster"
-                :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></UpgradeTask>
+                :controlPlanePendingUpgrade="controlPlanePendingUpgrade"
+                :downloadBinaries="downloadBinaries"
+                @refresh="$emit('refresh')"></UpgradeTask>
               <template v-else>
                 <el-button type="danger" icon="el-icon-upload" @click="$refs.choose.show()"
                   style="margin-left: 20px;">{{ t('chooseNewResourcePackage') }}</el-button>
@@ -47,15 +49,7 @@ zh:
         </el-form-item>
       </el-form>
     </div>
-    <el-alert
-      v-if="resource.data.supported_playbooks['cluster_version_' + cluster.inventory.all.children.target.vars.container_manager] === undefined"
-      type="warning" :closable="false">
-      {{ t('not_support_cluster_version') }}
-    </el-alert>
-    <el-alert v-else-if="errMsg" type="error" :closable="false">
-      <pre>{{ errMsg }}</pre>
-    </el-alert>
-    <CompareVersion v-else :cluster="cluster" :version="version"
+    <CompareVersion :cluster="cluster" :version="version"
       :controlPlanePendingUpgrade="controlPlanePendingUpgrade" @refresh="$emit('refresh')"></CompareVersion>
     <ChooseNewResourcePackage ref="choose" :cluster="cluster" @refresh="$emit('refresh')"></ChooseNewResourcePackage>
   </el-scrollbar>
@@ -100,6 +94,24 @@ export default {
       }
       return false
     },
+    downloadBinaries() {
+      for (let key in this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts) {
+        if (this.cluster.inventory.all.hosts[key].pangeecluster_require_download === true) {
+          return true
+        }
+      }
+      for (let key in this.cluster.inventory.all.children.target.children.etcd.hosts) {
+        if (this.cluster.inventory.all.hosts[key].pangeecluster_require_download === true) {
+          return true
+        }
+      }
+      for (let key in this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_node.hosts) {
+        if (this.cluster.inventory.all.hosts[key].pangeecluster_require_download === true) {
+          return true
+        }
+      }
+      return false
+    },
     resource() {
       return this.cluster.resourcePackage
     }
@@ -110,9 +122,6 @@ export default {
   },
   methods: {
     async loadClusterVersion() {
-      if (this.resource.data.supported_playbooks['cluster_version_' + this.cluster.inventory.all.children.target.vars.container_manager] === undefined) {
-        return
-      }
       this.loading = true
       this.errMsg = undefined
       await this.pangeeClusterApi.get(`/clusters/${this.cluster.name}/state/version`).then(resp => {

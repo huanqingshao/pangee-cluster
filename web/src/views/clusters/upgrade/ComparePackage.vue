@@ -1,11 +1,9 @@
 <i18n>
 en:
-  releaseNote: Release Note
   content: Resource Package Content
   compare: Compare installed version with target
   compareTitle: Compare Resource Packages
 zh:
-  releaseNote: 版本说明
   content: 资源包内容
   compare: 对比已安装版本与目标版本
   compareTitle: 对比资源包：
@@ -31,12 +29,6 @@ zh:
         <el-tabs v-if="releaseNoteHtml" v-model="activeName" type="card">
           <el-tab-pane :label="t('compare')" name="compare">
             <ComparePackageTable :cluster="cluster" :target="target.yaml"></ComparePackageTable>
-          </el-tab-pane>
-          <el-tab-pane :label="t('releaseNote')" name="releaseNote">
-            <el-scrollbar height="calc(90vh - 245px)">
-              <el-skeleton v-if="releaseNoteLoading"></el-skeleton>
-              <div v-else-if="releaseNoteHtml" v-html="releaseNoteHtml" class="markdown"></div>
-            </el-scrollbar>
           </el-tab-pane>
           <el-tab-pane :label="t('content')" name="content">
             <el-scrollbar height="calc(90vh - 245px)">

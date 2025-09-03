@@ -28,6 +28,10 @@ func GetNodes(c *gin.Context) {
 		return
 	}
 
+	stdOut, stdOutObj := IPLink(shellResult[0].StdOut, request.ClusterName)
+	shellResult[0].StdOut = stdOut
+	shellResult[0].StdOutObj = stdOutObj
+
 	c.JSON(http.StatusOK, common.PangeeClusterResponse{
 		Code:    http.StatusOK,
 		Message: "success",

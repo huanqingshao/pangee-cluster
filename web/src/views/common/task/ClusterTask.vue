@@ -121,7 +121,7 @@ export default {
         nodes_to_exclude: [],
       },
       min_resource_package_version_rules: [
-        { required: true, message: this.i18n('newResourcePackageRequired') }
+        { required: false, message: this.i18n('newResourcePackageRequired') }
       ],
       pingpong: {},
       pingpong_loading: true,
