@@ -49,7 +49,23 @@ zh:
         <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://pangee-cluster.cn/support" type="danger"
           style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
         </PangeeClusterLink>
-        <ResourcesCreateOffline class="app_margin_top"></ResourcesCreateOffline>
+        <el-select
+          v-model="sourceRepo"
+          size="small"
+          style="width: 120px; margin-right: 10px"
+          @change="refresh"
+        >
+          <el-option
+            v-for="item in repoOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+          <ResourceDownload class="app_margin_top"
+            :resource="{ history: { task_type: 'resource', task_name: '', processing: false, success_tasks: [] } }"
+            action="upload">
+          </ResourceDownload>
       </div>
       <div class="contentList">
         <el-table ref="table" v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%" row-key="version">
@@ -66,7 +82,10 @@ zh:
                   </el-icon>
                   {{ scope.row.version }}
                 </router-link>
-                <router-link v-else :to="`/settings/resources/${scope.row.version}/on_air`">
+                <router-link 
+                  v-else 
+                  :to="`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`"
+                >
                   <el-icon :size="12" style="width: 12px; height: 12px; vertical-align: middle;">
                     <el-icon-link></el-icon-link>
                   </el-icon>
@@ -131,7 +150,7 @@ zh:
                 <template v-else-if="scope.row.yaml">
                   <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
                   <el-tag type="danger" class="app_text_mono">
-                    {{ scope.row.yaml.metadata.kuboard_spray_version.min }}
+                    {{ scope.row.yaml.metadata.pangee_cluster_version.min }}
                   </el-tag>
                 </template>
               </template>
@@ -153,11 +172,13 @@ zh:
                   </template>
                   <template v-else>
                     <el-button type="primary" plain icon="el-icon-view"
-                      @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ $t('msg.view')
-                      }}</el-button>
+                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
+                    {{ $t('msg.view') }}
+                    </el-button>
                     <el-button type="primary" v-if="scope.row.meetPangeeClusterVersion" icon="el-icon-download"
-                      @click="$router.push(`/settings/resources/${scope.row.version}/on_air`)">{{ t('import')
-                      }}</el-button>
+                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
+                    {{ t('import') }}
+                    </el-button>
                   </template>
                 </template>
               </template>
@@ -171,11 +192,10 @@ zh:
 </template>
 
 <script>
-import axios from 'axios'
 import yaml from 'js-yaml'
 import ResourcesCreateOffline from './ResourcesCreateOffline.vue'
 import compareVersions from 'compare-versions'
-import repositoryPrefix from './repository_prefix.js'
+import ResourceDownload from './ResourceDownload.vue'
 
 export default {
   props: {
@@ -187,6 +207,11 @@ export default {
       importedPackageMap: {},
       packageYaml: {},
       cannot_reach_online_repository: false,
+      repoOptions: [
+        { value: 'github', label: 'github' },
+        { value: 'gitee', label: 'gitee' },
+      ],
+      sourceRepo: 'github',
     }
   },
   computed: {
@@ -212,7 +237,7 @@ export default {
       return result
     },
   },
-  components: { ResourcesCreateOffline },
+  components: { ResourcesCreateOffline, ResourceDownload },
   mounted() {
     this.refresh()
   },
@@ -229,14 +254,19 @@ export default {
     async refresh() {
       this.importedPackageMap = {}
       this.availablePackageList = undefined
+      this.packageYaml = {}
       this.cannot_reach_online_repository = false
-      await axios.get(`${repositoryPrefix()}/package-list.yaml?nocache=${new Date().getTime()}`).then(resp => {
-        this.availablePackageList = yaml.load(resp.data).items
+      await this.pangeeClusterApi.get('/resources/package-list', {
+        params: {
+          source: this.sourceRepo,
+        }
+      }).then(resp => {
+        this.availablePackageList = resp.data.items;
+        console.log(this.availablePackageList)
       }).catch(e => {
-        console.log(e)
-        // this.$message.error('离线环境')
-        this.cannot_reach_online_repository = true
-      })
+        console.log(e);
+        this.cannot_reach_online_repository = true;
+      });
       await this.pangeeClusterApi.get(`/resources`).then(resp => {
         for (let i in resp.data.data) {
           this.importedPackageMap[resp.data.data[i]] = true
@@ -260,22 +290,22 @@ export default {
       }
     },
     loadPackageLocal(packageVersion) {
-      this.pangeeClusterApi.get(`/resources/${packageVersion.version}`).then(resp => {
+      this.pangeeClusterApi.get(`/resources/local/${packageVersion.version}`).then(resp => {
         this.packageYaml[packageVersion.version] = resp.data.data.package
         packageVersion.yaml = resp.data.data.package
-        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
+        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.pangee_cluster_version.min) >= 0
       })
     },
     loadPackageFromRepository(packageVersion) {
-      axios.get(`${repositoryPrefix()}/${packageVersion.version}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
-        setTimeout(() => {
-          let temp = yaml.load(resp.data)
-          this.packageYaml[packageVersion.version] = temp
-          packageVersion.yaml = temp
-          packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.kuboard_spray_version.min) >= 0
-        }, 500)
-      }).catch(e => {
-        this.$message.error(e + '')
+      this.pangeeClusterApi.get(`/resources/remote/${packageVersion.tag_name}`, {
+        params: { 
+          source: this.sourceRepo
+        }
+      }).then(resp => {
+        const yamlObj = yaml.load(resp.data.data.package)
+        this.packageYaml[packageVersion.version] = yamlObj
+        packageVersion.yaml = yamlObj
+        packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.pangee_cluster_version.min) >= 0
       })
     }
   }

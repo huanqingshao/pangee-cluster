@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/opencmit/pangee-cluster/common"
@@ -20,7 +20,7 @@ func ListResources(c *gin.Context) {
 		common.HandleError(c, http.StatusInternalServerError, "cannot create folder: "+constants.GET_DATA_RESOURCE_DIR(), err2)
 		return
 	}
-	fileInfoList, err := ioutil.ReadDir(constants.GET_DATA_RESOURCE_DIR())
+	fileInfoList, err := os.ReadDir(constants.GET_DATA_RESOURCE_DIR())
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "cannot read folder: "+constants.GET_DATA_RESOURCE_DIR(), err)
 		return
