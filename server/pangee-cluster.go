@@ -88,9 +88,13 @@ func setupRouter() *gin.Engine {
 	api.DELETE("/private-keys/:owner_type/:owner_name/:name", private_key.DeletePrivateKey)
 
 	api.GET("/resources", resource.ListResources)
-	api.GET("/resources/:name", resource.GetResource)
-	api.GET("/resources/:name/release_note", resource.GetResourceReleaseNote)
+	api.GET("/resources/package-list", resource.GetPackageList)
+	api.GET("/resources/local/:name", resource.GetLocalResource)
+	api.GET("/resources/local/:name/release_note", resource.GetLocalResourceReleaseNote)
+	api.GET("/resources/remote/:name", resource.GetRemoteResource)
+	api.GET("/resources/remote/:name/release_note", resource.GetRemoteResourceReleaseNote)
 	api.POST("/resources/:name/download", resource.CreateAndDownloadResource)
+	api.POST("/resources/upload", resource.UploadResource)
 	api.POST("/resources/:name/reload", resource.ReloadResource)
 	api.DELETE("/resources/:name", resource.DeleteResource)
 
@@ -107,14 +111,14 @@ func main() {
 
 	router := setupRouter()
 
-	port := ":8006"
+	port := "8006"
 
 	logrus.Trace(runtime.GOARCH)
 	if runtime.GOARCH == "aarch64" || runtime.GOARCH == "arm64" {
-		port = ":8007"
+		port = "8007"
 	}
 
-	router.Run(constants.GetEnvDefault("KUBOARD_SPRAY_PORT", port))
+	router.Run(":" + constants.GetEnvDefault("PANGEE_CLUSTER_PORT", port))
 	// s := &http.Server{
 	// 	Addr:         ":8006",
 	// 	Handler:      router,
@@ -132,7 +136,7 @@ func initLogrus() {
 	logrus.SetReportCaller(true)
 	logrus.SetOutput(os.Stdout)
 
-	value := os.Getenv("KUBOARD_SPRAY_LOGRUS_LEVEL")
+	value := os.Getenv("PANGEE_CLUSTER_LOGRUS_LEVEL")
 	if value == "" {
 		value = "trace"
 	}
@@ -141,7 +145,7 @@ func initLogrus() {
 		fmt.Println("设置日志级别为 " + value)
 		logrus.SetLevel(level)
 	} else {
-		fmt.Println("请检查 KUBOARD_SPRAY_LOGRUS_LEVEL 的值，可选的有 panic / fatal / error / warn / info / debug / trace ，当前为： " + value)
+		fmt.Println("请检查 PANGEE_CLUSTER_LOGRUS_LEVEL 的值，可选的有 panic / fatal / error / warn / info / debug / trace ，当前为： " + value)
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 

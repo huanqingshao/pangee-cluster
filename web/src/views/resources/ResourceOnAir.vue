@@ -13,14 +13,14 @@ zh:
 
 <template>
   <div>
-    <ControlBar :title="name">
+    <ControlBar :title="version">
       <template v-if="resourcePackage">
-        <ResourceDownload v-if="meetVersionRequirement" action="download"
-          :resource="{ package: resourcePackage, history: { task_type: 'resource', task_name: name, processing: false, success_tasks: [] } }">
+        <ResourceDownload v-if="meetVersionRequirement" action="download" :source="source"
+          :resource="{ package: resourcePackage, tag_name: tag, file_name: file, history: { task_type: 'resource', task_name: version, processing: false, success_tasks: [] } }">
         </ResourceDownload>
         <template v-else>
           <el-tag type="danger" effect="dark">{{ t('minVersionRequired') }}</el-tag>
-          <el-tag type="danger" class="app_text_mono">{{ resourcePackage.metadata.kuboard_spray_version.min }}</el-tag>
+          <el-tag type="danger" class="app_text_mono">{{ resourcePackage.metadata.pangee_cluster_version.min }}</el-tag>
         </template>
       </template>
     </ControlBar>
@@ -45,11 +45,9 @@ zh:
 <script>
 import mixin from '../../mixins/mixin.js'
 import ResourceDetails from './details/ResourceDetails.vue'
-import axios from 'axios'
 import yaml from 'js-yaml'
 import ResourceDownload from './ResourceDownload.vue'
 import compareVersions from 'compare-versions'
-import repositoryPrefix from './repository_prefix.js'
 
 export default {
   mixins: [mixin],
@@ -59,14 +57,16 @@ export default {
   breadcrumb() {
     return [
       { label: this.t('resourceList'), to: '/settings/resources' },
-      { label: this.name },
+      { label: this.version },
     ]
   },
   refresh() {
     this.refresh()
   },
   props: {
-    name: { type: String, required: true },
+    tag: { type: String, required: true },
+    file: { type: String, required: true },
+    version: { type: String, required: true },
     mode: { type: String, required: false, default: 'view' },
   },
   data() {
@@ -74,6 +74,7 @@ export default {
       resourcePackage: undefined,
       releaseNote: undefined,
       loading: false,
+      source: this.$route.params.source,
     }
   },
   computed: {
@@ -81,24 +82,33 @@ export default {
       if (this.resourcePackage === undefined) {
         return false
       }
-      return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.kuboard_spray_version.min) >= 0
+      return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.pangee_cluster_version.min) >= 0
     },
   },
   components: { ResourceDetails, ResourceDownload },
   mounted() {
+
     this.refresh()
   },
   methods: {
     async refresh() {
       this.loading = true
-      await axios.get(`${repositoryPrefix()}/${this.name}/package.yaml?nocache=${new Date().getTime()}`).then(resp => {
-        this.resourcePackage = yaml.load(resp.data)
+      await this.pangeeClusterApi.get(`/resources/remote/${this.tag}`, {
+        params: { 
+          source: this.source
+        }
+      }).then(resp => {
+        this.resourcePackage = yaml.load(resp.data.data.package)
       }).catch(e => {
         console.log(e)
         this.$message.error('离线环境')
       })
-      await axios.get(`${repositoryPrefix()}//${this.name}/release.md?nocache=${new Date().getTime()}`).then(resp => {
-        this.releaseNote = resp.data
+      await this.pangeeClusterApi.get(`/resources/remote/${this.tag}/release_note`, {
+        params: { 
+          source: this.source
+        }
+      }).then(resp => {
+        this.releaseNote = resp.data.data.release_note
       }).catch(e => {
         console.log(e)
       })

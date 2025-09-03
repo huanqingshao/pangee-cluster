@@ -65,7 +65,7 @@ meta:
 
   ![web](./dev.assets/iShot_2022-08-06_20.21.03.png)
 
-- 在集成终端中（kuboard/web 路径下）执行命令：
+- 在集成终端中（pangee-cluster/web 路径下）执行命令：
 
   ```sh
   pnpm install
@@ -118,21 +118,28 @@ meta:
 - 在集成终端中（pangee-cluster/web 路径下）执行命令：
 
   ```sh
-  pnpm serve
+  pnpm dev
   ```
 
 - 在浏览器打开如下路径
 
-  `http://localhost:25702`（如果是 amd64 CPU）
-  或 `http://localhost:25703` （如果是 arm64 CPU）。
+  `http://localhost:8848`
 
-- 在登录界面中输入默认用户名 `admin`，默认密码 `Kuboard123`，可登录到 PangeeCluster 的界面。
+- 在登录界面中输入默认用户名 `admin`，默认密码 `PangeeCluster123`，可登录到 PangeeCluster 的界面。
 
 ## 构建容器镜像
 
 构建容器镜像时，只需要在开发环境的 `pangee-cluster` 目录中执行如下命令
 
 ```sh
-./build.sh v1.2.0 no_push
-# 其中 v1.2.0 为本次构建时的版本号，no_push 参数代表只生成镜像，不推送到镜像仓库
+./build.sh v1.2.5
+# 其中 v1.2.5 为本次构建时的版本号
 ```
+
+## 发布资源包
+
+将打包好的资源包 zip 上传至 github release 并选定 tag 即可，余下步骤由 github action 自动完成
+
+**请确保压缩包文件名(去除.zip)与 package.yaml 中的version名一致**
+
+**如不一致，用户手动下载压缩包然后加载本地资源包时会出现问题，用户直接在线下载资源包不会出现问题**

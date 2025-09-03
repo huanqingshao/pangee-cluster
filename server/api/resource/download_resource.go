@@ -2,7 +2,6 @@ package resource
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -68,7 +67,7 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		}
 	}
 	if !pkgExists {
-		if err := ioutil.WriteFile(versionDir+"/package.yaml", pkg, 0655); err != nil {
+		if err := os.WriteFile(versionDir+"/package.yaml", pkg, 0655); err != nil {
 			common.HandleError(c, http.StatusInternalServerError, "Write package.yaml failed. ", err)
 			return
 		}
@@ -93,12 +92,25 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		return "\n" + message, nil
 	}
 
+	// tagName, _ := common.MapGet(downloadReq, "tagName").(string)
+	fileName, _ := common.MapGet(downloadReq, "fileName").(string)
+	// var path string
+	// if tagName != "" && fileName != "" {
+	// 	path = tagName + "/" + fileName
+	// }
+
 	cmd := command.Execute{
 		OwnerType: "resource",
 		OwnerName: version,
 		Cmd:       "./pull-resource-package.sh",
 		Args: func(execute_dir string) []string {
-			return []string{common.MapGet(downloadReq, "downloadFrom").(string) + ":" + version}
+			return []string{
+				versionDir,
+				fileName,
+				common.MapGet(downloadReq, "downloadFrom").(string),
+				common.MapGet(downloadReq, "enableProxyOnDownload").(string),
+				common.MapGet(downloadReq, "httpProxy").(string),
+			}
 		},
 		Type:     "download",
 		PostExec: postExec,

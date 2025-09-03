@@ -34,7 +34,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="package.metadata.kuboard_spray_version.min" label="PangeeCluster最低版本"
+        <el-table-column prop="package.metadata.pangee_cluster_version.min" label="PangeeCluster最低版本"
           width="170px"></el-table-column>
         <el-table-column label="操 作">
           <template #default="data">

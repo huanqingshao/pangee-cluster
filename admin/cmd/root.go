@@ -30,7 +30,7 @@ func Execute() {
 func init() {
 
 	logrus.SetFormatter(new(KuboardLogFormatter))
-	value := os.Getenv("KUBOARD_SPRAY_ADMIN_LOGRUS_LEVEL")
+	value := os.Getenv("PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL")
 	if value == "" {
 		value = "info"
 	}
@@ -39,7 +39,7 @@ func init() {
 		fmt.Println("设置日志级别为 " + value)
 		logrus.SetLevel(level)
 	} else {
-		fmt.Println("请检查 KUBOARD_SPRAY_ADMIN_LOGRUS_LEVEL 的值，可选的有 panic / fatal / error / warn / info / debug / trace ，当前为： " + value)
+		fmt.Println("请检查 PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL 的值，可选的有 panic / fatal / error / warn / info / debug / trace ，当前为： " + value)
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 

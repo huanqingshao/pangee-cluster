@@ -190,7 +190,7 @@ export default {
     },
     killProcess() {
       this.pangeeClusterApi
-        .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/")!=-1 ? "kill-v2" : "kill"}/${this.pid}`)
+        .delete(`/execute/${this.ownerType}/${this.ownerName}/${this.pid.indexOf("/") !== -1 ? "kill-v2" : "kill"}/${this.pid}`)
         .then(resp => {
           if (resp.data.code === 200) {
             this.$message.success(this.t("killed"));

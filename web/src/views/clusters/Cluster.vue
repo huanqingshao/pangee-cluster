@@ -399,7 +399,7 @@ export default {
       let newValue = this.cluster.inventory.all.hosts.localhost.pangeecluster_resource_package;
       if (newValue) {
         await this.pangeeClusterApi
-          .get(`/resources/${newValue}`)
+          .get(`/resources/local/${newValue}`)
           .then(resp => {
             this.cluster.resourcePackage = resp.data.data.package;
           })
