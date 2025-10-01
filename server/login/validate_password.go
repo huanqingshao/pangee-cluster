@@ -28,11 +28,14 @@ func ValidatePassword(c *gin.Context) {
 
 	hashedPassword, err := hex.DecodeString(userInfo.Password)
 	if err != nil {
-		common.HandleError(c, http.StatusUnauthorized, "Failed to authorize.", err)
+		common.HandleError(c, http.StatusInternalServerError, "Cannot decode password in user repo.", err)
 	}
 	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(user.Password))
 	if err == nil {
 		result = "ok"
+	} else {
+		common.HandleError(c, http.StatusBadRequest, "Wrong password.", err)
+		return
 	}
 	result = "ok"
 	c.JSON(http.StatusOK, gin.H{
