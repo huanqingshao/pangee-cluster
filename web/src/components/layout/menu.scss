@@ -158,7 +158,7 @@
   z-index: 1;
 }
 
-.kuboard_namespaced_menu {
+.pangeecluster_namespaced_menu {
   height: calc(100% - 112px);
   text-align: left;
   background-color: rgb(244, 244, 245);
@@ -168,9 +168,9 @@
   overflow-y: auto;
   border: none;
 }
-.kuboard_namespaced_menu:not(.el-menu--collapse) {
+.pangeecluster_namespaced_menu:not(.el-menu--collapse) {
   width: 240px;
 }
-.kuboard_namespaced_menu .el-menu-item-group__title {
+.pangeecluster_namespaced_menu .el-menu-item-group__title {
   padding-left: 25px !important;
 }

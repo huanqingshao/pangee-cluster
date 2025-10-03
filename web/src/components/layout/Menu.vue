@@ -5,7 +5,6 @@
   settings: Settings
   resources: Resources Package
   mirrors: OS Mirrors
-  kuboard: Kuboard Integration
   profile: Change Password
 </i18n>
 <i18n locale="zh" lang="yaml">
@@ -15,7 +14,6 @@
   settings: 系统设置
   resources: 资源包管理
   mirrors: OS 软件源
-  kuboard: Kuboard 集成
   profile: 修改密码
 </i18n>
 
@@ -24,7 +22,7 @@
     <!-- <div class="menuTitle noselect nowrap" :style="menuStyle" @click="$router.push('/home')">
       Pangee Cluster
     </div> -->
-    <el-menu :default-active="defaultActive" class="kuboard_namespaced_menu" unique-opened :collapse="isCollapse"
+    <el-menu :default-active="defaultActive" class="pangeecluster_namespaced_menu" unique-opened :collapse="isCollapse"
       background-color="white" ref="menu" router>
       <el-menu-item index="1" :route="`/clusters`" class="toplevel">
         <el-icon>
@@ -116,7 +114,6 @@ export default {
         'ResourceOnAir': '2-1',
         'Mirrors': '2-2',
         'Mirror': '2-2',
-        'Kuboard': '2-3',
         'Profile': '2-4',
       }
       if (map[this.$route.name]) {
@@ -137,7 +134,7 @@ export default {
 <style lang="css">
 @import "./menu.scss";
 
-.kuboard_global_menu {
+.pangeecluster_global_menu {
   text-align: left;
   background-color: rgb(244, 244, 245);
   padding: 10px 0 0 0;
@@ -147,11 +144,11 @@ export default {
   border: none;
 }
 
-.kuboard_global_menu:not(.el-menu--collapse) {
+.pangeecluster_global_menu:not(.el-menu--collapse) {
   width: calc(8vw + 90px);
 }
 
-.kuboard_global_menu .el-menu-item-group__title {
+.pangeecluster_global_menu .el-menu-item-group__title {
   padding-left: 25px !important;
 }
 </style>

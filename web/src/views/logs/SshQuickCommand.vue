@@ -1,11 +1,3 @@
-<i18n locale="en" lang="yaml">
-  hi: kuboard
-</i18n>
-
-<i18n locale="cn" lang="yaml">
-  hi: kuboard
-</i18n>
-
 <template>
   <div class="command_wrapper" @click="send">
     <div class="name">{{command.name}}</div>

@@ -2,11 +2,9 @@
 en:
   clusters: Kubernetes Cluster
   resources: Resources Package
-  kuboard: Kuboard Integration
 zh:
   clusters: 集群管理
   resources: 资源包管理
-  kuboard: Kuboard 集成
 </i18n>
 
 <template>
@@ -56,7 +54,7 @@ zh:
 
 <script>
 import mixin from '../../mixins/mixin.js'
-import { kuboardIcon } from './images/icon.js'
+import { pangeeclusterIcon } from './images/icon.js'
 
 export default {
   mixins: [mixin],
@@ -70,7 +68,7 @@ export default {
   },
   data() {
     return {
-      kuboardIcon,
+      pangeeclusterIcon,
     }
   },
   computed: {

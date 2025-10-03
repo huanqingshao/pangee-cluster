@@ -15,7 +15,7 @@ zh:
 
 <template>
   <div class="header-warpper" :style="transparent ? 'background: transparent' : ''">
-    <div :class="'header kuboard-header'">
+    <div :class="'header pangeecluster_header'">
       <el-progress class="progress" :percentage="percentage" status="success" :stroke-width="3"></el-progress>
       <div style="display: flex;" :class="transparent ? '' : 'header-background'">
         <div class="logo-area" @click="$router.push('/home')">Pangee Cluster</div>
@@ -119,16 +119,16 @@ export default {
 </script>
 
 <style>
-.kuboard-header .el-progress__text {
+.pangeecluster_header .el-progress__text {
   display: none;
 }
 
-.kuboard-header .el-progress {
+.pangeecluster_header .el-progress {
   line-height: 2px;
   height: 2px;
 }
 
-.kuboard-header .el-progress .el-progress-bar {
+.pangeecluster_header .el-progress .el-progress-bar {
   top: 0;
   position: fixed;
   left: 0;

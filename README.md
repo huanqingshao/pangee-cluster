@@ -49,7 +49,6 @@ docker run -d \
 
 ## 自制资源包
 
-Kuboard-Spray 将定期提供最新版本的资源包，可以在 kubord-spray 资源包管理界面中查到，如果您是离线环境，也可以在 [https://kuboard.cn/support/pangee-cluster/](https://pangee-cluster.cn/support/)找到最新的资源包。您也可以自己制作资源包，资源包的项目地址在 [pangee-cluster-resource](https://github.com/opencmit/pangee-cluster-resource)，资源包的制作方法会在 2022 年 2 月提供文档。
 
 ## 社区
 

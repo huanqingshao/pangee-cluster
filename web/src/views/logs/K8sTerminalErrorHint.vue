@@ -1,7 +1,7 @@
 <i18n>
 en:
   error: "Cannot access the following url via websocket protocol: "
-  "commonProblems": "Refer to help on kuboard.cn"
+  "commonProblems": "Refer to help on github.com/opencmit/pangee-cluster for common problems and solutions"
   "confirm": "Do you confirm to retry ?"
 zh:
   error: 不能通过 websocket 协议访问如下地址：

@@ -15,8 +15,8 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pangee-cluster-admin",
-	Short: "Kuboard 命令行控制",
-	Long: `Kuboard 命令行控制程序，用于执行重置 admin 的密码等操作。
+	Short: "PangeeCluster 命令行控制",
+	Long: `PangeeCluster 命令行控制程序，用于执行重置 admin 的密码等操作。
 pangee-cluster-admin reset-password	
 `,
 }
@@ -29,7 +29,7 @@ func Execute() {
 
 func init() {
 
-	logrus.SetFormatter(new(KuboardLogFormatter))
+	logrus.SetFormatter(new(PangeeClusterLogFormatter))
 	value := os.Getenv("PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL")
 	if value == "" {
 		value = "info"

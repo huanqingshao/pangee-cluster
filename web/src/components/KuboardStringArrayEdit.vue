@@ -1,11 +1,3 @@
-<i18n locale="en" lang="yaml">
-  hi: kuboard
-</i18n>
-
-<i18n locale="cn" lang="yaml">
-  hi: kuboard
-</i18n>
-
 <template>
   <div class="app_form_mini" style="margin: 0 -5px; display: flex; flex-wrap: wrap">
     <template v-if="holderData[fieldName0] && holderData[fieldName0][fieldName1]">

@@ -1,7 +1,7 @@
 <i18n>
 en:
   title: Resource Packages
-  resourceDescription1: Kuboard provides a set of pre-verified resource packages.
+  resourceDescription1: PangeeCluster provides a set of pre-verified resource packages.
   resourceDescription2: You can also refer to https://github.com/opencmit/pangee-cluster-resource to create your own resource package.
   pangeecluster_version_min: PangeeCluster min version
   pangeecluster_version_max: PangeeCluster max version
@@ -18,7 +18,7 @@ en:
   cannot_reach_online_repository: Current browser cannot reach https://pangee-cluster.cn/support
 zh:
   title: 资源包列表
-  resourceDescription1: Kuboard 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装
+  resourceDescription1: PangeeCluster 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装
   resourceDescription2: 您也可以参考项目 https://github.com/opencmit/pangee-cluster-resource 自己创建资源包
   pangeecluster_version_min: PangeeCluster最低版本
   pangeecluster_version_max: PangeeCluster最高版本

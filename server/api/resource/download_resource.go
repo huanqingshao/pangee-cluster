@@ -83,8 +83,8 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 				logrus.Warn(err.Error())
 			}
 
-			message = "\033[32m[ " + "Kuboardspray resource package has been loaded successfully." + " ]\033[0m \n"
-			message += "\033[32m[ " + "Kuboardspray 资源包已成功加载到本地，请回到资源包页面查看。" + " ]\033[0m \n"
+			message = "\033[32m[ " + "PangeeCluster resource package has been loaded successfully." + " ]\033[0m \n"
+			message += "\033[32m[ " + "PangeeCluster 资源包已成功加载到本地，请回到资源包页面查看。" + " ]\033[0m \n"
 		} else {
 			message = "\033[31m\033[01m\033[05m[" + "Failed to download pangeecluster resource package, please reivew the log and fix the issues." + "]\033[0m \n"
 			message += "\033[31m\033[01m\033[05m[" + "下载资源包失败，请回顾日志，找到错误信息，并解决问题后，再次尝试。" + "]\033[0m \n"
