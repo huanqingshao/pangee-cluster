@@ -21,13 +21,11 @@ docker run -d \
   -e TZ=Asia/Shanghai \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v ~/pangee-cluster-data:/data \
-  eipwork/pangee-cluster:latest-amd64
-  # 如果您是 arm64 环境，请将标签里的 amd64 修改为 arm64，例如 eipwork/pangee-cluster:latest-arm64
-  # 如果抓不到这个镜像，可以尝试一下这个备用地址：
-  # swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster:latest-amd64
+  opencmit/pangee-cluster:latest-amd64
+  # 如果您是 arm64 环境，请将标签里的 amd64 修改为 arm64，例如 opencmit/pangee-cluster:latest-arm64
 ```
 
-在浏览器地址栏中输入 `http://这台机器的IP地址`，输入用户名 `admin`，默认密码 `Kuboard123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 [使用 PangeeCluster 安装 Kubernetes 集群](./guide/install-k8s.md)
+在浏览器地址栏中输入 `http://这台机器的IP地址`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 [使用 PangeeCluster 安装 Kubernetes 集群](./guide/install-k8s.md)
 
 ::: tip 常见问题
 

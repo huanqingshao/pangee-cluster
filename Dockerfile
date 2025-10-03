@@ -14,11 +14,15 @@ RUN apt-get update -y \
 RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64 -O /usr/local/bin/yq \
     && chmod +x /usr/local/bin/yq
 
+RUN useradd -m -s /bin/bash pangeecluster && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+RUN mkdir /pangee-cluster && chown pangeecluster:pangeecluster /pangee-cluster
+USER pangeecluster
+
 WORKDIR /pangee-cluster
 COPY ./.docker/requirements.txt ./requirements.txt
+RUN python3 --version
 RUN /usr/bin/python3 -m pip install --no-cache-dir pip -U \
-    && python3 -m pip install --no-cache-dir -r requirements.txt \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    && python3 -m pip install --no-cache-dir -r requirements.txt
 
 COPY .docker/ansible-patch/config/base.yml /usr/local/lib/python3.10/dist-packages/ansible/config/base.yml
 COPY .docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/callback/default.py
@@ -26,18 +30,17 @@ COPY .docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.1
 COPY .docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/action/raw.py
 
 ENV PANGEE_CLUSTER_WEB_DIR="/pangee-cluster/ui"
-ENV PANGEE_CLUSTER_PORT="8080"
+ENV PANGEE_CLUSTER_PORT="80"
 ENV GIN_MODE=release
 ENV PANGEE_CLUSTER_LOGRUS_LEVEL="info"
 ENV PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL="info"
 ENV TERM=xterm
 
-COPY ./admin/pangee-cluster-admin pangee-cluster-admin
-COPY ./server/ansible-script ansible-script
-COPY ./server/ansible-rpc ansible-rpc
-COPY ./server/pangee-cluster pangee-cluster
-COPY ./web/dist /pangee-cluster/ui
-COPY ./server/pull-resource-package.sh pull-resource-package.sh
-RUN chmod +x pangee-cluster pangee-cluster-admin pull-resource-package.sh
+COPY --chown=pangeecluster --chmod=+x ./admin/pangee-cluster-admin pangee-cluster-admin
+COPY --chown=pangeecluster ./server/ansible-script ansible-script
+COPY --chown=pangeecluster ./server/ansible-rpc ansible-rpc
+COPY --chown=pangeecluster --chmod=+x ./server/pangee-cluster pangee-cluster
+COPY --chown=pangeecluster ./web/dist /pangee-cluster/ui
+COPY --chown=pangeecluster --chmod=+x ./server/pull-resource-package.sh pull-resource-package.sh
 
 ENTRYPOINT ["./pangee-cluster"]
