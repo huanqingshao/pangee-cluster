@@ -40,10 +40,10 @@ http {
 
   server {
     listen       80;
-    # server_name  kuboard.this-is-a-sample.com; # 替换成你的域名
+    # server_name  pangeecluster.this-is-a-sample.com; # 替换成你的域名
 
     location / {
-      proxy_pass  http://10.99.0.8:25702/;  # 替换成你的 Kuboard IP 地址和端口
+      proxy_pass  http://10.99.0.8:25702/;  # 替换成你的 pangeecluster IP 地址和端口
       client_max_body_size 10m;
       gzip on;
 

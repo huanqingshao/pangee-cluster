@@ -7,12 +7,12 @@ description: Pangee Cluster 安装的 Kubernetes 集群如何实现高可用
 
 > 本文主要内容参考自： [kubespray 实现高可用的方式](https://kubespray.io/#/docs/ha-mode)
 
-Kuboard-Spray 基于 kubespray 实现 Kubernetes 集群安装，在 Kubernetes 集群中，如下组件需要提供高可用的访问端口：
+Pangee-Cluster 基于 kubespray 实现 Kubernetes 集群安装，在 Kubernetes 集群中，如下组件需要提供高可用的访问端口：
 
 - etcd 集群
 - kube-apiserver 服务
 
-后面的章节分别阐述基于 Kuboard-Spray 安装 k8s 集群时，这两个组件实现高可用的方式。
+后面的章节分别阐述基于 Pangee-Cluster 安装 k8s 集群时，这两个组件实现高可用的方式。
 
 ## ETCD
 

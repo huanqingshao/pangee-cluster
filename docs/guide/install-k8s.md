@@ -8,10 +8,9 @@ meta:
 
 # 离线安装 K8S
 
-## Kuboard-Spray
+## Pangee-Cluster
 
-Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用集群离线安装的工具，开源仓库的地址为 [Kuboard-Spray](https://github.com/opencmit/pangee-cluster)
-<span><iframe style="display:inline-block;vertical-align:middle;" src="https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html" frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe></span>
+Pangee-Cluster 是一款可以在图形界面引导下完成 Kubernetes 高可用集群离线安装的工具，开源仓库的地址为 [Pangee-Cluster](https://github.com/opencmit/pangee-cluster)
 
 **安装后的集群版本为**
 
@@ -19,11 +18,6 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 
 ### 社区
 
-对此项目感兴趣的同学，请点击此处 <span><iframe style="display:inline-block;vertical-align:middle;" src="https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html" frameborder="0" scrolling="0" width="100" height="20" title="GitHub"></iframe></span> 在 GitHub 添加本项目的 Star 以后，扫码加入群聊
-
-<p>
-  <img src="https://addons.kuboard.cn/downloads/qr_code_pangee-cluster.jpg" style="width: 150px; height: 150px;"/>
-</p>
 
 ### 配置要求
 
@@ -32,8 +26,6 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 - 至少 2 台 **2 核 4G** 的服务器
 - 本文档中，CPU 必须为 x86 架构，暂时未适配 arm 架构的 CPU
 - **CentOS 7.8**、 **CentOS 7.9** 或 **Ubuntu 20.04**
-
-[【腾讯云】云产品限时秒杀，爆款 1 核 2G 云服务器，首年 99 元](https://cloud.tencent.com/act/cps/redirect?redirect=1062&cps_key=2ee6baa049659f4713ddc55a51314372&from=console)
 
 **操作系统兼容性**
 
@@ -45,9 +37,9 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 | CentOS 7.8   | <span style="font-size: 24px;">😄</span> | 已验证 |
 | Ubuntu 20.04 | <span style="font-size: 24px;">😄</span> | 已验证 |
 
-## 安装 Kuboard-Spray
+## 安装 Pangee-Cluster
 
-- 取一台服务器或虚拟机，执行一条命令，即可完成 Kuboard-Spray 的安装。
+- 取一台服务器或虚拟机，执行一条命令，即可完成 Pangee-Cluster 的安装。
 
   对这台服务器的最低要求为：
   <div style="font-size: 13px;margin-left: 40px;">
@@ -69,27 +61,25 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
     -p 80:80/tcp \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ~/pangee-cluster-data:/data \
-    eipwork/pangee-cluster:latest-amd64
-    # 如果您是 arm64 环境，请将标签里的 amd64 修改为 arm64，例如 eipwork/pangee-cluster:latest-arm64
-    # 如果抓不到这个镜像，可以尝试一下这个备用地址：
-    # swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster:latest-amd64
+    opencmit/pangee-cluster:latest-amd64
+    # 如果您是 arm64 环境，请将标签里的 amd64 修改为 arm64，例如 opencmit/pangee-cluster:latest-arm64
   ```
 
   ::: tip 持久化
 
   - PangeeCluster 的信息保存在容器的 `/data` 路径，请将其映射到一个您认为安全的地方，上面的命令中，将其映射到了 `~/pangee-cluster-data` 路径；
-  - 只要此路径的内容不受损坏，重启、升级、重新安装 Kuboard-Spray，或者将数据及 Kuboard-Spray 迁移到另外一台机器上，您都可以找回到原来的信息；
+  - 只要此路径的内容不受损坏，重启、升级、重新安装 Pangee-Cluster，或者将数据及 Pangee-Cluster 迁移到另外一台机器上，您都可以找回到原来的信息；
   - 加个 [GITHUB Star](https://github.com/opencmit/pangee-cluster)，避免迷路。
 
   :::
 
-- 在浏览器打开地址 `http://这台机器的IP`，输入用户名 `admin`，默认密码 `Kuboard123`，即可登录 Kuboard-Spray 界面。
+- 在浏览器打开地址 `http://这台机器的IP`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 Pangee-Cluster 界面。
 
 ## 加载离线资源包
 
-- 在 Kuboard-Spray 界面中，导航到 `系统设置` --> `资源包管理` 界面，可以看到已经等候您多时的 `Kuboard-Spray 离线资源包`，如下图所示：
+- 在 Pangee-Cluster 界面中，导航到 `系统设置` --> `资源包管理` 界面，可以看到已经等候您多时的 `Pangee-Cluster 离线资源包`，如下图所示：
 
-  ![加载 Kuboard-Spray 资源包](./install-k8s.assets/pangee-cluster-01.png)
+  ![加载 Pangee-Cluster 资源包](./install-k8s.assets/pangee-cluster-01.png)
 
 - 点击 `导 入` 按钮，在界面的引导下完成资源包的加载。
 
@@ -104,9 +94,9 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 
 ## 规划并安装集群
 
-- 在 Kuboard-Spray 界面中，导航到 `集群管理` 界面，点击界面中的 `添加集群安装计划` 按钮，填写表单如下：
+- 在 Pangee-Cluster 界面中，导航到 `集群管理` 界面，点击界面中的 `添加集群安装计划` 按钮，填写表单如下：
 
-  - 集群名称： 自定义名称，本文中填写为 kuboard123，此名称不可以修改；
+  - 集群名称： 自定义名称，本文中填写为 pangeecluster123，此名称保存后不可以修改；
   - 资源包：选择前面步骤中导入的离线资源包。
 
   ![创建集群安装计划](./install-k8s.assets/pangee-cluster-02.png)
@@ -149,7 +139,6 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 
   - 在集群主节点上执行 kubectl 命令
   - 获取集群的 .kubeconfig 文件
-  - 将集群导入到 kuboard 管理界面
 
   </div>
 
@@ -159,14 +148,5 @@ Kuboard-Spray 是一款可以在图形界面引导下完成 Kubernetes 高可用
 
 :tada: :tada: :tada:
 
-您已经完成了 Kubernetes 集群的安装，下一步请：
+您已经完成了 Kubernetes 集群的安装
 
-<!-- <span v-on:click="$sendGaEvent('安装后求GitHub Star','安装后求GitHub Star','安装后求GitHub Star')"><a href="https://github.com/opencmit/kuboard-press" target="_blank">点击此处，给个GitHub Star</a></span>
-支持一下吧，<StarCount></StarCount>这么多人都 star 了呢，怎么能少得了您呢？ -->
-
-[安装 Kuboard - K8s 集群管理界面](https://kuboard.cn/install/v3/install-built-in.html)
-
-[获取 Kubernetes 免费教程](https://kuboard.cn/learning/)
-
-<!-- </div>
-</StoryBook> -->

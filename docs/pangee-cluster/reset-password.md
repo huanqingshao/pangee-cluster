@@ -22,7 +22,7 @@
   ```log
   设置日志级别为 info
   2022/04/30 22:41:39.801 |  info | try to reset-password
-  2022/04/30 22:41:39.803 |  info | 已将 admin 的密码重置为 Kuboard123
+  2022/04/30 22:41:39.803 |  info | 已将 admin 的密码重置为 PangeeCluster123
   ```
 
-  至此，您已经成功重置了 `admin` 用户的密码，重置后密码为 `Kuboard123`
+  至此，您已经成功重置了 `admin` 用户的密码，重置后密码为 `PangeeCluster123`

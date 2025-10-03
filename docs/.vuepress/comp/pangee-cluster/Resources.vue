@@ -2,7 +2,7 @@
   <div>
     <el-alert v-if="arch === ''" title="资源包列表" type="warning" :closable="false" show style="margin-bottom: 10px;">
       <div class="description">
-        <li>Kuboard 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装</li>
+        <li>PangeeCluster 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装</li>
         <li>您也可以参考项目 https://github.com/opencmit/pangee-cluster-resource 自己创建资源包</li>
       </div>
     </el-alert>

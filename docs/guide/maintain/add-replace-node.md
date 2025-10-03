@@ -56,7 +56,7 @@
   最终的提示信息如下：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
 
   [ 1 kube_nodes are already removed, please release the machine. ]
@@ -116,7 +116,7 @@ stream {
   > 此处省略截图，最终提示信息如下所示：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
   [ Completed task "Update apiserver list in loadbalancer" ]
   [ 已完成 "更新负载均衡中 apiserver 列表" 的任务，您可以继续其他操作。 ]
@@ -151,7 +151,7 @@ stream {
   > 此处省略截图，最终提示信息如下所示：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
   [ Completed task "Update apiserver list in loadbalancer" ]
   [ 已完成 "更新负载均衡中 apiserver 列表" 的任务，您可以继续其他操作。 ]
@@ -230,7 +230,7 @@ spec:
   > 此处省略截图，最终提示信息如下所示：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
   [ Completed task "Update apiserver list in loadbalancer" ]
   [ 已完成 "更新负载均衡中 apiserver 列表" 的任务，您可以继续其他操作。 ]
@@ -275,7 +275,7 @@ spec:
   > 此处省略截图，最终提示信息如下所示：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
   [ Completed task "Update apiserver's --etcd-servers param". ]
   [ 已完成 "更新 apiserver 中 etcd 连接参数"的任务，您可以继续其他操作。 ]
@@ -290,7 +290,7 @@ spec:
   > 此处省略截图，最终提示信息如下所示：
 
   ```sh
-  KUBOARD SPRAY *****************************************************************
+  PangeeCluster SPRAY *****************************************************************
 
   [ Completed task "Update apiserver list in loadbalancer" ]
   [ 已完成 "更新负载均衡中 apiserver 列表" 的任务，您可以继续其他操作。 ]

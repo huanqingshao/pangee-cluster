@@ -28,12 +28,12 @@
       <el-form-item style="margin-top: 10px;">
         <template #label>
           <el-tag variant="primary" effect="dark">步骤三</el-tag>
-          导入到<br> Kuboard-Spray
+          导入到<br> Pangee-Cluster
         </template>
         <div style="margin-bottom: 10px">
           <li>复制下面的 YAML 内容到粘贴板； <CopyToClipBoard :value="loadYaml"></CopyToClipBoard>
           </li>
-          <li>在 Kuboard-Spray 界面中导航到 “系统设置” --> “资源包管理” 菜单，点击 “离线加载资源包”，按界面提示操作，即可完成资源包的离线导入。</li>
+          <li>在 Pangee-Cluster 界面中导航到 “系统设置” --> “资源包管理” 菜单，点击 “离线加载资源包”，按界面提示操作，即可完成资源包的离线导入。</li>
         </div>
         <codemirror ref="cm" :value="loadYaml" :options="cmYamlOptions" class="app_codemirror_auto_height"></codemirror>
       </el-form-item>

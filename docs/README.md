@@ -4,7 +4,7 @@ sidebarDepth: 0
 
 # PangeeCluster
 
-基于 [kubespray](https://github.com/kubernetes-sigs/kubespray) 提供图形化的 K8S 集群离线安装、维护工具。
+中国移动开源的图形化的 K8S 集群离线安装、维护工具。
 
 ## 快速安装
 
@@ -30,14 +30,14 @@ docker run -d \
 ::: tip 常见问题
 
 - PangeeCluster 的信息保存在容器的 `/data` 路径，请将其映射到一个您认为安全的地方，上面的命令中，将其映射到了 `~/pangee-cluster-data` 路径；
-- 只要此路径的内容不受损坏，重启、升级、重新安装 Kuboard-Spray，或者将数据及 Kuboard-Spray 迁移到另外一台机器上，您都可以找回到原来的信息；
+- 只要此路径的内容不受损坏，重启、升级、重新安装 Pangee-Cluster，或者将数据及 Pangee-Cluster 迁移到另外一台机器上，您都可以找回到原来的信息；
 - 加个 [GITHUB Star](https://github.com/opencmit/pangee-cluster)，避免迷路。
 
 :::
 
 ## 自制资源包
 
-Kuboard-Spray 将定期提供最新版本的资源包，可以在 kubord-spray 资源包管理界面中查到，如果您是离线环境，也可以在 [https://pangee-cluster.cn/support/](./support/)找到最新的资源包。您也可以自己制作资源包，资源包的项目地址在 [pangee-cluster-resource](https://github.com/opencmit/pangee-cluster-resource)，资源包的制作方法会在 2022 年 2 月提供文档。
+Pangee-Cluster 将定期提供最新版本的资源包，可以在 kubord-spray 资源包管理界面中查到，如果您是离线环境，也可以在 [https://pangee-cluster.cn/support/](./support/)找到最新的资源包。您也可以自己制作资源包，资源包的项目地址在 [pangee-cluster-resource](https://github.com/opencmit/pangee-cluster-resource)，资源包的制作方法会在 2022 年 2 月提供文档。
 
 ## 社区
 

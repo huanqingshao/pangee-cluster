@@ -26,17 +26,13 @@ module.exports = {
     ],
   ],
   themeConfig: {
-    logo: 'https://kuboard.cn/favicon.png',
+    logo: '/favicon.png',
     repo: 'opencmit/pangee-cluster',
     docsDir: 'docs',
     nav: [
       {
         text: '学习指南',
         link: '/guide/install-k8s.md',
-      },
-      {
-        text: 'Kuboard',
-        link: 'https://kuboard.cn',
       },
     ],
     sidebarDepth: 2,
@@ -86,7 +82,6 @@ module.exports = {
           title: '可选组件',
           children: [
             '/guide/addons/install_addon.md',
-            '/guide/addons/kuboard.md',
             // '/guide/addons/nodelocaldns.md',
             '/guide/addons/netchecker.md',
             '/guide/addons/metrics_server.md',

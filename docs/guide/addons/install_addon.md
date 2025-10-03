@@ -5,12 +5,11 @@
 
 PangeeCluster 支持一系列可选组件的自动化安装/卸载，例如：
 
-- [Kuboard](./kuboard.md)
 - [Node Local DNS](./nodelocaldns.md)
 - [Netchecker](./netchecker.md)
 - [Metrics Server](./metrics_server.md)
 
-这些可选组件的安装和卸载遵循了相同的操作步骤，本文以可选组件 [Kuboard](./kuboard.md) 为例，描述了如何快速安装和卸载可选组件。
+这些可选组件的安装和卸载遵循了相同的操作步骤，本文描述了如何快速安装和卸载可选组件。
 
 ## 安装可选组件
 

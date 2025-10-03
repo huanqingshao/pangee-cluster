@@ -1,5 +1,4 @@
 let components = [
-  { name: 'KuboardDemo', component: () => import('./KuboardDemo.vue') },
   { name: 'PangeeClusterResources', component: () => import('./pangee-cluster/Resources.vue') },
   { name: 'CopyToClipBoard', component: () => import('./CopyToClipBoard.vue') },
   { name: 'InstallAddon', component: () => import('./InstallAddon.vue') },

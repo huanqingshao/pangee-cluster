@@ -1,17 +1,15 @@
 #!/bin/bash
 datetime=`date +%Y%m%d-%H%M%S`
 echo $datetime
-tag=swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster-docs
+tag=opencmit/pangee-cluster-docs
 
-yarn install
-yarn docs:build
+pnpm install
+pnpm docs:build
 
-docker build -t $tag:latest .
+docker build -t $tag:$datetime .
+
+# docker push $tag:$datetime
+# echo pushded $tag:$datetime
 
 
-if test $datetime != ""; then
-  # docker push $tag:latest
-  docker tag $tag:latest $tag:$datetime
-  docker push $tag:$datetime
-  echo pushded $tag:$datetime
-fi
+# docker run -d -p 8080:80 --name pangee-cluster-docs opencmit/pangee-cluster-docs:20251003-175809
