@@ -50,8 +50,10 @@ func resetPassword() {
 		os.Exit(-1)
 	}
 
+	password := os.Getenv("PANGEE_CLUSTER_DEFAULT_ADMIN_PASSWORD")
+
 	admin := result["admin"]
-	admin.Password = "2432612431302464617343536e4858706f567278764f532f5274752f755a526c72694f30306d73456657674c7a39644b712f43436c6d64544e506375"
+	admin.Password = password
 
 	content, err := yaml.Marshal(result)
 	if err != nil {

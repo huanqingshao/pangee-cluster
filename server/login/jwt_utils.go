@@ -48,10 +48,13 @@ func readUserRepository(username string) (*UserInfo, error) {
 			logrus.Fatal("cannot create user dir", err)
 			os.Exit(1)
 		}
+
+		password := os.Getenv("PANGEE_CLUSTER_DEFAULT_ADMIN_PASSWORD")
+
 		defaultRepository := map[string]*UserInfo{
 			"admin": {
 				Username: "admin",
-				Password: "2432612431302464617343536e4858706f567278764f532f5274752f755a526c72694f30306d73456657674c7a39644b712f43436c6d64544e506375",
+				Password: password,
 			},
 		}
 		if err := common.SaveYamlFile(userFilePath, defaultRepository); err != nil {
