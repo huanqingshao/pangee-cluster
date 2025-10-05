@@ -63,7 +63,7 @@ meta:
 
 - 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，如下图所示
 
-  ![web](./dev.assets/iShot_2022-08-06_20.21.03.png)
+  ![web](./dev.assets/screenshot_2025-10-04_15.57.13.png)
 
 - 在集成终端中（pangee-cluster/web 路径下）执行命令：
 

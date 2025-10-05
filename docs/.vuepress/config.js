@@ -60,7 +60,7 @@ module.exports = {
             '/guide/maintain/ha-mode.md',
             '/guide/maintain/add-replace-node.md',
             '/guide/maintain/upgrade.md',
-            '/guide/maintain/backup.md',
+            // '/guide/maintain/backup.md',
             '/guide/extra/speedup.md'
           ]
         },
@@ -71,22 +71,22 @@ module.exports = {
             '/guide/resource-package/make.md',
           ]
         },
-        {
-          title: '网络插件',
-          children: [
-            '/guide/network-plugin/calico.md',
-            '/guide/network-plugin/flannel.md',
-          ],
-        },
-        {
-          title: '可选组件',
-          children: [
-            '/guide/addons/install_addon.md',
-            // '/guide/addons/nodelocaldns.md',
-            '/guide/addons/netchecker.md',
-            '/guide/addons/metrics_server.md',
-          ],
-        },
+        // {
+        //   title: '网络插件',
+        //   children: [
+        //     '/guide/network-plugin/calico.md',
+        //     '/guide/network-plugin/flannel.md',
+        //   ],
+        // },
+        // {
+        //   title: '可选组件',
+        //   children: [
+        //     '/guide/addons/install_addon.md',
+        //     // '/guide/addons/nodelocaldns.md',
+        //     '/guide/addons/netchecker.md',
+        //     '/guide/addons/metrics_server.md',
+        //   ],
+        // },
         {
           title: '其他',
           children: [
