@@ -66,4 +66,11 @@ RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd6
 
 RUN apt install -y unzip
 
-ENTRYPOINT [ "containerd" ]
+# 创建与宿主机相同 UID/GID 的用户
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN if [ "$USER_GID" != "1000" ]; then groupmod -g $USER_GID vscode; fi && \
+    if [ "$USER_UID" != "1000" ]; then usermod -u $USER_UID vscode; fi
+
+# ENTRYPOINT [ "containerd" ]
+ENTRYPOINT [ "tail", "-f", "/dev/null" ]
