@@ -21,8 +21,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh \
   && apt-get install -y nodejs \
   && useradd -D
 
-RUN export https_proxy=${HTTP_PROXY} && wget https://go.dev/dl/go1.24.1.linux-$(dpkg --print-architecture).tar.gz \
-  && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.1.linux-$(dpkg --print-architecture).tar.gz
+RUN export https_proxy=${HTTP_PROXY} && wget https://go.dev/dl/go1.24.2.linux-$(dpkg --print-architecture).tar.gz \
+  && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.2.linux-$(dpkg --print-architecture).tar.gz
 
 RUN apt install -y python3-pip \
   && apt install -y sshpass
@@ -50,21 +50,19 @@ RUN python3 -m venv /root/.cmcc-venv \
 
 RUN apt install -y rsync netcat
 
-RUN  export https_proxy=${HTTP_PROXY} \
-  && wget https://github.com/containerd/containerd/releases/download/v2.0.5/containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
-  && tar Cxzvf /usr/local containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
-  && rm containerd-2.0.5-linux-$(dpkg --print-architecture).tar.gz \
-  && wget https://github.com/opencontainers/runc/releases/download/v1.3.0/runc.$(dpkg --print-architecture) \
-  && install -m 755 runc.$(dpkg --print-architecture) /usr/local/sbin/runc \
-  && rm runc.$(dpkg --print-architecture) \
-  && wget https://github.com/containerd/nerdctl/releases/download/v2.0.4/nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
-  && tar Cxzvf /usr/local/bin nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz \
-  && rm nerdctl-2.0.4-linux-$(dpkg --print-architecture).tar.gz
-
 RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64 -O /usr/local/bin/yq \
     && chmod +x /usr/local/bin/yq
 
 RUN apt install -y unzip
+
+RUN source /root/.profile && go version && apt install -y libgpgme-dev libassuan-dev libbtrfs-dev pkg-config \
+    && git clone https://github.com/containers/skopeo.git \
+    && cd skopeo \
+    && git checkout v1.21.0 \
+    && make bin/skopeo \
+    && mv bin/skopeo /usr/local/bin \
+    && cd ../ \
+    && rm -rf skopeo
 
 # 创建与宿主机相同 UID/GID 的用户
 ARG USER_UID=1000
