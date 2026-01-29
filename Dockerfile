@@ -29,7 +29,7 @@ COPY .devcontainer/docker/ansible-patch/plugins_callback/__init__.py /usr/local/
 COPY .devcontainer/docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/action/raw.py
 
 ENV PANGEE_CLUSTER_WEB_DIR="/pangee-cluster/ui"
-ENV PANGEE_CLUSTER_PORT="10080"
+ENV PANGEE_CLUSTER_PORT="9080"
 ENV GIN_MODE=release
 ENV PANGEE_CLUSTER_LOGRUS_LEVEL="info"
 ENV PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL="info"

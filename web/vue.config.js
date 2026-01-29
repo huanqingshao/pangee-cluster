@@ -3,11 +3,11 @@ const os = require('os')
 
 let public = 'kb:25702'
 let port = '25702'
-let target = 'http://localhost:8006'
+let target = 'http://localhost:9080'
 if (os.arch() === 'arm64') {
   public = 'pangee-cluster-arm:25703'
   port = 25703
-  target = 'http://localhost:8007'
+  target = 'http://localhost:9081'
 }
 
 module.exports = {

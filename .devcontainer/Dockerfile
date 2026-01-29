@@ -66,14 +66,10 @@ RUN source /root/.profile && go version && apt install -y libgpgme-dev libassuan
     && cd ../ \
     && rm -rf skopeo
 
-RUN wget https://github.com/NilsIrl/dockerc/releases/download/v0.3.2/dockerc_x86-64 -o /usr/local/bin/dockerc \
-    && chmod +x /usr/local/bin/dockerc
-
 # 创建与宿主机相同 UID/GID 的用户
 ARG USER_UID=1000
 ARG USER_GID=1000
 RUN if [ "$USER_GID" != "1000" ]; then groupmod -g $USER_GID vscode; fi && \
     if [ "$USER_UID" != "1000" ]; then usermod -u $USER_UID vscode; fi
 
-# ENTRYPOINT [ "containerd" ]
 ENTRYPOINT [ "tail", "-f", "/dev/null" ]

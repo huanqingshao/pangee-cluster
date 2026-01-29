@@ -56,8 +56,8 @@ meta:
 
 需按如下步骤逐个运行各组件
 
-- 运行 pangee-cluster server
-- 运行 pangee-cluster web
+- 运行 pangee-cluster/server
+- 运行 pangee-cluster/web
 
 ### 运行 pangee-cluster server
 
@@ -92,9 +92,9 @@ meta:
 
   ```sh
   # 如果是 amd64 环境
-  [GIN-debug] Listening and serving HTTP on :8006
+  [GIN-debug] Listening and serving HTTP on :9080
   # 如果是 arm64 环境
-  [GIN-debug] Listening and serving HTTP on :8007
+  [GIN-debug] Listening and serving HTTP on :9081
   ```
 
 ### 运行 pangee-cluster web
@@ -132,8 +132,19 @@ meta:
 构建容器镜像时，只需要在开发环境的 `pangee-cluster` 目录中执行如下命令
 
 ```sh
-./build.sh v1.2.5
-# 其中 v1.2.5 为本次构建时的版本号
+./build.sh v2.0.0
+# 其中 v2.0.0 为本次构建时的版本号
+```
+
+## 构建二进制可执行文件
+
+在开发容器所在宿主机安装 dockerc，并执行 dockerc 构建命令
+
+```shell
+wget https://github.com/NilsIrl/dockerc/releases/download/v0.3.2/dockerc_x86-64
+mv dockerc_x86-64 dockerc
+chmod +x dockerc
+./dockerc --image docker-daemon:pangee-cluster:v2.0.0-amd64 --output pangee-cluster-bin
 ```
 
 ## 发布资源包
