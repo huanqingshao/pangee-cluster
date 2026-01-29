@@ -28,20 +28,18 @@ cd ..
 echo
 echo "【构建 server】"
 rm -f ./server/pangee-cluster
-docker run --rm -v ${PWD}:/usr/src/pangee-cluster \
-  -v ~/temp/build-temp/pkg:/go/pkg \
-  -w /usr/src/pangee-cluster/server golang:1.24.1-bullseye \
-  sh -c "export GOPROXY=https://goproxy.cn && export GO111MODULE=on && go build pangee-cluster.go"
+cd server
+export GOPROXY=https://goproxy.cn && export GO111MODULE=on && go build pangee-cluster.go
+cd ..
 
 ls -lh ./server/pangee-cluster
 
 echo
 echo "【构建 admin】"
 rm -f ./admin/pangee-cluster-admin
-docker run --rm -v ${PWD}:/usr/src/pangee-cluster \
-  -v ~/temp/build-temp/pkg:/go/pkg \
-  -w /usr/src/pangee-cluster/admin golang:1.24.1-bullseye \
-  sh -c "export GOPROXY=https://goproxy.cn && export GO111MODULE=on && go build pangee-cluster-admin.go"
+cd admin
+export GOPROXY=https://goproxy.cn && export GO111MODULE=on && go build pangee-cluster-admin.go
+cd ..
 
 ls -lh ./admin/pangee-cluster-admin
 
