@@ -14,66 +14,32 @@ Pangee-Cluster 是一款可以在图形界面引导下完成 Kubernetes 高可�
 
 **安装后的集群版本为**
 
-- Kubernetes v1.23.1 （与您使用的 [资源包版本](../support) 有关）
+- Kubernetes v1.28.15 （与您使用的 [资源包版本](../support) 有关）
 
 ### 社区
 
 
 ### 配置要求
 
-对于 Kubernetes 初学者，在搭建 K8S 集群时，推荐在阿里云或腾讯云采购如下配置：（您也可以使用自己的虚拟机、私有云等您最容易获得的 Linux 环境）
+对于 Kubernetes 初学者，在搭建 K8S 集群时，推荐使用如下服务器配置：
 
 - 至少 2 台 **2 核 4G** 的服务器
 - 本文档中，CPU 必须为 x86 架构，暂时未适配 arm 架构的 CPU
-- **CentOS 7.8**、 **CentOS 7.9** 或 **Ubuntu 20.04**
+- **openEuler 20.03**、 **openEuler 22.03** 或 **Ubuntu 20.04**
 
 **操作系统兼容性**
 
-操作系统的兼容性取决于 [资源包](/support/)，最新[资源包](/support/) 支持的操作系统有： Ubuntu、Anolis、CentOS、RedHat、OracleLinux、Rocky Linux、Kylin Linux Advanced Server、openSUSE Leap 等。
+操作系统的兼容性取决于 [资源包](/support/)，最新[资源包](/support/) 支持的操作系统有： openEuler、Anolis、Kylin Linux Advanced Server、Ubuntu、CentOS 等。
 
-| CentOS 版本  | 本文档是否兼容                           | 备注   |
+| 操作系统版本  | 本文档是否兼容                           | 备注   |
 | ------------ | ---------------------------------------- | ------ |
-| CentOS 7.9   | <span style="font-size: 24px;">😄</span> | 已验证 |
-| CentOS 7.8   | <span style="font-size: 24px;">😄</span> | 已验证 |
+| openEuler 20.03   | <span style="font-size: 24px;">😄</span> | 已验证 |
+| openEuler 22.03   | <span style="font-size: 24px;">😄</span> | 已验证 |
 | Ubuntu 20.04 | <span style="font-size: 24px;">😄</span> | 已验证 |
 
 ## 安装 Pangee-Cluster
 
-- 取一台服务器或虚拟机，执行一条命令，即可完成 Pangee-Cluster 的安装。
-
-  对这台服务器的最低要求为：
-  <div style="font-size: 13px;margin-left: 40px;">
-
-  - 1 核 2G
-  - 不少于 10G 磁盘空余空间
-  - 已经安装好 docker
-
-  </div>
-
-  待执行的命令如下：
-
-  ```sh {6,7,8}
-  docker run -d \
-    --privileged \
-    --restart=unless-stopped \
-    --name=pangee-cluster \
-    -e TZ=Asia/Shanghai \
-    -p 80:80/tcp \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v ~/pangee-cluster-data:/data \
-    opencmit/pangee-cluster:latest-amd64
-    # 如果您是 arm64 环境，请将标签里的 amd64 修改为 arm64，例如 opencmit/pangee-cluster:latest-arm64
-  ```
-
-  ::: tip 持久化
-
-  - PangeeCluster 的信息保存在容器的 `/data` 路径，请将其映射到一个您认为安全的地方，上面的命令中，将其映射到了 `~/pangee-cluster-data` 路径；
-  - 只要此路径的内容不受损坏，重启、升级、重新安装 Pangee-Cluster，或者将数据及 Pangee-Cluster 迁移到另外一台机器上，您都可以找回到原来的信息；
-  - 加个 [GITHUB Star](https://github.com/opencmit/pangee-cluster)，避免迷路。
-
-  :::
-
-- 在浏览器打开地址 `http://这台机器的IP`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 Pangee-Cluster 界面。
+请参考文档 [快速安装 PangeeCluster](/index.html)
 
 ## 加载离线资源包
 
