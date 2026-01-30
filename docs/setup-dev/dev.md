@@ -43,15 +43,6 @@ meta:
 
 - 使用 VS code 在容器中打开工作区
 
-- 替换对 `ansible` 定制的文件：（待完善）
-
-  ```sh
-  cp .docker/ansible-patch/config/base.yml /usr/local/lib/python3.8/dist-packages/ansible/config/base.yml
-  cp .docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/callback/default.py
-  cp .docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/callback/__init__.py
-  cp .docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.8/dist-packages/ansible/plugins/action/raw.py
-  ```
-
 ## 运行开发环境
 
 需按如下步骤逐个运行各组件
@@ -59,7 +50,16 @@ meta:
 - 运行 pangee-cluster/server
 - 运行 pangee-cluster/web
 
-### 运行 pangee-cluster server
+### 运行 pangee-cluster web
+
+- 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，省略截图；
+
+- 在集成终端中（pangee-cluster/web/public 路径下）执行命令：
+
+  ```sh
+  ln -s version-$(dpkg --print-architecture).json version.json
+  # 仅需在首次运行时执行一次即可
+  ```
 
 - 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，如下图所示
 
@@ -70,7 +70,10 @@ meta:
   ```sh
   pnpm install
   pnpm build
+  pnpm dev
   ```
+
+### 运行 pangee-cluster server
 
 - 在 vscode 中导航到 `pangee-cluster`，点击右键，并点击 `在集成终端中打开`，省略截图；
 
@@ -97,29 +100,7 @@ meta:
   [GIN-debug] Listening and serving HTTP on :9081
   ```
 
-### 运行 pangee-cluster web
-
-- 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，省略截图；
-
-- 编辑 `/etc/hosts` 文件，添加如下信息：
-
-  ```sh
-  192.168.64.68  kb pangee-cluster-arm
-  # 假设 192.168.64.68 为您开发环境的 IP 地址
-  ```
-
-- 在集成终端中（pangee-cluster/web/public 路径下）执行命令：
-
-  ```sh
-  ln -s version-$(dpkg --print-architecture).json version.json
-  # 仅需在首次运行时执行一次即可
-  ```
-
-- 在集成终端中（pangee-cluster/web 路径下）执行命令：
-
-  ```sh
-  pnpm dev
-  ```
+### 访问 pangee-cluster 界面
 
 - 在浏览器打开如下路径
 

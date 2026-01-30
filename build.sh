@@ -11,9 +11,7 @@ fi
 
 echo "【构建】 ${1}-${arch}"
 
-tag=pangee-cluster
-# tag=eipwork/pangee-cluster
-# tag_backup=swr.cn-east-2.myhuaweicloud.com/kuboard/pangee-cluster
+tag=opencmit/pangee-cluster
 
 echo
 echo "【构建 web】"

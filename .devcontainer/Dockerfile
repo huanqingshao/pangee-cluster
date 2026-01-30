@@ -45,10 +45,10 @@ RUN python3 -m venv /root/.cmcc-venv \
   && source /root/.cmcc-venv/bin/activate \
   && pip install -U -r /root/requirements.txt
 
-COPY docker/ansible-patch/config/base.yml /usr/local/lib/python3.10/dist-packages/ansible/config/base.yml
-COPY docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/callback/default.py
-COPY docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/callback/__init__.py
-COPY docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/action/raw.py
+COPY docker/ansible-patch/config/base.yml /root/.cmcc-venv/lib/python3.8/site-packages/ansible/config/base.yml
+COPY docker/ansible-patch/plugins_callback/default.py /root/.cmcc-venv/lib/python3.8/site-packages/ansible/plugins/callback/default.py
+COPY docker/ansible-patch/plugins_callback/__init__.py /root/.cmcc-venv/lib/python3.8/site-packages/ansible/plugins/callback/__init__.py
+COPY docker/ansible-patch/plugins_action/raw.py /root/.cmcc-venv/lib/python3.8/site-packages/ansible/plugins/action/raw.py
 
 RUN apt install -y rsync netcat
 
