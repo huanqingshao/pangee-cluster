@@ -39,7 +39,7 @@ zh:
             </template>
             <span v-if="items.length == 0"> {{ t("selectANode") }} </span>
           </div>
-          <Codemirror v-if="contentType == 'text'" v-model:value="content" :options="cmOptions">
+          <Codemirror v-if="contentType == 'text' || contentType == 'application/x-yaml'" v-model:value="content" :options="cmOptions">
           </Codemirror>
           <div v-else class="editor">
             <!-- <pre v-if="contentType == 'text'"><code>{{ content }}</code></pre> -->
@@ -178,7 +178,7 @@ export default {
       }
       let path = `/resource-package/${this.packageName}/content${nodeToPath(node)}`;
       axios.head(path).then(resp => {
-        if (resp.headers['content-type']?.indexOf("text") >= 0) {
+        if (resp.headers['content-type']?.indexOf("text") >= 0 || resp.headers['content-type']?.indexOf("yaml") >= 0) {
           this.contentType = "text";
           axios.get(path).then(respTxt => {
             this.content = respTxt.data;
