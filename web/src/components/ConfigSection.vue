@@ -73,7 +73,7 @@ export default {
     disabled: { type: Boolean, required: false, default: false },
     antiFreeze: { type: Boolean, required: false, default: false },
     helpLink: { type: String, required: false, default: undefined },
-    labelWidth: { type: String, required: false, default: '80px' },
+    labelWidth: { type: String, required: false, default: '90px' },
   },
   data () {
     return {
@@ -146,6 +146,7 @@ export default {
 <style scoped lang="css">
 .enableButton {
   font-size: 13px;
+  white-space: break-spaces;
 }
 .config_section_header {
   height: 50px;
