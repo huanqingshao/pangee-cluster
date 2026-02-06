@@ -70,13 +70,13 @@ const compute_edit_mode = computed(() => {
   if (props.readOnly) {
     return false
   }
-  if (editMode.value === 'view') {
+  if ((editMode || '') === 'view') {
     return false
   }
   if (props.antiFreeze) {
     return true
   }
-  if (editMode.value === 'frozen') {
+  if ((editMode || '') === 'frozen') {
     return false
   }
   return true
@@ -105,15 +105,18 @@ const compute_placeholder = computed(() => {
 
 const computedRules = computed(() => {
   let result = []
-  if (editMode.value === 'frozen' && !props.antiFreeze) {
+  if ((editMode || '') === 'frozen' && !props.antiFreeze) {
     return []
   }
   if (props.required) {
-    let message = "message" //this.$t('field.' + this.fieldName) + ' ' + this.$t('field.is_required_field')
+    let fieldName = props.prop || props.label || '';
+    fieldName = fieldName.slice((fieldName.lastIndexOf('.') || 0) + 1);
+    let message = fieldName + t('isRequiredField');
     result.push({
       required: true,
       validator: (rule: any, value: any, callback: Function) => {
-        if (value !== undefined && value !== '') {
+        console.log("Validating required field:", value);
+        if (value !== undefined && value !== '' && value !== null) {
           return callback()
         }
         return callback(message)
