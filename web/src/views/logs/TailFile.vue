@@ -56,7 +56,7 @@ zh:
 </i18n>
 
 <template>
-  <div>
+  <div style="height: 100%; display: flex; flex-direction: column;">
     <div style="
         background-color: #3a3333;
         color: #fffeff;
