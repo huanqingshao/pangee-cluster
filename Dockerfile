@@ -28,6 +28,8 @@ COPY .devcontainer/docker/ansible-patch/plugins_callback/default.py /usr/local/l
 COPY .devcontainer/docker/ansible-patch/plugins_callback/__init__.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/callback/__init__.py
 COPY .devcontainer/docker/ansible-patch/plugins_action/raw.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/action/raw.py
 
+COPY .devcontainer/docker/policy.json /root/.config/containers/policy.json
+
 ENV PANGEE_CLUSTER_WEB_DIR="/pangee-cluster/ui"
 ENV PANGEE_CLUSTER_PORT="9080"
 ENV GIN_MODE=release
