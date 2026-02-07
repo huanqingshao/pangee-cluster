@@ -13,6 +13,29 @@ en:
   cannotUseLocalhostAsTarget: Cannot use the machine that pangeecluster runs on as a target node.
   inhirit: inhirit from value configured in Global Config tab
   rootuser: Must use root user
+
+  ansible_host: 'Host'
+  ansible_port: 'SSH Port'
+  ansible_port_placeholder: 'PangeeCluster use this SSH port to connect to the node'
+
+  is_required_field: ' is required'
+
+  ansible_user: 'Username'
+  ansible_user_placeholder: 'PangeeCluster use this username to connect to the node'
+  ansible_password: 'Password'
+  ansible_password_placeholder: 'PangeeCluster use this password to connect to the node'
+  ansible_ssh_private_key_file: 'Private Key File'
+  ansible_ssh_private_key_file_placeholder: 'PangeeCluster use this private key file to connect to the node'
+  ansible_become: 'Privilege Escalation'
+  ansible_become_placeholder: 'Whether to use su command to switch identity after PangeeCluster log in to the node'
+  ansible_become_user: 'Become User'
+  ansible_become_user_placeholder: 'The username to switch to after PangeeCluster log in to the node and use su command to switch identity'
+  ansible_become_password: 'Become Password'
+  ansible_become_password_placeholder: 'The password for switching identity'
+
+  ansible_python_interpreter: 'Python Interpreter Path'
+  ansible_python_interpreter_placeholder: 'The Python interpreter path that PangeeCluster uses when executing Ansible tasks on the node'
+
 zh:
   addSshKey: 添加私钥
   ansible_host_placeholder: 'PangeeCluster 连接该主机时所使用的主机名或 IP 地址'
@@ -32,6 +55,8 @@ zh:
   ansible_host: '主机'
   ansible_port: 'SSH 端口'
   ansible_port_placeholder: 'PangeeCluster 连接该主机时所使用的 SHH 端口'
+
+  is_required_field: " 为必填字段"
   
   ansible_user: '用户名'
   ansible_user_placeholder: 'PangeeCluster 连接该主机时所使用的用户名'
@@ -47,6 +72,7 @@ zh:
   ansible_become_password_placeholder: '切换密码'
 
   ansible_python_interpreter: 'Python 路径'
+  ansible_python_interpreter_placeholder: 'PangeeCluster 在该主机上执行 Ansible 任务时所使用的 Python 解释器路径'
 </i18n>
 
 
@@ -131,7 +157,7 @@ export default {
   data() {
     return {
       hostRules: [
-        { required: true, message: this.$t('field.ansible_host') + this.$t('field.is_required_field'), trigger: 'blur' },
+        { required: true, message: 'ansible_host' + this.i18n('is_required_field'), trigger: 'blur' },
         { validator: this.$validators.ipv4, trigger: 'change' },
         {
           validator: (rule, value, callback) => {
@@ -150,7 +176,7 @@ export default {
         },
       ],
       ipRules: [
-        { required: true, message: this.i18n('ip') + this.$t('field.is_required_field'), trigger: 'change' },
+        { required: true, message: this.i18n('ip') + this.i18n('is_required_field'), trigger: 'change' },
         { validator: this.$validators.ipv4, trigger: 'change' },
         {
           validator: (rule, value, callback) => {
@@ -160,20 +186,20 @@ export default {
               }
             }
 
-            let block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
-            if (block.contains(value)) {
-              return callback('IP 不能被包含在容器组子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
-            }
+            // let block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
+            // if (block.contains(value)) {
+            //   return callback('IP 不能被包含在容器组子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.calico_ippool_cidr)
+            // }
 
-            block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
-            if (block.contains(value)) {
-              return callback('IP 不能被包含在服务子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
-            }
+            // block = new Netmask(this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
+            // if (block.contains(value)) {
+            //   return callback('IP 不能被包含在服务子网中 ' + this.cluster.inventory.all.children.target.children.k8s_cluster.vars.kube_service_cidr)
+            // }
 
             // A类地址：10.0.0.0--10.255.255.255
             // B类地址：172.16.0.0--172.31.255.255 
             // C类地址：192.168.0.0--192.168.255.255
-            block = new Netmask('10.0.0.0/8')
+            let block = new Netmask('10.0.0.0/8')
             if (block.contains(value)) {
               return callback()
             }
@@ -282,7 +308,7 @@ export default {
           return default_value.slice(43)
         }
       }
-      return default_value ? this.i18n('default_value', { default_value: default_value }) : this.$t('field.' + fieldName + '_placeholder')
+      return default_value ? this.i18n('default_value', { default_value: default_value }) : this.t(fieldName + '_placeholder')
     },
     async loadSshKeyList() {
       let result = []
