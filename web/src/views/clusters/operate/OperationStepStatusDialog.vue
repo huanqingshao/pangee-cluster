@@ -145,11 +145,20 @@ export default {
         let node = this.status.data.result[i];
         for (let j in node) {
           let _metadata = yaml.load(j);
-          _metadata.cmd = node[j].cmd;
+          if (node[j].cmd) {
+            _metadata.cmd = node[j].cmd;
+          }
           _metadata.key = j;
+
+          let cmd = _metadata.cmd;
+          if (columns[_metadata.name] && columns[_metadata.name].cmd) {
+            cmd = columns[_metadata.name].cmd;
+          }
+
           if (columns[_metadata.name] == undefined) {
             columns[_metadata.name] = _metadata;
           }
+          columns[_metadata.name].cmd = cmd;
         }
       }
       let temp = [];
