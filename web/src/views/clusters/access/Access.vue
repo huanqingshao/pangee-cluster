@@ -31,8 +31,8 @@ zh:
     animated></el-skeleton>
   <el-scrollbar height="calc(100vh - 220px)" v-else-if="cluster.state.code === 200">
     <!-- <el-alert type="error" effect="dark" class="app_margin_bottom" :title="t('requiredToSyncEtcd')" :closable="false" show-icon></el-alert> -->
-    <el-alert type="info" :title="t('accessMethods')" :closable="false"></el-alert>
-    <div class="app_block_title">{{ t('accessFromControlPlane') }}</div>
+    <!-- <el-alert type="info" :title="t('accessMethods')" :closable="false"></el-alert> -->
+    <div class="app_block_title access_title">{{ t('accessFromControlPlane') }}</div>
     <div class="access_details" v-if="cluster">
       <el-alert :title="t('controlPlanes')" :closable="false" type="success"></el-alert>
       <div class="details" v-if="cluster.state && cluster.state.nodes">
@@ -52,7 +52,7 @@ zh:
         </template>
       </div>
     </div>
-    <div class="app_block_title">kubeconfig</div>
+    <div class="app_block_title access_title">kubeconfig</div>
     <div class="access_details">
       <el-button type="primary" icon="el-icon-files" @click="fetchKubeconfig" :loading="kubeconfigLoading">{{
         t('getKubeconfig') }}</el-button>
@@ -62,14 +62,14 @@ zh:
         <Codemirror v-model:value="kubeconfig" :options="cmOptions"></Codemirror>
       </div>
     </div>
-    <div class="app_block_title">etcd</div>
+    <div class="app_block_title access_title">etcd</div>
     <div class="access_details" v-if="cluster.state">
       <el-alert :closable="false" type="success" effect="dark" :title="t('etcdAccess')"></el-alert>
       <div class="details">
         <template v-for="(item, key) in cluster.state.etcd_members" :key="'etcd' + key">
           <div style="margin-top: 10px;">
-            <el-tag class="node_text" type="primary" size="default"> {{ etcdIp(item) }} </el-tag>
-            <el-tag class="node_text" type="primary" effect="light" size="default"> {{ etcdClientUrl(item) }} </el-tag>
+            <el-tag class="node_text app_text_mono" type="primary" size="default"> {{ etcdIp(item) }} </el-tag>
+            <el-tag class="node_text app_text_mono" type="primary" effect="light" size="default"> {{ etcdClientUrl(item) }} </el-tag>
             <template v-for="(etcd, name) in cluster.inventory.all.children.target.children.etcd.hosts"
               :key="'eb' + name + key">
               <el-button v-if="cluster.inventory.all.hosts[name].ip === etcdIp(item)"
@@ -238,6 +238,9 @@ etcdctl member list
 </script>
 
 <style scoped lang="css">
+.access_title {
+  background: var(--el-color-info-light-9);
+}
 .access_details {
   padding-left: 40px;
   margin-bottom: 20px;
@@ -246,6 +249,7 @@ etcdctl member list
 .details {
   background-color: var(--el-color-info-light-9);
   padding: 10px 20px 20px 20px;
+  border: solid 1px #fefefe;
 }
 
 .node_text {
