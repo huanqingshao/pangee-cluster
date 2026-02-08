@@ -8,6 +8,7 @@ import (
 	"github.com/opencmit/pangee-cluster/api/cluster/cluster_common"
 	"github.com/opencmit/pangee-cluster/api/command"
 	"github.com/opencmit/pangee-cluster/common"
+	"github.com/sirupsen/logrus"
 )
 
 type ExecuteStepRequest struct {
@@ -23,10 +24,19 @@ type ExecuteStepRequest struct {
 // 重置其 pangeecluster_resource_package 字段值为 none
 func resetNodeAction(inventory map[string]interface{}, path string, originalAction string) {
 	hosts := common.MapGet(inventory, path).(map[string]interface{})
-	for _, hostItf := range hosts {
-		if host, ok := hostItf.(map[string]interface{}); ok {
-			if common.MapGet(host, "pangeecluster_node_action") == originalAction {
-				common.MapSet(host, "pangeecluster_node_action", "none")
+	if originalAction == "delete_node" {
+		for key := range hosts {
+			hostName := "all.hosts." + key
+			if common.MapGetString(inventory, hostName+".pangeecluster_node_action") == "delete_node" {
+				common.MapDelete(hosts, key)
+				common.MapDelete(inventory, "all.hosts."+key)
+			}
+		}
+	} else {
+		for key := range hosts {
+			hostActionPath := "all.hosts." + key + ".pangeecluster_node_action"
+			if common.MapGet(inventory, hostActionPath) == originalAction {
+				common.MapSet(inventory, hostActionPath, "none")
 			}
 		}
 	}
@@ -55,30 +65,44 @@ func ExecuteStep(c *gin.Context) {
 
 			// logrus.Info("将要获取 data.operations")
 			operations := common.MapGet(tempClusterMetadata.ResourcePackage, "data.operations").([]interface{})
-			for _, operationItf := range operations { // 遍历所有的 operation
-				// logrus.Info("遍历 operation", index)
+			for index, operationItf := range operations { // 遍历所有的 operation
+				logrus.Info("遍历 operation", index)
 				operation := operationItf.(map[string]interface{})
-				nodeAction := common.MapGetString(operation, "pangeecluster_node_action")
-				if common.MapGetString(operation, "name") == req.Operation && nodeAction != "" { // 如果当前 operation 的 pangeecluster_node_action 不为空
-					// logrus.Info("匹配到 operation", nodeAction)
+				if common.MapGetString(operation, "name") == req.Operation { // 匹配到当前 operation
+					logrus.Info("匹配到 operation: ", req.Operation)
 					steps := common.MapGet(operation, "steps").([]interface{})
-					for index, stepItf := range steps { // 遍历所有的 steps
-						// logrus.Info("匹配到 step", nodeAction)
+					for _, stepItf := range steps { // 遍历所有的 steps
 						step := stepItf.(map[string]interface{})
-						if common.MapGetString(step, "name") == req.Step && index == len(steps)-1 { // 如果当前 step 为最后一个，重置 pangeecluster_resource_package 字段
-							// logrus.Info("是最后一个 step")
-							resetNodeAction(inventory, "all.hosts", nodeAction)
-							resetNodeAction(inventory, "all.children.target.children.etcd.hosts", nodeAction)
-							resetNodeAction(inventory, "all.children.target.children.harbor.hosts", nodeAction)
-							resetNodeAction(inventory, "all.children.target.children.k8s_cluster.children.kube_control_plane.hosts", nodeAction)
-							resetNodeAction(inventory, "all.children.target.children.k8s_cluster.children.kube_node.hosts", nodeAction)
+						if common.MapGetString(step, "name") == req.Step { // 匹配到当前 step
+							logrus.Info("匹配到 step: ", req.Step)
+							if common.MapGet(step, "mark_pangeecluster_node_action_done") != nil {
+								markDone := common.MapGet(step, "mark_pangeecluster_node_action_done").(map[string]interface{})
+								ansibleGroups := common.MapGet(markDone, "ansible_group").([]interface{})
+								action := common.MapGetString(markDone, "action")
+								if ansibleGroups != nil && action != "" {
+									for _, ansibleGroup := range ansibleGroups {
+										resetNodeAction(inventory, ansibleGroup.(string)+".hosts", action)
+										logrus.Infof("重置了 ansible group %s 下 hosts 的 pangeecluster_node_action 字段值为 none", ansibleGroup)
+									}
+								}
+							}
 
-							// logrus.Info("保存到文件", tempClusterMetadata.InventoryPath)
-							// 保存 inventory
+							if common.MapGet(step, "mark_pangeecluster_status") != nil {
+								statusName := common.MapGetString(step, "mark_pangeecluster_status.name")
+								statusValue := common.MapGetString(step, "mark_pangeecluster_status.value")
+								if statusName != "" && statusValue != "" {
+									common.MapSet(inventory, statusName, statusValue)
+									logrus.Infof("设置了 inventory 中变量 %s 的值为 %s", statusName, statusValue)
+								}
+							}
+
+							// 保存 inventory 文件到磁盘
 							common.SaveYamlFile(tempClusterMetadata.InventoryPath, inventory)
+
+							break // 已经找到对应的 step 并处理完毕，跳出循环
 						}
 					}
-					break
+					break // 已经找到对应的 operation 并处理完毕，跳出循环
 				}
 			}
 

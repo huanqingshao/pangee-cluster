@@ -129,17 +129,11 @@ export default {
           }
           for (let role of this.addNodeForm.roles) {
             if (role === 'etcd') {
-              this.inventoryRef.all.children.target.children.etcd.hosts[this.addNodeForm.name] = {
-                'pangeecluster_node_action': 'add_node',
-              }
+              this.inventoryRef.all.children.target.children.etcd.hosts[this.addNodeForm.name] = {}
             } else if (role === 'harbor_node') {
-              this.inventoryRef.all.children.target.children.harbor.hosts[this.addNodeForm.name] = {
-                'pangeecluster_node_action': 'add_node',
-              }
+              this.inventoryRef.all.children.target.children.harbor.hosts[this.addNodeForm.name] = {}
             } else {
-              this.inventoryRef.all.children.target.children.k8s_cluster.children[role].hosts[this.addNodeForm.name] = {
-                'pangeecluster_node_action': 'add_node',
-              }
+              this.inventoryRef.all.children.target.children.k8s_cluster.children[role].hosts[this.addNodeForm.name] = {}
             }
           }
           this.$emit('update:currentPropertiesTab', 'NODE_' + this.addNodeForm.name)

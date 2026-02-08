@@ -81,6 +81,9 @@ func ExecuteShellCommandsWithStrategy(owner_type, owner_name, target string, com
 	stdout, stderr, err := cmd.Run()
 	if err != nil {
 		duration := time.Now().UnixNano() - startTime.UnixNano()
+		logrus.Trace("stdout:", string(stdout))
+		logrus.Trace("stderr:", string(stderr))
+		logrus.Trace("err: ", err)
 		logrus.Trace("duration: ", duration/1000000)
 		return nil, err
 	}

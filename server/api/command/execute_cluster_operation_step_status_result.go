@@ -66,7 +66,9 @@ func CheckStepStatusExec(request CheckStepStatusRequest) (*CheckStepStatusRespon
 	duration := time.Now().UnixNano() - startTime.UnixNano()
 	logrus.Trace("duration: ", duration/1000000)
 	if err != nil {
-		// common.HandleError(c, http.StatusInternalServerError, "failed to run", err)
+		logrus.Trace("stdout: ", string(stdout))
+		logrus.Trace("stderr: ", string(stderr))
+		logrus.Trace("err: ", err)
 		return nil, errors.New(err.Error())
 	}
 

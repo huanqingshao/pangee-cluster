@@ -81,6 +81,7 @@ export default {
     currentOperation: { type: Number, required: true },
     currentStep: { type: Number, required: true },
   },
+  emits: ['loadingStatusChanged'],
   data() {
     return {
       history: [],
@@ -126,12 +127,16 @@ export default {
     async refresh() {
       if (this.apiPath) {
         this.loading = true;
+        this.$emit('loadingStatusChanged', true);
+        this.history = [];
         this.pangeeClusterApi.get(this.apiPath).then(resp => {
           this.history = resp.data.data.history
           this.loading = false;
+          this.$emit('loadingStatusChanged', false);
         }).catch(e => {
           console.log(e);
           this.loading = false;
+          this.$emit('loadingStatusChanged', false);
         })
       }
     },

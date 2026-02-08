@@ -28,15 +28,20 @@ zh:
     <div style="margin-bottom: 10px">
       <el-radio-group v-model="currentOperation" size="default">
         <template v-for="(operation, index) in cluster.resourcePackage.data.operations" :key="'op_' + index">
-          <el-radio-button :label="operation.title[locale]" :value="index"></el-radio-button>
+          <el-radio-button :label="operation.title[locale]" :value="index"
+            :disabled="isDisabled(operation)"></el-radio-button>
         </template>
       </el-radio-group>
-      <div class="operation-params" v-if="cluster.resourcePackage.data.operations[currentOperation] && cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action">
-        {{ t(cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action + "_count", {count: pendingNodesLength}) }}
+      <div class="operation-params"
+        v-if="cluster.resourcePackage.data.operations[currentOperation] && cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action">
+        {{ t(cluster.resourcePackage.data.operations[currentOperation].pangeecluster_node_action + "_count", {
+          count:
+        pendingNodesLength}) }}
         <el-link type="primary" icon="el-icon-edit" @click="$emit('go-to-plan-hosts')">
           <span style="margin-left: 5px">{{ t("edit") }}</span>
         </el-link>
-        <OperationPendingNode v-for="(node, name) in pendingNodes" :node="node" :node-name="name" :inventory="cluster.inventory">
+        <OperationPendingNode v-for="(node, name) in pendingNodes" :node="node" :node-name="name"
+          :inventory="cluster.inventory">
         </OperationPendingNode>
       </div>
     </div>
@@ -70,12 +75,16 @@ zh:
       </div>
       <div class="operation-card">
         <div class="markdown-title">
-          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$emit('refresh')">
+          <OperationStepExecute :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep"
+            @refresh="$emit('refresh')">
           </OperationStepExecute>
-          <OperationStepStatus ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep" @refresh="$refs.history.refresh()"></OperationStepStatus>
+          <OperationStepStatus v-if="!loadingStepHistory && $refs.history && $refs.history.history && $refs.history.history.length > 0"
+            ref="stepStatus" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep"
+            @refresh="$refs.history.refresh()"></OperationStepStatus>
         </div>
         <div class="operation-history">
-          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation" :currentStep="currentStep">
+          <OperationStepHistory ref="history" :cluster="cluster" :currentOperation="currentOperation"
+            :currentStep="currentStep" @loadingStatusChanged="loadingStepHistory = $event">
           </OperationStepHistory>
         </div>
       </div>
@@ -92,17 +101,33 @@ import OperationStepHistory from "./OperationStepHistory.vue";
 import OperationStepStatus from "./OperationStepStatus.vue";
 import OperationPendingNode from "./OperationPendingNode.vue";
 
+function getValue(obj, path, defaultValue = undefined) {
+  // 将路径字符串转换为数组
+  const keys = Array.isArray(path) ? path : path.split('.');
+
+  // 遍历路径
+  let result = obj;
+  for (const key of keys) {
+    if (result == null || result[key] === undefined) {
+      return defaultValue;
+    }
+    result = result[key];
+  }
+  return result;
+}
+
 export default {
   props: {
     cluster: { type: Object, required: true },
   },
-  data () {
+  data() {
     return {
+      loadingStepHistory: false
     };
   },
   computed: {
     currentOperation: {
-      get () {
+      get() {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -111,7 +136,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentOperation || 0
       },
-      set (v) {
+      set(v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -123,7 +148,7 @@ export default {
       }
     },
     currentStep: {
-      get () {
+      get() {
         if (this.$store.state.cluster[this.cluster.name] == undefined) {
           return 0;
         }
@@ -136,7 +161,7 @@ export default {
         }
         return this.$store.state.cluster[this.cluster.name].operation.currentStep || 0
       },
-      set (v) {
+      set(v) {
         this.$store.commit("cluster/CHANGE_CLUSTER_STATE",
           {
             cluster: this.cluster.name,
@@ -163,7 +188,7 @@ export default {
     pendingNodesLength() {
       let length = 0;
       for (let i in this.pendingNodes) {
-        length ++;
+        length++;
       }
       return length;
     }
@@ -177,7 +202,7 @@ export default {
     OperationPendingNode
   },
   methods: {
-    stepClass (step) {
+    stepClass(step) {
       if (this.currentStep == step) {
         return "step active";
       }
@@ -190,8 +215,29 @@ export default {
         isDir: true,
         path: path
       }]);
+    },
+    isDisabled(operation) {
+      if (operation.enabled_on == undefined) {
+        return false;
+      }
+      for (let condition of operation.enabled_on) {
+        let variableValue = getValue(this.cluster.inventory, condition.variable);
+        if (variableValue == undefined) {
+          return true;
+        }
+        if (condition.operator == "equal") {
+          if (variableValue != condition.value) {
+            return true;
+          }
+        } else if (condition.operator == "not_equal") {
+          if (variableValue == condition.value) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
-  },
+  }
 };
 </script>
 
