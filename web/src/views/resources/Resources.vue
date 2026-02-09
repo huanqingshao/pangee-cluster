@@ -62,10 +62,10 @@ zh:
             :value="item.value"
           />
         </el-select>
-          <ResourceDownload class="app_margin_top"
-            :resource="{ history: { task_type: 'resource', task_name: '', processing: false, success_tasks: [] } }"
-            action="upload">
-          </ResourceDownload>
+        <ResourceDownload class="app_margin_top"
+          :resource="{ history: { task_type: 'resource', task_name: '', processing: false, success_tasks: [] } }"
+          action="upload">
+        </ResourceDownload>
       </div>
       <div class="contentList">
         <el-table ref="table" v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%" row-key="version">
@@ -116,7 +116,7 @@ zh:
           </el-table-column>
           <el-table-column :label="t('supported_os')">
             <template #default="scope">
-              <template v-if="packageYaml[scope.row.version]">
+              <template v-if="packageYaml[scope.row.version] && scope.row.yaml">
                 <span v-for="(os, key) in scope.row.yaml.metadata.supported_os" :key="`os${scope.index}_${key}`"
                   style="margin-right: 10px;">
                   <el-tag>
@@ -160,7 +160,7 @@ zh:
             </template>
           </el-table-column>
           <slot name="columns">
-            <el-table-column :label="t('msg.operations')" width="200px">
+            <el-table-column :label="$t('msg.operations')" width="200px">
               <template #default="scope">
                 <template v-if="importedPackageMap">
                   <template v-if="importedPackageMap[scope.row.version]">

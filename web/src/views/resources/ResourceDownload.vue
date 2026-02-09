@@ -50,7 +50,7 @@ export default {
     resource: { type: Object, required: true },
     loading: { type: Boolean, required: false },
     action: { type: String, required: true },
-    source: { type: String, required: true }
+    source: { type: String, required: false }
   },
   data() {
     return {
