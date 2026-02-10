@@ -107,9 +107,11 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 			return []string{
 				versionDir,
 				fileName,
-				common.MapGet(downloadReq, "downloadFrom").(string),
-				common.MapGet(downloadReq, "enableProxyOnDownload").(string),
-				common.MapGet(downloadReq, "httpProxy").(string),
+				common.MapGetString(downloadReq, "downloadFrom"),
+				common.MapGetString(downloadReq, "retries"),
+				common.MapGetString(downloadReq, "downloadArchitecture"),
+				common.MapGetString(downloadReq, "enableProxyOnDownload"),
+				common.MapGetString(downloadReq, "httpProxy"),
 			}
 		},
 		Type:     "download",

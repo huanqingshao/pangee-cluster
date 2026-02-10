@@ -3,8 +3,18 @@
 # $1: 文件夹路径
 # $2: 文件名
 # $3: 下载源 (github.com / gitee.com)
-# $4: 是否使用 proxy (true / false)
-# $5: proxy 地址
+# $4: retries
+# $5: download_architecture (amd64 / arm64 / amd64,arm64)
+# $6: 是否使用 proxy (true / false)
+# $7: proxy 地址
+
+echo "文件夹路径: $1"
+echo "文件名    : $2"
+echo "下载源    : $3"
+echo "重试次数  : $4"
+echo "CPU架构   : $5"
+echo "启用代理  : $6"
+echo "代理地址  : $7"
 
 echo "TASK [创建文件夹] ****"
 
@@ -41,21 +51,8 @@ cp $1/content/package.yaml $1/package.yaml
 
 echo ""
 
-echo "TASK [配置代理] ****"
-
-ENABLE_PROXY_ON_DOWNLOAD=$4         /usr/local/bin/yq -i '.all.hosts.localhost.enable_proxy_on_download = env(ENABLE_PROXY_ON_DOWNLOAD)' $1/content/inventory.yaml
-if [ "$4" = "true" ]; then
-    echo "HTTP_PROXY=$5"
-    HTTP_PROXY=$5       /usr/local/bin/yq -i '.all.hosts.localhost.http_proxy = env(HTTP_PROXY)' $1/content/inventory.yaml
-    HTTPS_PROXY=$5      /usr/local/bin/yq -i '.all.hosts.localhost.https_proxy = env(HTTPS_PROXY)' $1/content/inventory.yaml
-else
-    echo "No proxy"
-fi
-
-echo ""
-
 echo "TASK [执行资源下载脚本] ****"
 
-bash $1/content/download-dependency.sh
+bash $1/content/download-dependency.sh $4 $5 $6 $7
 
 echo ""

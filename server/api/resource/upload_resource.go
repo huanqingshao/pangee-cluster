@@ -18,6 +18,8 @@ func UploadResource(c *gin.Context) {
 	// 限制上传大小50MB
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 50<<20)
 
+	retries := c.PostForm("retries")
+	downloadArchitecture := c.PostForm("downloadArchitecture")
 	enableProxyOnDownload := c.PostForm("enableProxyOnDownload")
 	httpProxy := c.PostForm("httpProxy")
 	file, err := c.FormFile("file")
@@ -117,6 +119,8 @@ func UploadResource(c *gin.Context) {
 				uploadDir,
 				"null",
 				"null",
+				retries,
+				downloadArchitecture,
 				enableProxyOnDownload,
 				httpProxy,
 			}

@@ -7,7 +7,7 @@ RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
   && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends tzdata \
   && apt upgrade -y \
   && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-  && apt install curl git vim wget -y 
+  && apt install curl git vim wget zip unzip rsync netcat lsof -y 
 
 RUN wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
   && dpkg -i docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
@@ -50,12 +50,8 @@ COPY docker/ansible-patch/plugins_callback/default.py /root/.cmcc-venv/lib/pytho
 COPY docker/ansible-patch/plugins_callback/__init__.py /root/.cmcc-venv/lib/python3.8/site-packages/ansible/plugins/callback/__init__.py
 COPY docker/ansible-patch/plugins_action/raw.py /root/.cmcc-venv/lib/python3.8/site-packages/ansible/plugins/action/raw.py
 
-RUN apt install -y rsync netcat
-
 RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64 -O /usr/local/bin/yq \
     && chmod +x /usr/local/bin/yq
-
-RUN apt install -y unzip
 
 RUN source /root/.profile && go version && apt install -y libgpgme-dev libassuan-dev libbtrfs-dev pkg-config \
     && git clone https://github.com/containers/skopeo.git \
