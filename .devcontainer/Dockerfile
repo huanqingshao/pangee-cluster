@@ -64,10 +64,11 @@ RUN source /root/.profile && go version && apt install -y libgpgme-dev libassuan
 
 COPY docker/policy.json /root/.config/containers/policy.json
 
-# 创建与宿主机相同 UID/GID 的用户
-ARG USER_UID=1000
-ARG USER_GID=1000
-RUN if [ "$USER_GID" != "1000" ]; then groupmod -g $USER_GID vscode; fi && \
-    if [ "$USER_UID" != "1000" ]; then usermod -u $USER_UID vscode; fi
+RUN apt install ssh iproute2 -y && mkdir /run/sshd
 
-ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+ENV ROOT_PASSWORD=PangeeCluster123
+RUN echo "root:${ROOT_PASSWORD}" | chpasswd
+
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+ENTRYPOINT [ "/usr/sbin/sshd", "-D" ]

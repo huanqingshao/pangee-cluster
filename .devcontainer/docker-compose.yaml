@@ -1,12 +1,8 @@
 services:
   devcontainer:
     build: .
-    command: sleep infinity
     privileged: true
-    user: "${UID:-1000}:${GID:-1000}"
     environment:
-      USER_UID: "${UID:-1000}"
-      USER_GID: "${GID:-1000}"
       PANGEE_CLUSTER_LOGRUS_LEVEL: trace
       PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL: trace
       PANGEE_CLUSTER_DEFAULT_ADMIN_PASSWORD: 2432612431302464617343536e4858706f567278764f532f5274752f755a526c72694f30306d73456657674c7a39644b712f43436c6d64544e506375
@@ -15,4 +11,5 @@ services:
     volumes:
       - ../..:/workspaces:cached
       - "/etc/resolv.conf:/etc/resolv.conf"
-
+    ports:
+      - "3322:22"
