@@ -11,5 +11,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
       - "/etc/resolv.conf:/etc/resolv.conf"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "~/.ssh:/root/.ssh"
     ports:
       - "3322:22"

@@ -70,5 +70,6 @@ ENV ROOT_PASSWORD=PangeeCluster123
 RUN echo "root:${ROOT_PASSWORD}" | chpasswd
 
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/#AuthorizedKeysFile/AuthorizedKeysFile/' /etc/ssh/sshd_config
 
 ENTRYPOINT [ "/usr/sbin/sshd", "-D" ]
