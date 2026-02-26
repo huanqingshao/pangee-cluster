@@ -15,7 +15,7 @@
               </div>
             </template>
             <template v-else>
-              <div style="display: flex; gap: 0">
+              <div style="display: flex; gap: 0; width: 100%;">
                 <slot name="editItem" :index="index" :item="item" style="flex-grow: 1"></slot>
                 <el-button style="margin-left: 5px;" icon="el-icon-delete" type="primary" text @click="modelValue!.splice(index, 1)"></el-button>
               </div>
@@ -75,7 +75,6 @@ function addNewItem() {
   border-radius: 50px;
   border: solid 1px var(--el-color-primary-light-7);
   background-color: var(--el-color-primary-light-9);
-  height: 28px;
 }
 
 .block_item_in_array {
