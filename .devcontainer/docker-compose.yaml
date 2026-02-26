@@ -1,7 +1,8 @@
 services:
-  devcontainer:
+  pangeeclusterdev:
     build: .
     privileged: true
+    restart: unless-stopped
     environment:
       PANGEE_CLUSTER_LOGRUS_LEVEL: trace
       PANGEE_CLUSTER_ADMIN_LOGRUS_LEVEL: trace

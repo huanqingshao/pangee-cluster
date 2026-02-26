@@ -9,9 +9,9 @@ RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
   && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
   && apt install curl git vim wget zip unzip rsync netcat lsof -y 
 
-RUN wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
-  && dpkg -i docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb \
-  && rm docker-ce-cli_20.10.24~3-0~ubuntu-focal_$(dpkg --print-architecture).deb
+RUN wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
+  && dpkg -i docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
+  && rm docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
@@ -66,10 +66,11 @@ COPY docker/policy.json /root/.config/containers/policy.json
 
 RUN apt install ssh iproute2 -y && mkdir /run/sshd
 
-ENV ROOT_PASSWORD=PangeeCluster123
+ENV ROOT_PASSWORD=123
 RUN echo "root:${ROOT_PASSWORD}" | chpasswd
 
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#AuthorizedKeysFile/AuthorizedKeysFile/' /etc/ssh/sshd_config
+RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 ENTRYPOINT [ "/usr/sbin/sshd", "-D" ]
