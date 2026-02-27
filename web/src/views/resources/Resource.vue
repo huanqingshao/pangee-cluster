@@ -28,7 +28,7 @@ zh:
           </el-icon>
           {{ t('not_load') }}
         </el-tag>
-        <ResourceDownload :resource="resource" action="reload" :loading="loading" @refresh="refresh"></ResourceDownload>
+        <ResourceDownload :resource="resource" :loading="loading" @refresh="refresh"></ResourceDownload>
         <el-popconfirm v-if="!resource.history.processing" :title="t('confirmToDelete')" @confirm="removeResource">
           <template #reference>
             <el-button type="danger" icon="el-icon-delete">{{ $t('msg.delete') }}</el-button>
@@ -36,9 +36,9 @@ zh:
         </el-popconfirm>
       </template>
     </ControlBar>
-    <el-card class="no-radius">
+    <el-card style="margin: 20px;">
       <el-skeleton v-if="loading"></el-skeleton>
-      <ResourceDetails v-else-if="resource" :releaseNote="releaseNote" :resourcePackage="resource.package" expandAll>
+      <ResourceDetails v-else-if="resource" releaseNoteBaseUrl="" :releaseNote="releaseNote" :resourcePackage="resource.package" expandAll>
       </ResourceDetails>
     </el-card>
   </div>
@@ -48,6 +48,7 @@ zh:
 import mixin from '../../mixins/mixin.js'
 import ResourceDetails from './details/ResourceDetails.vue'
 import ResourceDownload from './ResourceDownload.vue'
+import axios from "axios"
 
 export default {
   mixins: [mixin],
@@ -87,20 +88,20 @@ export default {
     this.refresh()
   },
   methods: {
-    refresh() {
+    async refresh() {
       this.loading = true
-      this.pangeeClusterApi.get(`/resources/local/${this.name}`).then(resp => {
+      await axios.get(`/resource-package/${this.name}/content/release.md`).then(resp => {
+        this.releaseNote = resp.data
+      }).catch(e => {
+        console.log(e)
+      })
+      await this.pangeeClusterApi.get(`/resources/local/${this.name}`).then(resp => {
         this.resource = resp.data.data
-        this.loading = false
       }).catch(e => {
         this.loading = false
         console.log(e)
       })
-      this.pangeeClusterApi.get(`/resources/local/${this.name}/release_note`).then(resp => {
-        this.releaseNote = resp.data.data.release_note
-      }).catch(e => {
-        console.log(e)
-      })
+      this.loading = false
     },
     removeResource() {
       this.pangeeClusterApi.delete(`/resources/${this.name}`).then(() => {

@@ -36,6 +36,7 @@ zh:
 
 <script>
 import ResourceDetails from "../../../resources/details/ResourceDetails.vue";
+import { computed } from 'vue'
 
 export default {
   props: {
@@ -56,9 +57,9 @@ export default {
   },
   provide() {
     return {
-      editMode: () => {
+      editMode: computed(() => {
         return "view";
-      }
+      })
     };
   },
   inject: ["isClusterInstalled", "isClusterOnline"],

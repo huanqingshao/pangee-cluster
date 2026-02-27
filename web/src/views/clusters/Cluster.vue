@@ -94,12 +94,12 @@ zh:
           @refresh="refresh"></Backup>
         <el-skeleton v-else animated :rows="10" style="height: calc(100vh - 220px)"></el-skeleton>
       </el-tab-pane>
-      <el-tab-pane :label="t('upgrade')" name="upgrade">
+      <!-- <el-tab-pane :label="t('upgrade')" name="upgrade">
         <template v-if="currentTab == 'upgrade'">
           <el-skeleton v-if="loading"></el-skeleton>
           <Upgrade v-else :cluster="cluster" @refresh="refresh"></Upgrade>
         </template>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

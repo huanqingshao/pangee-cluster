@@ -10,9 +10,9 @@ func GetRepoUrl(source string) (string, error) {
 	// TODO: 修改地址
 	switch source {
 	case "github":
-		url = "https://raw.githubusercontent.com/Horan-Z/test"
+		url = "https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package"
 	case "gitee":
-		url = "https://gitee.com/Horan-Z/test/raw"
+		url = "https://gitee.com/opencmit/pangee-cluster-resource-package"
 	default:
 		return url, fmt.Errorf("unsupported source type: %s", source)
 	}
@@ -26,9 +26,9 @@ func GetDownloadUrl(source string) (string, error) {
 	// TODO: 修改地址
 	switch source {
 	case "github":
-		url = "https://github.com/Horan-Z/test/releases/download"
+		url = "https://github.com/opencmit/pangee-cluster-resource-package/releases/download"
 	case "gitee":
-		url = "https://gitee.com/Horan-Z/test/releases/download"
+		url = "https://gitee.com/opencmit/pangee-cluster-resource-package/releases/download"
 	default:
 		return url, fmt.Errorf("unsupported source type: %s", source)
 	}

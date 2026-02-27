@@ -15,7 +15,8 @@ en:
   import_status_true: True
   import_status_false: False
   minVersionRequired: Min version required to pangeecluster
-  cannot_reach_online_repository: Current browser cannot reach https://pangee-cluster.cn/support
+  cannot_reach_online_repository: Current browser cannot reach https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/index/package-list.yaml
+  upload_resource_package: Upload Customized Resource Package
 zh:
   title: 资源包列表
   resourceDescription1: PangeeCluster 提供一组经过预先测试验证的资源包列表，可以帮助您快速完成集群安装
@@ -32,7 +33,8 @@ zh:
   import_status_true: 已导入
   import_status_false: 未导入
   minVersionRequired: PangeeCluster最低版本要求
-  cannot_reach_online_repository: 当前浏览器不能在线获取可选的资源包列表，请在可以访问外网的浏览器打开地址 https://pangee-cluster.cn/support
+  cannot_reach_online_repository: 当前浏览器不能在线获取可选的资源包列表，请在可以访问外网的浏览器打开地址 https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/index/package-list.yaml
+  upload_resource_package: 上传自定义资源包
 </i18n>
 
 <template>
@@ -45,27 +47,16 @@ zh:
           <li>{{ t('resourceDescription2') }}</li>
         </div>
       </el-alert>
+      <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/index/package-list.yaml" type="danger"
+        style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
+      </PangeeClusterLink>
       <div style="text-align: right;">
-        <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://pangee-cluster.cn/support" type="danger"
-          style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
-        </PangeeClusterLink>
-        <el-select
-          v-model="sourceRepo"
-          size="small"
-          style="width: 120px; margin-right: 10px"
-          @change="refresh"
-        >
-          <el-option
-            v-for="item in repoOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <ResourceDownload class="app_margin_top"
-          :resource="{ history: { task_type: 'resource', task_name: '', processing: false, success_tasks: [] } }"
-          action="upload">
-        </ResourceDownload>
+        <el-upload ref="upload" class="upload-resource-file" action="" :auto-upload="false" :show-file-list="false"
+          :on-change="handleFileSelect" :before-upload="() => false" :limit="1" accept=".zip">
+          <el-button type="warning" icon="el-icon-upload">
+            {{ t("upload_resource_package") }}
+          </el-button>
+        </el-upload>
       </div>
       <div class="contentList">
         <el-table ref="table" v-if="mergedPackageList" :data="mergedPackageList" style="width: 100%" row-key="version">
@@ -82,10 +73,7 @@ zh:
                   </el-icon>
                   {{ scope.row.version }}
                 </router-link>
-                <router-link 
-                  v-else 
-                  :to="`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`"
-                >
+                <router-link v-else :to="`/settings/resources/${scope.row.version}/tag/${scope.row.tag_name}/on_air`">
                   <el-icon :size="12" style="width: 12px; height: 12px; vertical-align: middle;">
                     <el-icon-link></el-icon-link>
                   </el-icon>
@@ -166,18 +154,11 @@ zh:
                   <template v-if="importedPackageMap[scope.row.version]">
                     <el-button type="primary" plain icon="el-icon-view"
                       @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.view') }}</el-button>
-                    <el-button type="danger" icon="el-icon-delete"
-                      @click="$router.push(`/settings/resources/${scope.row.version}`)">{{ $t('msg.delete')
-                      }}</el-button>
                   </template>
                   <template v-else>
-                    <el-button type="primary" plain icon="el-icon-view"
-                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
-                    {{ $t('msg.view') }}
-                    </el-button>
                     <el-button type="primary" v-if="scope.row.meetPangeeClusterVersion" icon="el-icon-download"
-                      @click="$router.push(`/settings/resources/${this.sourceRepo}/${scope.row.tag_name}/${scope.row.file_name}/${scope.row.version}/on_air`)">
-                    {{ t('import') }}
+                      @click="$router.push(`/settings/resources/${scope.row.version}/tag/${scope.row.tag_name}/on_air`)">
+                      {{ t('import') }}
                     </el-button>
                   </template>
                 </template>
@@ -196,6 +177,7 @@ import yaml from 'js-yaml'
 import ResourcesCreateOffline from './ResourcesCreateOffline.vue'
 import compareVersions from 'compare-versions'
 import ResourceDownload from './ResourceDownload.vue'
+import axios from 'axios'
 
 export default {
   props: {
@@ -242,6 +224,25 @@ export default {
     this.refresh()
   },
   methods: {
+    async handleFileSelect(file, fileList) {
+      console.log('选择的文件:', file)
+      try {
+        const formData = new FormData();
+        formData.append('file', file.raw);
+
+        await this.pangeeClusterApi
+          .post('/resources/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+          .then(resp => {
+            this.$router.replace(`/settings/resources/${resp.data.data.version}`);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+        this.$refs.upload.clearFiles();
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+    },
     depVersion(depName, packageYaml) {
       for (let i in packageYaml?.data.dependency) {
         let dep = packageYaml.data.dependency[i];
@@ -256,13 +257,9 @@ export default {
       this.availablePackageList = undefined
       this.packageYaml = {}
       this.cannot_reach_online_repository = false
-      await this.pangeeClusterApi.get('/resources/package-list', {
-        params: {
-          source: this.sourceRepo,
-        }
-      }).then(resp => {
-        this.availablePackageList = resp.data.items;
-        console.log(this.availablePackageList)
+      await axios.get("https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/index/package-list.yaml?nocache=" + Math.random()).then(resp => {
+        this.availablePackageList = yaml.load(resp.data).items;
+        // console.log(this.availablePackageList)
       }).catch(e => {
         console.log(e);
         this.cannot_reach_online_repository = true;
@@ -297,12 +294,8 @@ export default {
       })
     },
     loadPackageFromRepository(packageVersion) {
-      this.pangeeClusterApi.get(`/resources/remote/${packageVersion.tag_name}`, {
-        params: { 
-          source: this.sourceRepo
-        }
-      }).then(resp => {
-        const yamlObj = yaml.load(resp.data.data.package)
+      axios.get(`https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/${packageVersion.tag_name}/package.yaml?nocache=${Math.random()}`).then(resp => {
+        const yamlObj = yaml.load(resp.data)
         this.packageYaml[packageVersion.version] = yamlObj
         packageVersion.yaml = yamlObj
         packageVersion.meetPangeeClusterVersion = compareVersions(window.PangeeCluster.version.trimed, packageVersion.yaml.metadata.pangee_cluster_version.min) >= 0
@@ -319,5 +312,10 @@ export default {
 
 .contentList {
   margin: 10px 0;
+}
+
+.upload-resource-file {
+  height: 28px;
+  padding: 0px;
 }
 </style>

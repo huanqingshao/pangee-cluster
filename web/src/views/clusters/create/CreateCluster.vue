@@ -47,7 +47,7 @@ zh:
 
 <script>
 import ResourcePackage from '@/views/resources/details/ResourcePackage.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
   setup() {
@@ -59,7 +59,9 @@ export default {
   },
   provide() {
     return {
-      editMode: 'edit',
+      editMode: computed(() => {
+        return 'edit'
+      })
     }
   },
   data() {

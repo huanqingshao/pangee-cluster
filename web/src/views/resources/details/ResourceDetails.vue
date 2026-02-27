@@ -11,7 +11,7 @@ zh:
   <div>
     <el-tabs v-if="releaseNoteHtml" v-model="activeName" type="card">
       <el-tab-pane :label="t('releaseNote')" name="releaseNote">
-        <div v-if="releaseNoteHtml" v-html="releaseNoteHtml" class="markdown"></div>
+        <div v-if="releaseNoteHtml" v-html="releaseNoteHtml" class="plan-markdown"></div>
       </el-tab-pane>
       <el-tab-pane :label="t('content')" name="content">
         <div style="padding-top: 10px;">
@@ -30,6 +30,7 @@ import markdown from 'markdown-it'
 export default {
   props: {
     releaseNote: { type: String, required: false },
+    releaseNoteBaseUrl: { type: String, required: false },
     resourcePackage: { type: Object, required: true },
     expandAll: { type: Boolean, required: false, default: false },
   },
@@ -39,16 +40,22 @@ export default {
     }
   },
   computed: {
-    releaseNoteHtml () {
+    releaseNoteHtml() {
       if (this.releaseNote) {
+        let temp = this.releaseNote
+        if (this.releaseNoteBaseUrl) {
+          temp = temp.replaceAll("](./", `](${this.releaseNoteBaseUrl}/`)
+        }
         let md = new markdown()
-        return md.render(this.releaseNote)
+        let t = md.render(temp)
+        t = t.replaceAll("<img ", `<img onclick=showArchMarkdownImageModal(this) `);
+        return t;
       }
       return undefined
     }
   },
   components: { ResourcePackage },
-  mounted () {
+  mounted() {
   },
   methods: {
 
@@ -56,30 +63,18 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.markdown {
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
-  font-size: 13px;
-  h1 {
-    font-size: 18px;
-    display: none;
-  }
-  h2 {
-    font-size: 16px;
-    background-color: var(--el-color-primary-light-9);
-    padding: 10px 20px;
-  }
-
-}
+<style lang="css">
+@import "@/views/clusters/plan/markdown.scss"
 </style>
 
 <style scoped lang="css">
 .package_title {
   font-weight: bolder;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
+
 .package_info {
   margin-left: 20px;
-  font-family: Consolas,Menlo,Bitstream Vera Sans Mono,Monaco,"微软雅黑",monospace;
+  font-family: Consolas, Menlo, Bitstream Vera Sans Mono, Monaco, "微软雅黑", monospace;
 }
 </style>

@@ -90,11 +90,21 @@ function addNewItem() {
 .view_item_in_array {
   display: flex;
   align-items: center;
-  margin: 5px;
-  padding: 0px 12px 0px 12px;
+  margin: 3px;
+  padding: 0px 6px 0px 16px;
   border-radius: 4px;
-  border: solid 1px var(--el-color-primary-light-8);
+  /* border: solid 1px var(--el-color-primary-light-8); */
   background-color: white;
-  height: 28px;
+  height: 24px;
+  position: relative;
+  
+}
+
+.view_item_in_array::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: var(--el-color-primary);
+  font-weight: 500;
 }
 </style>

@@ -23,7 +23,6 @@ import { VueClipboard } from "@soerenmartius/vue3-clipboard";
 import App from "./App.vue";
 
 import axios from "axios";
-import checkNewVersion from "./utils/version-checker.js";
 
 import i18nMixin from "./mixins/i18n-mixin.js";
 
@@ -54,5 +53,4 @@ axios.get("./version.json?nocache=" + new Date().getTime()).then(resp => {
   initKuboardMfe(app);
   app.mount("#app");
 
-  checkNewVersion.init();
 });

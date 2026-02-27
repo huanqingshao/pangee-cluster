@@ -4,11 +4,9 @@
       :step="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].name"
       :title="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale]"
       :populateRequest="populateRequest" @refresh="$emit('refresh')" :width="600">
-      <el-form-item :label="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale]">
-        <!-- <div style="font-weight: bolder; line-height: 28px;">{{ t('backup_desc') }}</div>
-        <el-tag class="app_text_mono">/data/cluster/{{ cluster.name }}/backup</el-tag> -->
+      <!-- <el-form-item :label="cluster.resourcePackage.data.operations[currentOperation].steps[currentStep].title[locale]">
         <div>参数</div>
-      </el-form-item>
+      </el-form-item> -->
     </ClusterTask>
   </div>
 </template>

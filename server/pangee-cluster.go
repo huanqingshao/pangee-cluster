@@ -88,14 +88,9 @@ func setupRouter() *gin.Engine {
 	api.DELETE("/private-keys/:owner_type/:owner_name/:name", private_key.DeletePrivateKey)
 
 	api.GET("/resources", resource.ListResources)
-	api.GET("/resources/package-list", resource.GetPackageList)
 	api.GET("/resources/local/:name", resource.GetLocalResource)
-	api.GET("/resources/local/:name/release_note", resource.GetLocalResourceReleaseNote)
-	api.GET("/resources/remote/:name", resource.GetRemoteResource)
-	api.GET("/resources/remote/:name/release_note", resource.GetRemoteResourceReleaseNote)
-	api.POST("/resources/:name/download", resource.CreateAndDownloadResource)
 	api.POST("/resources/upload", resource.UploadResource)
-	api.POST("/resources/:name/reload", resource.ReloadResource)
+	api.POST("/resources/:name/download", resource.DownloadResourceDependancy)
 	api.DELETE("/resources/:name", resource.DeleteResource)
 
 	api.GET("/filebrowser", filebrowser.List)

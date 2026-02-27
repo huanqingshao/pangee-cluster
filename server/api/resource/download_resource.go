@@ -10,79 +10,47 @@ import (
 	"github.com/opencmit/pangee-cluster/common"
 	"github.com/opencmit/pangee-cluster/constants"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
 )
 
-func CreateAndDownloadResource(c *gin.Context) {
-	templateMethod(c, false)
-}
-
-func ReloadResource(c *gin.Context) {
-	templateMethod(c, true)
-}
-
-func templateMethod(c *gin.Context, canUseExisting bool) {
-	var req GetResourceRequest
-	c.ShouldBindUri(&req)
-
+func DownloadResourceDependancy(c *gin.Context) {
 	buf, err := c.GetRawData()
-
-	logrus.Trace(string(buf))
-
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to read request", err)
 		return
 	}
 
+	logrus.Trace(string(buf))
+
 	var downloadReq map[string]interface{}
 	err = json.Unmarshal(buf, &downloadReq)
-
 	if err != nil {
 		common.HandleError(c, http.StatusInternalServerError, "failed to parse request", err)
 		return
 	}
 
-	version := common.MapGet(downloadReq, "package.metadata.version").(string)
+	version, ok := common.MapGet(downloadReq, "version").(string)
+	if !ok || version == "" {
+		common.HandleError(c, http.StatusBadRequest, "invalid version parameter", nil)
+		return
+	}
 
 	versionDir := constants.GET_DATA_RESOURCE_DIR() + "/" + version
 
 	_, errExist := os.ReadDir(versionDir)
-	if errExist == nil && !canUseExisting {
-		common.HandleError(c, http.StatusConflict, "资源包已存在，不能重复创建", errExist)
+	if errExist != nil {
+		common.HandleError(c, http.StatusConflict, "资源包不存在", errExist)
 		return
 	}
 
-	if err := common.CreateDirIfNotExists(versionDir); err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "Create dir failed. ", err)
+	downloadScriptPath := versionDir + "/content/download-dependency.sh"
+	if _, err := os.Stat(downloadScriptPath); os.IsNotExist(err) {
+		common.HandleError(c, http.StatusInternalServerError, "download script not found", err)
 		return
-	}
-
-	pkg, _ := yaml.Marshal(downloadReq["package"])
-
-	pkgExists := false
-	entries, _ := os.ReadDir(versionDir)
-	for _, entry := range entries {
-		if entry.Name() == "package.yaml" {
-			pkgExists = true
-		}
-	}
-	if !pkgExists {
-		if err := os.WriteFile(versionDir+"/package.yaml", pkg, 0655); err != nil {
-			common.HandleError(c, http.StatusInternalServerError, "Write package.yaml failed. ", err)
-			return
-		}
 	}
 
 	postExec := func(status command.ExecuteExitStatus) (string, error) {
-
-		success := status.Success
 		var message string
-		if success {
-			err := os.WriteFile(versionDir+"/content/package.yaml", pkg, 0655)
-			if err != nil {
-				logrus.Warn(err.Error())
-			}
-
+		if status.Success {
 			message = "\033[32m[ " + "PangeeCluster resource package has been loaded successfully." + " ]\033[0m \n"
 			message += "\033[32m[ " + "PangeeCluster 资源包已成功加载到本地，请回到资源包页面查看。" + " ]\033[0m \n"
 		} else {
@@ -92,22 +60,12 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 		return "\n" + message, nil
 	}
 
-	// tagName, _ := common.MapGet(downloadReq, "tagName").(string)
-	fileName, _ := common.MapGet(downloadReq, "fileName").(string)
-	// var path string
-	// if tagName != "" && fileName != "" {
-	// 	path = tagName + "/" + fileName
-	// }
-
 	cmd := command.Execute{
 		OwnerType: "resource",
 		OwnerName: version,
-		Cmd:       "./pull-resource-package.sh",
+		Cmd:       downloadScriptPath,
 		Args: func(execute_dir string) []string {
 			return []string{
-				versionDir,
-				fileName,
-				common.MapGetString(downloadReq, "downloadFrom"),
 				common.MapGetString(downloadReq, "retries"),
 				common.MapGetString(downloadReq, "downloadArchitecture"),
 				common.MapGetString(downloadReq, "enableProxyOnDownload"),
@@ -119,7 +77,7 @@ func templateMethod(c *gin.Context, canUseExisting bool) {
 	}
 
 	if err := cmd.Exec(); err != nil {
-		common.HandleError(c, http.StatusInternalServerError, "Faild to InstallCluster. ", err)
+		common.HandleError(c, http.StatusInternalServerError, "Failed to install cluster", err)
 		return
 	}
 

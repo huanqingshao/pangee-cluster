@@ -93,11 +93,12 @@ export default {
           console.log(e)
         })
       } else {
-        axios.get(`https://addons.kuboard.cn/v-pangee-cluster/${this.target.version}/release.md?nocache=${new Date().getTime()}`).then(resp => {
-          this.releaseNote = resp.data
-        }).catch(e => {
-          console.log(e)
-        })
+        console.log("FIXME")
+        // axios.get(`https://opencmit.cn/v-pangee-cluster/${this.target.version}/release.md?nocache=${new Date().getTime()}`).then(resp => {
+        //   this.releaseNote = resp.data
+        // }).catch(e => {
+        //   console.log(e)
+        // })
       }
       this.releaseNoteLoading = false
     }

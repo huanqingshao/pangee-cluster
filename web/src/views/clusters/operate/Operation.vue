@@ -217,11 +217,13 @@ export default {
       }]);
     },
     isDisabled(operation) {
+      console.log(operation);
       if (operation.enabled_on == undefined) {
         return false;
       }
       for (let condition of operation.enabled_on) {
         let variableValue = getValue(this.cluster.inventory, condition.variable);
+        console.log(variableValue, condition.operator, condition.value)
         if (variableValue == undefined) {
           return true;
         }

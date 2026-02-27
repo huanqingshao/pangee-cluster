@@ -34,7 +34,7 @@ zh:
 </template>
 
 <script setup lang="ts">
-import { inject, computed } from 'vue';
+import { inject, computed, ComputedRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t, locale } = useI18n({
@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<{
 
 const modelValue = defineModel();
 
-const editMode = inject<"view" | "edit" | "create" | "frozen">('editMode')
+const editMode = inject<ComputedRef<"view" | "edit" | "create" | "frozen">>('editMode')
 
 const defaultLabelWidth = inject<string>("defaultLabelWidth", "")
 
@@ -70,13 +70,13 @@ const compute_edit_mode = computed(() => {
   if (props.readOnly) {
     return false
   }
-  if ((editMode || '') === 'view') {
+  if (editMode?.value === 'view') {
     return false
   }
   if (props.antiFreeze) {
     return true
   }
-  if ((editMode || '') === 'frozen') {
+  if (editMode?.value === 'frozen') {
     return false
   }
   return true
@@ -90,6 +90,9 @@ const compute_label_width = computed(() => {
 })
 
 const compute_display_value = computed(() => {
+  if (modelValue.value !== undefined && modelValue.value !== '') {
+    return modelValue.value
+  }
   if (props.placeholder) {
     return props.placeholder
   }
@@ -105,7 +108,7 @@ const compute_placeholder = computed(() => {
 
 const computedRules = computed(() => {
   let result = []
-  if ((editMode || '') === 'frozen' && !props.antiFreeze) {
+  if (editMode?.value === 'frozen' && !props.antiFreeze) {
     return []
   }
   if (props.required) {

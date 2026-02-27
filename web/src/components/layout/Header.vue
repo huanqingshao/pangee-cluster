@@ -30,21 +30,6 @@ zh:
           </transition-group>
         </div>
         <div class="header-right">
-          <!-- <div class="msg">
-            <div class="version" :style="showGithubStar ? '' : 'line-height: 70px;'">
-              <div class="dot"></div>
-              <div
-                style="margin-right: 10px; width: 80px; display: inline-block; vertical-align: top; text-align: left;"
-                class="nowrap">{{ t('version') }}</div>
-              <span class="font-weight">{{ version }}</span>
-            </div>
-            <div class="version" v-if="showGithubStar">
-              <div class="dot"></div>
-              <iframe id="github-star-iframe" style="display:inline-block;vertical-align:middle;"
-                :src="`https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html?nocache=${Math.random()}`"
-                frameborder="0" scrolling="0" width="120" height="20" title="GitHub"></iframe>
-            </div>
-          </div> -->
           <LoginInfo></LoginInfo>
         </div>
       </div>
@@ -58,7 +43,6 @@ import HeaderBreadCrumb from './HeaderBreadCrumb.vue'
 import KbButton from './KbButton.vue'
 import LoginInfo from './LoginInfo.vue'
 import axios from 'axios'
-import showGithubStar from './GithubStar.js'
 
 export default {
   props: {
@@ -72,7 +56,6 @@ export default {
     return {
       dialogVisible: false,
       current: 0,
-      showGithubStar: false,
     }
   },
   computed: {
@@ -100,14 +83,6 @@ export default {
     this.interval = setInterval(() => {
       this.current = this.current + 1
     }, 5000)
-    axios.get('https://addons.kuboard.cn/downloads/github-star-pangee-cluster.html').then(() => {
-      setTimeout(() => {
-        this.showGithubStar = true
-      }, 200)
-    }).catch(e => {
-      console.log('hide github-star', e)
-    })
-    showGithubStar()
   },
   beforeUnmount() {
     clearInterval(this.interval)
