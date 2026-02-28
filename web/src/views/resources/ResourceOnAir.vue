@@ -4,6 +4,7 @@ en:
   online: 'On Air '
   download: Download
   minVersionRequired: Min version required to pangeecluster
+  useProxy: "Enable Proxy"
   proxy: Proxy
   proxyPlaceHolder: Proxy URL that PangeeCluster server can use, e.g. http://proxy.example.com:8080
   prompt: Download ResourcePackage to PangeeCluster server
@@ -13,6 +14,7 @@ zh:
   online: 未下载
   download: 下 载
   minVersionRequired: PangeeCluster最低版本要求
+  useProxy: "使用代理"
   proxy: 代理
   proxyPlaceholder: PangeeCluster 服务器可以使用的代理地址，例如 http://proxy.example.com:8080
   prompt: 将资源包下载到服务器
@@ -34,8 +36,11 @@ zh:
             <el-form-item :label="t('timeout')" prop="timeout">
               <el-input-number v-model="form.timeout" :max="1200" :min="10" :step="10"></el-input-number>
             </el-form-item>
+            <el-form-item :label="t('useProxy')">
+              <el-switch v-model="enableProxyOnDownload" />
+            </el-form-item>
             <el-form-item :label="t('proxy')">
-              <el-input v-model="form.httpProxy" :placeholder="t('proxyPlaceholder')"></el-input>
+              <el-input v-model="httpProxy" :placeholder="t('proxyPlaceholder')"></el-input>
             </el-form-item>
           </el-form>
           <div style="text-align: right;">
@@ -103,7 +108,6 @@ export default {
       loading: false,
       downloading: false,
       form: {
-        httpProxy: '',
         timeout: 30
       }
     }
@@ -114,6 +118,22 @@ export default {
         return false
       }
       return compareVersions(window.PangeeCluster.version.trimed, this.resourcePackage.metadata.pangee_cluster_version.min) >= 0
+    },
+    enableProxyOnDownload: {
+      get () {
+        return this.$store.state.header.proxy.enableProxyOnDownload
+      },
+      set (value) {
+        this.$store.commit('header/CHANGE_PROXY', { key: 'enableProxyOnDownload', value })
+      }
+    },
+    httpProxy: {
+      get () {
+        return this.$store.state.header.proxy.httpProxy
+      },
+      set (value) {
+        this.$store.commit('header/CHANGE_PROXY', { key: 'httpProxy', value })
+      }
     },
   },
   components: { ResourceDetails, ResourceDownload },
@@ -141,7 +161,9 @@ export default {
       let source = `https://github.com/opencmit/pangee-cluster-resource-package/archive/refs/tags/${this.tag}.zip`
       const formData = new FormData();
       formData.append('sourceUrl', source);
-      formData.append('proxyUrl', this.form.httpProxy);
+      if (this.enableProxyOnDownload && this.httpProxy) {
+        formData.append('proxyUrl', this.httpProxy);
+      }
       this.downloading = true
       await this.pangeeClusterApi
         .post('/resources/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } })

@@ -13,19 +13,13 @@ zh:
   download: "加载资源包"
   upload: "加载离线资源包"
   downloadArchitecture: "选择 CPU 架构"
-  useProxy: " 使用代理"
+  useProxy: "使用代理"
   retries: "重试次数"
 </i18n>
 
 <template>
-  <ExecuteTask 
-    :history="resource.history"
-    :startTask="startTask"
-    :label="t('download')"
-    :title="t('title', { name: resource.package.metadata.version })"
-    :loading="loading"
-    @refresh="$emit('refresh')"
-  >
+  <ExecuteTask :history="resource.history" :startTask="startTask" :label="t('download')"
+    :title="t('title', { name: resource.package.metadata.version })" :loading="loading" @refresh="$emit('refresh')">
     <el-form @submit.prevent.stop :model="form" ref="form" label-position="left" label-width="120px">
       <el-form-item :label="t('downloadArchitecture')">
         <el-radio-group v-model="form.downloadArchitecture">
@@ -38,10 +32,10 @@ zh:
         <el-input-number v-model="form.retries" :max="5" :min="0"></el-input-number>
       </el-form-item>
       <el-form-item :label="t('useProxy')">
-        <el-switch v-model="form.enableProxyOnDownload" />
+        <el-switch v-model="enableProxyOnDownload" />
       </el-form-item>
-      <el-form-item v-if="form.enableProxyOnDownload" label="Http proxy">
-        <el-input v-model="form.httpProxy" />
+      <el-form-item v-if="enableProxyOnDownload" label="Http proxy">
+        <el-input v-model="httpProxy" />
       </el-form-item>
     </el-form>
   </ExecuteTask>
@@ -75,6 +69,24 @@ export default {
     });
     return { i18n: t };
   },
+  computed: {
+    enableProxyOnDownload: {
+      get () {
+        return this.$store.state.header.proxy.enableProxyOnDownload
+      },
+      set (value) {
+        this.$store.commit('header/CHANGE_PROXY', { key: 'enableProxyOnDownload', value })
+      }
+    },
+    httpProxy: {
+      get () {
+        return this.$store.state.header.proxy.httpProxy
+      },
+      set (value) {
+        this.$store.commit('header/CHANGE_PROXY', { key: 'httpProxy', value })
+      }
+    },
+  },
   components: { ExecuteTask },
   emits: ["refresh"],
   methods: {
@@ -85,8 +97,8 @@ export default {
           version: this.resource.package.metadata.version,
           retries: this.form.retries + "",
           downloadArchitecture: this.form.downloadArchitecture,
-          enableProxyOnDownload: this.form.enableProxyOnDownload.toString(), // 转为 "true" 或 "false"
-          httpProxy: this.form.httpProxy,
+          enableProxyOnDownload: this.enableProxyOnDownload.toString(), // 转为 "true" 或 "false"
+          httpProxy: this.httpProxy,
         };
         this.pangeeClusterApi
           .post(`/resources/${request.version}/download`, request)
