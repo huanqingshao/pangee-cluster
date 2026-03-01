@@ -26,7 +26,7 @@ module.exports = {
     ],
   ],
   themeConfig: {
-    logo: '/favicon.png',
+    // logo: '/favicon.png',
     repo: 'opencmit/pangee-cluster',
     docsDir: 'docs',
     nav: [
@@ -49,58 +49,13 @@ module.exports = {
               title: '集群安装',
               path: '/guide/install-k8s.md',
             },
-            {
-              title: '安装选项',
-              children: [
-                '/guide/options/admission-plugins.md',
-                '/guide/options/insecure-registry.md',
-                '/guide/options/dns.md',
-              ]
-            },
-            '/guide/maintain/ha-mode.md',
             '/guide/maintain/add-replace-node.md',
-            '/guide/maintain/upgrade.md',
-            // '/guide/maintain/backup.md',
             '/guide/extra/speedup.md'
           ]
         },
-        {
-          title: '资源包',
-          children: [
-            '/support/',
-            '/guide/resource-package/make.md',
-          ]
-        },
-        // {
-        //   title: '网络插件',
-        //   children: [
-        //     '/guide/network-plugin/calico.md',
-        //     '/guide/network-plugin/flannel.md',
-        //   ],
-        // },
-        // {
-        //   title: '可选组件',
-        //   children: [
-        //     '/guide/addons/install_addon.md',
-        //     // '/guide/addons/nodelocaldns.md',
-        //     '/guide/addons/netchecker.md',
-        //     '/guide/addons/metrics_server.md',
-        //   ],
-        // },
-        {
-          title: '其他',
-          children: [
-            '/pangee-cluster/backup.md',
-            '/pangee-cluster/reset-password.md'
-          ]
-        },
-        {
-          title: '开发者',
-          children: [
-            '/setup-dev/dev.md',
-          ]
-        },
-        '/support/change-log/v1.md',
+        '/pangee-cluster/reset-password.md',
+        '/setup-dev/dev.md',
+        '/support/change-log/v2.md',
       ],
     }
   },

@@ -4,11 +4,7 @@ sidebarDepth: 0
 
 # WebSocket
 
-当您进入这个页面时，通常是因为您已经在使用 pangee-cluster 时碰到了下面截图中的这个错误：
-
-![WebSocket Error](./websocket.assets/websocket-error.png)
-
-这个问题产生的最直接原因是因为浏览器不能使用 websocket 协议访问截图中的链接地址，而在 pangee-cluster 中，日志界面及 Web 终端界面都是依赖于 websocket 协议才能正常工作的。
+如果打不开日志界面，最直接原因通常是因为浏览器不能使用 websocket 协议访问 pangee-cluster。
 
 具体到您的实际环境中，导致此问题的原因可能是如下几种当中的一种或多种：
 
@@ -43,7 +39,7 @@ http {
     # server_name  pangeecluster.this-is-a-sample.com; # 替换成你的域名
 
     location / {
-      proxy_pass  http://10.99.0.8:25702/;  # 替换成你的 pangeecluster IP 地址和端口
+      proxy_pass  http://10.99.0.8:9080/;  # 替换成你的 pangeecluster IP 地址和端口
       client_max_body_size 10m;
       gzip on;
 

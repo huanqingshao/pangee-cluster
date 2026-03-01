@@ -10,7 +10,9 @@ RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
   && apt install curl git vim wget zip unzip rsync netcat lsof -y 
 
 RUN wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
+  wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/$(dpkg --print-architecture)/docker-buildx-plugin_0.23.0-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
   && dpkg -i docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
+  && dpkg -i docker-buildx-plugin_0.23.0-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb \
   && rm docker-ce-cli_28.1.1-1~ubuntu.20.04~focal_$(dpkg --print-architecture).deb
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh \

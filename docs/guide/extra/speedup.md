@@ -27,5 +27,3 @@ PangeeCluster 已经尽可能地优化了 ansible 的执行速度，想要执行
   ```sh
   systemctl restart sshd
   ```
-
-## 使用最近的镜像仓库

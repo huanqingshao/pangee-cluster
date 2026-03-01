@@ -21,7 +21,9 @@ WORKDIR /pangee-cluster
 COPY ./.devcontainer/docker/requirements.txt ./requirements.txt
 RUN python3 --version
 RUN /usr/bin/python3 -m pip install --no-cache-dir pip -U \
-    && python3 -m pip install --no-cache-dir -r requirements.txt
+    && python3 -m pip install --no-cache-dir --root-user-action=ignore -r requirements.txt \
+    && pip cache purge \
+    && rm -rf $(pip cache dir)
 
 COPY .devcontainer/docker/ansible-patch/config/base.yml /usr/local/lib/python3.10/dist-packages/ansible/config/base.yml
 COPY .devcontainer/docker/ansible-patch/plugins_callback/default.py /usr/local/lib/python3.10/dist-packages/ansible/plugins/callback/default.py

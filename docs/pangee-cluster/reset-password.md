@@ -3,7 +3,8 @@
 
 # 重置密码
 
-本文描述了如何重置 PangeeCluster 中 `admin` 用户的密码。请按照如下步骤操作：
+## 方法一
+按照如下步骤可以重置 PangeeCluster 中 `admin` 用户的密码：
 
 - 执行如下命令，进入 pangee-cluster 容器的命令行界面：
 
@@ -26,3 +27,7 @@
   ```
 
   至此，您已经成功重置了 `admin` 用户的密码，重置后密码为 `PangeeCluster123`
+
+## 方法二：
+
+删除 `/data/user/user.yaml` 文件， pangee-cluster 将使用默认密码重新初始化该文件。

@@ -37,15 +37,23 @@ docker run -d \
 ### 二进制
 
 ```sh
+# 创建数据目录
 mkdir ~/pangee-cluster-bin-data
 
-./pangee-cluster-bin \
+# 运行 pangee-cluster-bin
+sudo ./pangee-cluster-bin \
   -e PANGEE_CLUSTER_PORT=9080 \
   -e TZ=Asia/Shanghai \
-  -v ~/pangee-cluster-bin-data:/data
+  -v ~/pangee-cluster-bin-data:/data &
+
+# 以此方式运行时，建议执行下面的指令，并保持终端不退出，否则 pangee-cluster 会随终端关闭而退出
+top
+
+# 停止 pangee-cluster-bin
+sudo pkill pangee-cluster-bin
 ```
 
-在浏览器地址栏中输入 `http://这台机器的IP地址:10080`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 [使用 PangeeCluster 安装 Kubernetes 集群](./guide/install-k8s.md)
+在浏览器地址栏中输入 `http://这台机器的IP地址:9080`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 [使用 PangeeCluster 安装 Kubernetes 集群](./guide/install-k8s.md)
 
 ::: tip 常见问题
 
@@ -57,7 +65,4 @@ mkdir ~/pangee-cluster-bin-data
 
 ## 自制资源包
 
-Pangee-Cluster 将定期提供最新版本的资源包，可以在 pangee-cluster 资源包管理界面中查到，如果您是离线环境，也可以在 [https://pangee-cluster.cn/support/](./support/)找到最新的资源包。您也可以自己制作资源包，资源包的项目地址在 [pangee-cluster-resource](https://github.com/opencmit/pangee-cluster-resource)。
-
-## 社区
-
+Pangee-Cluster 将定期提供最新版本的资源包，可以在 pangee-cluster 资源包管理界面中查到，如果您是离线环境，也可以在 [https://github.com/opencmit/pangee-cluster-resource-package](https://github.com/opencmit/pangee-cluster-resource-package/)找到最新的资源包。您也可以参考该资源包项目自己定制资源包。

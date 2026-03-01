@@ -47,8 +47,8 @@ meta:
 
 需按如下步骤逐个运行各组件
 
-- 运行 pangee-cluster/server
 - 运行 pangee-cluster/web
+- 运行 pangee-cluster/server
 
 ### 运行 pangee-cluster web
 
@@ -81,13 +81,7 @@ meta:
 
   ```sh
   mkdir -p data/user
-  ```
-
-- 在 vscode 中导航到 `pangee-cluster/server`，点击右键，并点击 `在集成终端中打开`，省略截图；
-
-- 在集成终端中（pangee-cluster/server 路径下）执行命令：
-
-  ```sh
+  cd server
   go run pangee-cluster.go
   ```
 
@@ -125,13 +119,11 @@ meta:
 wget https://github.com/NilsIrl/dockerc/releases/download/v0.3.2/dockerc_x86-64
 mv dockerc_x86-64 dockerc
 chmod +x dockerc
-./dockerc --image docker-daemon:pangee-cluster:v2.0.0-amd64 --output pangee-cluster-bin
+./dockerc --image docker-daemon:opencmit/pangee-cluster:v2.0.0-amd64 --output pangee-cluster-bin
 ```
 
 ## 发布资源包
 
-将打包好的资源包 zip 上传至 github release 并选定 tag 即可，余下步骤由 github action 自动完成
+在 github 仓库 [opencmit/pangee-cluster-resource-package](https://github.com/opencmit/pangee-cluster-resource-package) 创建一个与 package.yaml 中的 version 名一致的 release 版本（及 Tag）
 
-**请确保压缩包文件名(去除.zip)与 package.yaml 中的version名一致**
-
-**如不一致，用户手动下载压缩包然后加载本地资源包时会出现问题，用户直接在线下载资源包不会出现问题**
+**如不一致，用户手动下载压缩包然后加载本地资源包时会出现问题**
