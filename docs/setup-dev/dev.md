@@ -33,15 +33,20 @@ meta:
 
 ### 导入代码到开发环境
 
-- 执行如下命令，将代码 clone 到开发环境。
+- 执行如下命令，将 clone 代码并初始化开发容器。
 
   ```sh
   git clone https://github.com/opencmit/pangee-cluster.git
   cd pangee-cluster
   git submodule update --init
+
+  cd .devcontainer
+  docker compose build
+  docker comopse up -d
   ```
 
-- 使用 VS code 在容器中打开工作区
+- 使用 VS code / Trae 等可以进行远程开发得 IDE 工具通过 ssh 端口 3322 连接到开发容器，连接用户名为 `root`，密码为 `123`
+- 在 IDE 中打开 `/workspace/pangee-cluster` 目录，即可开始开发工作
 
 ## 运行开发环境
 
