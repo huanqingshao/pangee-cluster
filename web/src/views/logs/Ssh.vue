@@ -201,9 +201,9 @@ export default {
                 _this.socket.send(
                   "0" +
                   `export ETCDCTL_API=3
-export ETCDCTL_CERT=/etc/kubernetes/ssl/etcd_server.crt
-export ETCDCTL_KEY=/etc/kubernetes/ssl/etcd_server.key
-export ETCDCTL_CACERT=/etc/kubernetes/ssl/ca.crt
+export ETCDCTL_CERT=${inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/etcd_server.crt
+export ETCDCTL_KEY=${inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/etcd_server.key
+export ETCDCTL_CACERT=${inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/ca.crt
 export ETCDCTL_ENDPOINTS=https://127.0.0.1:${inventory.all.children.target.children.etcd.vars.etcd_client_port || 2379}
 # 此处开始，执行您想要执行的 etcdctl 命令
 `

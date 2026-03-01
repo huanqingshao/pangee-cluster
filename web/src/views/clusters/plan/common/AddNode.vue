@@ -32,14 +32,14 @@ zh:
       <el-button icon="el-icon-plus" type="primary" @click="visible = true" :disabled="editMode === 'view'">{{
         t('addNode') }}</el-button>
     </template>
-    <el-form class="add-node-form"
-      label-position="left" label-width="80px" ref="addNodeForm" :model="addNodeForm" @submit.enter.prevent>
+    <el-form class="add-node-form" label-position="left" label-width="80px" ref="addNodeForm" :model="addNodeForm"
+      @submit.enter.prevent>
       <el-form-item :label="t('nodeName')" prop="name" :rules="nodeNameRules">
         <el-input v-model.trim="addNodeForm.name"></el-input>
       </el-form-item>
       <el-form-item :label="t('nodeRoles')" prop="roles" :rules="nodeRoleRules">
         <el-checkbox-group v-model="addNodeForm.roles">
-          <el-checkbox label="kube_control_plane" value="kube_control_plane"> 
+          <el-checkbox label="kube_control_plane" value="kube_control_plane">
             {{ $t('node.kube_control_plane') }}
           </el-checkbox>
           <el-checkbox label="etcd" value="etcd">{{ $t('node.etcd') }}</el-checkbox>
@@ -48,7 +48,7 @@ zh:
         </el-checkbox-group>
       </el-form-item>
       <div class="app_margin_bottom">
-        <li class="desc">{{ t('nodeRequirement1') }}</li>
+        <!-- <li class="desc">{{ t('nodeRequirement1') }}</li> -->
         <li class="desc">{{ t('nodeRequirement2') }}</li>
         <li class="desc">{{ t('nodeRequirement3') }}</li>
       </div>
@@ -151,6 +151,7 @@ export default {
   font-size: 12px;
   line-height: 24px;
 }
+
 .add-node-form {
   padding: 0 10px 10px 20px;
 }

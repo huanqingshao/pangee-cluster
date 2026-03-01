@@ -43,10 +43,13 @@ zh:
             </el-tag>
             <el-tag class="node_text" effect="light" size="default">
               <span class="app_text_mono">
-                {{ cluster.inventory.all.hosts[controlePlaneIpToNodename[key]].ansible_host }}
+                {{ cluster.inventory.all.hosts[controlePlaneIpToNodename[key]] ?
+                  cluster.inventory.all.hosts[controlePlaneIpToNodename[key]].ansible_host :
+                  cluster.inventory.all.hosts[key].ansible_host }}
               </span>
             </el-tag>
-            <el-button @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${controlePlaneIpToNodename[key]}`)"
+            <el-button
+              @click="openUrlInBlank(`#/ssh/cluster/${cluster.name}/${controlePlaneIpToNodename[key] ? controlePlaneIpToNodename[key] : key}`)"
               style="margin-left: 10px;" icon="el-icon-monitor" type="primary">{{ t('terminal') }}</el-button>
           </div>
         </template>
@@ -63,13 +66,15 @@ zh:
       </div>
     </div>
     <div class="app_block_title access_title">etcd</div>
+    {{ cluster.inventory.all.children.target.vars.root_dir }}
     <div class="access_details" v-if="cluster.state">
       <el-alert :closable="false" type="success" effect="dark" :title="t('etcdAccess')"></el-alert>
       <div class="details">
         <template v-for="(item, key) in cluster.state.etcd_members" :key="'etcd' + key">
           <div style="margin-top: 10px;">
             <el-tag class="node_text app_text_mono" type="primary" size="default"> {{ etcdIp(item) }} </el-tag>
-            <el-tag class="node_text app_text_mono" type="primary" effect="light" size="default"> {{ etcdClientUrl(item) }} </el-tag>
+            <el-tag class="node_text app_text_mono" type="primary" effect="light" size="default"> {{ etcdClientUrl(item)
+            }} </el-tag>
             <template v-for="(etcd, name) in cluster.inventory.all.children.target.children.etcd.hosts"
               :key="'eb' + name + key">
               <el-button v-if="cluster.inventory.all.hosts[name].ip === etcdIp(item)"
@@ -141,9 +146,9 @@ export default {
     etcdSsh: {
       get() {
         return `export ETCDCTL_API=3
-export ETCDCTL_CERT=/etc/kubernetes/ssl/etcd_server.crt
-export ETCDCTL_KEY=/etc/kubernetes/ssl/etcd_server.key
-export ETCDCTL_CACERT=/etc/kubernetes/ssl/ca.crt
+export ETCDCTL_CERT=${this.cluster.inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/etcd_server.crt
+export ETCDCTL_KEY=${this.cluster.inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/etcd_server.key
+export ETCDCTL_CACERT=${this.cluster.inventory.all.children.target.vars.root_dir}/etc/kubernetes/ssl/ca.crt
 export ETCDCTL_ENDPOINTS=https://127.0.0.1:${this.cluster.inventory.all.children.target.children.etcd.vars.etcd_client_port || 2379}
 etcdctl member list
 # ${this.t('yourcommand')}
@@ -192,8 +197,12 @@ etcdctl member list
     }
   },
   methods: {
+    // FIXME 判断哪些节点是控制节点
     isControlePlane(key, node) {
       if (this.controlePlaneIpToNodename[key] != undefined) {
+        return true;
+      }
+      if (this.cluster.inventory.all.children.target.children.k8s_cluster.children.kube_control_plane.hosts[key] != undefined) {
         return true;
       }
       return false;
@@ -241,6 +250,7 @@ etcdctl member list
 .access_title {
   background: var(--el-color-info-light-9);
 }
+
 .access_details {
   padding-left: 40px;
   margin-bottom: 20px;
