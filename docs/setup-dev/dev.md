@@ -41,6 +41,11 @@ meta:
   git submodule update --init
 
   cd .devcontainer
+
+  export HTTP_PROXY=http://192.168.3.10:7890  # 代理服务器地址不能为 127.0.0.1，否则会导致容器无法访问外部网络
+  export HTTPS_PROXY=http://192.168.3.10:7890
+  export NO_PROXY=localhost,127.0.0.1,192.168.0.0/16
+
   docker compose build
   docker comopse up -d
   ```

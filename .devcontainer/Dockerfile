@@ -1,8 +1,21 @@
 FROM ubuntu:20.04
 
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV http_proxy=${HTTP_PROXY}
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+ENV https_proxy=${HTTPS_PROXY}
+ENV NO_PROXY=${NO_PROXY}
+ENV no_proxy=${NO_PROXY}
+
 RUN sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc \
   && sed -i 's/ports\.ubuntu\.com/mirrors\.tuna\.tsinghua\.edu\.cn/g' /etc/apt/sources.list \
   && sed -i 's/archive\.ubuntu\.com/mirrors\.tuna\.tsinghua\.edu\.cn/g' /etc/apt/sources.list \
+  && if [ -n "$HTTP_PROXY" ]; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";" > /etc/apt/apt.conf.d/proxy.conf; fi \
+  && if [ -n "$HTTPS_PROXY" ]; then echo "Acquire::https::Proxy \"$HTTPS_PROXY\";" >> /etc/apt/apt.conf.d/proxy.conf; fi \
   && apt update \
   && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends tzdata \
   && apt upgrade -y \
@@ -56,6 +69,9 @@ RUN wget https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd6
     && chmod +x /usr/local/bin/yq
 
 RUN source /root/.profile && go version && apt install -y libgpgme-dev libassuan-dev libbtrfs-dev pkg-config \
+    && if [ -n "$HTTP_PROXY" ]; then git config --global http.proxy "$HTTP_PROXY"; fi \
+    && if [ -n "$HTTPS_PROXY" ]; then git config --global https.proxy "$HTTPS_PROXY"; fi \
+    && if [ -n "$NO_PROXY" ]; then git config --global http.noProxy "$NO_PROXY"; fi \
     && git clone https://github.com/containers/skopeo.git \
     && cd skopeo \
     && git checkout v1.21.0 \

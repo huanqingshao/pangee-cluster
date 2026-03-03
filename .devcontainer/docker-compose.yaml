@@ -1,6 +1,11 @@
 services:
   pangeeclusterdev:
-    build: .
+    build:
+      context: .
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}  # 例如: http://192.168.1.10:7890
+        HTTPS_PROXY: ${HTTPS_PROXY}  # 例如: http://192.168.1.10:7890
+        NO_PROXY: ${NO_PROXY}  # 例如: localhost,127.0.0.1,.local
     privileged: true
     restart: unless-stopped
     environment:
