@@ -57,15 +57,6 @@ meta:
 
 ### 运行 pangee-cluster web
 
-- 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，省略截图；
-
-- 在集成终端中（pangee-cluster/web/public 路径下）执行命令：
-
-  ```sh
-  ln -s version-$(dpkg --print-architecture).json version.json
-  # 仅需在首次运行时执行一次即可
-  ```
-
 - 在 vscode 中导航到 `pangee-cluster/web`，点击右键，并点击 `在集成终端中打开`，如下图所示
 
   ![web](./dev.assets/screenshot_2025-10-04_15.57.13.png)
@@ -124,7 +115,7 @@ meta:
 wget https://github.com/NilsIrl/dockerc/releases/download/v0.3.2/dockerc_x86-64
 mv dockerc_x86-64 dockerc
 chmod +x dockerc
-./dockerc --image docker-daemon:opencmit/pangee-cluster:v2.0.0-amd64 --output pangee-cluster-bin
+./dockerc --image docker-daemon:ghcr.io/opencmit/pangee-cluster:v2.0.0 --output pangee-cluster-bin
 ```
 
 ## 发布资源包

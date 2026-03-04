@@ -19,9 +19,8 @@ docker run -d \
   -p 8080:8080/tcp \
   -e PANGEE_CLUSTER_PORT=8080 \
   -e TZ=Asia/Shanghai \
-  -v /path/to/data:/data
-  \ # TODO: 修改地址
-  pangee-cluster:latest-amd64
+  -v ~/pangee-cluster-data:/data \
+  ghcr.io/opencmit/pangee-cluster:latest
 ```
 
 在浏览器地址栏中输入 `http://这台机器的IP地址:端口号`，输入用户名 `admin`，默认密码 `PangeeCluster123`，即可登录 pangee-cluster 界面，剩下的事情，在界面上操作一下，您就会啦。如果有困难，试试这篇文档 <a href="https://pangee-cluster.cn/guide/install-k8s.html" target="_blank">使用 PangeeCluster 安装 Kubernetes 集群</a>
