@@ -124,6 +124,7 @@ func ExecuteStep(c *gin.Context) {
 			result = appendCommonParams(result, req, false)
 			return result
 		},
+		Env:  []string{"ANSIBLE_CONFIG=./ansible.cfg"},
 		Dir:  cluster_common.ResourcePackageDirForInventory(inventory),
 		Type: req.Operation,
 		PreExec: func(execute_dir string) error {
