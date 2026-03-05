@@ -31,8 +31,8 @@ zh:
     <div class="app_description">
       {{ t('connectivity_check_desc') }}
       <el-button @click="refresh" icon="el-icon-refresh" type="primary">{{ $t('msg.refresh') }}</el-button>
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
-        :size="13"></PangeeClusterLink>
+      <!-- <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
+        :size="13"></PangeeClusterLink> -->
     </div>
     <div v-if="installed">
       <el-skeleton v-if="loading" animated class="app_margin_top"></el-skeleton>
@@ -116,8 +116,8 @@ zh:
     </div>
     <el-alert v-else type="warning" :closable="false" :title="t('installNetchecker')">
       {{ t('netcheckerNotInstalled') }}
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
-        :size="12">{{ t('installNetchecker') }}</PangeeClusterLink>
+      <!-- <PangeeClusterLink href="https://pangee-cluster.cn/guide/addons/netchecker.html" style="margin-left: 20px;"
+        :size="12">{{ t('installNetchecker') }}</PangeeClusterLink> -->
     </el-alert>
   </div>
 </template>

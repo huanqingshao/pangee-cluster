@@ -45,7 +45,7 @@ zh:
           <div class="horizontalConnection" :style="bastionEnabled ? '' : 'border-color: white;'"></div>
         </div>
         <div style="line-height: 28px">
-          <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12">
+          <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/maintain/add-replace-node.md" :size="12">
             添加/删除节点？
           </PangeeClusterLink>
         </div>

@@ -54,7 +54,7 @@ zh:
       </div>
     </el-form>
     <div style="text-align: right;">
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" style="float: left;">
+      <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/maintain/add-replace-node.md" style="float: left;">
       </PangeeClusterLink>
       <el-button icon="el-icon-close" @click="addNodeForm.visible = false">{{ $t('msg.cancel') }}</el-button>
       <el-button icon="el-icon-plus" @click="addNode" type="primary">{{ $t('msg.ok') }}</el-button>

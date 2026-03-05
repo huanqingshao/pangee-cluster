@@ -42,9 +42,9 @@ zh:
                 </template>
               </template>
             </template>
-            <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/upgrade.html" style="margin-left: 20px;"
+            <!-- <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/upgrade.html" style="margin-left: 20px;"
               :size="12">
-            </PangeeClusterLink>
+            </PangeeClusterLink> -->
           </div>
         </el-form-item>
       </el-form>

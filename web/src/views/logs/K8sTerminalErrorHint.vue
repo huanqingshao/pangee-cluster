@@ -14,7 +14,7 @@ zh:
     <el-dialog :title="$t('msg.prompt')" v-model="dialogVisible" width="60%" :before-close="handleClose">
       <p>{{ t('error') }}</p>
       <p class="app_text_mono" style="font-size: 12px; margin-left: 20px; margin-bottom: 20px;">{{ message }}</p>
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/extra/websocket.html" :size="14" type="danger">
+      <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/extra/websocket.md" :size="14" type="danger">
         {{ t('commonProblems') }}</PangeeClusterLink>
     </el-dialog>
   </div>

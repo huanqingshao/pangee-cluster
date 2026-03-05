@@ -28,7 +28,6 @@ zh:
 </template>
 
 <script>
-import PangeeClusterLink from '../../../components/PangeeClusterLink.vue'
 import ClusterTask from '../../common/task/ClusterTask.vue'
 
 export default {
@@ -44,7 +43,7 @@ export default {
   },
   computed: {
   },
-  components: { ClusterTask, PangeeClusterLink },
+  components: { ClusterTask },
   emits: ['refresh'],
   mounted() {
   },

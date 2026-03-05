@@ -61,7 +61,7 @@ zh:
       v-if="cluster && cluster.inventory.all.hosts.bastion && holder.ansible_password"
       style="margin-left: 120px; width: calc(100% - 120px);">
       {{ t('password_and_bastion') }}
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/extra/speedup.html" style="margin-left: 10px;"
+      <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/extra/speedup.md" style="margin-left: 10px;"
         :size="12">
       </PangeeClusterLink>
     </el-alert>

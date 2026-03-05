@@ -47,7 +47,7 @@ zh:
           <li>{{ t('resourceDescription2') }}</li>
         </div>
       </el-alert>
-      <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/index/package-list.yaml" type="danger"
+      <PangeeClusterLink v-if="cannot_reach_online_repository" href="https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/refs/heads/index/package-list.yaml" type="danger"
         style="margin-right: 10px; color: var(--el-color-danger)">{{ t('cannot_reach_online_repository') }}
       </PangeeClusterLink>
       <div style="text-align: right;">

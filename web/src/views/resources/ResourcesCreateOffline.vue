@@ -18,7 +18,8 @@ zh:
           <div style="line-height: 20px;">
             如果您 PangeeCluster 所在机器不能联网，请从如下链接获取离线导入文件：
             <li>
-              <PangeeClusterLink href="https://www.pangee-cluster.cn/support">https://www.pangee-cluster.cn/support
+              <PangeeClusterLink href="https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/refs/heads/index/package-list.yaml">
+                https://raw.githubusercontent.com/opencmit/pangee-cluster-resource-package/refs/heads/index/package-list.yaml
               </PangeeClusterLink>
             </li>
           </div>

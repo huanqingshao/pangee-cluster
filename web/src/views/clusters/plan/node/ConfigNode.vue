@@ -72,13 +72,13 @@ zh:
     <el-alert v-if="pendingDelete" :title="t('pendingDelete')" type="error" :closable="false" effect="dark"
       class="app_margin_bottom" show-icon>
       {{ t('pendingDeleteAction') }}
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12"
+      <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/maintain/add-replace-node.md" :size="12"
         style="margin-left: 20px; color: white;"></PangeeClusterLink>
     </el-alert>
     <el-alert v-if="pendingAdd" :title="t('pendingAdd')" type="warning" :closable="false" effect="dark"
       class="app_margin_bottom" show-icon>
       {{ t('pendingAddAction') }}
-      <PangeeClusterLink href="https://pangee-cluster.cn/guide/maintain/add-replace-node.html" :size="12"
+      <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/maintain/add-replace-node.md" :size="12"
         style="margin-left: 20px; color: white;"></PangeeClusterLink>
     </el-alert>
     <StateNode v-if="onlineNodes[nodeName]" :cluster="cluster" :nodeName="nodeName"></StateNode>
