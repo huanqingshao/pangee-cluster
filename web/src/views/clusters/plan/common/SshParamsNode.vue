@@ -88,7 +88,7 @@ zh:
     </EditCommon>
     <EditString v-model="holder.ansible_port" :label="t('ansible_port')" :prop="`all.hosts.${nodeName}`"
       :placeholder="placeholder('ansible_port')" anti-freeze
-      :required="!cluster.inventory.all.children.target.vars.ansible_port"></EditString>
+      :required="!cluster.inventory.all.vars.ansible_port"></EditString>
     <EditCommon v-model="holder.ansible_user" :label="t('ansible_user')" :placeholder="placeholder('ansible_user')"
       anti-freeze>
       <template #edit>
@@ -107,13 +107,13 @@ zh:
     <EditString v-model="holder.ansible_password" :label="t('ansible_password')" show-password anti-freeze clearable
       :placeholder="placeholder('ansible_password')"></EditString>
     <el-alert type="warning" :closable="false"
-      v-if="cluster && cluster.inventory.all.hosts.bastion && (holder.ansible_password || cluster.inventory.all.children.target.vars.ansible_password)"
+      v-if="cluster && cluster.inventory.all.hosts.bastion && (holder.ansible_password || cluster.inventory.all.vars.ansible_password)"
       style="margin-left: 120px; width: calc(100% - 120px);">
       {{ t('password_and_bastion') }}
       <PangeeClusterLink href="https://github.com/opencmit/pangee-cluster/blob/main/docs/guide/extra/speedup.md" style="margin-left: 10px;"
         :size="12">
       </PangeeClusterLink>
-      <li v-if="cluster && cluster.inventory.all.children.target.vars.ansible_password">{{ t('password_in_global') }}
+      <li v-if="cluster && cluster.inventory.all.vars.ansible_password">{{ t('password_in_global') }}
       </li>
     </el-alert>
     <EditSelect v-model="holder.ansible_python_interpreter" :label="t('ansible_python_interpreter')" anti-freeze
@@ -268,14 +268,14 @@ export default {
         if (this.holder.ansible_become !== undefined) {
           return this.holder.ansible_become
         }
-        return this.cluster.inventory.all.children.target.vars.ansible_become
+        return this.cluster.inventory.all.vars.ansible_become
       },
       set(v) {
         this.holderRef.ansible_become = v
         if (v) {
           this.holderRef.ansible_become_user = 'root'
           if (!this.holder.ansible_become_password) {
-            this.holderRef.ansible_become_password = this.cluster.inventory.all.children.target.vars.ansible_become_password || this.holder.ansible_password || this.cluster.inventory.all.children.target.vars.ansible_password
+            this.holderRef.ansible_become_password = this.cluster.inventory.all.vars.ansible_become_password || this.holder.ansible_password || this.cluster.inventory.all.children.target.vars.ansible_password
           }
         } else {
           this.holderRef.ansible_become = undefined
@@ -299,7 +299,7 @@ export default {
   },
   methods: {
     placeholder(fieldName) {
-      let default_value = this.cluster.inventory.all.children.target.vars[fieldName]
+      let default_value = this.cluster.inventory.all.vars[fieldName]
       if (fieldName.indexOf('password') > 0 && default_value) {
         default_value = '******'
       }
@@ -322,7 +322,7 @@ export default {
     async loadOptionIps(flag) {
       if (flag) {
         this.optionIpsLoading = true
-        let vars = this.cluster.inventory.all.children.target.vars
+        let vars = this.cluster.inventory.all.vars
         let req = {
           from_cache: false,
           ansible_host: this.ansible_host,
