@@ -66,7 +66,6 @@ zh:
       </div>
     </div>
     <div class="app_block_title access_title">etcd</div>
-    {{ cluster.inventory.all.children.target.vars.root_dir }}
     <div class="access_details" v-if="cluster.state">
       <el-alert :closable="false" type="success" effect="dark" :title="t('etcdAccess')"></el-alert>
       <div class="details">

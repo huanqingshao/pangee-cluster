@@ -16,7 +16,7 @@ type PangeeClusterClaims struct {
 	jwt.StandardClaims
 }
 
-const TokenExpireDuration = time.Hour * 24
+const TokenExpireDuration = time.Hour * 24 * 365
 
 var JwtSecret = []byte("mytoken")
 

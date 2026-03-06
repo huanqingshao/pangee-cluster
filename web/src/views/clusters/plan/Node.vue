@@ -57,6 +57,17 @@ zh:
 
 <script>
 
+function deleteNodeByName(parent, nodeName) {
+  if (parent.hosts) {
+    delete parent.hosts[nodeName];
+  }
+  if (parent.children) {
+    for (let key in parent.children) {
+      deleteNodeByName(parent.children[key], nodeName);
+    }
+  }
+}
+
 export default {
   props: {
     name: { type: String, required: true },
@@ -170,7 +181,7 @@ export default {
       } else {
         this.$emit('deleted')
         setTimeout(() => {
-          delete this.inventory.all.hosts[this.name]
+          deleteNodeByName(this.inventory.all, this.name);
         }, 50)
       }
     },
