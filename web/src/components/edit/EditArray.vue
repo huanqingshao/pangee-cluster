@@ -91,7 +91,7 @@ function addNewItem() {
   display: flex;
   align-items: center;
   margin: 3px;
-  padding: 0px 6px 0px 16px;
+  padding: 0px 6px 0px 12px;
   border-radius: 4px;
   /* border: solid 1px var(--el-color-primary-light-8); */
   background-color: white;
@@ -104,7 +104,6 @@ function addNewItem() {
   content: '-';
   position: absolute;
   left: 0;
-  color: var(--el-color-primary);
   font-weight: 500;
 }
 </style>
